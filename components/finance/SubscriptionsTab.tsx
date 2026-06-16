@@ -1,0 +1,151 @@
+"use client";
+
+import { useActionState, useEffect, useState, useTransition } from "react";
+import { isBefore, addDays } from "date-fns";
+import { Plus, Trash2 } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
+import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { formatCurrency, formatDate } from "@/lib/format";
+import { createSubscription, deleteSubscription, type FinanceFormState } from "@/app/(app)/finanzas/actions";
+import type { Category, Subscription } from "@/lib/types";
+
+interface SubscriptionsTabProps {
+  subscriptions: Subscription[];
+  categories: Category[];
+}
+
+const initialState: FinanceFormState = {};
+
+const BILLING_OPTIONS = [
+  { value: "mensual", label: "Mensual" },
+  { value: "trimestral", label: "Trimestral" },
+  { value: "anual", label: "Anual" },
+];
+
+function AddSubscriptionForm({
+  categories,
+  onSuccess,
+  onCancel,
+}: {
+  categories: Category[];
+  onSuccess: () => void;
+  onCancel: () => void;
+}) {
+  const [state, formAction, isPending] = useActionState(createSubscription, initialState);
+
+  useEffect(() => {
+    if (state.success) onSuccess();
+  }, [state.success, onSuccess]);
+
+  return (
+    <form action={formAction} noValidate className="flex flex-col gap-4">
+      <Input label="Nombre" name="name" required error={state.fieldErrors?.name} />
+      <Input label="Importe (€)" name="amount" type="number" step="0.01" required error={state.fieldErrors?.amount} />
+      <Select label="Ciclo de facturación" name="billingCycle" defaultValue="mensual" options={BILLING_OPTIONS} />
+      <Input label="Fecha de renovación" name="renewalDate" type="date" />
+      <Select
+        label="Categoría"
+        name="categoryId"
+        placeholder="Sin categoría"
+        options={categories.map((c) => ({ value: c.id, label: c.name }))}
+      />
+      <Checkbox label="Activa" name="isActive" defaultChecked />
+      {state.error && <p className="text-sm text-danger">{state.error}</p>}
+      <div className="mt-2 flex gap-3">
+        <Button type="button" variant="secondary" className="flex-1" onClick={onCancel}>
+          Cancelar
+        </Button>
+        <Button type="submit" className="flex-1" isLoading={isPending}>
+          Guardar
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTabProps) {
+  const [isPending, startTransition] = useTransition();
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [deleting, setDeleting] = useState<Subscription | null>(null);
+
+  const soonThreshold = addDays(new Date(), 14);
+
+  return (
+    <div className="flex flex-col gap-3">
+      {subscriptions.length === 0 ? (
+        <EmptyState title="Todavía no hay suscripciones." description="Añade la primera para empezar." />
+      ) : (
+        <ul className="flex flex-col gap-3">
+          {subscriptions.map((subscription) => {
+            const renewsSoon =
+              subscription.renewal_date && isBefore(new Date(subscription.renewal_date), soonThreshold);
+            return (
+              <li key={subscription.id}>
+                <Card className="flex items-center gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-brown">{subscription.name}</p>
+                    <p className="text-xs text-muted">
+                      {formatCurrency(subscription.amount)} · {subscription.billing_cycle}
+                      {subscription.renewal_date ? ` · ${formatDate(subscription.renewal_date)}` : ""}
+                    </p>
+                  </div>
+                  {renewsSoon && <Badge variant="warning">Se renueva pronto</Badge>}
+                  <button
+                    type="button"
+                    aria-label="Eliminar suscripción"
+                    onClick={() => setDeleting(subscription)}
+                    className="text-muted hover:text-danger"
+                  >
+                    <Trash2 className="h-4 w-4" aria-hidden />
+                  </button>
+                </Card>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      <Button
+        type="button"
+        onClick={() => setIsAddOpen(true)}
+        className="fixed bottom-20 right-4 z-30 rounded-full px-5 shadow-md md:bottom-6"
+      >
+        <Plus className="h-4 w-4" aria-hidden />
+        Añadir suscripción
+      </Button>
+
+      <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir suscripción">
+        <AddSubscriptionForm categories={categories} onSuccess={() => setIsAddOpen(false)} onCancel={() => setIsAddOpen(false)} />
+      </Modal>
+
+      <Modal isOpen={!!deleting} onClose={() => setDeleting(null)} title="Eliminar suscripción">
+        <p className="text-sm text-brown">¿Seguro que quieres eliminarlo?</p>
+        <div className="mt-4 flex gap-3">
+          <Button type="button" variant="secondary" className="flex-1" onClick={() => setDeleting(null)}>
+            Cancelar
+          </Button>
+          <Button
+            type="button"
+            variant="danger"
+            className="flex-1"
+            isLoading={isPending}
+            onClick={() =>
+              startTransition(async () => {
+                if (deleting) await deleteSubscription(deleting.id);
+                setDeleting(null);
+              })
+            }
+          >
+            Eliminar
+          </Button>
+        </div>
+      </Modal>
+    </div>
+  );
+}

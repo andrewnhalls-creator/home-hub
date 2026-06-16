@@ -1,0 +1,463 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { format } from "date-fns";
+import type { z } from "zod";
+import { createClient } from "@/lib/supabase/server";
+import { requireHousehold } from "@/lib/auth";
+import {
+  fixedPaymentSchema,
+  expenseSchema,
+  savingsGoalSchema,
+  contributionSchema,
+  subscriptionSchema,
+} from "@/lib/validations/finance";
+import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
+
+export interface FinanceFormState {
+  error?: string;
+  fieldErrors?: Record<string, string>;
+  success?: boolean;
+}
+
+function flattenFieldErrors(error: z.ZodError) {
+  const fieldErrors: Record<string, string> = {};
+  for (const issue of error.issues) {
+    const key = String(issue.path[0]);
+    if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+  }
+  return fieldErrors;
+}
+
+// ---------------------------------------------------------------------------
+// Fixed payments + payment instances
+// ---------------------------------------------------------------------------
+
+export async function createFixedPayment(
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = fixedPaymentSchema.safeParse({
+    name: formData.get("name"),
+    amount: formData.get("amount"),
+    categoryId: formData.get("categoryId") || undefined,
+    dueDay: formData.get("dueDay") || undefined,
+    paymentMethod: formData.get("paymentMethod") || undefined,
+    isActive: formData.get("isActive") === "on",
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("fixed_payments").insert({
+    household_id: householdId,
+    name: parsed.data.name,
+    amount: parsed.data.amount,
+    category_id: parsed.data.categoryId || null,
+    due_day: parsed.data.dueDay === "" ? null : parsed.data.dueDay,
+    payment_method: parsed.data.paymentMethod || null,
+    is_active: parsed.data.isActive,
+    notes: parsed.data.notes || null,
+    created_by: user.id,
+  });
+
+  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function updateFixedPayment(
+  paymentId: string,
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = fixedPaymentSchema.safeParse({
+    name: formData.get("name"),
+    amount: formData.get("amount"),
+    categoryId: formData.get("categoryId") || undefined,
+    dueDay: formData.get("dueDay") || undefined,
+    paymentMethod: formData.get("paymentMethod") || undefined,
+    isActive: formData.get("isActive") === "on",
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("fixed_payments")
+    .update({
+      name: parsed.data.name,
+      amount: parsed.data.amount,
+      category_id: parsed.data.categoryId || null,
+      due_day: parsed.data.dueDay === "" ? null : parsed.data.dueDay,
+      payment_method: parsed.data.paymentMethod || null,
+      is_active: parsed.data.isActive,
+      notes: parsed.data.notes || null,
+    })
+    .eq("id", paymentId)
+    .eq("household_id", householdId);
+
+  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function deleteFixedPayment(paymentId: string) {
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  await supabase
+    .from("fixed_payments")
+    .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
+    .eq("id", paymentId)
+    .eq("household_id", householdId);
+
+  revalidatePath("/finanzas");
+}
+
+/**
+ * Ensures every active fixed payment has a payment_instances row for the
+ * current month, so the Resumen tab (and "Pagos fijos") always have
+ * up-to-date data to compute from. Idempotent — safe to call on every
+ * page load.
+ */
+export async function ensureCurrentMonthPaymentInstances(householdId: string) {
+  const supabase = await createClient();
+  const now = new Date();
+  const monthStart = format(new Date(now.getFullYear(), now.getMonth(), 1), "yyyy-MM-dd");
+  const monthEnd = format(new Date(now.getFullYear(), now.getMonth() + 1, 0), "yyyy-MM-dd");
+
+  const { data: activePayments } = await supabase
+    .from("fixed_payments")
+    .select("id, name, amount, currency, due_day")
+    .eq("household_id", householdId)
+    .eq("is_active", true)
+    .is("deleted_at", null);
+
+  if (!activePayments || activePayments.length === 0) return;
+
+  const { data: existingInstances } = await supabase
+    .from("payment_instances")
+    .select("fixed_payment_id")
+    .eq("household_id", householdId)
+    .gte("due_date", monthStart)
+    .lte("due_date", monthEnd);
+
+  const existingIds = new Set((existingInstances ?? []).map((i) => i.fixed_payment_id));
+  const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+
+  const paymentsToCreate = activePayments.filter((payment) => !existingIds.has(payment.id));
+  if (paymentsToCreate.length === 0) return;
+
+  const toCreate = paymentsToCreate.map((payment) => {
+    const day = Math.min(payment.due_day ?? 1, lastDayOfMonth);
+    const dueDate = format(new Date(now.getFullYear(), now.getMonth(), day), "yyyy-MM-dd");
+    return {
+      household_id: householdId,
+      fixed_payment_id: payment.id,
+      due_date: dueDate,
+      amount: payment.amount,
+      currency: payment.currency,
+    };
+  });
+
+  const { data: createdInstances } = await supabase
+    .from("payment_instances")
+    .insert(toCreate)
+    .select("id, fixed_payment_id, due_date");
+
+  for (const instance of createdInstances ?? []) {
+    const payment = paymentsToCreate.find((p) => p.id === instance.fixed_payment_id);
+    if (!payment) continue;
+    await schedulePaymentInstanceNotification(instance.id, householdId, payment.name, instance.due_date);
+  }
+}
+
+export async function markPaymentInstancePaid(instanceId: string) {
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  await supabase
+    .from("payment_instances")
+    .update({ status: "pagado", paid_date: format(new Date(), "yyyy-MM-dd"), paid_by: user.id })
+    .eq("id", instanceId)
+    .eq("household_id", householdId);
+
+  await cancelScheduledNotifications("payment_instance", instanceId);
+
+  revalidatePath("/finanzas");
+}
+
+export async function skipPaymentInstance(instanceId: string) {
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  await supabase
+    .from("payment_instances")
+    .update({ status: "omitido" })
+    .eq("id", instanceId)
+    .eq("household_id", householdId);
+
+  await cancelScheduledNotifications("payment_instance", instanceId);
+
+  revalidatePath("/finanzas");
+}
+
+export async function overridePaymentInstanceAmount(instanceId: string, amount: number) {
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  await supabase
+    .from("payment_instances")
+    .update({ amount })
+    .eq("id", instanceId)
+    .eq("household_id", householdId);
+
+  revalidatePath("/finanzas");
+}
+
+export async function schedulePaymentInstanceNotification(
+  instanceId: string,
+  householdId: string,
+  title: string,
+  dueDate: string,
+) {
+  await upsertScheduledNotification({
+    householdId,
+    userId: null,
+    category: "pagos",
+    entityType: "payment_instance",
+    entityId: instanceId,
+    scheduledFor: new Date(`${dueDate}T09:00:00`).toISOString(),
+    title: "Tienes un pago próximo",
+    body: title,
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Expenses
+// ---------------------------------------------------------------------------
+
+export async function createExpense(
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = expenseSchema.safeParse({
+    title: formData.get("title"),
+    amount: formData.get("amount"),
+    expenseDate: formData.get("expenseDate"),
+    categoryId: formData.get("categoryId") || undefined,
+    paidBy: formData.get("paidBy") || undefined,
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("expenses").insert({
+    household_id: householdId,
+    title: parsed.data.title,
+    amount: parsed.data.amount,
+    expense_date: parsed.data.expenseDate,
+    category_id: parsed.data.categoryId || null,
+    paid_by: parsed.data.paidBy || null,
+    notes: parsed.data.notes || null,
+    created_by: user.id,
+  });
+
+  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function deleteExpense(expenseId: string) {
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  await supabase
+    .from("expenses")
+    .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
+    .eq("id", expenseId)
+    .eq("household_id", householdId);
+
+  revalidatePath("/finanzas");
+}
+
+// ---------------------------------------------------------------------------
+// Savings goals + contributions
+// ---------------------------------------------------------------------------
+
+export async function createSavingsGoal(
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = savingsGoalSchema.safeParse({
+    name: formData.get("name"),
+    targetAmount: formData.get("targetAmount"),
+    targetDate: formData.get("targetDate") || undefined,
+    priority: formData.get("priority") || "normal",
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("savings_goals").insert({
+    household_id: householdId,
+    name: parsed.data.name,
+    target_amount: parsed.data.targetAmount,
+    target_date: parsed.data.targetDate || null,
+    priority: parsed.data.priority,
+    notes: parsed.data.notes || null,
+    created_by: user.id,
+  });
+
+  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function deleteSavingsGoal(goalId: string) {
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  await supabase
+    .from("savings_goals")
+    .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
+    .eq("id", goalId)
+    .eq("household_id", householdId);
+
+  revalidatePath("/finanzas");
+}
+
+export async function addContribution(
+  goalId: string,
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = contributionSchema.safeParse({
+    amount: formData.get("amount"),
+    contributionDate: formData.get("contributionDate") || undefined,
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { data: goal } = await supabase
+    .from("savings_goals")
+    .select("current_amount")
+    .eq("id", goalId)
+    .eq("household_id", householdId)
+    .single();
+
+  if (!goal) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  const { error: contribError } = await supabase.from("savings_contributions").insert({
+    goal_id: goalId,
+    amount: parsed.data.amount,
+    contribution_date: parsed.data.contributionDate || undefined,
+    contributed_by: user.id,
+    notes: parsed.data.notes || null,
+  });
+
+  if (contribError) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  await supabase
+    .from("savings_goals")
+    .update({ current_amount: Number(goal.current_amount) + parsed.data.amount })
+    .eq("id", goalId)
+    .eq("household_id", householdId);
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+// ---------------------------------------------------------------------------
+// Subscriptions
+// ---------------------------------------------------------------------------
+
+export async function createSubscription(
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = subscriptionSchema.safeParse({
+    name: formData.get("name"),
+    amount: formData.get("amount"),
+    billingCycle: formData.get("billingCycle") || "mensual",
+    renewalDate: formData.get("renewalDate") || undefined,
+    categoryId: formData.get("categoryId") || undefined,
+    isActive: formData.get("isActive") === "on",
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("subscriptions")
+    .insert({
+      household_id: householdId,
+      name: parsed.data.name,
+      amount: parsed.data.amount,
+      billing_cycle: parsed.data.billingCycle,
+      renewal_date: parsed.data.renewalDate || null,
+      category_id: parsed.data.categoryId || null,
+      is_active: parsed.data.isActive,
+      notes: parsed.data.notes || null,
+      created_by: user.id,
+    })
+    .select("id")
+    .single();
+
+  if (error || !data) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  if (parsed.data.renewalDate) {
+    await upsertScheduledNotification({
+      householdId,
+      userId: null,
+      category: "suscripciones",
+      entityType: "subscription",
+      entityId: data.id,
+      scheduledFor: new Date(`${parsed.data.renewalDate}T09:00:00`).toISOString(),
+      title: "Tienes una suscripción próxima a renovar",
+      body: parsed.data.name,
+    });
+  }
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function deleteSubscription(subscriptionId: string) {
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  await supabase
+    .from("subscriptions")
+    .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
+    .eq("id", subscriptionId)
+    .eq("household_id", householdId);
+
+  await cancelScheduledNotifications("subscription", subscriptionId);
+
+  revalidatePath("/finanzas");
+}

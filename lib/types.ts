@@ -166,6 +166,24 @@ export interface FixedPayment {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
+  deleted_by: string | null;
+}
+
+export interface PaymentInstance {
+  id: string;
+  household_id: string;
+  fixed_payment_id: string | null;
+  due_date: string;
+  amount: number;
+  currency: string;
+  status: "pendiente" | "pagado" | "vencido" | "omitido";
+  paid_date: string | null;
+  paid_by: string | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Expense {
@@ -177,9 +195,12 @@ export interface Expense {
   expense_date: string;
   category_id: string | null;
   paid_by: string | null;
+  shopping_list_id: string | null;
   notes: string | null;
   created_by: string | null;
   created_at: string;
+  deleted_at: string | null;
+  deleted_by: string | null;
 }
 
 export interface SavingsGoal {
@@ -195,6 +216,8 @@ export interface SavingsGoal {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
+  deleted_by: string | null;
 }
 
 export interface SavingsContribution {
@@ -221,6 +244,8 @@ export interface Subscription {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
+  deleted_by: string | null;
 }
 
 export interface HouseholdDocument {
