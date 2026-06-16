@@ -24,7 +24,7 @@ export default function SignupPage() {
             {state.info}
           </p>
         ) : (
-          <form action={formAction} className="mt-6 flex flex-col gap-4">
+          <form action={formAction} noValidate className="mt-6 flex flex-col gap-4">
             <Input
               label="Tu nombre"
               name="displayName"

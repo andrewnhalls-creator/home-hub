@@ -19,7 +19,7 @@ export default function LoginPage() {
           Organiza tu casa, tus tareas y tus finanzas en un solo lugar.
         </p>
 
-        <form action={formAction} className="mt-6 flex flex-col gap-4">
+        <form action={formAction} noValidate className="mt-6 flex flex-col gap-4">
           <Input
             label="Correo electrónico"
             name="email"

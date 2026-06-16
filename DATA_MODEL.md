@@ -89,7 +89,7 @@ Shared shopping list.
 | `name` | `text not null` | |
 | `quantity` | `numeric` | |
 | `unit` | `text` | |
-| `category_id` | `uuid references categories(id)` | |
+| `category_id` | `uuid references categories(id) on delete set null` | |
 | `store` | `text` | |
 | `priority` | `text check (priority in ('baja','normal','alta')) default 'normal'` | |
 | `notes` | `text` | |
@@ -125,7 +125,7 @@ Shared shopping list.
 | `name` | `text not null` | |
 | `quantity` | `numeric` | |
 | `unit` | `text` | |
-| `category_id` | `uuid references categories(id)` | used to pre-fill category when added to shopping list |
+| `category_id` | `uuid references categories(id) on delete set null` | used to pre-fill category when added to shopping list |
 | `created_at` | `timestamptz default now()` | |
 
 ### `meal_plans`
@@ -154,7 +154,7 @@ Weekly menu planner entries.
 | `description` | `text` | |
 | `due_at` | `timestamptz` | |
 | `assigned_to` | `uuid references auth.users(id)` | nullable = unassigned/both |
-| `category_id` | `uuid references categories(id)` | |
+| `category_id` | `uuid references categories(id) on delete set null` | |
 | `repeat_frequency` | `text check (repeat_frequency in ('ninguna','diaria','semanal','mensual','anual')) default 'ninguna'` | |
 | `status` | `text check (status in ('pendiente','hecho','vencido')) default 'pendiente'` | |
 | `created_by` | `uuid references auth.users(id)` | |
@@ -186,7 +186,7 @@ Weekly menu planner entries.
 | `name` | `text not null` | |
 | `amount` | `numeric(12,2) not null` | |
 | `currency` | `text default 'EUR'` | |
-| `category_id` | `uuid references categories(id)` | |
+| `category_id` | `uuid references categories(id) on delete set null` | |
 | `due_day` | `int check (due_day between 1 and 31)` | |
 | `payment_method` | `text` | |
 | `is_active` | `boolean default true` | |
@@ -205,7 +205,7 @@ Weekly menu planner entries.
 | `amount` | `numeric(12,2) not null` | |
 | `currency` | `text default 'EUR'` | |
 | `expense_date` | `date not null` | |
-| `category_id` | `uuid references categories(id)` | |
+| `category_id` | `uuid references categories(id) on delete set null` | |
 | `paid_by` | `uuid references auth.users(id)` | |
 | `notes` | `text` | |
 | `created_by` | `uuid references auth.users(id)` | |
@@ -251,7 +251,7 @@ Weekly menu planner entries.
 | `currency` | `text default 'EUR'` | |
 | `billing_cycle` | `text check (billing_cycle in ('mensual','trimestral','anual')) default 'mensual'` | |
 | `renewal_date` | `date` | |
-| `category_id` | `uuid references categories(id)` | |
+| `category_id` | `uuid references categories(id) on delete set null` | |
 | `is_active` | `boolean default true` | |
 | `notes` | `text` | |
 | `created_by` | `uuid references auth.users(id)` | |
@@ -315,6 +315,7 @@ Append-only feed.
 - `recipes` 1—N `meal_plans` (optional link; `meal_plans` can stand alone with `custom_name`).
 - `savings_goals` 1—N `savings_contributions`.
 - `categories` is referenced by `shopping_items`, `recipe_ingredients`, `fixed_payments`, `expenses`, `subscriptions`, `reminders`, `wishlist_items` is intentionally category-less in MVP (priority-driven instead), and `household_documents` uses `document_type` (free text) instead of `category_id` since its types don't overlap with the shared category set.
+- Every `category_id` foreign key is `on delete set null`, not the default `no action` — deleting a category (or a household, which cascades to its categories) must not be blocked by, or destroy, rows that merely reference it.
 
 ## RLS strategy
 

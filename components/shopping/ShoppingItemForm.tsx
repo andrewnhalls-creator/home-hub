@@ -38,7 +38,7 @@ export function ShoppingItemForm({
   }, [state.success, onSuccess]);
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <form action={formAction} noValidate className="flex flex-col gap-4">
       <Input
         label="Producto"
         name="name"

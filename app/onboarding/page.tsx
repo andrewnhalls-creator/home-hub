@@ -46,7 +46,7 @@ export default function OnboardingPage() {
         </div>
 
         {mode === "create" ? (
-          <form action={createAction} className="mt-6 flex flex-col gap-4">
+          <form action={createAction} noValidate className="mt-6 flex flex-col gap-4">
             <Input
               label="Nombre del hogar"
               name="name"
@@ -62,7 +62,7 @@ export default function OnboardingPage() {
             </Button>
           </form>
         ) : (
-          <form action={joinAction} className="mt-6 flex flex-col gap-4">
+          <form action={joinAction} noValidate className="mt-6 flex flex-col gap-4">
             <Input
               label="Código de invitación"
               name="code"
