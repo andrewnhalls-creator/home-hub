@@ -254,6 +254,25 @@ export interface WishlistItem {
   updated_at: string;
 }
 
+export interface CalendarEvent {
+  id: string;
+  household_id: string;
+  title: string;
+  description: string | null;
+  event_date: string;
+  event_time: string | null;
+  is_all_day: boolean;
+  repeat_frequency: RepeatFrequency;
+  remind_before_minutes: number | null;
+  is_private: boolean;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  deleted_by: string | null;
+}
+
 export interface ActivityLogEntry {
   id: string;
   household_id: string;
