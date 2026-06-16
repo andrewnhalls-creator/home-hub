@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { ToastProvider } from "@/components/ui/Toast";
 
 export const metadata: Metadata = {
   title: "Home Hub",
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="es-ES" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-cream text-brown font-sans">
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );
