@@ -15,6 +15,18 @@ export type CategoryModule =
   | "wishlist"
   | "meals";
 export type HouseholdRole = "owner" | "member";
+export type NotificationCategory =
+  | "recordatorios"
+  | "calendario"
+  | "tareas"
+  | "pagos"
+  | "suscripciones"
+  | "documentos"
+  | "menu"
+  | "compra"
+  | "actividad_hogar"
+  | "resumen_diario"
+  | "resumen_semanal";
 
 export interface Profile {
   id: string;
@@ -352,5 +364,19 @@ export interface ActivityLogEntry {
   entity_id: string | null;
   action: string | null;
   summary: string | null;
+  created_at: string;
+}
+
+export interface NotificationEvent {
+  id: string;
+  household_id: string;
+  user_id: string;
+  category: NotificationCategory;
+  title: string;
+  body: string | null;
+  entity_type: string | null;
+  entity_id: string | null;
+  is_read: boolean;
+  read_at: string | null;
   created_at: string;
 }
