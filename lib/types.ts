@@ -303,6 +303,10 @@ export interface HouseholdDocument {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  archived_at: string | null;
+  archived_by: string | null;
+  deleted_at: string | null;
+  deleted_by: string | null;
 }
 
 export interface WishlistItem {
