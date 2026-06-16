@@ -69,6 +69,7 @@ export interface Category {
 export interface ShoppingItem {
   id: string;
   household_id: string;
+  shopping_list_id: string | null;
   name: string;
   quantity: number | null;
   unit: string | null;
@@ -79,6 +80,47 @@ export interface ShoppingItem {
   is_completed: boolean;
   completed_at: string | null;
   completed_by: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type ShoppingListStatus = "borrador" | "activa" | "comprada" | "archivada";
+
+export interface ShoppingList {
+  id: string;
+  household_id: string;
+  name: string;
+  week_start_date: string | null;
+  week_end_date: string | null;
+  planned_budget: number | null;
+  actual_total: number | null;
+  currency: string;
+  main_store: string | null;
+  status: ShoppingListStatus;
+  shopping_date: string | null;
+  paid_by: string | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  archived_at: string | null;
+  archived_by: string | null;
+  deleted_at: string | null;
+  deleted_by: string | null;
+}
+
+export interface ShoppingTrip {
+  id: string;
+  household_id: string;
+  shopping_list_id: string;
+  store: string | null;
+  total_amount: number;
+  currency: string;
+  shopping_date: string | null;
+  paid_by: string | null;
+  receipt_url: string | null;
+  notes: string | null;
   created_by: string | null;
   created_at: string;
   updated_at: string;

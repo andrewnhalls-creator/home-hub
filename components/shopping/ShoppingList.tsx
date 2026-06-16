@@ -15,9 +15,10 @@ import type { Category, ShoppingItem } from "@/lib/types";
 interface ShoppingListProps {
   items: ShoppingItem[];
   categories: Category[];
+  shoppingListId?: string;
 }
 
-export function ShoppingList({ items, categories }: ShoppingListProps) {
+export function ShoppingList({ items, categories, shoppingListId }: ShoppingListProps) {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [storeFilter, setStoreFilter] = useState("");
@@ -140,6 +141,7 @@ export function ShoppingList({ items, categories }: ShoppingListProps) {
         <ShoppingItemForm
           action={addShoppingItem}
           categories={categories}
+          shoppingListId={shoppingListId}
           onSuccess={() => setIsAddOpen(false)}
           onCancel={() => setIsAddOpen(false)}
         />

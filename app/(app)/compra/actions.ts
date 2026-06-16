@@ -33,8 +33,11 @@ export async function addShoppingItem(
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const shoppingListId = (formData.get("shoppingListId") as string) || null;
+
   const { error } = await supabase.from("shopping_items").insert({
     household_id: householdId,
+    shopping_list_id: shoppingListId,
     name: parsed.data.name,
     quantity: parsed.data.quantity === "" ? null : parsed.data.quantity,
     unit: parsed.data.unit || null,
@@ -58,6 +61,7 @@ export async function addShoppingItem(
   });
 
   revalidatePath("/compra");
+  if (shoppingListId) revalidatePath(`/compra/listas/${shoppingListId}`);
   return { success: true };
 }
 

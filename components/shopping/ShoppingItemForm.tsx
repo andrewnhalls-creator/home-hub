@@ -12,6 +12,7 @@ interface ShoppingItemFormProps {
   action: (prevState: ShoppingFormState, formData: FormData) => Promise<ShoppingFormState>;
   categories: Category[];
   item?: ShoppingItem;
+  shoppingListId?: string;
   onSuccess: () => void;
   onCancel: () => void;
 }
@@ -28,6 +29,7 @@ export function ShoppingItemForm({
   action,
   categories,
   item,
+  shoppingListId,
   onSuccess,
   onCancel,
 }: ShoppingItemFormProps) {
@@ -39,6 +41,7 @@ export function ShoppingItemForm({
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-4">
+      {shoppingListId && <input type="hidden" name="shoppingListId" value={shoppingListId} />}
       <Input
         label="Producto"
         name="name"
