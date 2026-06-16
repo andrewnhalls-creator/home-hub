@@ -63,7 +63,7 @@ Rules:
 - Destructive: muted red background or red text/border, used only for delete/remove actions, always behind a confirmation step.
 - Disabled: reduced opacity, no pointer events.
 - Icon buttons: minimum 44×44px hit area even if the visual icon is smaller, `aria-label` always present.
-- Standard Spanish button labels: **Añadir, Guardar, Cancelar, Editar, Eliminar, Marcar como hecho, Añadir a la compra, Crear objetivo, Crear recordatorio.**
+- Standard Spanish button labels: **Añadir, Guardar, Cancelar, Editar, Eliminar, Marcar como hecho, Añadir a la compra, Crear objetivo, Crear recordatorio, Posponer, Reprogramar, Marcar como pagado, Omitir este mes, Archivar, Restaurar, Probar notificación, Marcar como leído, Exportar datos.**
 
 ## Form style
 
@@ -76,9 +76,9 @@ Rules:
 
 ## Navigation
 
-- Mobile (primary target): fixed bottom navigation bar, icon + short Spanish label, active state in `terracotta`, inactive in `muted`. Sections: Inicio, Compra, Menú, Recordatorios, Tareas, Finanzas, Documentos, Deseos, Ajustes. If 9 items is too many for a comfortable bottom bar, group into a primary 5 (Inicio, Compra, Menú, Finanzas, Ajustes) with the rest reachable from Inicio/a "Más" overflow — decide pragmatically during Milestone 3, but never hide a section behind more than one extra tap.
-- Desktop/wide viewport: left sidebar with the same sections, full labels, persistent.
-- Top bar: current section title, contextual actions (e.g. search/add icon), household name/avatar.
+- Mobile (primary target): fixed bottom navigation bar, icon + short Spanish label, active state in `terracotta`, inactive in `muted`. Sections: Inicio, Compra, Menú, Recordatorios, Tareas, Calendario, Finanzas, Documentos, Deseos, Ajustes (10 total since the calendar module was added). **Decided** (built in Milestone 3, confirmed still correct with 10 items): primary 4 (Inicio, Compra, Menú, Finanzas) + a "Más" overflow sheet for the remaining 6 (Recordatorios, Tareas, Calendario, Documentos, Deseos, Ajustes) — a 2×3 grid in the overflow modal. Never hide a section behind more than one extra tap.
+- Desktop/wide viewport: left sidebar with all 10 sections, full labels, persistent — no overflow needed at that width.
+- Top bar: current section title (derived from the route, see `components/layout/TopBar.tsx`), household name, and a notification bell icon with an unread-count badge (opens the in-app notification centre) once notifications ship in Milestone 15.
 
 ## Mobile layout
 
@@ -97,6 +97,24 @@ Rules:
 - Page/section-level errors (e.g. failed fetch): a calm card with "No se ha podido cargar esta sección." and a "Reintentar" action — never a raw stack trace or English error.
 - Save failures surface via toast: "No se ha podido guardar. Inténtalo de nuevo."
 
+## Notification centre and badges
+
+- Bell icon in the top bar; a small `amber`/`terracotta` dot or count badge when there are unread `notification_events`, cleared on "Marcar todo como leído".
+- The notification centre itself opens as a full-screen mobile sheet (consistent with the Form style rule below) or a side panel on desktop — a chronological list grouped loosely by day, unread items with a subtle left accent bar in `terracotta`, read items in muted tones.
+- Each entry: category icon, title, short body, relative time, tap target for "Marcar como leído" — never require a separate screen just to mark one item read.
+- Device/notification settings (`/ajustes/notificaciones`) use the same card + toggle patterns as the rest of Settings — a `Switch`-style toggle (can reuse `Badge`/`Button` primitives or add a small `Toggle` primitive when built) rather than checkboxes, for a more native mobile feel.
+
+## Calendar view
+
+- Monthly view: a compact grid, current day highlighted with a `terracotta` ring, days with events get a small dot/badge in the relevant module's accent colour (reminders → amber, payments → rose, etc.) rather than cramming text into the cell.
+- Weekly view and the "Próximos eventos" list reuse the existing `Card`/`ListSection` patterns already established on the dashboard — don't invent a new list pattern for the calendar specifically.
+- A private event ("Evento privado") gets a small lock icon next to its title so the creator can tell at a glance which events their partner can't see.
+
+## Trash and archive
+
+- Soft-deleted records move to a "Papelera" view reachable from the relevant module (not a single global trash) — a simple filtered list with "Restaurar" and a permanent-delete option behind an extra confirmation ("Esto no se puede deshacer.").
+- Archived records (shopping lists, documents) show an "Archivado" `Badge` (neutral variant) and are excluded from the default list view by a filter toggle, not a separate page.
+
 ## Accessibility
 
 - Minimum WCAG AA contrast for all text against its background; adjust any pastel token shade that fails at the size/weight used.
@@ -108,6 +126,6 @@ Rules:
 
 ## Component naming
 
-- `components/ui/Button.tsx`, `Card.tsx`, `Input.tsx`, `Select.tsx`, `Modal.tsx`, `EmptyState.tsx`, `Badge.tsx`, `ProgressBar.tsx`, `Toast.tsx` — generic, reusable, no module-specific logic.
-- `components/layout/AppShell.tsx`, `BottomNav.tsx`, `TopBar.tsx` — app-wide structural components.
-- Module components grouped by feature folder (e.g. `components/shopping/ShoppingItemCard.tsx`, `components/shopping/AddShoppingItemForm.tsx`) — `PascalCase` filenames matching the exported component name, English names, Spanish content within.
+- `components/ui/Button.tsx`, `Card.tsx`, `Input.tsx`, `Select.tsx`, `Textarea.tsx`, `Modal.tsx`, `EmptyState.tsx`, `Badge.tsx`, `ProgressBar.tsx`, `Toast.tsx`, `FloatingAddLink.tsx` — generic, reusable, no module-specific logic.
+- `components/layout/AppShell.tsx`, `BottomNav.tsx`, `Sidebar.tsx`, `TopBar.tsx` — app-wide structural components.
+- Module components grouped by feature folder (e.g. `components/shopping/ShoppingItemCard.tsx`, `components/meals/RecipeForm.tsx`) — `PascalCase` filenames matching the exported component name, English names, Spanish content within. New folders for the modules added in this round: `components/calendar/`, `components/notifications/`, `components/finance/` (payment instances, savings, subscriptions), `components/settings/` (devices, categories, export).

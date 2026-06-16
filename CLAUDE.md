@@ -5,8 +5,8 @@ These rules apply to every Claude Code session working in this repository. Read 
 ## Project
 
 - **Name:** Home Hub
-- **Purpose:** A private, shared household management app for two people (a married couple) to organise shopping lists, weekly menus, recipes, reminders, chores, fixed payments, variable expenses, savings goals, subscriptions, household documents, a wishlist, and household planning, in one place.
-- **Audience:** Exactly two users per household (owner + partner), invite-only. Not a public or multi-tenant SaaS product.
+- **Purpose:** A private, shared household management app for two people (a married couple) to organise shopping lists, weekly menus, recipes, reminders, chores, a calendar, fixed payments with payment history, variable expenses (including weekly grocery spend tracking), savings goals, subscriptions, household documents, a wishlist, push notifications, and household planning, in one place.
+- **Audience:** Exactly two named users per household (owner + partner), invite-only. Not a public or multi-tenant SaaS product.
 
 ## Language and locale (non-negotiable)
 
@@ -33,8 +33,10 @@ These rules apply to every Claude Code session working in this repository. Read 
 - Supabase (Postgres + Auth + RLS) as the only backend. `@supabase/supabase-js` + `@supabase/ssr`.
 - Zod for validation, `react-hook-form` + `@hookform/resolvers` for forms.
 - `date-fns` (with `es` locale) for date handling. `lucide-react` for icons. `clsx` + `tailwind-merge` for class composition.
-- Deployed on Vercel.
-- PWA-installable (manifest + icons), no heavy offline sync in MVP.
+- Deployed on Vercel (hosting only). **Supabase Edge Functions + Supabase Cron (pg_cron) own all scheduled/background processing** — reminder/notification due-date scanning, recurring occurrence generation, and Web Push delivery. Never rely on Vercel Hobby cron for anything time-sensitive (it is not reliable enough for reminder timing).
+- Web Push (service worker + VAPID) is a **core v1 feature**, not optional. See `PRODUCT_REQUIREMENTS.md` notification section and `SECURITY_AND_PRIVACY.md` for content rules.
+- PWA-installable (manifest + icons + install-guidance screen). Push notifications on iOS require the PWA installed to the home screen (iOS 16.4+) — this is a real platform constraint to surface in the UI, not a bug.
+- Limited offline support: the shopping list view caches recently-loaded items and queues completions made while offline (see `PRODUCT_REQUIREMENTS.md`). Do not build full offline sync for every module in v1.
 
 ## Safety rules
 
@@ -46,6 +48,10 @@ These rules apply to every Claude Code session working in this repository. Read 
 - Do not make destructive Supabase changes (dropping tables/columns, deleting data) without first explaining exactly what will change.
 - Never force-push. Never make the GitHub repo public. Keep it private.
 - Confirm with the user before creating or linking new external resources (new Supabase project, new Vercel project) if one already exists — reuse existing infra unless told otherwise.
+- The VAPID private key (Web Push) is a server-only secret: it lives in Supabase Edge Function secrets, never in `NEXT_PUBLIC_*`, never committed, never logged. Only the VAPID **public** key is client-safe.
+- Never log a full push subscription (endpoint + keys) or full notification payload content in plaintext server logs; log delivery status/IDs only (see `notification_delivery_attempts`).
+- Push/notification body text must never contain exact amounts, balances, or other sensitive finance details — use generic phrasing (see `SECURITY_AND_PRIVACY.md` "privacy-safe notification examples"). Sensitive detail is only shown in-app after login.
+- Soft delete, not hard delete, for: finance records, fixed payments, savings goals, documents, calendar events, reminders, shopping lists/spend history. Use `deleted_at`/`deleted_by` (and `archived_at`/`archived_by` where archiving applies) rather than `DELETE FROM`. Other modules (shopping items, chores, recipes, wishlist) keep hard delete with a confirmation dialog, since they're low-stakes and high-churn.
 
 ## Git workflow
 
@@ -86,7 +92,7 @@ These rules apply to every Claude Code session working in this repository. Read 
 
 ## App architecture conventions
 
-- App Router routes under `app/`, one folder per Spanish-named section (`compra/`, `menu/`, `recordatorios/`, `tareas/`, `finanzas/`, `documentos/`, `deseos/`, `ajustes/`).
+- App Router routes under `app/`, one folder per Spanish-named section (`compra/`, `menu/`, `recordatorios/`, `tareas/`, `calendario/`, `finanzas/`, `documentos/`, `deseos/`, `ajustes/` with sub-routes `ajustes/notificaciones`, `ajustes/privacidad`, `ajustes/categorias`, `ajustes/dispositivos`). `buscar/` (global search) is post-MVP, design-ready but not built in v1.
 - Shared UI primitives in `components/ui/`, layout shell in `components/layout/`, feature-specific components grouped by module (`components/shopping/`, `components/finance/`, etc.).
 - Supabase client/server helpers in `lib/supabase/`. Shared formatting (currency, dates) in `lib/format.ts`. Shared constants (categories, enums) in `lib/constants.ts`. Shared TypeScript types in `lib/types.ts`.
 - Keep components small and focused; avoid massive files. Prefer simple, readable, robust code over clever abstractions.
@@ -109,6 +115,10 @@ These rules apply to every Claude Code session working in this repository. Read 
 
 - Design and build for small screens first (bottom navigation, single-column layouts, large touch targets), then enhance for larger screens (sidebar nav, multi-column layouts).
 - Test every new screen at a narrow mobile viewport before considering it done.
+
+## Definition of done (every module)
+
+A module is not done until: the page exists; data saves to and loads from Supabase; RLS is verified (not just assumed); every visible string is Spanish (Spain); the mobile layout (≈375–390px) works; it has an empty state, a loading state, and an error state; forms have Zod validation with Spanish messages and `noValidate` set; destructive actions have a confirmation step; it's been manually exercised against the live Supabase project (not just typechecked); `npm run lint`, `npm run typecheck`, and `npm run build` all pass; and the change is committed and pushed.
 
 ## Working agreement
 
