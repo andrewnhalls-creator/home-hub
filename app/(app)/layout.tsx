@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { AppShell } from "@/components/layout/AppShell";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
@@ -22,12 +23,15 @@ export default async function AppGroupLayout({ children }: { children: ReactNode
   ]);
 
   return (
-    <AppShell
-      householdName={householdName}
-      notifications={notifications ?? []}
-      unreadCount={unreadCount ?? 0}
-    >
-      {children}
-    </AppShell>
+    <>
+      <ServiceWorkerRegistration />
+      <AppShell
+        householdName={householdName}
+        notifications={notifications ?? []}
+        unreadCount={unreadCount ?? 0}
+      >
+        {children}
+      </AppShell>
+    </>
   );
 }

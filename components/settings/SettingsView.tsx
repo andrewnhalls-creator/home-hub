@@ -1,4 +1,5 @@
-import { LogOut } from "lucide-react";
+import Link from "next/link";
+import { LogOut, Bell, ChevronRight } from "lucide-react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { HouseholdNameForm } from "@/components/settings/HouseholdNameForm";
@@ -91,6 +92,19 @@ export function SettingsView({
         <div className="mt-3">
           <ProfileNameForm displayName={profile?.display_name ?? ""} />
         </div>
+      </Card>
+
+      <Card className="p-0 overflow-hidden">
+        <Link
+          href="/ajustes/notificaciones"
+          className="flex min-h-[44px] items-center justify-between gap-3 px-4 py-3 text-sm text-brown hover:bg-sand"
+        >
+          <span className="flex items-center gap-3">
+            <Bell className="h-4 w-4 text-terracotta" aria-hidden />
+            Notificaciones
+          </span>
+          <ChevronRight className="h-4 w-4 text-muted" aria-hidden />
+        </Link>
       </Card>
 
       <Card>

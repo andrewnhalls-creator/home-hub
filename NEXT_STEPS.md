@@ -5,43 +5,31 @@
 2. Read `CLAUDE.md`
 3. Read `BUILD_PLAN.md`
 4. Run `git status` and `git log --oneline -5`
-5. Confirm branch is `main` at commit `bc9ef99`
 
 ## Current Position
-**Milestone 15, Step 2 — Service Worker for Push Notifications**
+**Milestone 15, Step 5 — Supabase Edge Function for Push Delivery**
 
-Finance (Milestone 12), Documents/Wishlist (Milestone 14), Core Settings (Milestone 15 step 0), and In-app Notification Centre (Milestone 15 step 1) are ALL complete.
+Steps 1–4 are complete:
+- Step 1: In-app notification centre (bell icon, modal, mark-as-read)
+- Step 2: `public/sw.js` service worker
+- Step 3: `ServiceWorkerRegistration` component + `usePushSubscription` hook + server actions (upsertPushSubscription, removePushSubscription, upsertNotificationPreferences, sendTestNotification)
+- Step 4: `/ajustes/notificaciones` page — category toggles, push enable/disable, test button
 
-## Immediate Next Tasks (Milestone 15 steps 2–8)
+## Immediate Next Tasks (Milestone 15 steps 5–8)
 
-### Step 2 — Service Worker
-- Create `public/sw.js` with push event listener and notification click handler
-- Register SW in a client component or hook (`useEffect` in root layout or dedicated `ServiceWorkerRegistration` component)
-
-### Step 3 — Push Subscription Storage
-- After SW registers, call `pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: NEXT_PUBLIC_VAPID_PUBLIC_KEY })`
-- Send subscription JSON to a server action that upserts into `push_subscriptions` table
-
-### Step 4 — /ajustes/notificaciones Page
-- Toggle per-category notification preferences
-- "Probar notificación" button that sends a test push
-
-### Step 5 — VAPID Keys
-- Regenerate fresh keys: `npx web-push generate-vapid-keys`
-- Add `NEXT_PUBLIC_VAPID_PUBLIC_KEY=<public>` to `.env.local`
-- ⚠️ ASK USER before storing VAPID_PRIVATE_KEY as Edge Function secret
-
-### Step 6 — Supabase Edge Function
+### Step 5 — Supabase Edge Function
 - Create `supabase/functions/send-push/index.ts`
-- Deploy via MCP `deploy_edge_function` — ASK USER first
-- Set secrets `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT` — ASK USER
+- Uses `web-push` (or the VAPID JWT approach in Deno) to send push notifications
+- Reads `push_subscriptions` for active subscriptions, sends via VAPID
+- ⚠️ **ASK USER before deploying** via `mcp__supabase__deploy_edge_function`
+- ⚠️ **ASK USER before setting secrets** `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT`
 
-### Step 7 — Supabase Cron
-- Configure pg_cron job to call Edge Function for scheduled notifications
-- ASK USER before configuring
+### Step 6 — Supabase Cron
+- Configure `pg_cron` job to invoke the Edge Function for scheduled notifications
+- ⚠️ **ASK USER before configuring**
 
-### Step 8 — Verify Live Push
-- Test end-to-end push delivery
+### Step 7 — Live Push Test
+- End-to-end: subscribe on device → trigger notification → verify delivery
 
 ## After Milestone 15
 Continue in order per BUILD_PLAN.md:
@@ -53,12 +41,17 @@ Continue in order per BUILD_PLAN.md:
 - Milestone 21: Deploy to Vercel — **ASK USER BEFORE DOING ANYTHING**
 - Milestone 22: Final review
 
+## VAPID Keys (generated this session)
+- Public key in `.env.local` as `NEXT_PUBLIC_VAPID_PUBLIC_KEY` ✅
+- Private key: NOT committed. Store as Supabase Edge Function secret `VAPID_PRIVATE_KEY` when deploying `send-push`.
+- Subject: `mailto:andrew.halls@hotmail.es` → set as `VAPID_SUBJECT` Edge Function secret.
+
 ## Do NOT
 - Re-apply any database migrations (001–013 are done)
 - Recreate any existing routes or components
-- Start Milestone 16+ before finishing Milestone 15
 - Commit `.env`, `.env.local`, secrets, or service-role keys
 - Force-push
 - Deploy to Vercel without asking
 - Create cloud resources without asking
 - Make destructive DB changes without asking
+- Set Edge Function secrets without asking
