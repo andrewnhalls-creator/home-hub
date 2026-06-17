@@ -7,18 +7,14 @@ The next phase is a full UI/UX redesign. See `UI_REDESIGN_PLAN.md` for the full 
 
 ---
 
-## Complete: Milestone UI-0 through UI-5
+## Complete: Milestone UI-0 through UI-6
 
-- [x] UI-0 through UI-4: see HANDOFF.md
-- [x] UI-5: Calendar defaults to week view; SegmentedControl (Semana/Mes/Agenda); WeekStrip + day-panel replaces 7-card layout; Agenda view with date tiles; TYPE_LABEL map
+- [x] UI-0 through UI-5: see HANDOFF.md
+- [x] UI-6: PageLoader → skeleton shimmer; ReminderList pills → SegmentedControl; ModuleError + error.tsx for all 10 module routes
 
 ---
 
-## Next: Milestone UI-6 — Module polish
-
-**Goal:** New bottom nav order (Inicio, Calendario, Compra, Finanzas, Más). Más becomes a polished sheet.
-
-**Files:** `lib/constants.ts`, `components/layout/BottomNav.tsx`, `components/layout/MoreMenuSheet.tsx`, `components/layout/Sidebar.tsx`
+## Next: Milestone UI-7 — Tablet/iPad responsive
 
 ---
 

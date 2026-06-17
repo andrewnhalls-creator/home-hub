@@ -1,14 +1,20 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone UI-5 complete)
+Updated: 2026-06-17 (Milestone UI-6 complete)
 
-## Current milestone: UI-5 — Calendar redesign (COMPLETE)
+## Current milestone: UI-6 — Module polish (COMPLETE)
 
 ## Status
-All functional milestones (1–22) complete. UI-0 through UI-5 done.
-Next is UI-6 (module polish).
+All functional milestones (1–22) complete. UI-0 through UI-6 done.
+Next is UI-7 (tablet/iPad responsive).
 
 ## Production URL
 https://home-hub-dun.vercel.app
+
+## What was done in Milestone UI-6
+- `components/ui/PageLoader.tsx`: upgraded from spinner to skeleton card shimmer (4 shimmer cards with avatar + two text lines); affects all 14 module loading states
+- `components/reminders/ReminderList.tsx`: replaced raw pill `<button>` filter row with `SegmentedControl scrollable` (Hoy / Semana / Todos / Completados); consistent with Calendar and Finance tab selectors
+- `components/ui/ModuleError.tsx` (new): shared error state — AlertTriangle icon in danger circle, "Algo ha ido mal" message, "Reintentar" secondary button
+- `app/(app)/*/error.tsx` (new, 10 files): error boundaries for dashboard, calendario, compra, deseos, documentos, finanzas, menu, recordatorios, tareas, ajustes — all delegate to `ModuleError`
 
 ## What was done in Milestone UI-5
 - `components/calendar/CalendarView.tsx`: full redesign
