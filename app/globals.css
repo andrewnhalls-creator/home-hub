@@ -59,7 +59,28 @@
 body {
   background: var(--color-cream);
   color: var(--color-brown);
-  color-scheme: light;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Surfaces */
+    --color-cream: #0d1117;
+    --color-sand: #161b22;
+    --color-card: #1e2430;
+
+    /* Text */
+    --color-brown: #e6edf3;
+    --color-muted: #7d8590;
+
+    /* Border */
+    --color-border: #30363d;
+
+    /* Shadows — heavier on dark to create depth */
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.35), 0 1px 2px -1px rgb(0 0 0 / 0.25);
+    --shadow-card-hover: 0 4px 12px -1px rgb(0 0 0 / 0.45), 0 2px 6px -2px rgb(0 0 0 / 0.35);
+    --shadow-modal: 0 20px 40px -5px rgb(0 0 0 / 0.55), 0 8px 16px -6px rgb(0 0 0 / 0.45);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
