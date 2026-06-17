@@ -1,11 +1,12 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone UI-8 complete)
+Updated: 2026-06-17 (Deployment unblocked — app live)
 
-## Current milestone: UI-8 — QA + final polish (COMPLETE)
+## Current milestone: DEPLOYED ✓
 
 ## Status
 All functional milestones (1–22) complete. Full UI/UX redesign (UI-0 through UI-8) complete.
-The app is live and fully polished. No outstanding milestones.
+Deployed via Vercel CLI (`npx vercel --prod`) — GitHub-triggered deploys remain blocked on Hobby plan
+(collaborator restriction), so use CLI for future deploys. No outstanding milestones.
 
 ## Production URL
 https://home-hub-dun.vercel.app

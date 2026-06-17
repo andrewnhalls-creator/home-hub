@@ -46,6 +46,7 @@ export function WeekStrip({
             aria-label={format(day, "EEEE d 'de' MMMM", { locale: es })}
             aria-pressed={selected}
             onClick={() => onDateSelect?.(day)}
+            tabIndex={onDateSelect ? 0 : -1}
             className={cn(
               "flex flex-1 flex-col items-center gap-1 rounded-xl py-2 transition-colors",
               onDateSelect ? "cursor-pointer hover:bg-sand" : "cursor-default",

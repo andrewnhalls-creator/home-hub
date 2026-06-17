@@ -46,7 +46,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            role="status"
+            role={toast.variant === "error" ? "alert" : "status"}
             className={cn(
               "pointer-events-auto flex w-full max-w-sm items-center gap-2 rounded-xl border px-4 py-3 text-sm shadow-sm",
               toast.variant === "success"
@@ -64,7 +64,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               type="button"
               onClick={() => dismiss(toast.id)}
               aria-label="Cerrar aviso"
-              className="text-muted"
+              className="rounded text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
               <X className="h-4 w-4" aria-hidden />
             </button>

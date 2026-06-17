@@ -36,7 +36,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
         aria-labelledby="modal-title"
         onClick={(event) => event.stopPropagation()}
         className={cn(
-          "max-h-[92vh] w-full overflow-y-auto rounded-t-2xl bg-card p-5 shadow-sm sm:max-w-md sm:rounded-2xl",
+          "max-h-[92vh] w-full overflow-y-auto overscroll-contain rounded-t-2xl bg-card p-5 shadow-sm sm:max-w-md sm:rounded-2xl",
           className,
         )}
       >

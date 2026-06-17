@@ -37,7 +37,7 @@ export function MetricCard({
         <Icon className={cn("h-5 w-5", iconColor)} aria-hidden />
       </div>
       <div className="flex flex-col gap-0.5">
-        <span className="text-2xl font-bold text-brown leading-none">{metric}</span>
+        <span className="text-2xl font-bold text-brown leading-none tabular-nums">{metric}</span>
         <span className="text-sm font-medium text-brown">{label}</span>
         {status && (
           <span className={cn("text-xs leading-snug", statusColor)}>{status}</span>
