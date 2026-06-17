@@ -48,7 +48,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
           >
             <X className="h-5 w-5" aria-hidden />
           </button>

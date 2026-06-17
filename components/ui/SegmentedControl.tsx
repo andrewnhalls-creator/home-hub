@@ -35,7 +35,7 @@ export function SegmentedControl<T extends string>({
         aria-selected={active}
         onClick={() => onChange(option.value)}
         className={cn(
-          "whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-all",
+          "whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
           scrollable ? "shrink-0" : "flex-1",
           active
             ? "bg-card text-terracotta shadow-[var(--shadow-card)]"

@@ -53,10 +53,11 @@ function yearsRemaining(mortgage: Mortgage): string | null {
   return `${years} año${years !== 1 ? "s" : ""} y ${rem} mes${rem !== 1 ? "es" : ""}`;
 }
 
+const dateFormatter = new Intl.DateTimeFormat("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" });
+
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "—";
-  const [y, m, d] = dateStr.split("-");
-  return `${d}/${m}/${y}`;
+  return dateFormatter.format(new Date(`${dateStr}T12:00:00`));
 }
 
 interface MortgageCardProps {
@@ -101,7 +102,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
     <Card className="flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
-        <div>
+        <div className="min-w-0">
           <CardTitle className="text-base">{mortgage.name}</CardTitle>
           {mortgage.lender && <p className="text-sm text-muted mt-0.5">{mortgage.lender}</p>}
         </div>
@@ -249,7 +250,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
                       type="button"
                       aria-label="Eliminar pago"
                       onClick={() => handleDeletePayment(p.id)}
-                      className="text-muted hover:text-danger transition-colors p-1"
+                      className="rounded-lg p-1 text-muted transition-colors hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
                       <Trash2 size={13} />
                     </button>

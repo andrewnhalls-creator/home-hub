@@ -47,6 +47,7 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
           label="Capital inicial (€)"
           name="originalPrincipal"
           type="number"
+          inputMode="decimal"
           step="0.01"
           min="0"
           required
@@ -58,6 +59,7 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
           label="Saldo pendiente (€)"
           name="currentBalance"
           type="number"
+          inputMode="decimal"
           step="0.01"
           min="0"
           required
@@ -72,6 +74,7 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
           label="Cuota mensual (€)"
           name="monthlyPayment"
           type="number"
+          inputMode="decimal"
           step="0.01"
           min="0"
           required
@@ -83,6 +86,7 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
           label="Tipo de interés (%)"
           name="interestRate"
           type="number"
+          inputMode="decimal"
           step="0.001"
           min="0"
           max="100"
@@ -110,6 +114,7 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
         label="Día de pago (1–31)"
         name="paymentDay"
         type="number"
+        inputMode="numeric"
         min="1"
         max="31"
         defaultValue={mortgage?.payment_day ?? undefined}
@@ -129,8 +134,8 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
         <Button type="button" variant="secondary" className="flex-1" onClick={onCancel} disabled={isPending}>
           Cancelar
         </Button>
-        <Button type="submit" className="flex-1" disabled={isPending}>
-          {isPending ? "Guardando…" : mortgage ? "Guardar cambios" : "Añadir hipoteca"}
+        <Button type="submit" className="flex-1" isLoading={isPending}>
+          {mortgage ? "Guardar cambios" : "Añadir hipoteca"}
         </Button>
       </div>
     </form>
