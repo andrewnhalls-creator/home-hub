@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (meal→shopping generator)
+Updated: 2026-06-17 (realtime sync + bug fixes)
 
-## Current state: meal plan → shopping list generator complete ✓
+## Current state: realtime shopping list sync + UI fixes complete ✓
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -31,7 +31,11 @@ npx supabase functions deploy send-push
 6. ✅ **Dark mode** — `@media (prefers-color-scheme: dark)` in `globals.css`; remaps surface/text/border/shadow tokens; one `bg-white→bg-card` fix in `InstallGuideView.tsx`
 7. ✅ **Expense analytics charts** — `ExpenseCharts.tsx` with recharts: monthly bar (6mo), weekly bar (4wk), category donut (current month). Rendered above expense list in Gastos tab.
 8. ✅ **Richer calendar** — DB migration 017 adds `end_date` + `color` to `calendar_events`. Multi-day events expand across date range. Per-event colour picker (8 swatches) in form. Week/agenda views show "d MMM – d MMM" range label. All views use event colour override.
-9. ✅ **Meal plan → shopping list generator** — "Generar lista de la compra" button on `/menu` page. Action collects unique recipe IDs for the week, fetches all ingredients, deduplicates by (name, unit) summing quantities, creates a named `shopping_list`, inserts items, redirects to list for review.
+9. ✅ **Meal plan → shopping list generator** — "Generar lista de la compra" button on `/menu` page.
+10. ✅ **Realtime shopping list sync** — Supabase Realtime channel on `shopping_items` filtered by `household_id`; INSERT/UPDATE/DELETE handled in `ShoppingList` local state; card remounts on remote `is_completed` change.
+11. ✅ **FAB buttons → inline** — All fixed-position floating add buttons converted to full-width inline buttons at bottom of content.
+12. ✅ **Reminder delete removed** — Trash button removed from `ReminderCard`; only Documents retains delete.
+13. ✅ **Stuck notification badge fixed** — `deleteReminder` now marks related `notification_events` as read, clearing the bell badge.
 
 ## Next planned improvements (see NEXT_STEPS.md for full detail)
 1. Realtime shopping list sync
