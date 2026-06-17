@@ -48,7 +48,7 @@ export default async function DocumentsPage() {
   return (
     <>
       <DocumentsList documents={documents ?? []} />
-      <div className="px-4 pb-6 max-w-lg mx-auto">
+      <div className="pb-6">
         <TrashSection
           title="Documentos archivados"
           items={archiveItems}

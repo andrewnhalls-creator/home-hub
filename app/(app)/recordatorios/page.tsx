@@ -43,7 +43,7 @@ export default async function RemindersPage() {
   return (
     <>
       <ReminderList reminders={reminders ?? []} categories={categories ?? []} members={members ?? []} />
-      <div className="px-4 pb-6 max-w-lg mx-auto">
+      <div className="pb-6">
         <TrashSection
           title="Papelera de recordatorios"
           items={trashItems}

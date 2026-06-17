@@ -88,7 +88,7 @@ export default async function ShoppingListsPage() {
         lists={lists ?? []}
         analytics={{ currentWeekTotal, previousWeekTotal, monthlyTotal, fourWeekAverage }}
       />
-      <div className="px-4 pb-6 max-w-lg mx-auto">
+      <div className="pb-6">
         <TrashSection
           title="Listas archivadas"
           items={archiveItems}

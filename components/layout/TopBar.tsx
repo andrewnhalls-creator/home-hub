@@ -19,10 +19,10 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-cream/95 px-4 py-4 backdrop-blur md:px-6">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-xl font-semibold text-brown">{title}</h1>
-        <div className="flex items-center gap-3">
+        <h1 className="text-xl font-semibold text-brown md:hidden">{title}</h1>
+        <div className="flex flex-1 items-center justify-end gap-3">
           {householdName && (
-            <span className="hidden text-sm text-muted sm:inline">{householdName}</span>
+            <span className="hidden text-sm text-muted md:inline">{householdName}</span>
           )}
           <NotificationCentre notifications={notifications} unreadCount={unreadCount} />
         </div>

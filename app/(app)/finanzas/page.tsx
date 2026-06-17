@@ -167,7 +167,7 @@ export default async function FinancePage() {
         financeCategories={financeCategories ?? []}
         members={members ?? []}
       />
-      <div className="px-4 pb-6 max-w-lg mx-auto space-y-0">
+      <div className="pb-6">
         <TrashSection
           title="Papelera — Pagos fijos"
           items={fixedTrash}

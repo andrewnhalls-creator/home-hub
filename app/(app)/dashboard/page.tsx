@@ -96,126 +96,130 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* Greeting */}
+      {/* Greeting — always full width */}
       <GreetingCard
         firstName={firstName}
         householdName={householdName}
         pendingCount={pendingCount}
       />
 
-      {/* 6 metric tiles, 2-column grid */}
-      <div className="grid grid-cols-2 gap-3">
-        <MetricCard
-          icon={ShoppingCart}
-          label="Compra"
-          metric={shopping}
-          status={shopping === 0 ? "Lista vacía" : "pendientes"}
-          href="/compra"
-        />
-        <MetricCard
-          icon={UtensilsCrossed}
-          iconColor="text-olive"
-          iconBg="bg-sage/20"
-          label="Menú"
-          metric={meals}
-          status={meals === 0 ? "Sin planificar" : "de 7 comidas"}
-          href="/menu"
-        />
-        <MetricCard
-          icon={Bell}
-          iconBg="bg-amber/20"
-          label="Recordatorios"
-          metric={pending}
-          status={pending === 0 ? "Nada pendiente" : "pendientes"}
-          href="/recordatorios"
-        />
-        <MetricCard
-          icon={ListChecks}
-          iconColor="text-olive"
-          iconBg="bg-olive/10"
-          label="Tareas"
-          metric={tasks}
-          status={tasks === 0 ? "Al día" : "pendientes"}
-          href="/tareas"
-        />
-        <MetricCard
-          icon={CalendarDays}
-          label="Hoy"
-          metric={todayEventsCount}
-          status={todayEventsCount === 0 ? "Sin eventos hoy" : "eventos"}
-          href="/calendario"
-        />
-        <MetricCard
-          icon={Wallet}
-          iconColor="text-coral"
-          iconBg="bg-rose/20"
-          label="Finanzas"
-          metric={activePayments}
-          status={activePayments === 0 ? "Sin pagos activos" : "pagos activos"}
-          href="/finanzas"
-        />
+      {/* On lg+: 2-col layout (metric grid left, calendar + lists right) */}
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        {/* Left: 6 metric tiles — 2-col on mobile/tablet, 3-col on md+ */}
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-2 lg:content-start">
+          <MetricCard
+            icon={ShoppingCart}
+            label="Compra"
+            metric={shopping}
+            status={shopping === 0 ? "Lista vacía" : "pendientes"}
+            href="/compra"
+          />
+          <MetricCard
+            icon={UtensilsCrossed}
+            iconColor="text-olive"
+            iconBg="bg-sage/20"
+            label="Menú"
+            metric={meals}
+            status={meals === 0 ? "Sin planificar" : "de 7 comidas"}
+            href="/menu"
+          />
+          <MetricCard
+            icon={Bell}
+            iconBg="bg-amber/20"
+            label="Recordatorios"
+            metric={pending}
+            status={pending === 0 ? "Nada pendiente" : "pendientes"}
+            href="/recordatorios"
+          />
+          <MetricCard
+            icon={ListChecks}
+            iconColor="text-olive"
+            iconBg="bg-olive/10"
+            label="Tareas"
+            metric={tasks}
+            status={tasks === 0 ? "Al día" : "pendientes"}
+            href="/tareas"
+          />
+          <MetricCard
+            icon={CalendarDays}
+            label="Hoy"
+            metric={todayEventsCount}
+            status={todayEventsCount === 0 ? "Sin eventos hoy" : "eventos"}
+            href="/calendario"
+          />
+          <MetricCard
+            icon={Wallet}
+            iconColor="text-coral"
+            iconBg="bg-rose/20"
+            label="Finanzas"
+            metric={activePayments}
+            status={activePayments === 0 ? "Sin pagos activos" : "pagos activos"}
+            href="/finanzas"
+          />
+        </div>
+
+        {/* Right: calendar widget + upcoming sections */}
+        <div className="flex flex-col gap-5">
+          <WeekCalendarWidget
+            weekStartStr={weekStart}
+            events={calendarEvents ?? []}
+          />
+
+          {(reminders?.length ?? 0) > 0 && (
+            <ListSection
+              title="Próximos recordatorios"
+              href="/recordatorios"
+              items={(reminders ?? []).map((r) => ({
+                id: r.id,
+                title: r.title,
+                meta: r.due_at ? formatDate(r.due_at) : undefined,
+                badgeLabel: r.due_at && isPast(new Date(r.due_at)) ? "Vencido" : undefined,
+                badgeVariant: "danger" as const,
+              }))}
+            />
+          )}
+
+          {(chores?.length ?? 0) > 0 && (
+            <ListSection
+              title="Tareas de casa pendientes"
+              href="/tareas"
+              items={(chores ?? []).map((c) => ({
+                id: c.id,
+                title: c.title,
+                meta: c.next_due_date ? formatDate(c.next_due_date) : undefined,
+              }))}
+            />
+          )}
+
+          {(payments?.length ?? 0) > 0 && (
+            <ListSection
+              title="Próximos pagos"
+              href="/finanzas"
+              items={(payments ?? []).map((p) => ({
+                id: p.id,
+                title: p.name,
+                meta: p.due_day ? `Día ${p.due_day}` : undefined,
+                badgeLabel: formatCurrency(p.amount),
+                badgeVariant: "accent" as const,
+              }))}
+            />
+          )}
+
+          {subscriptions && subscriptions.length > 0 && (
+            <ListSection
+              title="Suscripciones esta semana"
+              href="/finanzas"
+              items={subscriptions.map((s) => ({
+                id: s.id,
+                title: s.name,
+                meta: s.renewal_date ? formatDate(s.renewal_date) : undefined,
+                badgeLabel: formatCurrency(s.amount),
+                badgeVariant: "warning" as const,
+              }))}
+            />
+          )}
+        </div>
       </div>
-
-      {/* Week calendar widget */}
-      <WeekCalendarWidget
-        weekStartStr={weekStart}
-        events={calendarEvents ?? []}
-      />
-
-      {/* Upcoming list sections — only rendered when there are items */}
-      {(reminders?.length ?? 0) > 0 && (
-        <ListSection
-          title="Próximos recordatorios"
-          href="/recordatorios"
-          items={(reminders ?? []).map((r) => ({
-            id: r.id,
-            title: r.title,
-            meta: r.due_at ? formatDate(r.due_at) : undefined,
-            badgeLabel: r.due_at && isPast(new Date(r.due_at)) ? "Vencido" : undefined,
-            badgeVariant: "danger" as const,
-          }))}
-        />
-      )}
-
-      {(chores?.length ?? 0) > 0 && (
-        <ListSection
-          title="Tareas de casa pendientes"
-          href="/tareas"
-          items={(chores ?? []).map((c) => ({
-            id: c.id,
-            title: c.title,
-            meta: c.next_due_date ? formatDate(c.next_due_date) : undefined,
-          }))}
-        />
-      )}
-
-      {(payments?.length ?? 0) > 0 && (
-        <ListSection
-          title="Próximos pagos"
-          href="/finanzas"
-          items={(payments ?? []).map((p) => ({
-            id: p.id,
-            title: p.name,
-            meta: p.due_day ? `Día ${p.due_day}` : undefined,
-            badgeLabel: formatCurrency(p.amount),
-            badgeVariant: "accent" as const,
-          }))}
-        />
-      )}
-
-      {subscriptions && subscriptions.length > 0 && (
-        <ListSection
-          title="Suscripciones esta semana"
-          href="/finanzas"
-          items={subscriptions.map((s) => ({
-            id: s.id,
-            title: s.name,
-            meta: s.renewal_date ? formatDate(s.renewal_date) : undefined,
-            badgeLabel: formatCurrency(s.amount),
-            badgeVariant: "warning" as const,
-          }))}
-        />
-      )}
     </div>
   );
 }

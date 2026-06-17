@@ -20,7 +20,9 @@ export function AppShell({ householdName, notifications, unreadCount, children }
         <TopBar householdName={householdName} notifications={notifications} unreadCount={unreadCount} />
         <OfflineBanner />
         <main className="flex-1 px-4 pb-24 pt-4 md:px-6 md:pb-6">
-          {children}
+          <div className="mx-auto w-full max-w-3xl">
+            {children}
+          </div>
         </main>
       </div>
       <BottomNav />
