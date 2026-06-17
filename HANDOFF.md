@@ -1,14 +1,20 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone UI-2 complete)
+Updated: 2026-06-17 (Milestone UI-3 complete)
 
-## Current milestone: UI-2 — Navigation + app shell (COMPLETE)
+## Current milestone: UI-3 — Dashboard redesign (COMPLETE)
 
 ## Status
-All functional milestones (1–22) complete. UI-0, UI-1, UI-2 done.
-Next is UI-3 (dashboard redesign).
+All functional milestones (1–22) complete. UI-0 through UI-3 done.
+Next is UI-4 (Finance redesign).
 
 ## Production URL
 https://home-hub-dun.vercel.app
+
+## What was done in Milestone UI-3
+- `components/dashboard/GreetingCard.tsx` (new): warm sand card with decorative terracotta circles, greeting + household name + pending status dot (green = clear, amber = items pending)
+- `components/dashboard/WeekCalendarWidget.tsx` (new, client): WeekStrip with event dots + up to 3 upcoming events in a date-tile list + "Ver todo / Añadir evento" CTAs
+- `components/dashboard/ListSection.tsx`: items now use `divide-y divide-border` with `py-2.5` rows; "Ver todo" gets ChevronRight icon; `emptyMessage` is now optional; `min-w-0 truncate` on item titles
+- `app/(app)/dashboard/page.tsx`: full restructure — 7 parallel queries (removed savings/activity, added calendar events, subscriptions window 30→7 days, reminders/chores/payments now return count+data in one call); 6 MetricCards in 2-col grid; WeekCalendarWidget; ListSections only rendered when they have data; no more RecentActivity or savings goal card on dashboard
 
 ## What was done in Milestone UI-2
 - `lib/constants.ts`: `NAV_ITEMS` reordered (Inicio, Calendario, Compra, Finanzas first); `PRIMARY_NAV_ITEMS` updated to the new 4 (Calendario replaces Menú); `MORE_NAV_ITEMS` now: Recordatorios, Tareas, Menú, Documentos, Deseos, Ajustes

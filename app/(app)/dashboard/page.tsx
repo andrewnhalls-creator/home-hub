@@ -1,13 +1,19 @@
-import { ShoppingCart, UtensilsCrossed } from "lucide-react";
-import { startOfWeek, endOfWeek, format, isPast } from "date-fns";
+import {
+  ShoppingCart,
+  UtensilsCrossed,
+  Bell,
+  ListChecks,
+  CalendarDays,
+  Wallet,
+} from "lucide-react";
+import { startOfWeek, endOfWeek, format, isPast, addDays } from "date-fns";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formatCurrency, formatDate } from "@/lib/format";
-import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
-import { ProgressBar } from "@/components/ui/ProgressBar";
-import { SummaryCard } from "@/components/dashboard/SummaryCard";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { GreetingCard } from "@/components/dashboard/GreetingCard";
+import { WeekCalendarWidget } from "@/components/dashboard/WeekCalendarWidget";
 import { ListSection } from "@/components/dashboard/ListSection";
-import { RecentActivity } from "@/components/dashboard/RecentActivity";
 
 export default async function DashboardPage() {
   const { user, householdId, householdName } = await requireHousehold();
@@ -17,17 +23,16 @@ export default async function DashboardPage() {
   const weekStart = format(startOfWeek(today, { weekStartsOn: 1 }), "yyyy-MM-dd");
   const weekEnd = format(endOfWeek(today, { weekStartsOn: 1 }), "yyyy-MM-dd");
   const todayStr = format(today, "yyyy-MM-dd");
-  const in30Days = format(new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000), "yyyy-MM-dd");
+  const in7Days = format(addDays(today, 7), "yyyy-MM-dd");
 
   const [
     { count: shoppingCount },
     { count: weekMealsCount },
-    { data: reminders },
-    { data: chores },
-    { data: payments },
-    { data: savingsGoals },
+    { data: reminders, count: remindersCount },
+    { data: chores, count: choresCount },
+    { data: payments, count: paymentsCount },
     { data: subscriptions },
-    { data: activity },
+    { data: calendarEvents },
   ] = await Promise.all([
     supabase
       .from("shopping_items")
@@ -42,150 +47,175 @@ export default async function DashboardPage() {
       .lte("planned_date", weekEnd),
     supabase
       .from("reminders")
-      .select("id, title, due_at, status")
+      .select("id, title, due_at, status", { count: "exact" })
       .eq("household_id", householdId)
       .eq("status", "pendiente")
       .order("due_at", { ascending: true, nullsFirst: false })
       .limit(3),
     supabase
       .from("chores")
-      .select("id, title, next_due_date, status")
+      .select("id, title, next_due_date, status", { count: "exact" })
       .eq("household_id", householdId)
       .eq("status", "pendiente")
       .order("next_due_date", { ascending: true, nullsFirst: false })
       .limit(3),
     supabase
       .from("fixed_payments")
-      .select("id, name, amount, due_day")
+      .select("id, name, amount, due_day", { count: "exact" })
       .eq("household_id", householdId)
       .eq("is_active", true)
       .order("due_day", { ascending: true, nullsFirst: false })
       .limit(3),
-    supabase
-      .from("savings_goals")
-      .select("id, name, target_amount, current_amount")
-      .eq("household_id", householdId)
-      .order("created_at", { ascending: true })
-      .limit(1),
     supabase
       .from("subscriptions")
       .select("id, name, amount, renewal_date")
       .eq("household_id", householdId)
       .eq("is_active", true)
       .gte("renewal_date", todayStr)
-      .lte("renewal_date", in30Days)
+      .lte("renewal_date", in7Days)
       .order("renewal_date", { ascending: true })
       .limit(3),
     supabase
-      .from("activity_log")
-      .select("id, summary, created_at")
+      .from("calendar_events")
+      .select("id, title, event_date")
       .eq("household_id", householdId)
-      .order("created_at", { ascending: false })
-      .limit(5),
+      .is("deleted_at", null)
+      .gte("event_date", weekStart)
+      .lte("event_date", weekEnd)
+      .order("event_date", { ascending: true }),
   ]);
 
   const firstName = (user.user_metadata?.display_name as string | undefined)?.split(" ")[0];
-  const topGoal = savingsGoals?.[0];
+  const pendingCount = (remindersCount ?? 0) + (choresCount ?? 0);
+  const todayEventsCount = (calendarEvents ?? []).filter((e) => e.event_date === todayStr).length;
+  const shopping = shoppingCount ?? 0;
+  const meals = weekMealsCount ?? 0;
+  const pending = remindersCount ?? 0;
+  const tasks = choresCount ?? 0;
+  const activePayments = paymentsCount ?? 0;
 
   return (
-    <div className="flex flex-col gap-6">
-      <Card>
-        <CardTitle>{firstName ? `Hola, ${firstName}` : "Hola"}</CardTitle>
-        <CardDescription>Resumen de {householdName}</CardDescription>
-      </Card>
+    <div className="flex flex-col gap-5">
+      {/* Greeting */}
+      <GreetingCard
+        firstName={firstName}
+        householdName={householdName}
+        pendingCount={pendingCount}
+      />
 
+      {/* 6 metric tiles, 2-column grid */}
       <div className="grid grid-cols-2 gap-3">
-        <SummaryCard
+        <MetricCard
           icon={ShoppingCart}
-          label="En la lista de la compra"
-          value={String(shoppingCount ?? 0)}
+          label="Compra"
+          metric={shopping}
+          status={shopping === 0 ? "Lista vacía" : "pendientes"}
           href="/compra"
         />
-        <SummaryCard
+        <MetricCard
           icon={UtensilsCrossed}
-          label="Comidas esta semana"
-          value={String(weekMealsCount ?? 0)}
+          iconColor="text-olive"
+          iconBg="bg-sage/20"
+          label="Menú"
+          metric={meals}
+          status={meals === 0 ? "Sin planificar" : "de 7 comidas"}
           href="/menu"
+        />
+        <MetricCard
+          icon={Bell}
+          iconBg="bg-amber/20"
+          label="Recordatorios"
+          metric={pending}
+          status={pending === 0 ? "Nada pendiente" : "pendientes"}
+          href="/recordatorios"
+        />
+        <MetricCard
+          icon={ListChecks}
+          iconColor="text-olive"
+          iconBg="bg-olive/10"
+          label="Tareas"
+          metric={tasks}
+          status={tasks === 0 ? "Al día" : "pendientes"}
+          href="/tareas"
+        />
+        <MetricCard
+          icon={CalendarDays}
+          label="Hoy"
+          metric={todayEventsCount}
+          status={todayEventsCount === 0 ? "Sin eventos hoy" : "eventos"}
+          href="/calendario"
+        />
+        <MetricCard
+          icon={Wallet}
+          iconColor="text-coral"
+          iconBg="bg-rose/20"
+          label="Finanzas"
+          metric={activePayments}
+          status={activePayments === 0 ? "Sin pagos activos" : "pagos activos"}
+          href="/finanzas"
         />
       </div>
 
-      <ListSection
-        title="Próximos recordatorios"
-        href="/recordatorios"
-        emptyMessage="Nada pendiente por ahora."
-        items={(reminders ?? []).map((reminder) => ({
-          id: reminder.id,
-          title: reminder.title,
-          meta: reminder.due_at ? formatDate(reminder.due_at) : undefined,
-          badgeLabel: reminder.due_at && isPast(new Date(reminder.due_at)) ? "Vencido" : "Pendiente",
-          badgeVariant: reminder.due_at && isPast(new Date(reminder.due_at)) ? "danger" : "neutral",
-        }))}
+      {/* Week calendar widget */}
+      <WeekCalendarWidget
+        weekStartStr={weekStart}
+        events={calendarEvents ?? []}
       />
 
-      <ListSection
-        title="Tareas de casa pendientes"
-        href="/tareas"
-        emptyMessage="Tu semana está lista."
-        items={(chores ?? []).map((chore) => ({
-          id: chore.id,
-          title: chore.title,
-          meta: chore.next_due_date ? formatDate(chore.next_due_date) : undefined,
-        }))}
-      />
-
-      <ListSection
-        title="Próximos pagos"
-        href="/finanzas"
-        emptyMessage="Todavía no hay pagos fijos configurados."
-        items={(payments ?? []).map((payment) => ({
-          id: payment.id,
-          title: payment.name,
-          meta: payment.due_day ? `Día ${payment.due_day}` : undefined,
-          badgeLabel: formatCurrency(payment.amount),
-          badgeVariant: "accent",
-        }))}
-      />
-
-      <Card>
-        <CardTitle>Objetivos de ahorro</CardTitle>
-        {topGoal ? (
-          <div className="mt-3">
-            <div className="flex items-center justify-between text-sm">
-              <span className="font-medium text-brown">{topGoal.name}</span>
-              <span className="text-muted">
-                {formatCurrency(topGoal.current_amount)} / {formatCurrency(topGoal.target_amount)}
-              </span>
-            </div>
-            <ProgressBar
-              className="mt-2"
-              value={topGoal.current_amount}
-              max={topGoal.target_amount}
-              label={topGoal.name}
-            />
-          </div>
-        ) : (
-          <p className="mt-3 text-sm text-muted">
-            Todavía no hay objetivos de ahorro. Crea el primero para empezar.
-          </p>
-        )}
-      </Card>
-
-      {subscriptions && subscriptions.length > 0 && (
+      {/* Upcoming list sections — only rendered when there are items */}
+      {(reminders?.length ?? 0) > 0 && (
         <ListSection
-          title="Suscripciones que se renuevan pronto"
-          href="/finanzas"
-          emptyMessage=""
-          items={subscriptions.map((subscription) => ({
-            id: subscription.id,
-            title: subscription.name,
-            meta: subscription.renewal_date ? formatDate(subscription.renewal_date) : undefined,
-            badgeLabel: formatCurrency(subscription.amount),
-            badgeVariant: "warning",
+          title="Próximos recordatorios"
+          href="/recordatorios"
+          items={(reminders ?? []).map((r) => ({
+            id: r.id,
+            title: r.title,
+            meta: r.due_at ? formatDate(r.due_at) : undefined,
+            badgeLabel: r.due_at && isPast(new Date(r.due_at)) ? "Vencido" : undefined,
+            badgeVariant: "danger" as const,
           }))}
         />
       )}
 
-      <RecentActivity items={activity ?? []} />
+      {(chores?.length ?? 0) > 0 && (
+        <ListSection
+          title="Tareas de casa pendientes"
+          href="/tareas"
+          items={(chores ?? []).map((c) => ({
+            id: c.id,
+            title: c.title,
+            meta: c.next_due_date ? formatDate(c.next_due_date) : undefined,
+          }))}
+        />
+      )}
+
+      {(payments?.length ?? 0) > 0 && (
+        <ListSection
+          title="Próximos pagos"
+          href="/finanzas"
+          items={(payments ?? []).map((p) => ({
+            id: p.id,
+            title: p.name,
+            meta: p.due_day ? `Día ${p.due_day}` : undefined,
+            badgeLabel: formatCurrency(p.amount),
+            badgeVariant: "accent" as const,
+          }))}
+        />
+      )}
+
+      {subscriptions && subscriptions.length > 0 && (
+        <ListSection
+          title="Suscripciones esta semana"
+          href="/finanzas"
+          items={subscriptions.map((s) => ({
+            id: s.id,
+            title: s.name,
+            meta: s.renewal_date ? formatDate(s.renewal_date) : undefined,
+            badgeLabel: formatCurrency(s.amount),
+            badgeVariant: "warning" as const,
+          }))}
+        />
+      )}
     </div>
   );
 }
