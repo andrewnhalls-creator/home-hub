@@ -3,12 +3,14 @@
 ## Start Here
 1. Read `HANDOFF.md` (full document)
 2. Read `CLAUDE.md`
-3. Run `git status` and `git log --oneline -5`
+3. Run `git status --short` and `git log --oneline -5`
+
+> **Session discipline:** Work one stage at a time. Stop and ask the user to start a fresh Claude Code session if context is getting large. After every completed stage, update `HANDOFF.md`, `NEXT_STEPS.md`, commit, push, and wait for "continue".
 
 ## Current Position
-**Milestone 15, Step 6 — Deploy Edge Function + Set Secrets**
+**Milestone 15, Step 6b — Set VAPID Secrets in Supabase**
 
-Steps 1–5 are complete:
+Steps 1–5 are complete, and step 6a (deploy Edge Function) is done:
 - Step 1: In-app notification centre (bell icon, modal, mark-as-read)
 - Step 2: `public/sw.js` service worker
 - Step 3: `ServiceWorkerRegistration` + `usePushSubscription` hook + subscription server actions
@@ -17,20 +19,16 @@ Steps 1–5 are complete:
 
 ## Immediate Next Tasks (Milestone 15 steps 6–8)
 
-### Step 6 — Deploy Edge Function + Set Secrets
-⚠️ **STOP — ask user before each action below**
+### Step 6b — Set VAPID Secrets in Supabase Dashboard
+✅ Edge Function `send-push` deployed (version 1, status ACTIVE)
 
-**a. Deploy the Edge Function:**
-- Use `mcp__supabase__deploy_edge_function` with project_id `xzkavpjwvadqldauaabm`
-- Function name: `send-push`
-- Source: `supabase/functions/send-push/index.ts`
+⚠️ **USER ACTION REQUIRED** — set these 3 secrets in the Supabase dashboard:
+- URL: `https://supabase.com/dashboard/project/xzkavpjwvadqldauaabm/settings/functions`
+- `VAPID_PUBLIC_KEY` = full public key from `.env.local` (`NEXT_PUBLIC_VAPID_PUBLIC_KEY`)
+- `VAPID_PRIVATE_KEY` = private key from "Vapid keys.rtf" (never commit)
+- `VAPID_SUBJECT` = `mailto:andrew.halls@hotmail.es`
 
-**b. Set Edge Function secrets** (ask user to confirm the private key is the correct one from their records):
-```
-VAPID_PUBLIC_KEY=BCpWxtTgNzrnoIU8cnr1KjqHrjMgVCpYD_fsf4dUwZRm3U16B2vAqPYb34XGz_mE82Gsx_KCPRHWt4MQoCfQ-uw
-VAPID_PRIVATE_KEY=<user must supply — do not print or store in docs>
-VAPID_SUBJECT=mailto:andrew.halls@hotmail.es
-```
+Once secrets are set, continue to Step 7.
 
 ### Step 7 — Supabase Cron
 ⚠️ **ASK USER before configuring**

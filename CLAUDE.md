@@ -126,3 +126,30 @@ A module is not done until: the page exists; data saves to and loads from Supaba
 - Follow the phases in `BUILD_PLAN.md` in order; don't skip ahead to later modules before earlier foundational work (auth, schema, app shell) is in place.
 - No placeholder buttons that silently do nothing — either implement the action or clearly mark it as not-yet-available in the UI copy.
 - No fake/demo data rendered as if real in production views; use proper empty states instead.
+
+## Context-saving protocol
+
+1. Work one stage at a time.
+2. Do not continue automatically into the next stage.
+3. At the end of each stage:
+   - Update `HANDOFF.md`
+   - Update `NEXT_STEPS.md`
+   - Update `KNOWN_ISSUES.md` if needed
+   - Commit and push
+   - Stop and wait for the user to say continue
+4. Keep `HANDOFF.md` concise — current state only, not a full history.
+5. Keep `NEXT_STEPS.md` focused on the next 1–3 stages only.
+6. Do not paste long file contents into chat.
+7. Do not read large files unless required by the current stage.
+8. Do not read `package-lock.json` unless debugging dependencies.
+9. Do not inspect `node_modules/`, `.next/`, build output, generated files, or cache folders.
+10. Prefer targeted file reads over broad repository scans.
+11. Prefer `git status --short`, `git diff --stat`, and `git diff --name-only` over full `git diff`.
+12. For build/lint/test output, use `tail` or targeted error output instead of dumping full logs.
+13. Do not call Supabase MCP unless the current stage requires database, auth, RLS, Edge Functions, secrets, or Cron.
+14. Do not call Vercel MCP unless the current stage requires deployment, env vars, domains, or build/deploy status.
+15. Do not add new MCP servers without explicit user approval.
+16. Do not use browser/search/documentation MCP tools unless explicitly approved.
+17. Do not include secrets, private keys, `.env.local` values, or service role keys in summaries, logs, docs, commits, or handoff files.
+18. If context seems to be getting large, stop early, update handoff files, commit, push, and tell the user to start a fresh session.
+19. Use repository files and Git history as the source of truth, not chat history.
