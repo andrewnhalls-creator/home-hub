@@ -1,6 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Home Hub",
@@ -31,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es-ES" className="h-full antialiased">
+    <html lang="es-ES" className={`${jakarta.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-cream text-brown font-sans">
         <ToastProvider>{children}</ToastProvider>
       </body>

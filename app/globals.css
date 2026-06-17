@@ -32,6 +32,8 @@
 }
 
 @theme inline {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
   --color-cream: var(--color-cream);
   --color-sand: var(--color-sand);
   --color-card: var(--color-card);
