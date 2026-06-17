@@ -123,7 +123,14 @@ export function FinanceTabs({
         />
       </div>
 
-      {tab === "resumen" && <ResumenTab {...resumen} />}
+      {tab === "resumen" && (
+        <ResumenTab
+          {...resumen}
+          mortgages={mortgages}
+          mortgagePayments={mortgagePayments}
+          onGoToMortgage={() => setTab("hipoteca")}
+        />
+      )}
       {tab === "pagos" && (
         <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />
       )}

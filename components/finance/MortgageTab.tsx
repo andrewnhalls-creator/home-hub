@@ -70,6 +70,7 @@ interface MortgageCardProps {
 
 function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: MortgageCardProps) {
   const [showHistory, setShowHistory] = useState(false);
+  const [deletingPaymentId, setDeletingPaymentId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
   const { showToast } = useToast();
 
@@ -90,15 +91,19 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
     });
   }
 
-  function handleDeletePayment(paymentId: string) {
+  function handleDeletePaymentConfirm() {
+    if (!deletingPaymentId) return;
+    const idToDelete = deletingPaymentId;
+    setDeletingPaymentId(null);
     startTransition(async () => {
-      const result = await deleteMortgagePayment(paymentId);
+      const result = await deleteMortgagePayment(idToDelete);
       if (result.error) showToast(result.error, "error");
       else showToast("Pago eliminado.", "success");
     });
   }
 
   return (
+    <>
     <Card className="flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
@@ -249,7 +254,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
                     <button
                       type="button"
                       aria-label="Eliminar pago"
-                      onClick={() => handleDeletePayment(p.id)}
+                      onClick={() => setDeletingPaymentId(p.id)}
                       className="rounded-lg p-1 text-muted transition-colors hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
                       <Trash2 size={13} />
@@ -262,6 +267,37 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
         </div>
       )}
     </Card>
+
+    <Modal
+      isOpen={!!deletingPaymentId}
+      onClose={() => setDeletingPaymentId(null)}
+      title="Eliminar pago"
+    >
+      <div className="flex flex-col gap-4">
+        <p className="text-sm text-brown">
+          ¿Eliminar este pago registrado? Esta acción no se puede deshacer.
+        </p>
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            className="flex-1"
+            onClick={() => setDeletingPaymentId(null)}
+          >
+            Cancelar
+          </Button>
+          <Button
+            type="button"
+            variant="danger"
+            className="flex-1"
+            onClick={handleDeletePaymentConfirm}
+          >
+            Eliminar
+          </Button>
+        </div>
+      </div>
+    </Modal>
+    </>
   );
 }
 
