@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireHousehold } from "@/lib/auth";
 import { documentSchema } from "@/lib/validations/documents";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
+import { logActivity } from "@/lib/activity";
 
 export interface DocumentFormState {
   error?: string;
@@ -82,6 +83,7 @@ export async function createDocument(
   if (error || !data) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
 
   await scheduleExpiryNotification(data.id, householdId, parsed.data.title, parsed.data.expiryDate);
+  void logActivity({ householdId, actorId: user.id, entityType: "household_document", entityId: data.id, action: "created", summary: `Añadió el documento: ${parsed.data.title}` });
 
   revalidatePath("/documentos");
   return { success: true };
@@ -133,11 +135,15 @@ export async function archiveDocument(documentId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: doc } = await supabase.from("household_documents").select("title").eq("id", documentId).single();
+
   await supabase
     .from("household_documents")
     .update({ archived_at: new Date().toISOString(), archived_by: user.id })
     .eq("id", documentId)
     .eq("household_id", householdId);
+
+  void logActivity({ householdId, actorId: user.id, entityType: "household_document", entityId: documentId, action: "archived", summary: `Archivó el documento: ${doc?.title ?? documentId}` });
 
   revalidatePath("/documentos");
 }
@@ -146,6 +152,8 @@ export async function deleteDocument(documentId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: doc } = await supabase.from("household_documents").select("title").eq("id", documentId).single();
+
   await supabase
     .from("household_documents")
     .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
@@ -153,6 +161,47 @@ export async function deleteDocument(documentId: string) {
     .eq("household_id", householdId);
 
   await cancelScheduledNotifications("household_document", documentId);
+  void logActivity({ householdId, actorId: user.id, entityType: "household_document", entityId: documentId, action: "deleted", summary: `Eliminó el documento: ${doc?.title ?? documentId}` });
 
   revalidatePath("/documentos");
+}
+
+export async function restoreDocument(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const documentId = formData.get("id") as string;
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("household_documents")
+    .update({ deleted_at: null, deleted_by: null })
+    .eq("id", documentId)
+    .eq("household_id", householdId);
+
+  if (error) return { error: "No se ha podido restaurar." };
+
+  revalidatePath("/documentos");
+  return {};
+}
+
+export async function unarchiveDocument(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const documentId = formData.get("id") as string;
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("household_documents")
+    .update({ archived_at: null, archived_by: null })
+    .eq("id", documentId)
+    .eq("household_id", householdId);
+
+  if (error) return { error: "No se ha podido restaurar." };
+
+  revalidatePath("/documentos");
+  return {};
 }

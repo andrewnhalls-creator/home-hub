@@ -1,47 +1,25 @@
-# Next Steps — Fresh Session Checklist
+# Next Steps
 
-## Start Here
-1. Read `HANDOFF.md` (full document)
-2. Read `CLAUDE.md`
-3. Run `git status --short` and `git log --oneline -5`
+## Immediate next task: Milestone 17 Part C — Trash/archive UI
 
-> **Session discipline:** Work one stage at a time. Stop and ask the user to start a fresh Claude Code session if context is getting large. After every completed stage, update `HANDOFF.md`, `NEXT_STEPS.md`, commit, push, and wait for "continue".
+### 1. Create `components/ui/TrashSection.tsx`
+Generic reusable client component. Pattern:
+- `TrashRow` sub-component: holds `useActionState(restoreAction, {})`, renders item label + sublabel + form with `<input type="hidden" name="id" value={item.id} />` + "Restaurar" submit button
+- `TrashSection` component: collapsible section with toggle button, title, list of TrashRow components
+- Props: `title`, `items: Array<{ id, label, sublabel?, deletedAt }>`, `restoreAction: (_prevState: { error?: string }, formData: FormData) => Promise<{ error?: string }>`
 
-## Current Position
-**Milestone 17 — Activity log and soft-delete/archive UI**
+### 2. Update module pages (fetch deleted/archived, render TrashSection)
+- `app/(app)/recordatorios/page.tsx` — fetch `deleted_at is not null` reminders; render TrashSection below ReminderList using `restoreReminder`
+- `app/(app)/finanzas/page.tsx` — fetch deleted records per type; render TrashSection per tab using respective restore actions
+- `app/(app)/calendario/page.tsx` — fetch deleted events; render TrashSection using `restoreCalendarEvent`
+- `app/(app)/documentos/page.tsx` — fetch archived (deleted_at null + archived_at not null) AND deleted separately; render ArchiveSection + TrashSection using `unarchiveDocument` / `restoreDocument`
+- `app/(app)/compra/listas/page.tsx` — fetch archived + deleted lists; render archive + trash sections using `unarchiveShoppingList` / `restoreShoppingList`
 
-Milestone 16 complete. All settings sub-pages built and pushed.
+### 3. Finish Milestone 17
+- Run `npm run lint` and `npm run typecheck`
+- Commit all Milestone 17 changes
+- Update HANDOFF.md and NEXT_STEPS.md
+- Push to origin/main
 
-## Immediate Next Task
-
-### Milestone 17 — Activity log and soft-delete/archive UI
-Per BUILD_PLAN.md:
-- Activity log writes on key actions across all modules
-- "Historial"/"Creado por"/"Actualizado por" surfaced on finance, payments, savings goals, documents, reminders, chores, calendar events, shopping lists
-- Wire `deleted_at`/`archived_at` into delete/archive/restore UI — "Papelera" (trash) view, "Restaurar", "Archivar"
-- Dashboard: render recent activity
-
-## After Milestone 17
-Continue in order per BUILD_PLAN.md:
-- Milestone 18: Polish
-- Milestone 19: Offline shopping
-- Milestone 18: Polish
-- Milestone 19: Offline shopping
-- Milestone 20: PWA + install prompt
-- Milestone 21: Deploy to Vercel — **ASK USER BEFORE DOING ANYTHING**
-- Milestone 22: Final review
-
-## VAPID Key Status
-- Public key: in `.env.local` as `NEXT_PUBLIC_VAPID_PUBLIC_KEY` ✅
-- Private key: NOT committed. User holds it. Set as Edge Function secret `VAPID_PRIVATE_KEY` in step 6.
-
-## Do NOT
-- Deploy Edge Function without asking
-- Set Supabase secrets without asking
-- Configure Supabase Cron without asking
-- Re-apply any database migrations (001–013 are done)
-- Recreate any existing routes or components
-- Commit `.env`, `.env.local`, secrets, `*.rtf`, or service-role keys
-- Force-push
-- Deploy to Vercel without asking
-- Make destructive DB changes without asking
+## After Milestone 17: Milestone 18
+See BUILD_PLAN.md for details.

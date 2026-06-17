@@ -6,6 +6,7 @@ import type { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { requireHousehold } from "@/lib/auth";
 import { shoppingListSchema, shoppingTripSchema, markPurchasedSchema } from "@/lib/validations/shoppingLists";
+import { logActivity } from "@/lib/activity";
 
 export interface ShoppingListFormState {
   error?: string;
@@ -55,6 +56,8 @@ export async function createShoppingList(
     .single();
 
   if (error || !data) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  void logActivity({ householdId, actorId: user.id, entityType: "shopping_list", entityId: data.id, action: "created", summary: `Creó la lista de la compra: ${parsed.data.name}` });
 
   revalidatePath("/compra/listas");
   return { success: true };
@@ -190,11 +193,15 @@ export async function archiveShoppingList(listId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: list } = await supabase.from("shopping_lists").select("name").eq("id", listId).single();
+
   await supabase
     .from("shopping_lists")
     .update({ status: "archivada", archived_at: new Date().toISOString(), archived_by: user.id })
     .eq("id", listId)
     .eq("household_id", householdId);
+
+  void logActivity({ householdId, actorId: user.id, entityType: "shopping_list", entityId: listId, action: "archived", summary: `Archivó la lista: ${list?.name ?? listId}` });
 
   revalidatePath("/compra/listas");
 }
@@ -203,12 +210,42 @@ export async function deleteShoppingList(listId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: list } = await supabase.from("shopping_lists").select("name").eq("id", listId).single();
+
   await supabase
     .from("shopping_lists")
     .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
     .eq("id", listId)
     .eq("household_id", householdId);
 
+  void logActivity({ householdId, actorId: user.id, entityType: "shopping_list", entityId: listId, action: "deleted", summary: `Eliminó la lista: ${list?.name ?? listId}` });
+
   revalidatePath("/compra/listas");
   redirect("/compra/listas");
+}
+
+export async function restoreShoppingList(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const listId = formData.get("id") as string;
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+  const { error } = await supabase.from("shopping_lists").update({ deleted_at: null, deleted_by: null }).eq("id", listId).eq("household_id", householdId);
+  if (error) return { error: "No se ha podido restaurar." };
+  revalidatePath("/compra/listas");
+  return {};
+}
+
+export async function unarchiveShoppingList(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const listId = formData.get("id") as string;
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+  const { error } = await supabase.from("shopping_lists").update({ status: "borrador", archived_at: null, archived_by: null }).eq("id", listId).eq("household_id", householdId);
+  if (error) return { error: "No se ha podido restaurar." };
+  revalidatePath("/compra/listas");
+  return {};
 }

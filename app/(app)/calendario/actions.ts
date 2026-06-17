@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireHousehold } from "@/lib/auth";
 import { calendarEventSchema } from "@/lib/validations/calendar";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
+import { logActivity } from "@/lib/activity";
 
 export interface CalendarEventFormState {
   error?: string;
@@ -97,6 +98,7 @@ export async function createCalendarEvent(
       parsed.data.remindBeforeMinutes,
     );
   }
+  void logActivity({ householdId, actorId: user.id, entityType: "calendar_event", entityId: data.id, action: "created", summary: `Añadió el evento: ${parsed.data.title}` });
 
   revalidatePath("/calendario");
   return { success: true };
@@ -168,6 +170,8 @@ export async function deleteCalendarEvent(eventId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: event } = await supabase.from("calendar_events").select("title").eq("id", eventId).single();
+
   await supabase
     .from("calendar_events")
     .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
@@ -175,8 +179,29 @@ export async function deleteCalendarEvent(eventId: string) {
     .eq("household_id", householdId);
 
   await cancelScheduledNotifications("calendar_event", eventId);
+  void logActivity({ householdId, actorId: user.id, entityType: "calendar_event", entityId: eventId, action: "deleted", summary: `Eliminó el evento: ${event?.title ?? eventId}` });
 
   revalidatePath("/calendario");
+}
+
+export async function restoreCalendarEvent(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const eventId = formData.get("id") as string;
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("calendar_events")
+    .update({ deleted_at: null, deleted_by: null })
+    .eq("id", eventId)
+    .eq("household_id", householdId);
+
+  if (error) return { error: "No se ha podido restaurar." };
+
+  revalidatePath("/calendario");
+  return {};
 }
 
 function flattenFieldErrors(error: z.ZodError) {

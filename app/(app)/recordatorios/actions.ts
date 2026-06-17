@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireHousehold } from "@/lib/auth";
 import { reminderSchema } from "@/lib/validations/reminders";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
+import { logActivity } from "@/lib/activity";
 
 export interface ReminderFormState {
   error?: string;
@@ -144,8 +145,10 @@ export async function updateReminder(
 }
 
 export async function toggleReminderStatus(reminderId: string, isDone: boolean) {
-  const { householdId } = await requireHousehold();
+  const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
+
+  const { data: reminder } = await supabase.from("reminders").select("title").eq("id", reminderId).single();
 
   await supabase
     .from("reminders")
@@ -155,6 +158,7 @@ export async function toggleReminderStatus(reminderId: string, isDone: boolean) 
 
   if (isDone) {
     await cancelScheduledNotifications("reminder", reminderId);
+    void logActivity({ householdId, actorId: user.id, entityType: "reminder", entityId: reminderId, action: "completed", summary: `Completó el recordatorio: ${reminder?.title ?? reminderId}` });
   }
 
   revalidatePath("/recordatorios");
@@ -190,6 +194,8 @@ export async function deleteReminder(reminderId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: reminder } = await supabase.from("reminders").select("title").eq("id", reminderId).single();
+
   await supabase
     .from("reminders")
     .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
@@ -197,21 +203,29 @@ export async function deleteReminder(reminderId: string) {
     .eq("household_id", householdId);
 
   await cancelScheduledNotifications("reminder", reminderId);
+  void logActivity({ householdId, actorId: user.id, entityType: "reminder", entityId: reminderId, action: "deleted", summary: `Eliminó el recordatorio: ${reminder?.title ?? reminderId}` });
 
   revalidatePath("/recordatorios");
 }
 
-export async function restoreReminder(reminderId: string) {
+export async function restoreReminder(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const reminderId = formData.get("id") as string;
   const { householdId } = await requireHousehold();
   const supabase = await createClient();
 
-  await supabase
+  const { error } = await supabase
     .from("reminders")
     .update({ deleted_at: null, deleted_by: null })
     .eq("id", reminderId)
     .eq("household_id", householdId);
 
+  if (error) return { error: "No se ha podido restaurar." };
+
   revalidatePath("/recordatorios");
+  return {};
 }
 
 function flattenFieldErrors(error: z.ZodError) {

@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireHousehold } from "@/lib/auth";
 import { choreSchema } from "@/lib/validations/chores";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
+import { logActivity } from "@/lib/activity";
 import type { ChoreFrequency } from "@/lib/types";
 
 export interface ChoreFormState {
@@ -102,6 +103,7 @@ export async function createChore(
     parsed.data.title,
     parsed.data.nextDueDate || null,
   );
+  void logActivity({ householdId, actorId: user.id, entityType: "chore", entityId: data.id, action: "created", summary: `Añadió la tarea: ${parsed.data.title}` });
 
   revalidatePath("/tareas");
   return { success: true };
@@ -156,7 +158,7 @@ export async function updateChore(
 }
 
 export async function completeChore(choreId: string) {
-  const { householdId } = await requireHousehold();
+  const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
   const { data: chore } = await supabase
@@ -171,6 +173,7 @@ export async function completeChore(choreId: string) {
 
   if (chore.frequency === "puntual" || !chore.next_due_date) {
     await supabase.from("chores").update({ status: "hecho" }).eq("id", choreId).eq("household_id", householdId);
+    void logActivity({ householdId, actorId: user.id, entityType: "chore", entityId: choreId, action: "completed", summary: `Completó la tarea: ${chore.title}` });
     revalidatePath("/tareas");
     return;
   }
@@ -184,16 +187,19 @@ export async function completeChore(choreId: string) {
     .eq("household_id", householdId);
 
   await scheduleChoreNotification(choreId, householdId, chore.assigned_to, chore.title, nextDate);
+  void logActivity({ householdId, actorId: user.id, entityType: "chore", entityId: choreId, action: "completed", summary: `Completó la tarea: ${chore.title}` });
 
   revalidatePath("/tareas");
 }
 
 export async function deleteChore(choreId: string) {
-  const { householdId } = await requireHousehold();
+  const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: chore } = await supabase.from("chores").select("title").eq("id", choreId).single();
   await supabase.from("chores").delete().eq("id", choreId).eq("household_id", householdId);
   await cancelScheduledNotifications("chore", choreId);
+  void logActivity({ householdId, actorId: user.id, entityType: "chore", entityId: choreId, action: "deleted", summary: `Eliminó la tarea: ${chore?.title ?? choreId}` });
 
   revalidatePath("/tareas");
 }

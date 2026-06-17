@@ -13,6 +13,7 @@ import {
   subscriptionSchema,
 } from "@/lib/validations/finance";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
+import { logActivity } from "@/lib/activity";
 
 export interface FinanceFormState {
   error?: string;
@@ -66,6 +67,8 @@ export async function createFixedPayment(
 
   if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
 
+  void logActivity({ householdId, actorId: user.id, entityType: "fixed_payment", action: "created", summary: `Añadió el pago fijo: ${parsed.data.name}` });
+
   revalidatePath("/finanzas");
   return { success: true };
 }
@@ -114,13 +117,30 @@ export async function deleteFixedPayment(paymentId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: payment } = await supabase.from("fixed_payments").select("name").eq("id", paymentId).single();
+
   await supabase
     .from("fixed_payments")
     .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
     .eq("id", paymentId)
     .eq("household_id", householdId);
 
+  void logActivity({ householdId, actorId: user.id, entityType: "fixed_payment", entityId: paymentId, action: "deleted", summary: `Eliminó el pago fijo: ${payment?.name ?? paymentId}` });
+
   revalidatePath("/finanzas");
+}
+
+export async function restoreFixedPayment(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const paymentId = formData.get("id") as string;
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+  const { error } = await supabase.from("fixed_payments").update({ deleted_at: null, deleted_by: null }).eq("id", paymentId).eq("household_id", householdId);
+  if (error) return { error: "No se ha podido restaurar." };
+  revalidatePath("/finanzas");
+  return {};
 }
 
 /**
@@ -277,6 +297,8 @@ export async function createExpense(
 
   if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
 
+  void logActivity({ householdId, actorId: user.id, entityType: "expense", action: "created", summary: `Añadió un gasto: ${parsed.data.title}` });
+
   revalidatePath("/finanzas");
   return { success: true };
 }
@@ -285,13 +307,30 @@ export async function deleteExpense(expenseId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: expense } = await supabase.from("expenses").select("title").eq("id", expenseId).single();
+
   await supabase
     .from("expenses")
     .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
     .eq("id", expenseId)
     .eq("household_id", householdId);
 
+  void logActivity({ householdId, actorId: user.id, entityType: "expense", entityId: expenseId, action: "deleted", summary: `Eliminó el gasto: ${expense?.title ?? expenseId}` });
+
   revalidatePath("/finanzas");
+}
+
+export async function restoreExpense(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const expenseId = formData.get("id") as string;
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+  const { error } = await supabase.from("expenses").update({ deleted_at: null, deleted_by: null }).eq("id", expenseId).eq("household_id", householdId);
+  if (error) return { error: "No se ha podido restaurar." };
+  revalidatePath("/finanzas");
+  return {};
 }
 
 // ---------------------------------------------------------------------------
@@ -327,6 +366,8 @@ export async function createSavingsGoal(
 
   if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
 
+  void logActivity({ householdId, actorId: user.id, entityType: "savings_goal", action: "created", summary: `Creó la meta de ahorro: ${parsed.data.name}` });
+
   revalidatePath("/finanzas");
   return { success: true };
 }
@@ -335,13 +376,30 @@ export async function deleteSavingsGoal(goalId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: goal } = await supabase.from("savings_goals").select("name").eq("id", goalId).single();
+
   await supabase
     .from("savings_goals")
     .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
     .eq("id", goalId)
     .eq("household_id", householdId);
 
+  void logActivity({ householdId, actorId: user.id, entityType: "savings_goal", entityId: goalId, action: "deleted", summary: `Eliminó la meta de ahorro: ${goal?.name ?? goalId}` });
+
   revalidatePath("/finanzas");
+}
+
+export async function restoreSavingsGoal(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const goalId = formData.get("id") as string;
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+  const { error } = await supabase.from("savings_goals").update({ deleted_at: null, deleted_by: null }).eq("id", goalId).eq("household_id", householdId);
+  if (error) return { error: "No se ha podido restaurar." };
+  revalidatePath("/finanzas");
+  return {};
 }
 
 export async function addContribution(
@@ -443,6 +501,8 @@ export async function createSubscription(
     });
   }
 
+  void logActivity({ householdId, actorId: user.id, entityType: "subscription", entityId: data.id, action: "created", summary: `Añadió la suscripción: ${parsed.data.name}` });
+
   revalidatePath("/finanzas");
   return { success: true };
 }
@@ -451,6 +511,8 @@ export async function deleteSubscription(subscriptionId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  const { data: sub } = await supabase.from("subscriptions").select("name").eq("id", subscriptionId).single();
+
   await supabase
     .from("subscriptions")
     .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
@@ -458,6 +520,20 @@ export async function deleteSubscription(subscriptionId: string) {
     .eq("household_id", householdId);
 
   await cancelScheduledNotifications("subscription", subscriptionId);
+  void logActivity({ householdId, actorId: user.id, entityType: "subscription", entityId: subscriptionId, action: "deleted", summary: `Eliminó la suscripción: ${sub?.name ?? subscriptionId}` });
 
   revalidatePath("/finanzas");
+}
+
+export async function restoreSubscription(
+  _prevState: { error?: string },
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const subscriptionId = formData.get("id") as string;
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+  const { error } = await supabase.from("subscriptions").update({ deleted_at: null, deleted_by: null }).eq("id", subscriptionId).eq("household_id", householdId);
+  if (error) return { error: "No se ha podido restaurar." };
+  revalidatePath("/finanzas");
+  return {};
 }
