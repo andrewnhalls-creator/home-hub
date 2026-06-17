@@ -10,6 +10,8 @@ import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";
 import type { Category, ShoppingItem } from "@/lib/types";
 import { toggleShoppingItemComplete, deleteShoppingItem } from "@/app/(app)/compra/actions";
+import { useOnlineStatus } from "@/hooks/useOnlineStatus";
+import { useOfflineToggleQueue } from "@/hooks/useOfflineToggleQueue";
 
 interface ShoppingItemCardProps {
   item: ShoppingItem;
@@ -21,6 +23,9 @@ export function ShoppingItemCard({ item, category, onEdit }: ShoppingItemCardPro
   const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [localCompleted, setLocalCompleted] = useState(item.is_completed);
+  const isOnline = useOnlineStatus();
+  const { enqueue } = useOfflineToggleQueue(isOnline);
 
   const meta = [
     item.quantity ? `${item.quantity}${item.unit ? ` ${item.unit}` : ""}` : null,
@@ -35,14 +40,20 @@ export function ShoppingItemCard({ item, category, onEdit }: ShoppingItemCardPro
       <Card className="flex items-start gap-3">
         <button
           type="button"
-          aria-label={item.is_completed ? "Volver a pendiente" : "Marcar como comprado"}
+          aria-label={localCompleted ? "Volver a pendiente" : "Marcar como comprado"}
           disabled={isPending}
-          onClick={() =>
-            startTransition(() => toggleShoppingItemComplete(item.id, !item.is_completed))
-          }
+          onClick={() => {
+            const next = !localCompleted;
+            setLocalCompleted(next);
+            if (!isOnline) {
+              enqueue(item.id, next);
+            } else {
+              startTransition(() => toggleShoppingItemComplete(item.id, next));
+            }
+          }}
           className="mt-0.5 text-terracotta disabled:opacity-50"
         >
-          {item.is_completed ? (
+          {localCompleted ? (
             <CheckCircle2 className="h-6 w-6" aria-hidden />
           ) : (
             <Circle className="h-6 w-6" aria-hidden />
@@ -53,7 +64,7 @@ export function ShoppingItemCard({ item, category, onEdit }: ShoppingItemCardPro
           <p
             className={cn(
               "text-sm font-medium text-brown",
-              item.is_completed && "text-muted line-through",
+              localCompleted && "text-muted line-through",
             )}
           >
             {item.name}
