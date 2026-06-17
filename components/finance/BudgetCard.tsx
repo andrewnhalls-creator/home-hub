@@ -111,8 +111,8 @@ export function BudgetCard({ monthlyBudget, spent }: BudgetCardProps) {
 
       <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-border">
         <div
-          className={`h-full rounded-full transition-all ${barColor}`}
-          style={{ width: `${pct}%` }}
+          className={`progress-fill h-full w-full rounded-full ${barColor}`}
+          style={{ transform: `scaleX(${pct / 100})` }}
         />
       </div>
 

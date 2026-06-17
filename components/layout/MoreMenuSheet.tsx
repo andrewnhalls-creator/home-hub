@@ -43,7 +43,7 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
       onClick={onClose}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-brown/40" aria-hidden />
+      <div className="animate-backdrop-enter absolute inset-0 bg-brown/40" aria-hidden />
 
       {/* Sheet */}
       <div

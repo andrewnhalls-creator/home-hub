@@ -97,7 +97,7 @@ export function FinanceTabs({
               aria-selected={active}
               onClick={() => setTab(value)}
               className={cn(
-                "flex items-center gap-2.5 rounded-xl border px-3 py-3 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+                "flex items-center gap-2.5 rounded-xl border px-3 py-3 text-left text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]",
                 active
                   ? "border-terracotta/30 bg-terracotta text-cream shadow-[var(--shadow-card)]"
                   : "border-border bg-card text-brown hover:bg-sand",
@@ -124,25 +124,27 @@ export function FinanceTabs({
         />
       </div>
 
-      {tab === "resumen" && (
-        <ResumenTab
-          {...resumen}
-          mortgages={mortgages}
-          mortgagePayments={mortgagePayments}
-          onGoToMortgage={() => setTab("hipoteca")}
-        />
-      )}
-      {tab === "pagos" && (
-        <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />
-      )}
-      {tab === "gastos" && <ExpensesTab expenses={expenses} categories={financeCategories} members={members} />}
-      {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
-      {tab === "suscripciones" && (
-        <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
-      )}
-      {tab === "hipoteca" && (
-        <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
-      )}
+      <div key={tab} className="animate-tab-enter">
+        {tab === "resumen" && (
+          <ResumenTab
+            {...resumen}
+            mortgages={mortgages}
+            mortgagePayments={mortgagePayments}
+            onGoToMortgage={() => setTab("hipoteca")}
+          />
+        )}
+        {tab === "pagos" && (
+          <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />
+        )}
+        {tab === "gastos" && <ExpensesTab expenses={expenses} categories={financeCategories} members={members} />}
+        {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
+        {tab === "suscripciones" && (
+          <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
+        )}
+        {tab === "hipoteca" && (
+          <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
+        )}
+      </div>
     </div>
   );
 }

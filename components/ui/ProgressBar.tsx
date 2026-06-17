@@ -21,8 +21,8 @@ export function ProgressBar({ value, max, className, label }: ProgressBarProps) 
         className="h-2.5 w-full overflow-hidden rounded-full bg-sand"
       >
         <div
-          className="h-full rounded-full bg-terracotta transition-all"
-          style={{ width: `${percentage}%` }}
+          className="progress-fill h-full w-full rounded-full bg-terracotta"
+          style={{ transform: `scaleX(${percentage / 100})` }}
         />
       </div>
     </div>

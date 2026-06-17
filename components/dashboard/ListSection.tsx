@@ -36,7 +36,7 @@ export function ListSection({ title, href, items, emptyMessage }: ListSectionPro
       {items.length === 0 ? (
         <p className="mt-3 text-sm text-muted">{emptyMessage ?? "Nada pendiente por ahora."}</p>
       ) : (
-        <ul className="mt-3 flex flex-col divide-y divide-border">
+        <ul className="stagger-list mt-3 flex flex-col divide-y divide-border">
           {items.map((item) => (
             <li key={item.id} className="flex items-center justify-between gap-3 py-2.5 first:pt-1 last:pb-0">
               <div className="min-w-0 flex-1">

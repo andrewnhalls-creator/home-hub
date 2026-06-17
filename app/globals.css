@@ -140,3 +140,43 @@ body {
 .animate-toast-enter {
   animation: toast-enter 0.2s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
+
+/* Backdrop — fades in behind modals and sheets */
+@keyframes backdrop-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-backdrop-enter {
+  animation: backdrop-enter 0.2s ease-out both;
+}
+
+/* Tab panel — fades and rises slightly when switching tabs */
+@keyframes tab-enter {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+.animate-tab-enter {
+  animation: tab-enter 0.16s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+/* Stagger list items on page load */
+.stagger-list > li {
+  animation: page-fade-up 0.22s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.stagger-list > li:nth-child(1)  { animation-delay: 0ms;   }
+.stagger-list > li:nth-child(2)  { animation-delay: 40ms;  }
+.stagger-list > li:nth-child(3)  { animation-delay: 80ms;  }
+.stagger-list > li:nth-child(4)  { animation-delay: 115ms; }
+.stagger-list > li:nth-child(5)  { animation-delay: 145ms; }
+.stagger-list > li:nth-child(6)  { animation-delay: 170ms; }
+.stagger-list > li:nth-child(7)  { animation-delay: 190ms; }
+.stagger-list > li:nth-child(8)  { animation-delay: 205ms; }
+
+/* Progress bar — scaleX is GPU-composited; transform-origin: left so it fills left→right */
+.progress-fill {
+  transform-origin: left center;
+  transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  @starting-style {
+    transform: scaleX(0);
+  }
+}

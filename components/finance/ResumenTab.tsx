@@ -114,8 +114,8 @@ function MortgageCard({ mortgage, payments, onClick }: MortgageCardProps) {
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-border">
               <div
-                className="h-full rounded-full bg-sage transition-all"
-                style={{ width: `${amortisedPct}%` }}
+                className="progress-fill h-full w-full rounded-full bg-sage"
+                style={{ transform: `scaleX(${amortisedPct / 100})` }}
               />
             </div>
           </div>

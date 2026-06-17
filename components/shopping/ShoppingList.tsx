@@ -119,7 +119,7 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
           description="Añade el primero para empezar."
         />
       ) : (
-        <ul className="flex flex-col gap-3">
+        <ul className="stagger-list flex flex-col gap-3">
           {activeItems.map((item) => (
             <li key={`${item.id}-${item.is_completed}`}>
               <ShoppingItemCard
