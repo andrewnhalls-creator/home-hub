@@ -8,23 +8,23 @@
 > **Session discipline:** Work one stage at a time. Stop and ask the user to start a fresh Claude Code session if context is getting large. After every completed stage, update `HANDOFF.md`, `NEXT_STEPS.md`, commit, push, and wait for "continue".
 
 ## Current Position
-**Milestone 16 — Settings expansion**
+**Milestone 17 — Activity log and soft-delete/archive UI**
 
-Milestone 15 complete. End-to-end push notification device test deferred to Milestone 22 (requires real user accounts).
+Milestone 16 complete. All settings sub-pages built and pushed.
 
 ## Immediate Next Task
 
-### Milestone 16 — Settings expansion
+### Milestone 17 — Activity log and soft-delete/archive UI
 Per BUILD_PLAN.md:
-- `/ajustes/dispositivos` — device/session list, revoke/remove device, tied to push_subscriptions deactivation
-- `/ajustes/categorias` — create/rename/recolour/archive categories per module; never hard-delete a category in use
-- `/ajustes/privacidad` — export household data as JSON, finance/shopping-history/documents as CSV
-- `/auth` — forgot/reset password, change password, change email
+- Activity log writes on key actions across all modules
+- "Historial"/"Creado por"/"Actualizado por" surfaced on finance, payments, savings goals, documents, reminders, chores, calendar events, shopping lists
+- Wire `deleted_at`/`archived_at` into delete/archive/restore UI — "Papelera" (trash) view, "Restaurar", "Archivar"
+- Dashboard: render recent activity
 
-## After Milestone 15
+## After Milestone 17
 Continue in order per BUILD_PLAN.md:
-- Milestone 16: Settings expansion (`/ajustes/dispositivos`, `/categorias`, `/privacidad`, password reset)
-- Milestone 17: Activity log + trash/archive UI
+- Milestone 18: Polish
+- Milestone 19: Offline shopping
 - Milestone 18: Polish
 - Milestone 19: Offline shopping
 - Milestone 20: PWA + install prompt

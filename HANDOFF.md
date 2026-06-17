@@ -1,5 +1,5 @@
 # Home Hub — Handoff Document
-Generated: 2026-06-17 (updated after Step 8 infrastructure health check)
+Generated: 2026-06-17 (updated after Milestone 16)
 
 ## Project Summary
 Private Spanish-Spain household-management PWA for two named users: **Andrew** (owner) and **Jose** (member).
@@ -16,7 +16,7 @@ Private Spanish-Spain household-management PWA for two named users: **Andrew** (
 
 ## Current Branch & Commit
 - Branch: `main`
-- Latest commit: `228162a` — "Fix Edge Function: replace npm:web-push with esm.sh import"
+- Latest commit: `6f35259` — "Add settings expansion (devices, categories, privacy export, password reset)"
 - Git status: **clean**, everything pushed to GitHub
 
 ## Phase Status
@@ -43,14 +43,15 @@ Private Spanish-Spain household-management PWA for two named users: **Andrew** (
 19. **Milestone 15 Step 6b: VAPID secrets set** — `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` set as Edge Function secrets in Supabase dashboard.
 20. **Milestone 15 Step 7: Supabase Cron configured** — `pg_net` + `pg_cron` enabled (migration 014). Cron job `send-push-cron` registered (`* * * * *`, jobid 1). Uses anon key as Bearer token; function uses its own service role for DB access internally.
 21. **Milestone 15 Step 8: Infrastructure health confirmed** — Fixed `npm:web-push` → `https://esm.sh/web-push@3.6.7` (Deno runtime compatibility). Fixed `VAPID_PUBLIC_KEY` Edge Function secret (was stored with wrong encoding). Cron now returns HTTP 200 `{"processed":0,"sent":0,"failed":0}` every minute. Function deployed as version 6 (ACTIVE). **End-to-end device test deliberately deferred to Milestone 22 (final review), when real user accounts are created.**
+22. **Milestone 16: Settings expansion** — `/ajustes/dispositivos` (push subscription list, revoke/remove per-device, revoke all), `/ajustes/categorias` (create/rename/recolour/archive per module; migration 015 adds `archived_at`/`archived_by` to categories), `/ajustes/privacidad` (data export as JSON + finance CSV via `/api/ajustes/exportar`), `/ajustes/cuenta` (change password, change email), `/auth/forgot-password`, `/auth/reset-password`, `/auth/callback` (PKCE code exchange). SettingsView updated with links to all sub-pages. Login page now has "¿Olvidaste tu contraseña?" link.
 
-### Current Position: **Milestone 16 — Settings expansion**
-Milestone 15 complete. End-to-end push notification device test deferred to Milestone 22 (requires real accounts).
-Next: Milestone 16 — `/ajustes/dispositivos`, `/ajustes/categorias`, `/ajustes/privacidad`, password reset.
+### Current Position: **Milestone 17 — Activity log and soft-delete/archive UI**
+Milestone 16 complete.
+Next: Milestone 17 — activity log writes + dashboard renders, trash/archive UI for modules that use soft delete.
 
 ### Incomplete (in order)
-- Milestone 15 step 8: live push test (manual — needs a subscribed device)
-- Milestone 16: settings expansion (`/ajustes/dispositivos`, `/categorias`, `/privacidad`, password reset)
+- Milestone 15 step 8: live push test (manual — needs a subscribed device, deferred to M22)
+- Milestone 17: activity log + trash/archive UI
 - Milestone 17: activity log + trash/archive UI
 - Milestone 18: polish pass
 - Milestone 19: offline shopping
@@ -74,6 +75,12 @@ Next: Milestone 16 — `/ajustes/dispositivos`, `/ajustes/categorias`, `/ajustes
 | `/ajustes` | ✅ |
 | `/notificaciones` (actions only, no full page) | ✅ |
 | `/ajustes/notificaciones` | ✅ |
+| `/ajustes/dispositivos` | ✅ |
+| `/ajustes/categorias` | ✅ |
+| `/ajustes/privacidad` | ✅ |
+| `/ajustes/cuenta` | ✅ |
+| `/auth/forgot-password`, `/auth/reset-password`, `/auth/callback` | ✅ |
+| `/api/ajustes/exportar` | ✅ |
 
 ## Database / Schema
 - Migrations 001–013 applied to Supabase project `xzkavpjwvadqldauaabm`
@@ -84,7 +91,7 @@ Next: Milestone 16 — `/ajustes/dispositivos`, `/ajustes/categorias`, `/ajustes
 
 ## Supabase Status
 - Project: `xzkavpjwvadqldauaabm` (Postgres 17)
-- Migrations through 014 applied (014 = pg_net + pg_cron)
+- Migrations through 015 applied (014 = pg_net + pg_cron; 015 = categories archived_at/archived_by)
 - Edge Functions: `send-push` **DEPLOYED** (version 6, ACTIVE, `verify_jwt: true`) — VAPID secrets set and confirmed working
 - Supabase Cron: **ACTIVE** — `send-push-cron` fires every minute (jobid 1), confirmed returning HTTP 200
 - push_subscriptions table active — app will upsert subscriptions when user enables push
@@ -148,7 +155,7 @@ Store the private key ONLY as a Supabase Edge Function secret — never commit i
 - Any force-push
 
 ## Exact Next Actions (fresh session)
-Milestone 15 complete. Continue with Milestone 16:
+Milestone 16 complete. Continue with Milestone 17:
 1. Read HANDOFF.md, NEXT_STEPS.md
 2. Run `git status --short` and `git log --oneline -5`
-3. Build Milestone 16: `/ajustes/dispositivos`, `/ajustes/categorias`, `/ajustes/privacidad`, password reset/change per BUILD_PLAN.md
+3. Build Milestone 17: activity log writes + dashboard activity, trash/archive UI per BUILD_PLAN.md
