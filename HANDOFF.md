@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (document expiry alerts)
+Updated: 2026-06-17 (monthly budget tracker)
 
-## Current state: document expiry push alerts complete ✓
+## Current state: monthly budget tracker complete ✓
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -37,6 +37,7 @@ npx supabase functions deploy send-push
 12. ✅ **Reminder delete removed** — Trash button removed from `ReminderCard`; only Documents retains delete.
 13. ✅ **Stuck notification badge fixed** — `deleteReminder` now marks related `notification_events` as read, clearing the bell badge.
 14. ✅ **Document expiry push alerts** — `scan_document_expiry_notifications()` SQL function + pg_cron job daily at 08:00 UTC. Queues `scheduled_notifications` for docs expiring in 30, 7, and 1 day. Deduplication via `idempotency_key`. Applied as migration 018.
+15. ✅ **Monthly budget tracker** — `monthly_budget` column on `households` (migration 019). `BudgetCard` component: shows variable-expense progress bar (green→amber→red at 80%/100%) with inline edit. Appears at top of Resumen tab.
 
 ## Next planned improvements (see NEXT_STEPS.md for full detail)
 1. Realtime shopping list sync
