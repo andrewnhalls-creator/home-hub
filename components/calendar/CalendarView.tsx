@@ -10,6 +10,7 @@ import {
   isSameMonth,
   isToday,
   parse,
+  parseISO,
   startOfMonth,
   startOfWeek,
   subMonths,
@@ -49,6 +50,23 @@ const TYPE_DOT_CLASS: Record<CalendarItemType, string> = {
   documento: "bg-muted",
   comida: "bg-sage",
 };
+
+function ItemDot({ item }: { item: import("@/lib/calendar").CalendarItem }) {
+  return (
+    <span
+      className={cn("h-2 w-2 shrink-0 rounded-full", !item.color && TYPE_DOT_CLASS[item.type])}
+      style={item.color ? { background: item.color } : undefined}
+      aria-hidden
+    />
+  );
+}
+
+function itemDateRangeLabel(item: import("@/lib/calendar").CalendarItem): string | null {
+  if (!item.endDate || item.endDate === item.date) return null;
+  const start = format(parseISO(item.date), "d MMM", { locale: es });
+  const end = format(parseISO(item.endDate), "d MMM", { locale: es });
+  return `${start} – ${end}`;
+}
 
 const TYPE_LABEL: Record<CalendarItemType, string> = {
   evento: "Evento",
@@ -205,35 +223,37 @@ export function CalendarView({ items }: CalendarViewProps) {
                 <p className="text-sm text-muted">Sin eventos este día.</p>
               ) : (
                 <ul className="flex flex-col gap-2">
-                  {selectedWeekDayItems.map((item) => (
-                    <li
-                      key={item.id}
-                      className="flex items-center gap-3 rounded-xl border border-border bg-sand px-3 py-2.5"
-                    >
-                      <span
-                        className={cn("h-2 w-2 shrink-0 rounded-full", TYPE_DOT_CLASS[item.type])}
-                        aria-hidden
-                      />
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-brown">
-                          {item.title}
-                          {item.isPrivate && (
-                            <Lock className="ml-1 inline h-3 w-3 text-muted" aria-label="Privado" />
-                          )}
-                        </p>
-                        <p className="text-xs text-muted">{TYPE_LABEL[item.type]}</p>
-                      </div>
-                      {item.type === "evento" && item.event && (
-                        <button
-                          type="button"
-                          onClick={() => setEditingItem(item)}
-                          className="shrink-0 min-h-[44px] px-2 text-xs font-medium text-terracotta hover:underline active:opacity-70"
-                        >
-                          Editar
-                        </button>
-                      )}
-                    </li>
-                  ))}
+                  {selectedWeekDayItems.map((item) => {
+                    const rangeLabel = itemDateRangeLabel(item);
+                    return (
+                      <li
+                        key={item.id}
+                        className="flex items-center gap-3 rounded-xl border border-border bg-sand px-3 py-2.5"
+                      >
+                        <ItemDot item={item} />
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-brown">
+                            {item.title}
+                            {item.isPrivate && (
+                              <Lock className="ml-1 inline h-3 w-3 text-muted" aria-label="Privado" />
+                            )}
+                          </p>
+                          <p className="text-xs text-muted">
+                            {rangeLabel ?? TYPE_LABEL[item.type]}
+                          </p>
+                        </div>
+                        {item.type === "evento" && item.event && (
+                          <button
+                            type="button"
+                            onClick={() => setEditingItem(item)}
+                            className="shrink-0 min-h-[44px] px-2 text-xs font-medium text-terracotta hover:underline active:opacity-70"
+                          >
+                            Editar
+                          </button>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>
@@ -291,7 +311,8 @@ export function CalendarView({ items }: CalendarViewProps) {
                     {dayItems.slice(0, 3).map((item) => (
                       <span
                         key={item.id}
-                        className={cn("h-1.5 w-1.5 rounded-full", TYPE_DOT_CLASS[item.type])}
+                        className={cn("h-1.5 w-1.5 rounded-full", !item.color && TYPE_DOT_CLASS[item.type])}
+                        style={item.color ? { background: item.color } : undefined}
                         aria-hidden
                       />
                     ))}
@@ -314,38 +335,52 @@ export function CalendarView({ items }: CalendarViewProps) {
             />
           ) : (
             <ul className="flex flex-col gap-2">
-              {upcoming.map((item) => (
-                <li key={item.id}>
-                  <Card className="flex items-center gap-3 p-3">
-                    <div className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-lg bg-terracotta/10">
-                      <span className="text-[10px] font-semibold uppercase leading-none text-terracotta">
-                        {format(new Date(`${item.date}T00:00:00`), "MMM", { locale: es })}
-                      </span>
-                      <span className="text-sm font-bold leading-none text-terracotta">
-                        {format(new Date(`${item.date}T00:00:00`), "d")}
-                      </span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-brown">
-                        {item.title}
-                        {item.isPrivate && (
-                          <Lock className="ml-1 inline h-3 w-3 text-muted" aria-label="Privado" />
-                        )}
-                      </p>
-                      <p className="text-xs text-muted">{TYPE_LABEL[item.type]}</p>
-                    </div>
-                    {item.type === "evento" && item.event && (
-                      <button
-                        type="button"
-                        onClick={() => setEditingItem(item)}
-                        className="shrink-0 text-xs font-medium text-terracotta hover:underline"
+              {upcoming.map((item) => {
+                const rangeLabel = itemDateRangeLabel(item);
+                const accentColor = item.color ?? "var(--color-terracotta)";
+                const accentBg = item.color ? `${item.color}1a` : "rgb(10 132 255 / 0.1)";
+                return (
+                  <li key={item.id}>
+                    <Card className="flex items-center gap-3 p-3">
+                      <div
+                        className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-lg"
+                        style={{ background: accentBg }}
                       >
-                        Editar
-                      </button>
-                    )}
-                  </Card>
-                </li>
-              ))}
+                        <span
+                          className="text-[10px] font-semibold uppercase leading-none"
+                          style={{ color: accentColor }}
+                        >
+                          {format(new Date(`${item.date}T00:00:00`), "MMM", { locale: es })}
+                        </span>
+                        <span
+                          className="text-sm font-bold leading-none"
+                          style={{ color: accentColor }}
+                        >
+                          {format(new Date(`${item.date}T00:00:00`), "d")}
+                        </span>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-brown">
+                          {item.title}
+                          {item.isPrivate && (
+                            <Lock className="ml-1 inline h-3 w-3 text-muted" aria-label="Privado" />
+                          )}
+                        </p>
+                        <p className="text-xs text-muted">{rangeLabel ?? TYPE_LABEL[item.type]}</p>
+                      </div>
+                      {item.type === "evento" && item.event && (
+                        <button
+                          type="button"
+                          onClick={() => setEditingItem(item)}
+                          className="shrink-0 text-xs font-medium text-terracotta hover:underline"
+                        >
+                          Editar
+                        </button>
+                      )}
+                    </Card>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </>
@@ -382,7 +417,7 @@ export function CalendarView({ items }: CalendarViewProps) {
                 key={item.id}
                 className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-brown"
               >
-                <span className={cn("h-2 w-2 shrink-0 rounded-full", TYPE_DOT_CLASS[item.type])} aria-hidden />
+                <ItemDot item={item} />
                 <span className="min-w-0 flex-1 truncate">{item.title}</span>
                 {item.isPrivate && <Lock className="h-3 w-3 shrink-0 text-muted" aria-label="Privado" />}
                 {item.type === "evento" && item.event && (

@@ -50,11 +50,13 @@ export async function createCalendarEvent(
     title: formData.get("title"),
     description: formData.get("description") || undefined,
     eventDate: formData.get("eventDate"),
+    endDate: formData.get("endDate") || undefined,
     eventTime: formData.get("eventTime") || undefined,
     isAllDay: formData.get("isAllDay") === "on",
     repeatFrequency: formData.get("repeatFrequency") || "ninguna",
     remindBeforeMinutes: formData.get("remindBeforeMinutes") || undefined,
     isPrivate: formData.get("isPrivate") === "on",
+    color: formData.get("color") || undefined,
     notes: formData.get("notes") || undefined,
   });
 
@@ -72,12 +74,14 @@ export async function createCalendarEvent(
       title: parsed.data.title,
       description: parsed.data.description || null,
       event_date: parsed.data.eventDate,
+      end_date: parsed.data.repeatFrequency === "ninguna" ? (parsed.data.endDate || null) : null,
       event_time: parsed.data.isAllDay ? null : parsed.data.eventTime || null,
       is_all_day: parsed.data.isAllDay,
       repeat_frequency: parsed.data.repeatFrequency,
       remind_before_minutes:
         parsed.data.remindBeforeMinutes === "" ? null : parsed.data.remindBeforeMinutes,
       is_private: parsed.data.isPrivate,
+      color: parsed.data.color || null,
       notes: parsed.data.notes || null,
       created_by: user.id,
     })
@@ -113,11 +117,13 @@ export async function updateCalendarEvent(
     title: formData.get("title"),
     description: formData.get("description") || undefined,
     eventDate: formData.get("eventDate"),
+    endDate: formData.get("endDate") || undefined,
     eventTime: formData.get("eventTime") || undefined,
     isAllDay: formData.get("isAllDay") === "on",
     repeatFrequency: formData.get("repeatFrequency") || "ninguna",
     remindBeforeMinutes: formData.get("remindBeforeMinutes") || undefined,
     isPrivate: formData.get("isPrivate") === "on",
+    color: formData.get("color") || undefined,
     notes: formData.get("notes") || undefined,
   });
 
@@ -134,12 +140,14 @@ export async function updateCalendarEvent(
       title: parsed.data.title,
       description: parsed.data.description || null,
       event_date: parsed.data.eventDate,
+      end_date: parsed.data.repeatFrequency === "ninguna" ? (parsed.data.endDate || null) : null,
       event_time: parsed.data.isAllDay ? null : parsed.data.eventTime || null,
       is_all_day: parsed.data.isAllDay,
       repeat_frequency: parsed.data.repeatFrequency,
       remind_before_minutes:
         parsed.data.remindBeforeMinutes === "" ? null : parsed.data.remindBeforeMinutes,
       is_private: parsed.data.isPrivate,
+      color: parsed.data.color || null,
       notes: parsed.data.notes || null,
     })
     .eq("id", eventId)

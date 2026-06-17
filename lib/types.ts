@@ -343,11 +343,13 @@ export interface CalendarEvent {
   title: string;
   description: string | null;
   event_date: string;
+  end_date: string | null;
   event_time: string | null;
   is_all_day: boolean;
   repeat_frequency: RepeatFrequency;
   remind_before_minutes: number | null;
   is_private: boolean;
+  color: string | null;
   notes: string | null;
   created_by: string | null;
   created_at: string;

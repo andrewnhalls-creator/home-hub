@@ -6,8 +6,9 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 import type { CalendarEventFormState } from "@/app/(app)/calendario/actions";
-import type { CalendarEvent } from "@/lib/types";
+import type { CalendarEvent, RepeatFrequency } from "@/lib/types";
 
 interface CalendarEventFormProps {
   action: (prevState: CalendarEventFormState, formData: FormData) => Promise<CalendarEventFormState>;
@@ -35,6 +36,17 @@ const REMIND_OPTIONS = [
   { value: "1440", label: "1 día antes" },
 ];
 
+const EVENT_COLORS = [
+  "#0a84ff",
+  "#5ac8fa",
+  "#2dd4bf",
+  "#059669",
+  "#ffb020",
+  "#ff9f0a",
+  "#8b5cf6",
+  "#ff453a",
+];
+
 export function CalendarEventForm({
   action,
   event,
@@ -44,10 +56,14 @@ export function CalendarEventForm({
 }: CalendarEventFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const [isAllDay, setIsAllDay] = useState(event?.is_all_day ?? false);
+  const [repeatFrequency, setRepeatFrequency] = useState<RepeatFrequency>(event?.repeat_frequency ?? "ninguna");
+  const [selectedColor, setSelectedColor] = useState<string>(event?.color ?? "");
 
   useEffect(() => {
     if (state.success) onSuccess();
   }, [state.success, onSuccess]);
+
+  const showEndDate = repeatFrequency === "ninguna";
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-4">
@@ -59,15 +75,36 @@ export function CalendarEventForm({
         error={state.fieldErrors?.title}
       />
       <Textarea label="Descripción" name="description" defaultValue={event?.description ?? undefined} />
+
       <div className="grid grid-cols-2 gap-3">
         <Input
-          label="Fecha"
+          label="Fecha de inicio"
           name="eventDate"
           type="date"
           required
           defaultValue={event?.event_date ?? defaultDate}
           error={state.fieldErrors?.eventDate}
         />
+        {showEndDate ? (
+          <Input
+            label="Fecha de fin"
+            name="endDate"
+            type="date"
+            defaultValue={event?.end_date ?? undefined}
+            error={state.fieldErrors?.endDate}
+          />
+        ) : (
+          <Input
+            label="Hora"
+            name="eventTime"
+            type="time"
+            defaultValue={event?.event_time ?? undefined}
+            disabled={isAllDay}
+          />
+        )}
+      </div>
+
+      {showEndDate && (
         <Input
           label="Hora"
           name="eventTime"
@@ -75,19 +112,23 @@ export function CalendarEventForm({
           defaultValue={event?.event_time ?? undefined}
           disabled={isAllDay}
         />
-      </div>
+      )}
+
       <Checkbox
         label="Todo el día"
         name="isAllDay"
         defaultChecked={event?.is_all_day}
         onChange={(e) => setIsAllDay(e.target.checked)}
       />
+
       <Select
         label="Repetición"
         name="repeatFrequency"
         defaultValue={event?.repeat_frequency ?? "ninguna"}
         options={REPEAT_OPTIONS}
+        onChange={(e) => setRepeatFrequency(e.target.value as RepeatFrequency)}
       />
+
       <Select
         label="Avisarme antes"
         name="remindBeforeMinutes"
@@ -95,6 +136,41 @@ export function CalendarEventForm({
         defaultValue={event?.remind_before_minutes != null ? String(event.remind_before_minutes) : ""}
         options={REMIND_OPTIONS}
       />
+
+      {/* Colour picker */}
+      <div>
+        <p className="mb-1.5 text-sm font-medium text-brown">Color</p>
+        <input type="hidden" name="color" value={selectedColor} />
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setSelectedColor("")}
+            aria-label="Sin color"
+            aria-pressed={!selectedColor}
+            className={cn(
+              "flex h-7 w-7 items-center justify-center rounded-full border-2 bg-card text-muted",
+              !selectedColor ? "border-terracotta" : "border-border",
+            )}
+          >
+            <span className="text-xs leading-none">–</span>
+          </button>
+          {EVENT_COLORS.map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setSelectedColor(c)}
+              aria-label={`Color ${c}`}
+              aria-pressed={selectedColor === c}
+              className={cn(
+                "h-7 w-7 rounded-full border-2 transition-transform active:scale-90",
+                selectedColor === c ? "border-terracotta scale-110" : "border-transparent",
+              )}
+              style={{ background: c }}
+            />
+          ))}
+        </div>
+      </div>
+
       <Checkbox label="Evento privado" name="isPrivate" defaultChecked={event?.is_private} />
       <Textarea label="Notas" name="notes" defaultValue={event?.notes ?? undefined} />
 

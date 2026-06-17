@@ -16,14 +16,24 @@ export function expandCalendarEvent(
   rangeEnd: Date,
 ): CalendarOccurrence[] {
   const occurrences: CalendarOccurrence[] = [];
-  let cursor = new Date(`${event.event_date}T00:00:00`);
 
   if (event.repeat_frequency === "ninguna") {
-    if (!isBefore(cursor, rangeStart) && !isAfter(cursor, rangeEnd)) {
+    const evStart = new Date(`${event.event_date}T00:00:00`);
+    const evEnd = event.end_date ? new Date(`${event.end_date}T00:00:00`) : evStart;
+    // Clamp iteration to visible range to avoid huge loops on long multi-day events
+    const iterStart = isAfter(evStart, rangeStart) ? evStart : rangeStart;
+    const iterEnd = isBefore(evEnd, rangeEnd) ? evEnd : rangeEnd;
+    let cursor = iterStart;
+    let guard = 0;
+    while (!isAfter(cursor, iterEnd) && guard < 366) {
       occurrences.push({ date: format(cursor, "yyyy-MM-dd"), event });
+      cursor = addDays(cursor, 1);
+      guard++;
     }
     return occurrences;
   }
+
+  let cursor = new Date(`${event.event_date}T00:00:00`);
 
   const step = (date: Date) => {
     switch (event.repeat_frequency) {
@@ -81,6 +91,8 @@ export interface CalendarItem {
   type: CalendarItemType;
   isPrivate?: boolean;
   event?: CalendarEvent;
+  color?: string;
+  endDate?: string;
 }
 
 interface BuildCalendarItemsInput {
@@ -116,6 +128,8 @@ export function buildCalendarItems({
       type: "evento",
       isPrivate: occurrence.event.is_private,
       event: occurrence.event,
+      color: occurrence.event.color ?? undefined,
+      endDate: occurrence.event.end_date ?? undefined,
     });
   }
 
