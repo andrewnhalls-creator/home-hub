@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/constants";
 import { NotificationCentre } from "@/components/notifications/NotificationCentre";
 import { MoreMenuSheet } from "@/components/layout/MoreMenuSheet";
@@ -50,8 +50,15 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
           )}
           {!householdName && <div className="hidden md:block md:flex-1" />}
 
-          {/* Right: notifications + Menu button */}
+          {/* Right: search + notifications + Menu button */}
           <div className="flex shrink-0 items-center gap-1">
+            <Link
+              href="/buscar"
+              aria-label="Buscar"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+            >
+              <Search className="h-5 w-5" aria-hidden />
+            </Link>
             <NotificationCentre notifications={notifications} unreadCount={unreadCount} />
 
             {/* Menu button — mobile only */}
