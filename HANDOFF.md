@@ -1,9 +1,9 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (post-launch polish — papelera done)
+Updated: 2026-06-17 (all post-launch items complete)
 
-## Current state: post-launch polish in progress
+## Current state: post-launch polish complete ✓
 
-v1 is live. Working through post-launch improvements in order.
+All planned post-launch improvements are done and pushed.
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -13,23 +13,27 @@ https://home-hub-dun.vercel.app
 npx vercel --prod
 ```
 (GitHub-triggered deploys blocked on Hobby plan — always use CLI)
+After deploying app, also redeploy the Edge Function:
+```
+npx supabase functions deploy send-push
+```
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `9d04dd2` (/papelera recovery route)
+- Last commit: `3b966f1` (push notification quiet hours)
 - Pushed to origin main ✓
-- Deploy pending for this commit
+- Deploy pending for app + Edge Function
 
 ## Completed post-launch items
-1. ✅ **Web font upgrade** — Plus Jakarta Sans via `next/font/google`
-2. ✅ **Animated page transitions** — fade-up 220ms on every route change
+1. ✅ **Web font** — Plus Jakarta Sans via `next/font/google`
+2. ✅ **Page transitions** — fade-up 220ms via `PageTransition` wrapper
 3. ✅ **Global search `/buscar`** — 9 modules, search icon in top bar
-4. ✅ **`/papelera` recovery route**
-   - `app/(app)/papelera/page.tsx`: server component, queries 7 modules in parallel
-   - Uses existing `TrashSection` component + all existing restore actions (no new actions needed)
-   - Modules covered: reminders, documents, fixed_payments, expenses, savings_goals, subscriptions, shopping_lists
-   - Empty state when nothing deleted; collapsed accordions per module otherwise
-   - Accessible from Menu sheet (Menú button in top bar) — added to `MENU_ITEMS` in `lib/constants.ts`
+4. ✅ **`/papelera` recovery route** — 7 modules, linked from Menu sheet
+5. ✅ **Push notification quiet hours**
+   - `quiet_hours_start` / `quiet_hours_end` columns already existed in `notification_preferences`
+   - `NotificationsSettings.tsx`: new "Horario silencioso" card — toggle + time pickers (De / Hasta)
+   - `actions.ts`: `upsertNotificationPreferences` now saves both quiet hours fields
+   - `send-push/index.ts`: `isInQuietHours()` checks current Europe/Madrid time against the range (handles midnight crossover); called from `isPushAllowed()` before category check
 
-## Remaining post-launch items (in order)
-5. Push notification quiet hours / per-category toggles
+## No remaining planned work
+The app is feature-complete for the current scope.
