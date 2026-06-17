@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { BellOff, Loader2, Send, AlertTriangle } from "lucide-react";
+import { BellOff, Loader2, Send, AlertTriangle, Moon } from "lucide-react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { usePushSubscription } from "@/hooks/usePushSubscription";
@@ -14,6 +14,8 @@ interface NotificationPreferences {
   push_enabled: boolean;
   categories: Record<NotificationCategory, boolean>;
   lead_time_minutes: number;
+  quiet_hours_start: string | null;
+  quiet_hours_end: string | null;
 }
 
 const DEFAULT_CATEGORIES: Record<NotificationCategory, boolean> = {
@@ -42,33 +44,52 @@ export function NotificationsSettings({ initialPrefs }: NotificationsSettingsPro
     push_enabled: initialPrefs?.push_enabled ?? true,
     categories: { ...DEFAULT_CATEGORIES, ...(initialPrefs?.categories ?? {}) },
     lead_time_minutes: initialPrefs?.lead_time_minutes ?? 30,
+    quiet_hours_start: initialPrefs?.quiet_hours_start?.slice(0, 5) ?? null,
+    quiet_hours_end: initialPrefs?.quiet_hours_end?.slice(0, 5) ?? null,
   });
 
   const [isPending, startTransition] = useTransition();
   const [testSent, setTestSent] = useState(false);
 
-  function toggleCategory(category: NotificationCategory) {
-    const next = { ...prefs, categories: { ...prefs.categories, [category]: !prefs.categories[category] } };
-    setPrefs(next);
+  function savePrefs(next: NotificationPreferences) {
     startTransition(async () => {
       await upsertNotificationPreferences({
         pushEnabled: next.push_enabled,
         categories: next.categories,
         leadTimeMinutes: next.lead_time_minutes,
+        quietHoursStart: next.quiet_hours_start,
+        quietHoursEnd: next.quiet_hours_end,
       });
     });
+  }
+
+  function toggleQuietHours() {
+    const quietEnabled = !!prefs.quiet_hours_start;
+    const next: NotificationPreferences = {
+      ...prefs,
+      quiet_hours_start: quietEnabled ? null : "23:00",
+      quiet_hours_end: quietEnabled ? null : "08:00",
+    };
+    setPrefs(next);
+    savePrefs(next);
+  }
+
+  function handleQuietTimeChange(field: "quiet_hours_start" | "quiet_hours_end", value: string) {
+    const next = { ...prefs, [field]: value };
+    setPrefs(next);
+    savePrefs(next);
+  }
+
+  function toggleCategory(category: NotificationCategory) {
+    const next = { ...prefs, categories: { ...prefs.categories, [category]: !prefs.categories[category] } };
+    setPrefs(next);
+    savePrefs(next);
   }
 
   function handleTogglePush() {
     const next = { ...prefs, push_enabled: !prefs.push_enabled };
     setPrefs(next);
-    startTransition(async () => {
-      await upsertNotificationPreferences({
-        pushEnabled: next.push_enabled,
-        categories: next.categories,
-        leadTimeMinutes: next.lead_time_minutes,
-      });
-    });
+    savePrefs(next);
   }
 
   function handleSubscribe() {
@@ -167,6 +188,64 @@ export function NotificationsSettings({ initialPrefs }: NotificationsSettingsPro
             </button>
           )}
         </div>
+      </Card>
+
+      <Card>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Moon className="h-4 w-4 shrink-0 text-muted" aria-hidden />
+            <div>
+              <CardTitle>Horario silencioso</CardTitle>
+              <CardDescription>Sin notificaciones durante un intervalo de tiempo.</CardDescription>
+            </div>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={!!prefs.quiet_hours_start}
+            aria-label="Activar horario silencioso"
+            onClick={toggleQuietHours}
+            disabled={isWorking}
+            className={cn(
+              "relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+              prefs.quiet_hours_start ? "bg-terracotta" : "bg-sand",
+            )}
+          >
+            <span
+              className={cn(
+                "pointer-events-none inline-block h-5 w-5 rounded-full bg-cream shadow-sm transition-transform",
+                prefs.quiet_hours_start ? "translate-x-5" : "translate-x-0",
+              )}
+            />
+          </button>
+        </div>
+
+        {prefs.quiet_hours_start && (
+          <div className="mt-4 flex items-center gap-3">
+            <div className="flex flex-1 flex-col gap-1">
+              <label className="text-xs text-muted" htmlFor="quiet-start">Desde</label>
+              <input
+                id="quiet-start"
+                type="time"
+                value={prefs.quiet_hours_start}
+                onChange={(e) => handleQuietTimeChange("quiet_hours_start", e.target.value)}
+                disabled={isWorking}
+                className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm text-brown focus:outline-none focus:ring-2 focus:ring-terracotta disabled:opacity-50"
+              />
+            </div>
+            <div className="flex flex-1 flex-col gap-1">
+              <label className="text-xs text-muted" htmlFor="quiet-end">Hasta</label>
+              <input
+                id="quiet-end"
+                type="time"
+                value={prefs.quiet_hours_end ?? "08:00"}
+                onChange={(e) => handleQuietTimeChange("quiet_hours_end", e.target.value)}
+                disabled={isWorking}
+                className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm text-brown focus:outline-none focus:ring-2 focus:ring-terracotta disabled:opacity-50"
+              />
+            </div>
+          </div>
+        )}
       </Card>
 
       <Card>

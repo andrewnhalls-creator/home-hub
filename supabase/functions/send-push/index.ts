@@ -69,6 +69,8 @@ interface ScheduledNotificationRow {
 interface NotificationPreferencesRow {
   push_enabled: boolean;
   categories: Record<string, boolean>;
+  quiet_hours_start: string | null;
+  quiet_hours_end: string | null;
 }
 
 // ---------- Helpers ----------
@@ -85,10 +87,25 @@ async function getUserPreferences(
 ): Promise<NotificationPreferencesRow | null> {
   const { data } = await db
     .from("notification_preferences")
-    .select("push_enabled, categories")
+    .select("push_enabled, categories, quiet_hours_start, quiet_hours_end")
     .eq("user_id", userId)
     .maybeSingle();
   return data;
+}
+
+function isInQuietHours(prefs: NotificationPreferencesRow): boolean {
+  if (!prefs.quiet_hours_start || !prefs.quiet_hours_end) return false;
+  const now = new Date();
+  const hhmm = now.toLocaleTimeString("en-US", {
+    timeZone: "Europe/Madrid",
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+  }).slice(0, 5); // "HH:MM"
+  const start = prefs.quiet_hours_start.slice(0, 5);
+  const end = prefs.quiet_hours_end.slice(0, 5);
+  // Handle overnight range (e.g. 23:00 → 08:00)
+  return start <= end ? hhmm >= start && hhmm < end : hhmm >= start || hhmm < end;
 }
 
 function isPushAllowed(
@@ -97,6 +114,7 @@ function isPushAllowed(
 ): boolean {
   if (!prefs) return true; // default on if no prefs row
   if (!prefs.push_enabled) return false;
+  if (isInQuietHours(prefs)) return false;
   if (prefs.categories && category in prefs.categories) {
     return prefs.categories[category] === true;
   }

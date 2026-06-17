@@ -42,6 +42,8 @@ export async function upsertNotificationPreferences(prefs: {
   pushEnabled: boolean;
   categories: Record<NotificationCategory, boolean>;
   leadTimeMinutes: number;
+  quietHoursStart?: string | null;
+  quietHoursEnd?: string | null;
 }) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
@@ -53,6 +55,8 @@ export async function upsertNotificationPreferences(prefs: {
       push_enabled: prefs.pushEnabled,
       categories: prefs.categories,
       lead_time_minutes: prefs.leadTimeMinutes,
+      quiet_hours_start: prefs.quietHoursStart ?? null,
+      quiet_hours_end: prefs.quietHoursEnd ?? null,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "household_id,user_id" },
