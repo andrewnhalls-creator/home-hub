@@ -1,24 +1,28 @@
 # Next Steps
 
-## Status: v1 complete ✓
-
-All milestones are done and the app is live in production.
-Push notifications verified working end-to-end on a real device.
-
----
-
-## Deploy command (always use CLI)
+## Deploy pending
+Font upgrade (`1280922`) needs deploying:
 ```
 cd /Users/dianezhalls/Projects/home-hub && npx vercel --prod
 ```
-Make sure `npx vercel whoami` shows `andrewnhalls-2415` before deploying.
 
 ---
 
-## Post-launch ideas (pick any, in any order)
+## Next: Animated page transitions
 
-- **Global search** `/buscar` page — design-ready, deferred from v1
-- **Web font upgrade** — Inter or Plus Jakarta Sans for sharper typography
-- **Animated page transitions** — slide/fade between top-level routes
-- **More granular push notification scheduling** — e.g. quiet hours, per-category toggles
-- **Dedicated `/papelera` route** — unified soft-delete recovery for all modules
+Top-level route changes (e.g. Inicio → Compra → Finanzas) currently snap with no animation.
+Goal: a subtle fade or slide transition between pages that feels native without being heavy.
+
+Approach options to consider at session start:
+- **CSS `@view-transitions`** (native browser API, no JS) — simplest, works in Chrome/Safari, graceful degradation in Firefox
+- **Framer Motion `AnimatePresence`** — more control, requires adding the package, slightly heavier
+
+Recommended: start with `@view-transitions` (zero-dependency), fall back to Framer Motion only if it proves too limited.
+
+---
+
+## Remaining post-launch items (in order)
+2. **Animated page transitions** ← next
+3. Global search `/buscar`
+4. `/papelera` recovery route
+5. Push notification quiet hours / per-category toggles

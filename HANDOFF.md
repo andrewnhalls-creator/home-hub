@@ -1,19 +1,12 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (v1 complete — all milestones done)
+Updated: 2026-06-17 (post-launch polish — font upgrade done)
 
-## Current state: v1 shipped ✓
+## Current state: post-launch polish in progress
 
-All planned v1 milestones are complete and live in production.
+v1 is live. Working through post-launch improvements in order.
 
 ## Production URL
 https://home-hub-dun.vercel.app
-
-## Last known good state
-- Build, lint, typecheck all pass
-- Last commits: `195b890` (UI/UX audit — touch targets + press states), `82af7d3` (UI/UX audit — animations/focus trap), `3b8972f` (reminder timezone fix)
-- Deployed to Vercel production ✓
-- Push notifications working end-to-end on real device ✓
-- Reminder timezone bug corrected ✓
 
 ## Deploy command
 ```
@@ -21,9 +14,19 @@ npx vercel --prod
 ```
 (GitHub-triggered deploys blocked on Hobby plan — always use CLI)
 
-## Post-launch ideas (not blocking)
-- Global search `/buscar` page — design-ready, deferred post-MVP
-- Web font upgrade (Inter or Plus Jakarta Sans)
-- Animated page transitions
-- More granular push notification scheduling
-- Dedicated `/papelera` route for all modules
+## Last known good state
+- Build, lint, typecheck all pass
+- Last commit: `1280922` (Plus Jakarta Sans font upgrade)
+- Pushed to origin main ✓
+- Deploy pending for this commit
+
+## Completed post-launch items
+1. ✅ **Web font upgrade** — Plus Jakarta Sans via `next/font/google`
+   - `app/layout.tsx`: loads font, injects `--font-jakarta` CSS variable onto `<html>`
+   - `app/globals.css` `@theme inline`: `--font-sans` → `var(--font-jakarta), ui-sans-serif, ...`
+
+## Remaining post-launch items (in order)
+2. Animated page transitions
+3. Global search `/buscar`
+4. `/papelera` recovery route
+5. Push notification quiet hours / per-category toggles
