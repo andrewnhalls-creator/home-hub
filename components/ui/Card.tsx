@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils";
 type CardVariant = "default" | "featured" | "subtle" | "metric";
 
 const variantClasses: Record<CardVariant, string> = {
-  default: "bg-card border border-border shadow-[var(--shadow-card)]",
-  featured: "bg-card border-2 border-terracotta/25 shadow-[var(--shadow-card)]",
-  subtle: "bg-sand border border-border/60",
-  metric: "bg-card border border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow",
+  default: "bg-card backdrop-blur-xl border border-border shadow-[var(--shadow-card)]",
+  featured: "bg-card backdrop-blur-xl border-2 border-terracotta/30 shadow-[var(--shadow-card)]",
+  subtle: "bg-white/5 backdrop-blur-sm border border-white/8",
+  metric: "bg-card backdrop-blur-xl border border-border shadow-[var(--shadow-card)] hover:bg-white/12 hover:shadow-[var(--shadow-card-hover)] transition-[box-shadow,background-color] duration-200",
 };
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {

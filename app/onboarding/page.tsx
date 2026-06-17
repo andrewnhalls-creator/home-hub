@@ -28,7 +28,7 @@ export default function OnboardingPage() {
             onClick={() => setMode("create")}
             className={cn(
               "flex-1 rounded-lg px-3 py-2 text-sm font-medium",
-              mode === "create" ? "bg-terracotta text-cream" : "text-muted",
+              mode === "create" ? "bg-terracotta text-white" : "text-muted",
             )}
           >
             Crear hogar
@@ -38,7 +38,7 @@ export default function OnboardingPage() {
             onClick={() => setMode("join")}
             className={cn(
               "flex-1 rounded-lg px-3 py-2 text-sm font-medium",
-              mode === "join" ? "bg-terracotta text-cream" : "text-muted",
+              mode === "join" ? "bg-terracotta text-white" : "text-muted",
             )}
           >
             Unirme a un hogar

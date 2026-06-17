@@ -25,7 +25,7 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b border-border bg-cream/95 px-4 py-3 backdrop-blur-md md:px-6">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-white/5 px-4 py-3 backdrop-blur-2xl md:px-6">
         <div className="flex items-center gap-2">
           {/* Left: Home Hub brand link — mobile only */}
           <Link

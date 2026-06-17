@@ -86,7 +86,7 @@ export function WeekCalendarWidget({ weekStartStr, events }: WeekCalendarWidgetP
         </Link>
         <Link
           href="/calendario"
-          className="flex flex-1 items-center justify-center rounded-xl bg-terracotta py-2.5 text-sm font-medium text-cream transition-colors hover:bg-[#b35a3c]"
+          className="flex flex-1 items-center justify-center rounded-xl bg-terracotta py-2.5 text-sm font-medium text-white transition-colors hover:bg-coral"
         >
           Añadir evento
         </Link>

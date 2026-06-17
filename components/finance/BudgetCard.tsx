@@ -64,7 +64,7 @@ export function BudgetCard({ monthlyBudget, spent }: BudgetCardProps) {
             aria-label="Guardar"
             disabled={isPending}
             onClick={handleSave}
-            className="mb-[2px] flex h-11 w-11 items-center justify-center rounded-full bg-terracotta text-cream disabled:opacity-50"
+            className="mb-[2px] flex h-11 w-11 items-center justify-center rounded-full bg-terracotta text-white disabled:opacity-50"
           >
             <Check className="h-4 w-4" aria-hidden />
           </button>
