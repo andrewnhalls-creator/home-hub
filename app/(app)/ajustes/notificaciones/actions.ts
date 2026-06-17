@@ -65,14 +65,26 @@ export async function sendTestNotification() {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
-  await supabase.from("notification_events").insert({
-    household_id: householdId,
-    user_id: user.id,
-    category: "actividad_hogar",
-    title: "Notificación de prueba",
-    body: "Las notificaciones push están configuradas correctamente.",
-    is_read: false,
-  });
+  const { data: event } = await supabase
+    .from("notification_events")
+    .insert({
+      household_id: householdId,
+      user_id: user.id,
+      category: "actividad_hogar",
+      title: "Notificación de prueba",
+      body: "Las notificaciones push están configuradas correctamente.",
+      is_read: false,
+    })
+    .select("id")
+    .single();
+
+  // Request immediate push delivery from the Edge Function.
+  // Fails silently if the function is not yet deployed.
+  if (event?.id) {
+    await supabase.functions
+      .invoke("send-push", { body: { mode: "test", event_id: event.id } })
+      .catch(() => {});
+  }
 
   revalidatePath("/", "layout");
 }

@@ -38,13 +38,14 @@ Private Spanish-Spain household-management PWA for two named users: **Andrew** (
 14. **Milestone 15 Core Settings** (`/ajustes`) — household name, members list, invite code, profile display name, sign-out
 15. **Milestone 15 Step 1: In-app notification centre** — bell icon, unread badge, modal panel, mark-as-read, grouped by day
 16. **Milestone 15 Steps 2–4: Service worker + push subscriptions + /ajustes/notificaciones** — `public/sw.js`, `ServiceWorkerRegistration` component, `usePushSubscription` hook, server actions (upsertPushSubscription, removePushSubscription, upsertNotificationPreferences, sendTestNotification), `/ajustes/notificaciones` page with per-category toggles and test button; VAPID public key in `.env.local`
+17. **Milestone 15 Step 5: Edge Function scaffold** — `supabase/functions/send-push/index.ts` written and committed. Handles `scheduled` (cron) and `test` (direct invoke with JWT) modes. `sendTestNotification` server action updated to invoke function after creating event (fails silently if not deployed). `tsconfig.json` excludes `supabase/functions/` from Next.js type check. `.gitignore` blocks `*.rtf`.
 
-### Current Position: **Milestone 15 Step 5 (VAPID Edge Function)**
-Milestone 15 steps completed: 1–4 (notification centre + service worker + subscriptions + settings UI).
-Next: step 5 — deploy Supabase Edge Function `send-push` (ASK USER before deploying/setting secrets).
+### Current Position: **Milestone 15 Step 6 (deploy Edge Function + set secrets)**
+Milestone 15 steps completed: 1–5.
+Next: step 6 — **ASK USER** before deploying the Edge Function and setting `VAPID_PRIVATE_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_SUBJECT` as Supabase secrets.
 
 ### Incomplete (in order)
-- Milestone 15 steps 5–8: Edge Function (`supabase/functions/send-push/index.ts`) → set VAPID secrets (ASK USER) → Supabase Cron (ASK USER) → live push test
+- Milestone 15 steps 6–8: deploy Edge Function (ASK USER) → set VAPID secrets (ASK USER) → Supabase Cron (ASK USER) → live push test
 - Milestone 16: settings expansion (`/ajustes/dispositivos`, `/categorias`, `/privacidad`, password reset)
 - Milestone 17: activity log + trash/archive UI
 - Milestone 18: polish pass
@@ -80,10 +81,9 @@ Next: step 5 — deploy Supabase Edge Function `send-push` (ASK USER before depl
 ## Supabase Status
 - Project: `xzkavpjwvadqldauaabm` (Postgres 17)
 - Migrations through 013 applied
-- Edge Functions: none deployed yet
-- Supabase Cron: not yet configured
+- Edge Functions: `send-push` written at `supabase/functions/send-push/index.ts` — **NOT YET DEPLOYED** (step 6)
+- Supabase Cron: not yet configured (step 7)
 - push_subscriptions table active — app will upsert subscriptions when user enables push
-- `supabase/functions/send-push/` not yet created (step 5)
 
 ## Vercel Status
 - **Not yet linked.** ASK USER before creating Vercel project.
@@ -147,12 +147,11 @@ Store the private key ONLY as a Supabase Edge Function secret — never commit i
 - Any force-push
 
 ## Exact Next Actions (fresh session)
-Steps 2–4 are done. Continue from step 5:
-1. Read HANDOFF.md, CLAUDE.md, BUILD_PLAN.md
+Steps 2–5 are done. Continue from step 6:
+1. Read HANDOFF.md, NEXT_STEPS.md
 2. Run `git status` and `git log --oneline -5`
-3. Confirm current position: Milestone 15 Step 5 (Edge Function)
-4. Create `supabase/functions/send-push/index.ts` — Edge Function using web-push to deliver notifications
-5. **ASK USER** before deploying Edge Function or setting secrets
-6. Set `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT` as Supabase Edge Function secrets — **ASK USER**
-7. Configure Supabase Cron to call the Edge Function — **ASK USER**
-8. End-to-end live push test
+3. Confirm current position: Milestone 15 Step 6 (deploy + secrets)
+4. **ASK USER** before deploying Edge Function via `mcp__supabase__deploy_edge_function`
+5. **ASK USER** before setting secrets (`VAPID_PRIVATE_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_SUBJECT`)
+6. Configure Supabase Cron — **ASK USER**
+7. End-to-end live push test

@@ -31,3 +31,6 @@ pnpm-debug.log*
 
 # Vercel
 .vercel
+
+# Key/secret files that must never be committed
+*.rtf
