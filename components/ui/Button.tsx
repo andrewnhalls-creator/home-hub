@@ -13,12 +13,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-terracotta text-cream hover:bg-[#b35a3c] focus-visible:ring-terracotta",
+    "bg-terracotta text-white shadow-[var(--shadow-btn)] hover:brightness-95 enabled:active:translate-y-px enabled:active:shadow-[var(--shadow-btn-active)] focus-visible:ring-terracotta",
   secondary:
-    "bg-transparent border border-terracotta text-terracotta hover:bg-terracotta/10 focus-visible:ring-terracotta",
+    "bg-transparent border border-terracotta text-terracotta hover:bg-terracotta/10 enabled:active:scale-[0.97] focus-visible:ring-terracotta",
   danger:
-    "bg-transparent border border-danger text-danger hover:bg-danger/10 focus-visible:ring-danger",
-  ghost: "bg-transparent text-brown hover:bg-sand focus-visible:ring-muted",
+    "bg-transparent border border-danger text-danger hover:bg-danger/10 enabled:active:scale-[0.97] focus-visible:ring-danger",
+  ghost: "bg-transparent text-brown hover:bg-sand enabled:active:scale-[0.97] focus-visible:ring-muted",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -37,7 +37,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || isLoading}
         className={cn(
-          "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-card disabled:cursor-not-allowed disabled:opacity-50 enabled:active:scale-[0.97]",
+          "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-[box-shadow,transform,filter] duration-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-card disabled:cursor-not-allowed disabled:opacity-50",
           variantClasses[variant],
           sizeClasses[size],
           className,

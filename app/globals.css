@@ -23,6 +23,17 @@
   --shadow-card-hover: 0 4px 12px -1px oklch(0.40 0.108 110 / 0.12), 0 2px 6px -2px oklch(0.40 0.108 110 / 0.08);
   --shadow-modal: 0 20px 40px -5px oklch(0.22 0.022 82 / 0.16), 0 8px 16px -6px oklch(0.22 0.022 82 / 0.10);
 
+  /* Button — raised ceramic tile (top glaze highlight + bottom edge + warm lift) */
+  --shadow-btn:
+    inset 0 1px 0 oklch(0.56 0.090 110 / 0.30),
+    inset 0 -1px 0 oklch(0.28 0.100 112 / 0.35),
+    0 2px 0 oklch(0.22 0.022 82 / 0.22),
+    0 3px 8px oklch(0.22 0.022 82 / 0.12);
+  /* Button pressed — shadow collapses inward, tile sinks */
+  --shadow-btn-active:
+    inset 0 1px 3px oklch(0.22 0.022 82 / 0.22),
+    inset 0 0px 0 oklch(0.28 0.100 112 / 0);
+
   /* Border radius tokens */
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -85,6 +96,14 @@ body {
     --shadow-card: 0 1px 3px 0 oklch(0 0 0 / 0.35), 0 1px 2px -1px oklch(0 0 0 / 0.25);
     --shadow-card-hover: 0 4px 12px -1px oklch(0 0 0 / 0.45), 0 2px 6px -2px oklch(0 0 0 / 0.35);
     --shadow-modal: 0 20px 40px -5px oklch(0 0 0 / 0.55), 0 8px 16px -6px oklch(0 0 0 / 0.45);
+    --shadow-btn:
+      inset 0 1px 0 oklch(0.75 0.080 108 / 0.28),
+      inset 0 -1px 0 oklch(0.50 0.095 112 / 0.30),
+      0 2px 0 oklch(0 0 0 / 0.45),
+      0 3px 8px oklch(0 0 0 / 0.28);
+    --shadow-btn-active:
+      inset 0 1px 3px oklch(0 0 0 / 0.40),
+      inset 0 0px 0 oklch(0 0 0 / 0);
   }
 }
 
