@@ -35,7 +35,7 @@ export function ChoreCard({ chore, assignedName, onEdit }: ChoreCardProps) {
           aria-label="Marcar como hecho"
           disabled={isPending || isDone}
           onClick={() => startTransition(() => completeChore(chore.id))}
-          className="mt-0.5 text-terracotta disabled:opacity-50"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-terracotta active:bg-terracotta/10 disabled:opacity-50"
         >
           {isDone ? <CheckCircle2 className="h-6 w-6" aria-hidden /> : <Circle className="h-6 w-6" aria-hidden />}
         </button>
@@ -59,7 +59,7 @@ export function ChoreCard({ chore, assignedName, onEdit }: ChoreCardProps) {
             type="button"
             aria-label="Editar tarea"
             onClick={onEdit}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
           >
             <Pencil className="h-4 w-4" aria-hidden />
           </button>
@@ -67,7 +67,7 @@ export function ChoreCard({ chore, assignedName, onEdit }: ChoreCardProps) {
             type="button"
             aria-label="Eliminar tarea"
             onClick={() => setIsConfirmingDelete(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
           >
             <Trash2 className="h-4 w-4" aria-hidden />
           </button>

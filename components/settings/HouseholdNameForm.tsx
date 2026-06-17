@@ -63,7 +63,7 @@ export function HouseholdNameForm({ name, canEdit }: HouseholdNameFormProps) {
           type="button"
           aria-label="Editar nombre del hogar"
           onClick={() => setIsEditing(true)}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
         >
           <Pencil className="h-4 w-4" aria-hidden />
         </button>

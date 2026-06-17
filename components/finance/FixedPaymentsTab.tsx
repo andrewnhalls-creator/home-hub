@@ -100,7 +100,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
                       type="button"
                       aria-label="Editar pago fijo"
                       onClick={() => setEditingPayment(payment)}
-                      className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand"
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
                     >
                       <Pencil className="h-4 w-4" aria-hidden />
                     </button>
@@ -108,7 +108,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
                       type="button"
                       aria-label="Eliminar pago fijo"
                       onClick={() => setDeletingPayment(payment)}
-                      className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand"
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
                     >
                       <Trash2 className="h-4 w-4" aria-hidden />
                     </button>

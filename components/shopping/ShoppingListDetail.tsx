@@ -141,7 +141,7 @@ export function ShoppingListDetail({ list, trips, itemsCount }: ShoppingListDeta
       </Card>
 
       <Link href={`/compra?lista=${list.id}`}>
-        <Card className="flex items-center gap-3 transition-colors hover:bg-sand">
+        <Card className="flex items-center gap-3 transition-colors hover:bg-sand active:bg-sand">
           <ShoppingCart className="h-5 w-5 text-terracotta" aria-hidden />
           <p className="text-sm font-medium text-brown">Ver productos de esta lista ({itemsCount})</p>
         </Card>
@@ -167,7 +167,7 @@ export function ShoppingListDetail({ list, trips, itemsCount }: ShoppingListDeta
                     type="button"
                     aria-label="Eliminar compra"
                     onClick={() => startTransition(() => deleteShoppingTrip(list.id, trip.id))}
-                    className="text-muted hover:text-danger"
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:text-danger active:bg-sand"
                   >
                     <Trash2 className="h-4 w-4" aria-hidden />
                   </button>

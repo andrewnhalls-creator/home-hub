@@ -73,7 +73,7 @@ export function ShoppingListsOverview({ lists, analytics }: ShoppingListsOvervie
           {lists.map((list) => (
             <li key={list.id}>
               <Link href={`/compra/listas/${list.id}`}>
-                <Card className="flex items-center gap-3 transition-colors hover:bg-sand">
+                <Card className="flex items-center gap-3 transition-colors hover:bg-sand active:bg-sand">
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-brown">{list.name}</p>
                     <p className="text-xs text-muted">

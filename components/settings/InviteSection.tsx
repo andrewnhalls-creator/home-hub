@@ -49,7 +49,7 @@ export function InviteSection({ initialCode, initialExpiresAt }: InviteSectionPr
               type="button"
               aria-label="Copiar código"
               onClick={handleCopy}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-terracotta hover:bg-terracotta/10"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-terracotta hover:bg-terracotta/10 active:bg-terracotta/10"
             >
               {copied ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
             </button>

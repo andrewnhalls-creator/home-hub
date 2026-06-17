@@ -61,7 +61,7 @@ export function NotificationCentre({ notifications, unreadCount }: NotificationC
         type="button"
         aria-label={unreadCount > 0 ? `Notificaciones, ${unreadCount} sin leer` : "Notificaciones"}
         onClick={() => setIsOpen(true)}
-        className="relative flex h-10 w-10 items-center justify-center rounded-full text-brown hover:bg-sand"
+        className="relative flex h-11 w-11 items-center justify-center rounded-full text-brown hover:bg-sand active:bg-sand"
       >
         <Bell className="h-5 w-5" aria-hidden />
         {unreadCount > 0 && (

@@ -153,7 +153,7 @@ function CategoryRow({ cat }: { cat: Category }) {
             type="button"
             onClick={() => setEditing(true)}
             aria-label={`Editar ${cat.name}`}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-muted hover:text-brown hover:bg-sand"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-muted hover:text-brown hover:bg-sand active:bg-sand"
           >
             <Pencil className="h-3.5 w-3.5" aria-hidden />
           </button>
