@@ -1,27 +1,31 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone 20 complete)
+Updated: 2026-06-17 (Milestone 21 complete)
 
-## Current milestone: 21 — Deployment (Vercel)
+## Current milestone: 22 — Final review
 
 ## Status
-- Milestone 20 (PWA + install prompt): COMPLETE — committed and pushed
+- Milestone 21 (Deployment): COMPLETE — live at https://home-hub-dun.vercel.app
 
-## What was done in Milestone 20
-- **`app/manifest.ts`**: Next.js web app manifest — name, start_url `/dashboard`, display `standalone`, theme_color `#c96b4b`, background_color `#f5ebe0`, 192×192 and 512×512 PNG icons
-- **`public/icons/`**: Generated `icon-192.png`, `icon-512.png`, `apple-touch-icon.png` using sharp (terracotta background, cream house silhouette)
-- **`app/layout.tsx`**: Added `appleWebApp` metadata (capable, title, statusBarStyle) and icon links for iOS and favicon
-- **`public/sw.js`**: Updated push notification icon path from `/favicon.ico` to `/icons/icon-192.png`
-- **`app/(app)/ajustes/instalar/page.tsx`**: New route `/ajustes/instalar`
-- **`components/settings/InstallGuideView.tsx`**: Install guidance component — platform tabs (iPhone/Android/Mac/Windows), step-by-step instructions, push notification requirements checklist (iOS 16.4+ constraint surfaced), "Probar notificación" link to `/ajustes/notificaciones`
-- **`components/settings/SettingsView.tsx`**: Added "Instalar la app" link to settings nav
+## What was done in Milestone 21
+- Vercel project created: `home-hub` under team `andrewnhalls-2415s-projects`
+- Git integration enabled: every push to `main` auto-deploys to production
+- Environment variables set in Vercel dashboard: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY`
+- Build passed: ✓ Compiled in 14.2s (Turbopack), TypeScript clean, 31 routes generated
+- Deployment ID: `dpl_9DAnKaE9xWYVBURCAgsi7UsQ8R8N` — state READY
+- VAPID private key and Supabase secrets remain in Supabase Edge Function secrets only (not in Vercel)
+- Supabase Cron (`send-push-cron`) confirmed active from Milestone 15 — unchanged
+
+## Production URL
+https://home-hub-dun.vercel.app
 
 ## Already done
-- Milestone 19: Offline support for shopping (sw.js caching, offline queue, OfflineBanner)
-- Milestone 18: Loading states, success toasts, noValidate
-- Milestone 17: Activity log + TrashSection restore UI
-- Milestone 16: Settings pages, forgot/reset password, auth callback
-- All modules: aria-labels, delete confirm modals, EmptyState, Zod validation, Spanish errors
+- Milestone 20: PWA manifest, icons, install guidance page
+- Milestone 19: Offline support for shopping
+- Milestone 18: Loading states, toasts, noValidate
+- Milestone 17: Activity log + trash/restore UI
+- Milestone 16: Settings, forgot/reset password
+- All modules: Spanish UI, RLS, Zod validation, empty/loading/error states
 
 ## Last known good state
-- Build, lint, typecheck all pass
-- Committed and pushed as "Add PWA manifest, icons, and install prompt (Milestone 20)"
+- Build, lint, typecheck all pass locally and on Vercel
+- Committed and pushed; Vercel auto-deployed from `a08e534`
