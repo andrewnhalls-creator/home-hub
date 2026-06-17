@@ -1,14 +1,20 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone UI-3 complete)
+Updated: 2026-06-17 (Milestone UI-4 complete)
 
-## Current milestone: UI-3 — Dashboard redesign (COMPLETE)
+## Current milestone: UI-4 — Finance redesign (COMPLETE)
 
 ## Status
-All functional milestones (1–22) complete. UI-0 through UI-3 done.
-Next is UI-4 (Finance redesign).
+All functional milestones (1–22) complete. UI-0 through UI-4 done.
+Next is UI-5 (Calendar redesign).
 
 ## Production URL
 https://home-hub-dun.vercel.app
+
+## What was done in Milestone UI-4
+- `app/globals.css`: added `.scrollbar-none` utility (scrollbar-width: none + webkit)
+- `components/ui/SegmentedControl.tsx`: added `scrollable` prop — when true, wraps in `overflow-x-auto` container and uses `shrink-0` items instead of `flex-1`; role/aria attributes split correctly between outer wrapper and inner tablist
+- `components/finance/ResumenTab.tsx`: replaced 7 separate cards with a 3×2 KPI chip grid (no icons, pure numbers; danger color only for overdue > 0) + a subtle secondary card with "total pagos fijos" and "suscripciones" totals as key-value rows
+- `components/finance/FinanceTabs.tsx`: uses `SegmentedControl scrollable`; compact labels ("Pagos" not "Pagos fijos"); month label context line above tabs; "Archivo" removed from tab strip (trash remains below in page)
 
 ## What was done in Milestone UI-3
 - `components/dashboard/GreetingCard.tsx` (new): warm sand card with decorative terracotta circles, greeting + household name + pending status dot (green = clear, amber = items pending)

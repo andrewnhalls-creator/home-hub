@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { ResumenTab } from "@/components/finance/ResumenTab";
 import { FixedPaymentsTab } from "@/components/finance/FixedPaymentsTab";
 import { ExpensesTab } from "@/components/finance/ExpensesTab";
@@ -38,11 +40,16 @@ type Tab = "resumen" | "pagos" | "gastos" | "ahorro" | "suscripciones";
 
 const TABS: { value: Tab; label: string }[] = [
   { value: "resumen", label: "Resumen" },
-  { value: "pagos", label: "Pagos fijos" },
+  { value: "pagos", label: "Pagos" },
   { value: "gastos", label: "Gastos" },
   { value: "ahorro", label: "Ahorro" },
   { value: "suscripciones", label: "Suscripciones" },
 ];
+
+function currentMonthLabel(): string {
+  const raw = format(new Date(), "MMMM yyyy", { locale: es });
+  return raw.charAt(0).toUpperCase() + raw.slice(1);
+}
 
 export function FinanceTabs({
   resumen,
@@ -58,20 +65,16 @@ export function FinanceTabs({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-2 overflow-x-auto">
-        {TABS.map((item) => (
-          <button
-            key={item.value}
-            type="button"
-            onClick={() => setTab(item.value)}
-            className={cn(
-              "shrink-0 rounded-full px-4 py-2 text-sm font-medium",
-              tab === item.value ? "bg-terracotta text-cream" : "bg-card text-muted",
-            )}
-          >
-            {item.label}
-          </button>
-        ))}
+      {/* Month context + tab strip */}
+      <div className="flex flex-col gap-2">
+        <p className="text-sm text-muted">{currentMonthLabel()}</p>
+        <SegmentedControl
+          options={TABS}
+          value={tab}
+          onChange={setTab}
+          scrollable
+          aria-label="Secciones de finanzas"
+        />
       </div>
 
       {tab === "resumen" && <ResumenTab {...resumen} />}

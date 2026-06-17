@@ -1,4 +1,5 @@
-import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/Card";
 import { formatCurrency } from "@/lib/format";
 
 interface ResumenTabProps {
@@ -10,6 +11,23 @@ interface ResumenTabProps {
   expensesThisMonthTotal: number;
   activeSubscriptionsTotal: number;
   savingsProgressPct: number | null;
+}
+
+interface KpiChipProps {
+  label: string;
+  value: string;
+  danger?: boolean;
+}
+
+function KpiChip({ label, value, danger = false }: KpiChipProps) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-3 shadow-[var(--shadow-card)]">
+      <p className={cn("text-lg font-bold leading-none", danger ? "text-danger" : "text-brown")}>
+        {value}
+      </p>
+      <p className="mt-1.5 text-[11px] leading-tight text-muted">{label}</p>
+    </div>
+  );
 }
 
 export function ResumenTab({
@@ -24,42 +42,37 @@ export function ResumenTab({
 }: ResumenTabProps) {
   return (
     <div className="flex flex-col gap-3">
-      <div className="grid grid-cols-2 gap-3">
-        <Card>
-          <CardTitle>{upcomingCount}</CardTitle>
-          <CardDescription>Próximos pagos</CardDescription>
-        </Card>
-        <Card>
-          <CardTitle>{overdueCount}</CardTitle>
-          <CardDescription>Pagos vencidos</CardDescription>
-        </Card>
-        <Card>
-          <CardTitle>{formatCurrency(paidThisMonthTotal)}</CardTitle>
-          <CardDescription>Pagado este mes</CardDescription>
-        </Card>
-        <Card>
-          <CardTitle>{formatCurrency(pendingThisMonthTotal)}</CardTitle>
-          <CardDescription>Pendiente este mes</CardDescription>
-        </Card>
+      {/* 6-chip KPI grid — numbers only, colour reserved for problems */}
+      <div className="grid grid-cols-3 gap-2">
+        <KpiChip label="Próximos" value={String(upcomingCount)} />
+        <KpiChip label="Vencidos" value={String(overdueCount)} danger={overdueCount > 0} />
+        <KpiChip
+          label="Ahorro"
+          value={savingsProgressPct !== null ? `${Math.round(savingsProgressPct)}%` : "—"}
+        />
+        <KpiChip label="Pagado" value={formatCurrency(paidThisMonthTotal)} />
+        <KpiChip label="Pendiente" value={formatCurrency(pendingThisMonthTotal)} />
+        <KpiChip label="Variables" value={formatCurrency(expensesThisMonthTotal)} />
       </div>
-      <Card>
-        <CardTitle>{formatCurrency(totalFixedThisMonth)}</CardTitle>
-        <CardDescription>Total de pagos fijos este mes</CardDescription>
+
+      {/* Secondary totals — context for the chips above */}
+      <Card variant="subtle">
+        <div className="flex flex-col gap-2.5">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-sm text-muted">Total pagos fijos</span>
+            <span className="text-sm font-semibold text-brown tabular-nums">
+              {formatCurrency(totalFixedThisMonth)}
+            </span>
+          </div>
+          <div className="h-px bg-border" />
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-sm text-muted">Suscripciones activas</span>
+            <span className="text-sm font-semibold text-brown tabular-nums">
+              {formatCurrency(activeSubscriptionsTotal)}/mes
+            </span>
+          </div>
+        </div>
       </Card>
-      <Card>
-        <CardTitle>{formatCurrency(expensesThisMonthTotal)}</CardTitle>
-        <CardDescription>Gastos variables este mes</CardDescription>
-      </Card>
-      <Card>
-        <CardTitle>{formatCurrency(activeSubscriptionsTotal)}</CardTitle>
-        <CardDescription>Suscripciones activas (importe mensual)</CardDescription>
-      </Card>
-      {savingsProgressPct !== null && (
-        <Card>
-          <CardTitle>{Math.round(savingsProgressPct)}%</CardTitle>
-          <CardDescription>Progreso medio de los objetivos de ahorro</CardDescription>
-        </Card>
-      )}
     </div>
   );
 }

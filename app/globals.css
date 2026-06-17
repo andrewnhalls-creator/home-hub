@@ -57,3 +57,11 @@ body {
   background: var(--color-cream);
   color: var(--color-brown);
 }
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
