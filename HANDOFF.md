@@ -35,5 +35,12 @@ npx supabase functions deploy send-push
    - `actions.ts`: `upsertNotificationPreferences` now saves both quiet hours fields
    - `send-push/index.ts`: `isInQuietHours()` checks current Europe/Madrid time against the range (handles midnight crossover); called from `isPushAllowed()` before category check
 
-## No remaining planned work
-The app is feature-complete for the current scope.
+## Next planned improvements (see NEXT_STEPS.md for full detail)
+1. Dark mode (follows system setting)
+2. Expense analytics charts
+3. Richer calendar (multi-day events, drag-to-reschedule)
+4. Meal plan → shopping list generator
+5. Realtime shopping list sync
+6. Document expiry push alerts
+7. Monthly budget tracker
+8. Savings goal progress charts
