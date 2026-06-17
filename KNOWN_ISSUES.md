@@ -7,10 +7,8 @@
 - **Impact**: Infrastructure confirmed healthy (cron → Edge Function returns HTTP 200). Actual device delivery test requires real user accounts, which don't exist yet.
 - **Resolution**: Test at Milestone 22 — create real accounts, subscribe at `/ajustes/notificaciones`, verify push arrives end-to-end.
 
-### PWA icons (PNG) not yet created
-- **Stage**: Milestone 20 (PWA + install prompt)
-- **Impact**: Push notification `icon` in `public/sw.js` falls back to `/favicon.ico` (ICO format). Some Android browsers may not display it correctly.
-- **Resolution**: Add PNG icons (at least 192×192) to `public/icons/` and update `sw.js` icon path in Milestone 20.
+### PWA icons (PNG) not yet created ✅
+- **Resolved 2026-06-17**: `icon-192.png`, `icon-512.png`, and `apple-touch-icon.png` added to `public/icons/`. `sw.js` icon path updated to `/icons/icon-192.png`.
 
 ## Resolved
 

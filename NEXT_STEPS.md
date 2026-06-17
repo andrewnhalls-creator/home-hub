@@ -1,24 +1,26 @@
 # Next Steps
 
-## Current: Milestone 20 — PWA (manifest, icons, install prompt)
+## Current: Milestone 21 — Deployment (Vercel)
 
 ### Scope
-1. `app/manifest.ts` — Next.js web app manifest with name, short_name, start_url, display, theme_color, background_color, icons
-2. PNG icons — at minimum 192×192 and 512×512 in `public/icons/` (also fixes the known issue with push notification icon)
-3. PWA meta tags in root layout — `theme-color`, `apple-mobile-web-app-capable`, `apple-mobile-web-app-status-bar-style`, `apple-mobile-web-app-title`
-4. "Instalar la app" screen at `/ajustes` or a dedicated page — explains how to add to home screen on iOS (Safari Share → Añadir a la pantalla de inicio) and Android (Chrome menu → Instalar aplicación), with the iOS push notification constraint noted
-5. Update `public/sw.js` icon path from `/favicon.ico` to `/icons/icon-192.png` once PNG icons exist
+1. Confirm local production build succeeds (already confirmed in M20)
+2. Ask user to confirm before creating/linking the Vercel project (or verify it already exists)
+3. Configure environment variables in Vercel: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY`
+4. Deploy via Vercel MCP; check build/runtime logs and fix any errors
+5. Confirm Supabase Cron jobs are active and the Edge Function is deployed
 
 ### Notes
-- iOS 16.4+ requires PWA installed to home screen for push notifications — surface this in the install guidance UI
-- Icons can be generated with a simple canvas script or any icon tool — they don't need to be production-quality artwork
+- VAPID private key and Supabase secrets stay in Supabase Edge Function secrets — NOT in Vercel env vars
+- Check with user before creating a new Vercel project if one already exists — reuse existing infra
+- Use Vercel MCP tools for all deploy/env var work
 
 ### Commit
-- `npm run lint && npm run typecheck && npm run build`
-- Commit: `Add PWA manifest, icons, and install prompt (Milestone 20)`
-- Push to origin/main
+- Any deployment-related code changes: `Prepare Vercel deployment`
 
-## After Milestone 20: Milestone 21
-- Global search (`/buscar`) — design-ready but not built in v1; or final E2E review
-- Final manual test checklist (TEST_PLAN.md)
-- Milestone 22: Create real user accounts, test push end-to-end
+## After Milestone 21: Milestone 22 (Final review)
+- Re-check every screen for stray English text
+- Re-check no secrets committed
+- Smoke-test every module's core CRUD
+- Real push notification end-to-end test on a real device
+- Re-verify RLS cross-household access denial
+- Re-check mobile usability and install-guidance flow
