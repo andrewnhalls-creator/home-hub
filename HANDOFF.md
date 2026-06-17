@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (global realtime sync)
+Updated: 2026-06-17 (UI/UX + animation polish)
 
-## Current state: global realtime sync complete ✓
+## Current state: UI/UX and animation polish complete ✓
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -18,7 +18,7 @@ npx supabase functions deploy send-push
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `537e8ef` (global realtime sync)
+- Last commit: `f055167` (animation polish — sliding tabs, backdrop fades, stagger, scaleX progress)
 - Pushed to origin main ✓
 - Deploy pending (run `npx vercel --prod` to deploy)
 - Edge Function unchanged (no redeploy needed)
@@ -40,6 +40,8 @@ npx supabase functions deploy send-push
 14. ✅ **Document expiry push alerts** — `scan_document_expiry_notifications()` SQL function + pg_cron daily at 08:00 UTC. Migration 018. 30/7/1 day alerts, deduplication via `idempotency_key`
 15. ✅ **Monthly budget tracker** — `monthly_budget` on `households` (migration 019). `BudgetCard`: progress bar green→amber→red, inline edit. Tracks variable expenses vs budget
 16. ✅ **Global realtime sync** — `RealtimeSync` component in AppShell watches 14 tables via one Supabase Realtime channel, debounces `router.refresh()` (200ms). Every page updates live across all devices in the household
+17. ✅ **Interaction + animation polish (pass 1)** — `transition-colors` → `transition` on Button so `active:scale` eases back; toast entry animation; sheet-enter now fades in; page transition tightened to 180ms with strong cubic-bezier; `active:scale` press feedback added to every icon button across all modules; `focus-visible:ring` added to all icon-only action buttons; unread notification `border-l-4` replaced with `bg-terracotta/8` tint; TopBar "Menu" → "Más"
+18. ✅ **Animation system (pass 2)** — Sliding `SegmentedControl` indicator pill (useLayoutEffect, no flash); tab content fade via `key={tab} animate-tab-enter`; Modal + MoreMenuSheet backdrops fade in; all progress bars switched from `width%` to GPU-composited `transform:scaleX` with `@starting-style` 0→value on mount; list stagger (8-item cascade) on dashboard ListSection and shopping items; `FinanceTabs` mobile grid buttons get `active:scale-[0.97]`
 
 ## SQL migrations applied
 - 001–017: initial schema through calendar multi-day/colour
