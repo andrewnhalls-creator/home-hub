@@ -7,18 +7,7 @@ App and Edge Function fully deployed. All v1 + post-launch items complete.
 
 ## Planned improvements (suggested order)
 
-### 1. Expense analytics charts
-Visual spend breakdowns on the Finanzas → Gastos tab.
-
-- Monthly spend bar chart (last 6 months)
-- Category breakdown donut/pie chart for the selected month
-- Week-over-week comparison line for grocery spend (links to shopping list data)
-- Library: `recharts` (small bundle, good Next.js support) or native SVG
-- All chart colours must be accessible (not red/green only) and respect `prefers-reduced-motion`
-
----
-
-### 3. Richer calendar
+### 1. Richer calendar
 Make the calendar more useful for day-to-day household planning.
 
 - Multi-day events (store `start_date` + `end_date` on calendar_events, render as spanning blocks)
