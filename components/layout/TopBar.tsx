@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Menu } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/constants";
 import { NotificationCentre } from "@/components/notifications/NotificationCentre";
+import { MoreMenuSheet } from "@/components/layout/MoreMenuSheet";
 import type { NotificationEvent } from "@/lib/types";
 
 interface TopBarProps {
@@ -13,20 +17,60 @@ interface TopBarProps {
 
 export function TopBar({ householdName, notifications = [], unreadCount = 0 }: TopBarProps) {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const current = NAV_ITEMS.find((item) => pathname?.startsWith(item.href));
-  const title = current?.label ?? "Home Hub";
+  const pageTitle = current?.label ?? "";
+  const isHome = pathname?.startsWith("/dashboard");
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-cream/95 px-4 py-4 backdrop-blur md:px-6">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="text-xl font-semibold text-brown md:hidden">{title}</h1>
-        <div className="flex flex-1 items-center justify-end gap-3">
-          {householdName && (
-            <span className="hidden text-sm text-muted md:inline">{householdName}</span>
+    <>
+      <header className="sticky top-0 z-30 border-b border-border bg-cream/95 px-4 py-3 backdrop-blur-md md:px-6">
+        <div className="flex items-center gap-2">
+          {/* Left: Home Hub brand link — mobile only */}
+          <Link
+            href="/dashboard"
+            className="shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta md:hidden"
+            aria-label="Inicio"
+          >
+            <span className="text-base font-bold text-terracotta">Home Hub</span>
+          </Link>
+
+          {/* Center: current page title (hidden on Home and desktop) */}
+          {!isHome && pageTitle && (
+            <span className="flex-1 truncate text-center text-sm font-semibold text-brown md:hidden">
+              {pageTitle}
+            </span>
           )}
-          <NotificationCentre notifications={notifications} unreadCount={unreadCount} />
+          {(isHome || !pageTitle) && <div className="flex-1 md:hidden" />}
+
+          {/* Desktop: household name (sidebar shows full nav) */}
+          {householdName && (
+            <span className="hidden text-sm text-muted md:block md:flex-1">{householdName}</span>
+          )}
+          {!householdName && <div className="hidden md:block md:flex-1" />}
+
+          {/* Right: notifications + Menu button */}
+          <div className="flex shrink-0 items-center gap-1">
+            <NotificationCentre notifications={notifications} unreadCount={unreadCount} />
+
+            {/* Menu button — mobile only */}
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              aria-label="Abrir menú"
+              aria-haspopup="dialog"
+              aria-expanded={isMenuOpen}
+              className="flex h-10 min-w-[44px] items-center justify-center gap-1 rounded-xl px-2 text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta md:hidden"
+            >
+              <Menu className="h-5 w-5" aria-hidden />
+              <span className="text-xs font-semibold text-brown">Menu</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <MoreMenuSheet isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+    </>
   );
 }

@@ -14,7 +14,7 @@ interface AppShellProps {
 
 export function AppShell({ householdName, notifications, unreadCount, children }: AppShellProps) {
   return (
-    <div className="flex min-h-screen bg-cream">
+    <div className="flex min-h-dvh overflow-x-hidden bg-cream">
       <Sidebar />
       <div className="flex flex-1 flex-col">
         <TopBar householdName={householdName} notifications={notifications} unreadCount={unreadCount} />

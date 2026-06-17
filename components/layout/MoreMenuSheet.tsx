@@ -4,16 +4,19 @@ import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X } from "lucide-react";
-import { MORE_NAV_ITEMS } from "@/lib/constants";
+import { MENU_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const ITEM_ACCENTS: Record<string, { iconColor: string; iconBg: string }> = {
-  "/recordatorios": { iconColor: "text-terracotta", iconBg: "bg-amber/20" },
-  "/tareas":        { iconColor: "text-olive",      iconBg: "bg-olive/10" },
-  "/menu":          { iconColor: "text-olive",      iconBg: "bg-sage/20"  },
-  "/documentos":    { iconColor: "text-muted",      iconBg: "bg-sand"     },
-  "/deseos":        { iconColor: "text-coral",      iconBg: "bg-rose/20"  },
-  "/ajustes":       { iconColor: "text-muted",      iconBg: "bg-sand"     },
+  "/dashboard":              { iconColor: "text-terracotta", iconBg: "bg-terracotta/10" },
+  "/recordatorios":          { iconColor: "text-amber",      iconBg: "bg-amber/20"      },
+  "/tareas":                 { iconColor: "text-olive",      iconBg: "bg-olive/10"      },
+  "/menu":                   { iconColor: "text-sage",       iconBg: "bg-sage/20"       },
+  "/documentos":             { iconColor: "text-muted",      iconBg: "bg-sand"          },
+  "/deseos":                 { iconColor: "text-rose",       iconBg: "bg-rose/20"       },
+  "/ajustes":                { iconColor: "text-muted",      iconBg: "bg-sand"          },
+  "/ajustes/notificaciones": { iconColor: "text-coral",      iconBg: "bg-coral/10"      },
+  "/ajustes/dispositivos":   { iconColor: "text-sage",       iconBg: "bg-sage/10"       },
 };
 
 interface MoreMenuSheetProps {
@@ -45,7 +48,7 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Más opciones"
+        aria-label="Menú"
         onClick={(e) => e.stopPropagation()}
         className="relative w-full rounded-t-2xl bg-card px-5 pt-3 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-modal)]"
       >
@@ -54,12 +57,12 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
 
         {/* Header */}
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-brown">Más opciones</h2>
+          <h2 className="text-base font-semibold text-brown">Menu</h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>
@@ -67,19 +70,19 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
 
         {/* Grid */}
         <ul className="grid grid-cols-3 gap-3">
-          {MORE_NAV_ITEMS.map((item) => {
+          {MENU_ITEMS.map((item) => {
             const Icon = item.icon;
             const accent = ITEM_ACCENTS[item.href] ?? {
               iconColor: "text-terracotta",
               iconBg: "bg-terracotta/10",
             };
             return (
-              <li key={item.href}>
+              <li key={item.href + item.label}>
                 <Link
                   href={item.href}
                   onClick={onClose}
                   className={cn(
-                    "flex flex-col items-center gap-2.5 rounded-2xl border border-border bg-card px-2 py-4 text-center transition-colors hover:bg-sand",
+                    "flex flex-col items-center gap-2.5 rounded-2xl border border-border bg-card px-2 py-4 text-center transition-colors hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
                   )}
                 >
                   <div className={cn("flex h-12 w-12 items-center justify-center rounded-xl", accent.iconBg)}>

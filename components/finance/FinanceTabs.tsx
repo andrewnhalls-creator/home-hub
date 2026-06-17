@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { Landmark } from "lucide-react";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { ResumenTab } from "@/components/finance/ResumenTab";
 import { FixedPaymentsTab } from "@/components/finance/FixedPaymentsTab";
 import { ExpensesTab } from "@/components/finance/ExpensesTab";
@@ -36,14 +38,15 @@ interface FinanceTabsProps {
   members: Member[];
 }
 
-type Tab = "resumen" | "pagos" | "gastos" | "ahorro" | "suscripciones";
+type Tab = "resumen" | "pagos" | "gastos" | "ahorro" | "suscripciones" | "hipoteca";
 
 const TABS: { value: Tab; label: string }[] = [
-  { value: "resumen", label: "Resumen" },
-  { value: "pagos", label: "Pagos" },
-  { value: "gastos", label: "Gastos" },
-  { value: "ahorro", label: "Ahorro" },
+  { value: "resumen",       label: "Resumen"       },
+  { value: "pagos",         label: "Pagos"         },
+  { value: "gastos",        label: "Gastos"        },
+  { value: "ahorro",        label: "Ahorro"        },
   { value: "suscripciones", label: "Suscripciones" },
+  { value: "hipoteca",      label: "Hipoteca"      },
 ];
 
 function currentMonthLabel(): string {
@@ -85,6 +88,13 @@ export function FinanceTabs({
       {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
       {tab === "suscripciones" && (
         <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
+      )}
+      {tab === "hipoteca" && (
+        <EmptyState
+          icon={Landmark}
+          title="Hipoteca"
+          description="Próximamente podrás hacer seguimiento de tu hipoteca, saldo pendiente, cuota mensual e historial de pagos."
+        />
       )}
     </div>
   );

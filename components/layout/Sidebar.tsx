@@ -11,7 +11,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-60 shrink-0 border-r border-border bg-card px-3 py-6 md:flex md:flex-col md:gap-1">
+    <aside className="hidden w-60 shrink-0 border-r border-border bg-card px-3 py-6 md:flex md:flex-col md:gap-1 md:overflow-y-auto">
       <div className="mb-5 px-3">
         <span className="text-xl font-semibold text-terracotta">Home Hub</span>
       </div>

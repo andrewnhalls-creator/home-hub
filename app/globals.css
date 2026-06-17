@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --color-cream: #fff7ed;
-  --color-sand: #f5e6d3;
-  --color-card: #fffdf9;
-  --color-terracotta: #c96b4b;
-  --color-coral: #e89a84;
-  --color-sage: #a8bfa3;
-  --color-olive: #7c8f68;
-  --color-amber: #f2c879;
-  --color-rose: #e8b4b8;
-  --color-brown: #5c4033;
-  --color-muted: #8a7568;
-  --color-border: #eadfc8;
-  --color-success: #6fa37a;
-  --color-warning-text: #7a5b1e;
-  --color-danger: #c1554a;
+  /* Apple Home Glass palette */
+  --color-cream: #f5f8ff;
+  --color-sand: #eaf3ff;
+  --color-card: #ffffff;
+  --color-terracotta: #0a84ff;
+  --color-coral: #5ac8fa;
+  --color-sage: #2dd4bf;
+  --color-olive: #059669;
+  --color-amber: #ffb020;
+  --color-rose: #8b5cf6;
+  --color-brown: #111827;
+  --color-muted: #5b6472;
+  --color-border: #d8e6f7;
+  --color-success: #34c759;
+  --color-warning-text: #92400e;
+  --color-danger: #ff453a;
 
-  /* Warm-tinted shadow tokens */
-  --shadow-card: 0 1px 3px 0 rgb(92 64 51 / 0.06), 0 1px 2px -1px rgb(92 64 51 / 0.06);
-  --shadow-card-hover: 0 4px 6px -1px rgb(92 64 51 / 0.08), 0 2px 4px -2px rgb(92 64 51 / 0.08);
-  --shadow-modal: 0 20px 25px -5px rgb(92 64 51 / 0.12), 0 8px 10px -6px rgb(92 64 51 / 0.08);
+  /* Blue-glass shadow tokens */
+  --shadow-card: 0 1px 3px 0 rgb(10 132 255 / 0.06), 0 1px 2px -1px rgb(10 132 255 / 0.05);
+  --shadow-card-hover: 0 4px 12px -1px rgb(10 132 255 / 0.10), 0 2px 6px -2px rgb(10 132 255 / 0.08);
+  --shadow-modal: 0 20px 40px -5px rgb(17 24 39 / 0.14), 0 8px 16px -6px rgb(17 24 39 / 0.08);
 
   /* Border radius tokens */
   --radius-sm: 0.5rem;

@@ -29,11 +29,11 @@ function TrashRow({
   return (
     <li className="flex items-center gap-3 py-2">
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-stone-700 truncate">{item.label}</p>
+        <p className="truncate text-sm font-medium text-brown">{item.label}</p>
         {item.sublabel && (
-          <p className="text-xs text-stone-400 truncate">{item.sublabel}</p>
+          <p className="truncate text-xs text-muted">{item.sublabel}</p>
         )}
-        <p className="text-xs text-stone-400">
+        <p className="text-xs text-muted">
           Eliminado{" "}
           {format(new Date(item.deletedAt), "d MMM yyyy", { locale: es })}
         </p>
@@ -73,27 +73,27 @@ export function TrashSection({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="mt-6 border border-stone-200 rounded-2xl overflow-hidden">
+    <div className="mt-3 overflow-hidden rounded-xl border border-border">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-stone-50 hover:bg-stone-100 transition-colors text-left"
+        className="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-sand"
         aria-expanded={open}
       >
-        <span className="text-sm font-semibold text-stone-500 uppercase tracking-wide">
+        <span className="text-xs font-medium text-muted">
           {title}
         </span>
-        <span className="text-stone-400">
-          {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+        <span className="text-muted">
+          {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
         </span>
       </button>
 
       {open && (
         <div className="px-4 pb-3">
           {items.length === 0 ? (
-            <p className="text-sm text-stone-400 py-3">{emptyMessage}</p>
+            <p className="py-3 text-sm text-muted">{emptyMessage}</p>
           ) : (
-            <ul className="divide-y divide-stone-100">
+            <ul className="divide-y divide-border">
               {items.map((item) => (
                 <TrashRow
                   key={item.id}

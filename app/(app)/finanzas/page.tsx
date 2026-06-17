@@ -167,32 +167,38 @@ export default async function FinancePage() {
         financeCategories={financeCategories ?? []}
         members={members ?? []}
       />
-      <div className="pb-6">
-        <TrashSection
-          title="Papelera — Pagos fijos"
-          items={fixedTrash}
-          restoreAction={restoreFixedPayment}
-          emptyMessage="No hay pagos fijos eliminados"
-        />
-        <TrashSection
-          title="Papelera — Gastos"
-          items={expenseTrash}
-          restoreAction={restoreExpense}
-          emptyMessage="No hay gastos eliminados"
-        />
-        <TrashSection
-          title="Papelera — Objetivos de ahorro"
-          items={goalsTrash}
-          restoreAction={restoreSavingsGoal}
-          emptyMessage="No hay objetivos eliminados"
-        />
-        <TrashSection
-          title="Papelera — Suscripciones"
-          items={subsTrash}
-          restoreAction={restoreSubscription}
-          emptyMessage="No hay suscripciones eliminadas"
-        />
-      </div>
+      <details className="group mt-2 mb-6">
+        <summary className="cursor-pointer list-none rounded-xl px-3 py-2 text-xs font-medium text-muted hover:text-brown focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta">
+          <span className="group-open:hidden">▸ Archivo y papelera</span>
+          <span className="hidden group-open:inline">▾ Archivo y papelera</span>
+        </summary>
+        <div className="mt-2">
+          <TrashSection
+            title="Papelera — Pagos fijos"
+            items={fixedTrash}
+            restoreAction={restoreFixedPayment}
+            emptyMessage="No hay pagos fijos eliminados"
+          />
+          <TrashSection
+            title="Papelera — Gastos"
+            items={expenseTrash}
+            restoreAction={restoreExpense}
+            emptyMessage="No hay gastos eliminados"
+          />
+          <TrashSection
+            title="Papelera — Objetivos de ahorro"
+            items={goalsTrash}
+            restoreAction={restoreSavingsGoal}
+            emptyMessage="No hay objetivos eliminados"
+          />
+          <TrashSection
+            title="Papelera — Suscripciones"
+            items={subsTrash}
+            restoreAction={restoreSubscription}
+            emptyMessage="No hay suscripciones eliminadas"
+          />
+        </div>
+      </details>
     </>
   );
 }
