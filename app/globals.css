@@ -9,7 +9,7 @@
 
   /* Surfaces */
   --color-cream: oklch(0.17 0.010 62);           /* app bg — warm charcoal */
-  --color-sand: oklch(0.23 0.012 64);             /* hover / secondary bg */
+  --color-sand: oklch(0.27 0.012 64);             /* hover / secondary bg */
   --color-card: oklch(1.000 0.000 0 / 0.08);     /* glass surface — 8% white */
 
   /* Brand */
