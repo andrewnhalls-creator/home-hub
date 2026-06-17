@@ -1,5 +1,5 @@
 # Home Hub — Handoff Document
-Generated: 2026-06-17
+Generated: 2026-06-17 (updated after Step 8 infrastructure health check)
 
 ## Project Summary
 Private Spanish-Spain household-management PWA for two named users: **Andrew** (owner) and **Jose** (member).
@@ -16,7 +16,7 @@ Private Spanish-Spain household-management PWA for two named users: **Andrew** (
 
 ## Current Branch & Commit
 - Branch: `main`
-- Latest commit: (after this commit) — "Add push notification service worker and settings UI"
+- Latest commit: `228162a` — "Fix Edge Function: replace npm:web-push with esm.sh import"
 - Git status: **clean**, everything pushed to GitHub
 
 ## Phase Status
@@ -42,10 +42,11 @@ Private Spanish-Spain household-management PWA for two named users: **Andrew** (
 18. **Milestone 15 Step 6a: Edge Function deployed** — `send-push` deployed to Supabase (version 1, status ACTIVE, `verify_jwt: true`).
 19. **Milestone 15 Step 6b: VAPID secrets set** — `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` set as Edge Function secrets in Supabase dashboard.
 20. **Milestone 15 Step 7: Supabase Cron configured** — `pg_net` + `pg_cron` enabled (migration 014). Cron job `send-push-cron` registered (`* * * * *`, jobid 1). Uses anon key as Bearer token; function uses its own service role for DB access internally.
+21. **Milestone 15 Step 8a: Infrastructure health confirmed** — Fixed `npm:web-push` → `https://esm.sh/web-push@3.6.7` (Deno runtime compatibility). Fixed `VAPID_PUBLIC_KEY` Edge Function secret (was stored with wrong encoding). Cron now returns HTTP 200 `{"processed":0,"sent":0,"failed":0}` every minute. Function deployed as version 6 (ACTIVE).
 
-### Current Position: **Milestone 15 Step 8 — Live push test**
-Milestone 15 steps completed: 1–7.
-Next: step 8 — subscribe on a device via `/ajustes/notificaciones`, click "Probar notificación", verify push arrives.
+### Current Position: **Milestone 15 Step 8b — Live device push test**
+Milestone 15 steps completed: 1–7, 8a (infrastructure).
+Next: step 8b — subscribe on a real device at `/ajustes/notificaciones`, click "Probar notificación", verify push notification arrives, check `notification_delivery_attempts` in Supabase.
 
 ### Incomplete (in order)
 - Milestone 15 step 8: live push test (manual — needs a subscribed device)
@@ -83,10 +84,11 @@ Next: step 8 — subscribe on a device via `/ajustes/notificaciones`, click "Pro
 
 ## Supabase Status
 - Project: `xzkavpjwvadqldauaabm` (Postgres 17)
-- Migrations through 013 applied
-- Edge Functions: `send-push` **DEPLOYED** (version 1, ACTIVE, `verify_jwt: true`) — VAPID secrets set
-- Supabase Cron: **ACTIVE** — `send-push-cron` fires every minute (jobid 1), pg_net + pg_cron enabled (migration 014)
+- Migrations through 014 applied (014 = pg_net + pg_cron)
+- Edge Functions: `send-push` **DEPLOYED** (version 6, ACTIVE, `verify_jwt: true`) — VAPID secrets set and confirmed working
+- Supabase Cron: **ACTIVE** — `send-push-cron` fires every minute (jobid 1), confirmed returning HTTP 200
 - push_subscriptions table active — app will upsert subscriptions when user enables push
+- **Import note:** `supabase/functions/send-push/index.ts` uses `https://esm.sh/web-push@3.6.7` (NOT `npm:web-push` — the npm: specifier fails in Deno Edge Runtime)
 
 ## Vercel Status
 - **Not yet linked.** ASK USER before creating Vercel project.
@@ -104,15 +106,11 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_1Gp39QP9YwJPkbFf9X9c0w_TGpL0F07
 NEXT_PUBLIC_VAPID_PUBLIC_KEY=BCpWxtTgNzrnoIU8cnr1KjqHrjMgVCpYD_fsf4dUwZRm3U16B2vAqPYb34XGz_mE82Gsx_KCPRHWt4MQoCfQ-uw
 ```
 
-Still needed (NOT yet set):
-- `VAPID_PRIVATE_KEY` — Supabase Edge Function secret (NEVER commit). Key was generated this session. Store as Edge Function secret when deploying `send-push`.
-- `VAPID_SUBJECT` — e.g. `mailto:andrew.halls@hotmail.es` (Edge Function secret)
+Supabase Edge Function secrets (set in dashboard, NEVER committed):
+- `VAPID_PUBLIC_KEY` ✅ set and verified working (2026-06-17)
+- `VAPID_PRIVATE_KEY` ✅ set
+- `VAPID_SUBJECT` ✅ set
 
-**IMPORTANT:** Fresh VAPID keys were generated in this session. The private key was shown in the session transcript. If you consider the transcript compromised, regenerate:
-```
-export NPM_CONFIG_CACHE=/tmp/npm-cache-home-hub && npx --yes web-push generate-vapid-keys
-```
-Then update `NEXT_PUBLIC_VAPID_PUBLIC_KEY` in `.env.local` and use the new private key as the Edge Function secret.
 Store the private key ONLY as a Supabase Edge Function secret — never commit it, never log it in full.
 
 ## Key Architectural Decisions
@@ -150,7 +148,8 @@ Store the private key ONLY as a Supabase Edge Function secret — never commit i
 - Any force-push
 
 ## Exact Next Actions (fresh session)
-Steps 1–7 done. Continue from step 8:
+Steps 1–7 and 8a (infrastructure) done. Continue with step 8b:
 1. Read HANDOFF.md, NEXT_STEPS.md
 2. Run `git status --short` and `git log --oneline -5`
-3. Step 8: Live push test — subscribe on a device at `/ajustes/notificaciones`, click "Probar notificación", verify push arrives on device, check `notification_delivery_attempts` in Supabase for status
+3. Step 8b: Live device test — user subscribes at `/ajustes/notificaciones` on a real device, clicks "Probar notificación", verifies push arrives, checks `notification_delivery_attempts` in Supabase
+4. Once step 8b confirmed: mark Milestone 15 complete and continue to Milestone 16

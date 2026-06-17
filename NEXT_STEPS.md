@@ -8,24 +8,26 @@
 > **Session discipline:** Work one stage at a time. Stop and ask the user to start a fresh Claude Code session if context is getting large. After every completed stage, update `HANDOFF.md`, `NEXT_STEPS.md`, commit, push, and wait for "continue".
 
 ## Current Position
-**Milestone 15, Step 8 — Live push test**
+**Milestone 15, Step 8b — Live device push test**
 
-Steps 1–7 complete:
+Steps 1–7 and 8a complete:
 - Step 1: In-app notification centre (bell icon, modal, mark-as-read)
 - Step 2: `public/sw.js` service worker
 - Step 3: `ServiceWorkerRegistration` + `usePushSubscription` hook + subscription server actions
 - Step 4: `/ajustes/notificaciones` page — category toggles, push enable/disable, test button
-- Step 5: `supabase/functions/send-push/index.ts` — Edge Function deployed (ACTIVE)
-- Step 6a: Edge Function deployed (version 1, ACTIVE, `verify_jwt: true`)
-- Step 6b: VAPID secrets set (`VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`)
-- Step 7: Supabase Cron — `send-push-cron` active, fires every minute (jobid 1)
+- Step 5: `supabase/functions/send-push/index.ts` — Edge Function scaffold written
+- Step 6a: Edge Function deployed (version 6, ACTIVE, `verify_jwt: true`)
+- Step 6b: VAPID secrets set and **confirmed working** (`VAPID_PUBLIC_KEY` corrected 2026-06-17)
+- Step 7: Supabase Cron — `send-push-cron` active, fires every minute, returns HTTP 200
+- Step 8a: Infrastructure health confirmed — cron + Edge Function returning `{"processed":0,"sent":0,"failed":0}`
 
 ## Immediate Next Task
 
-### Step 8 — Live Push Test
-- Subscribe on a real device via `/ajustes/notificaciones` (enable push, grant permission)
+### Step 8b — Live Device Push Test (USER ACTION REQUIRED)
+- Open the app in a browser on a real device
+- Go to `/ajustes/notificaciones`, enable push, grant notification permission
 - Click "Probar notificación"
-- Verify push arrives on device
+- Verify push notification arrives on device
 - Check `notification_delivery_attempts` in Supabase for delivery status
 - iOS: PWA must be installed to Home Screen (iOS 16.4+ requirement)
 
