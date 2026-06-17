@@ -2,17 +2,10 @@
 
 ## Active
 
-### Push notification delivery not live yet (expected)
-- **Stage**: Milestone 15 Step 6 (not yet started)
-- **Impact**: "Probar notificación" creates an in-app notification event but no device push arrives.
-- **Cause**: `supabase/functions/send-push/index.ts` is written but not deployed. Supabase Cron is not configured.
-- **Resolution**: Complete Milestone 15 Step 6 — deploy the Edge Function and set VAPID secrets (ASK USER first). Then Step 7 — configure Supabase Cron.
-
-### VAPID secrets not set in Supabase
-- **Stage**: Milestone 15 Step 6
-- **Impact**: Edge Function will return 500 if invoked before secrets are set.
-- **Required secrets**: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`
-- **Resolution**: User to confirm approval, then set via Supabase dashboard or MCP tool.
+### Push notification delivery not yet verified end-to-end
+- **Stage**: Milestone 15 Step 8
+- **Impact**: Infrastructure is fully wired (Edge Function deployed, VAPID secrets set, Cron active) but delivery has not been confirmed on a real device yet.
+- **Resolution**: Manual test — subscribe at `/ajustes/notificaciones`, click "Probar notificación", verify push arrives. Check `notification_delivery_attempts` in Supabase.
 
 ### PWA icons (PNG) not yet created
 - **Stage**: Milestone 20 (PWA + install prompt)
@@ -21,4 +14,8 @@
 
 ## Resolved
 
-_(none yet)_
+### VAPID secrets not set in Supabase ✅
+- Resolved 2026-06-17: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` set as Edge Function secrets in Supabase dashboard.
+
+### Supabase Cron not configured ✅
+- Resolved 2026-06-17: `pg_net` + `pg_cron` enabled (migration 014). `send-push-cron` job active (jobid 1, `* * * * *`).

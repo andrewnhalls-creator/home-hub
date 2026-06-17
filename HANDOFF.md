@@ -1,5 +1,5 @@
 # Home Hub — Handoff Document
-Generated: 2026-06-16
+Generated: 2026-06-17
 
 ## Project Summary
 Private Spanish-Spain household-management PWA for two named users: **Andrew** (owner) and **Jose** (member).
@@ -40,13 +40,15 @@ Private Spanish-Spain household-management PWA for two named users: **Andrew** (
 16. **Milestone 15 Steps 2–4: Service worker + push subscriptions + /ajustes/notificaciones** — `public/sw.js`, `ServiceWorkerRegistration` component, `usePushSubscription` hook, server actions (upsertPushSubscription, removePushSubscription, upsertNotificationPreferences, sendTestNotification), `/ajustes/notificaciones` page with per-category toggles and test button; VAPID public key in `.env.local`
 17. **Milestone 15 Step 5: Edge Function scaffold** — `supabase/functions/send-push/index.ts` written and committed. Handles `scheduled` (cron) and `test` (direct invoke with JWT) modes. `sendTestNotification` server action updated to invoke function after creating event (fails silently if not deployed). `tsconfig.json` excludes `supabase/functions/` from Next.js type check. `.gitignore` blocks `*.rtf`.
 18. **Milestone 15 Step 6a: Edge Function deployed** — `send-push` deployed to Supabase (version 1, status ACTIVE, `verify_jwt: true`).
+19. **Milestone 15 Step 6b: VAPID secrets set** — `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` set as Edge Function secrets in Supabase dashboard.
+20. **Milestone 15 Step 7: Supabase Cron configured** — `pg_net` + `pg_cron` enabled (migration 014). Cron job `send-push-cron` registered (`* * * * *`, jobid 1). Uses anon key as Bearer token; function uses its own service role for DB access internally.
 
-### Current Position: **Milestone 15 Step 6b (set VAPID secrets in Supabase dashboard)**
-Milestone 15 steps completed: 1–5, 6a.
-Next: step 6b — USER must set `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` as Supabase Edge Function secrets via the dashboard. Then step 7 (Supabase Cron).
+### Current Position: **Milestone 15 Step 8 — Live push test**
+Milestone 15 steps completed: 1–7.
+Next: step 8 — subscribe on a device via `/ajustes/notificaciones`, click "Probar notificación", verify push arrives.
 
 ### Incomplete (in order)
-- Milestone 15 steps 6b–8: set VAPID secrets (USER action in dashboard) → Supabase Cron (ASK USER) → live push test
+- Milestone 15 step 8: live push test (manual — needs a subscribed device)
 - Milestone 16: settings expansion (`/ajustes/dispositivos`, `/categorias`, `/privacidad`, password reset)
 - Milestone 17: activity log + trash/archive UI
 - Milestone 18: polish pass
@@ -82,8 +84,8 @@ Next: step 6b — USER must set `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_
 ## Supabase Status
 - Project: `xzkavpjwvadqldauaabm` (Postgres 17)
 - Migrations through 013 applied
-- Edge Functions: `send-push` **DEPLOYED** (version 1, ACTIVE, `verify_jwt: true`) — secrets not yet set
-- Supabase Cron: not yet configured (step 7)
+- Edge Functions: `send-push` **DEPLOYED** (version 1, ACTIVE, `verify_jwt: true`) — VAPID secrets set
+- Supabase Cron: **ACTIVE** — `send-push-cron` fires every minute (jobid 1), pg_net + pg_cron enabled (migration 014)
 - push_subscriptions table active — app will upsert subscriptions when user enables push
 
 ## Vercel Status
@@ -148,9 +150,7 @@ Store the private key ONLY as a Supabase Edge Function secret — never commit i
 - Any force-push
 
 ## Exact Next Actions (fresh session)
-Steps 1–6a done. Continue from step 6b:
+Steps 1–7 done. Continue from step 8:
 1. Read HANDOFF.md, NEXT_STEPS.md
 2. Run `git status --short` and `git log --oneline -5`
-3. Confirm secrets are set (ask user) — if not, direct to Supabase dashboard
-4. Configure Supabase Cron — **ASK USER** before applying SQL
-5. End-to-end live push test
+3. Step 8: Live push test — subscribe on a device at `/ajustes/notificaciones`, click "Probar notificación", verify push arrives on device, check `notification_delivery_attempts` in Supabase for status
