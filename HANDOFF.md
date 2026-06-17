@@ -1,14 +1,27 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone UI-4 complete)
+Updated: 2026-06-17 (Milestone UI-5 complete)
 
-## Current milestone: UI-4 — Finance redesign (COMPLETE)
+## Current milestone: UI-5 — Calendar redesign (COMPLETE)
 
 ## Status
-All functional milestones (1–22) complete. UI-0 through UI-4 done.
-Next is UI-5 (Calendar redesign).
+All functional milestones (1–22) complete. UI-0 through UI-5 done.
+Next is UI-6 (module polish).
 
 ## Production URL
 https://home-hub-dun.vercel.app
+
+## What was done in Milestone UI-5
+- `components/calendar/CalendarView.tsx`: full redesign
+  - Default view changed `"mensual"` → `"semanal"`
+  - `ViewMode` renamed `"proximos"` → `"agenda"`
+  - View selector: replaced raw pill buttons with `SegmentedControl` (Semana / Mes / Agenda)
+  - Added `selectedWeekDay` state (defaults to today); `effectiveWeekDay` clamps to visible week
+  - New week view: `WeekStrip` with event dots + selected-day panel below (title + typed item list); replaces the 7-card-per-day layout
+  - `navWeek()` helper updates both cursor and selectedWeekDay together
+  - Agenda view: replaced plain `Card` list with date-tile (terracotta mini calendar chip) + title + type label
+  - Month day label in modal uses full "EEEE d de MMMM" format
+  - `TYPE_LABEL` map added for Spanish type labels in item rows
+  - `weekEventDates` memo derives date range internally from `cursor` to satisfy React Compiler
 
 ## What was done in Milestone UI-4
 - `app/globals.css`: added `.scrollbar-none` utility (scrollbar-width: none + webkit)

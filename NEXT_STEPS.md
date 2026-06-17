@@ -7,14 +7,14 @@ The next phase is a full UI/UX redesign. See `UI_REDESIGN_PLAN.md` for the full 
 
 ---
 
-## Complete: Milestone UI-0 through UI-4
+## Complete: Milestone UI-0 through UI-5
 
-- [x] UI-0 through UI-3: see HANDOFF.md
-- [x] UI-4: SegmentedControl scrollable prop; Finance tab strip scrolls on mobile; 3×2 KPI chip grid in ResumenTab (no icons, danger-only colour); month context label; "Archivo" removed from tab strip
+- [x] UI-0 through UI-4: see HANDOFF.md
+- [x] UI-5: Calendar defaults to week view; SegmentedControl (Semana/Mes/Agenda); WeekStrip + day-panel replaces 7-card layout; Agenda view with date tiles; TYPE_LABEL map
 
 ---
 
-## Next: Milestone UI-5 — Calendar redesign
+## Next: Milestone UI-6 — Module polish
 
 **Goal:** New bottom nav order (Inicio, Calendario, Compra, Finanzas, Más). Más becomes a polished sheet.
 
