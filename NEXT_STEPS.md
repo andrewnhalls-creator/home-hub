@@ -1,37 +1,32 @@
 # Next Steps
 
 ## Deploy pending
-Font + transitions (`a1169ca`) need deploying:
+Font + transitions + search (`3a573de`) need deploying:
 ```
 cd /Users/dianezhalls/Projects/home-hub && npx vercel --prod
 ```
 
 ---
 
-## Next: Global search `/buscar`
+## Next: `/papelera` recovery route
 
-A global search page that queries across all modules from one input.
+A single unified page at `/papelera` where soft-deleted items from all modules can be seen and restored.
 
-### Scope
-- Route: `app/(app)/buscar/page.tsx`
-- Input at top, results grouped by module (Compra, Recordatorios, Tareas, Finanzas, Documentos, Deseos, Menú)
-- Each result row shows title + module label + taps to that item's page
-- No dedicated nav item needed — accessible from the top bar search icon (if present) or as a standalone page
+### Modules with soft delete (need a restore action each)
+- Reminders (`reminders.deleted_at`) → existing `restoreReminder` action exists in `/recordatorios/actions`
+- Fixed payments (`fixed_payments.deleted_at`)
+- Subscriptions (`subscriptions.deleted_at`)
+- Savings goals (`savings_goals.deleted_at`)
+- Documents (`household_documents.deleted_at`)
 
-### Data approach
-- Single Supabase query per module (shopping_items, reminders, chores, fixed_payments, subscriptions, household_documents, wishlist_items, recipes) filtered by `household_id` and `ilike` on the name/title column
-- Run in parallel with `Promise.all`
-- Minimum 2 characters before searching (debounced or on submit)
-
-### UI
-- Empty state: prompt to type something
-- Zero results state: "Sin resultados para «X»"
-- Loading state: skeleton rows per section
-- Group results under section headers with module icons
+### Plan
+1. Check which restore server actions already exist (reminders has one; others may need creating)
+2. Create `app/(app)/papelera/page.tsx` — server component, queries all soft-deleted rows in parallel
+3. Create `components/papelera/PapeleraView.tsx` — client component, grouped by module with Restaurar buttons
+4. Add `/papelera` link to the Menu sheet (MoreMenuSheet) or Ajustes
 
 ---
 
 ## Remaining post-launch items (in order)
-3. **Global search `/buscar`** ← next
-4. `/papelera` recovery route
+4. **`/papelera` recovery route** ← next
 5. Push notification quiet hours / per-category toggles

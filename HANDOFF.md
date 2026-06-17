@@ -1,5 +1,5 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (post-launch polish — transitions done)
+Updated: 2026-06-17 (post-launch polish — global search done)
 
 ## Current state: post-launch polish in progress
 
@@ -16,22 +16,25 @@ npx vercel --prod
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `a1169ca` (page transitions)
+- Last commit: `3a573de` (global search)
 - Pushed to origin main ✓
 - Deploy pending for this commit
 
 ## Completed post-launch items
 1. ✅ **Web font upgrade** — Plus Jakarta Sans via `next/font/google`
-   - `app/layout.tsx`: loads font, injects `--font-jakarta` CSS variable
-   - `app/globals.css` `@theme inline`: `--font-sans: var(--font-jakarta), ui-sans-serif, ...`
-
-2. ✅ **Animated page transitions** — fade-up on every route change
-   - `components/layout/PageTransition.tsx`: client component, `key={usePathname()}` triggers remount + animation
-   - `AppShell.tsx`: wraps `{children}` in `<PageTransition>`
-   - `app/globals.css`: `@keyframes page-fade-up` + `.animate-page-in` utility (220ms ease-out)
-   - Reduced motion already globally handled by `globals.css` `prefers-reduced-motion` rule
+2. ✅ **Animated page transitions** — fade-up 220ms on every route change via `PageTransition`
+3. ✅ **Global search `/buscar`**
+   - `app/(app)/buscar/page.tsx`: server component, reads `?q=`, queries 9 tables in parallel
+   - `components/search/SearchView.tsx`: client component, form input + grouped results
+   - `components/layout/TopBar.tsx`: search icon (🔍) added, links to `/buscar`
+   - Searches: shopping_items, reminders, chores, fixed_payments, subscriptions,
+     household_documents, wishlist_items, recipes, savings_goals
+   - Soft-delete filters applied where relevant (reminders, fixed_payments, subscriptions,
+     household_documents, savings_goals)
+   - Results grouped by module with icon headers; each row links to that module's page
+     (recipes link directly to `/menu/recetas/{id}`)
+   - Empty state for <2 chars; zero-results state with copy
 
 ## Remaining post-launch items (in order)
-3. Global search `/buscar`
 4. `/papelera` recovery route
 5. Push notification quiet hours / per-category toggles
