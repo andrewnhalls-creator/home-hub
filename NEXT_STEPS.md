@@ -1,59 +1,29 @@
 # Next Steps
 
-## Phase: UI/UX Redesign — "Warm Home Cockpit"
+## Phase: UI/UX Redesign — COMPLETE
 
-All functional milestones (1–22) are complete. The app is live at https://home-hub-dun.vercel.app.
-The next phase is a full UI/UX redesign. See `UI_REDESIGN_PLAN.md` for the full audit and plan.
-
----
-
-## Complete: Milestone UI-0 through UI-7
-
-- [x] UI-0 through UI-6: see HANDOFF.md
-- [x] UI-7: AppShell max-w-3xl content cap; TopBar h1 hidden on desktop; dashboard 2-col on lg+; trash section double-padding fixed
+All functional milestones (1–22) and all UI milestones (UI-0 through UI-8) are complete.
+The app is live at https://home-hub-dun.vercel.app.
 
 ---
 
-## Next: Milestone UI-8 — QA + final polish
+## Complete: UI-0 through UI-8
+
+- [x] UI-0: Audit and plan
+- [x] UI-1: Design system tokens, shared components (WeekStrip, SegmentedControl, MetricCard, Card variants, EmptyState, Button sizes)
+- [x] UI-2: Navigation redesign (Calendario promoted to primary; MoreMenuSheet bottom sheet)
+- [x] UI-3: Dashboard redesign (GreetingCard, 6 MetricCards, WeekCalendarWidget, conditional ListSections)
+- [x] UI-4: Finance redesign (SegmentedControl tabs, KPI chip grid in ResumenTab)
+- [x] UI-5: Calendar redesign (week-first default, WeekStrip + day panel, Agenda view, SegmentedControl)
+- [x] UI-6: Module polish (skeleton PageLoader, ReminderList SegmentedControl filter, ModuleError + error.tsx for all routes)
+- [x] UI-7: Tablet/iPad responsive (AppShell max-w-3xl cap, TopBar h1 hidden on md+, dashboard 2-col on lg+)
+- [x] UI-8: QA + final polish (Spanish copy audit clean, finance EmptyState icons, dynamic ShoppingListForm placeholder)
 
 ---
 
-## Milestone UI-3 — Dashboard redesign
+## Post-launch ideas (not milestones)
 
-**Goal:** Redesign /dashboard as home cockpit with greeting card, 6 metric tiles, week calendar widget, and upcoming sections.
-
-**Files:** `app/(app)/dashboard/page.tsx`, new dashboard components
-
----
-
-## Milestone UI-4 — Finance redesign
-
-**Goal:** Fix mobile layout, use SegmentedControl for tabs, improve KPI card grid.
-
-**Files:** `components/finance/FinanceTabs.tsx`, `components/finance/ResumenTab.tsx`, `app/(app)/finanzas/page.tsx`
-
----
-
-## Milestone UI-5 — Calendar redesign
-
-**Goal:** Default to weekly view, add WeekStrip, rename Agenda view, improve week day layout.
-
-**Files:** `components/calendar/CalendarView.tsx`
-
----
-
-## Milestone UI-6 — Module polish
-
-**Goal:** Consistent headers, empty/loading/error states, card styles across all modules.
-
----
-
-## Milestone UI-8 — QA + final polish
-
-**Goal:** Lint, typecheck, build all pass (already do). Mobile viewport check at ~375px for all modules. Spanish copy audit — scan all visible strings. Fix any issues found.
-
-**Key checks:**
-- All module pages render correctly at 375px width
-- No English strings in user-facing UI
-- All loading/error/empty states look right
-- TopBar, BottomNav, Sidebar all consistent
+- Global search `/buscar` page — design-ready, deferred post-MVP
+- Web font upgrade (Inter or Plus Jakarta Sans)
+- Animated page transitions
+- More granular push notification scheduling

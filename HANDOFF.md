@@ -1,14 +1,21 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone UI-7 complete)
+Updated: 2026-06-17 (Milestone UI-8 complete)
 
-## Current milestone: UI-7 — Tablet/iPad responsive (COMPLETE)
+## Current milestone: UI-8 — QA + final polish (COMPLETE)
 
 ## Status
-All functional milestones (1–22) complete. UI-0 through UI-7 done.
-Next is UI-8 (QA + final polish).
+All functional milestones (1–22) complete. Full UI/UX redesign (UI-0 through UI-8) complete.
+The app is live and fully polished. No outstanding milestones.
 
 ## Production URL
 https://home-hub-dun.vercel.app
+
+## What was done in Milestone UI-8
+- Spanish copy audit: all user-facing strings confirmed Spanish (es-ES); no English UI text found across components and app pages
+- Finance `EmptyState` icons: added `ShoppingBag` (Gastos), `CalendarClock` (Pagos fijos), `PiggyBank` (Ahorro), `RefreshCcw` (Suscripciones) — all four finance tabs now consistent with other modules
+- `ShoppingListForm`: placeholder date is now dynamic (current week's Monday) instead of stale hardcoded `"16/06"`
+- Verified: all Zod validation messages are Spanish; all `aria-label` values are Spanish; all toast messages are Spanish
+- Verified: loading states (skeleton shimmer via `PageLoader`), error states (`ModuleError` with retry), empty states (`EmptyState` with icon) all present and consistent across modules
 
 ## What was done in Milestone UI-7
 - `components/layout/AppShell.tsx`: main content wrapped in `max-w-3xl mx-auto` — caps at 768px on large screens, centered on desktop
