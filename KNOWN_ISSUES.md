@@ -2,10 +2,10 @@
 
 ## Active
 
-### Push notification delivery not yet tested on a real device
-- **Stage**: Milestone 15 Step 8b
-- **Impact**: Infrastructure is confirmed healthy (cron → Edge Function returns HTTP 200 every minute). Device-level delivery not yet confirmed.
-- **Resolution**: Manual test — subscribe at `/ajustes/notificaciones` on a real device, click "Probar notificación", verify push arrives. Check `notification_delivery_attempts` in Supabase.
+### Push notification end-to-end device test deferred
+- **Stage**: Milestone 22 (final review)
+- **Impact**: Infrastructure confirmed healthy (cron → Edge Function returns HTTP 200). Actual device delivery test requires real user accounts, which don't exist yet.
+- **Resolution**: Test at Milestone 22 — create real accounts, subscribe at `/ajustes/notificaciones`, verify push arrives end-to-end.
 
 ### PWA icons (PNG) not yet created
 - **Stage**: Milestone 20 (PWA + install prompt)

@@ -42,11 +42,11 @@ Private Spanish-Spain household-management PWA for two named users: **Andrew** (
 18. **Milestone 15 Step 6a: Edge Function deployed** — `send-push` deployed to Supabase (version 1, status ACTIVE, `verify_jwt: true`).
 19. **Milestone 15 Step 6b: VAPID secrets set** — `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` set as Edge Function secrets in Supabase dashboard.
 20. **Milestone 15 Step 7: Supabase Cron configured** — `pg_net` + `pg_cron` enabled (migration 014). Cron job `send-push-cron` registered (`* * * * *`, jobid 1). Uses anon key as Bearer token; function uses its own service role for DB access internally.
-21. **Milestone 15 Step 8a: Infrastructure health confirmed** — Fixed `npm:web-push` → `https://esm.sh/web-push@3.6.7` (Deno runtime compatibility). Fixed `VAPID_PUBLIC_KEY` Edge Function secret (was stored with wrong encoding). Cron now returns HTTP 200 `{"processed":0,"sent":0,"failed":0}` every minute. Function deployed as version 6 (ACTIVE).
+21. **Milestone 15 Step 8: Infrastructure health confirmed** — Fixed `npm:web-push` → `https://esm.sh/web-push@3.6.7` (Deno runtime compatibility). Fixed `VAPID_PUBLIC_KEY` Edge Function secret (was stored with wrong encoding). Cron now returns HTTP 200 `{"processed":0,"sent":0,"failed":0}` every minute. Function deployed as version 6 (ACTIVE). **End-to-end device test deliberately deferred to Milestone 22 (final review), when real user accounts are created.**
 
-### Current Position: **Milestone 15 Step 8b — Live device push test**
-Milestone 15 steps completed: 1–7, 8a (infrastructure).
-Next: step 8b — subscribe on a real device at `/ajustes/notificaciones`, click "Probar notificación", verify push notification arrives, check `notification_delivery_attempts` in Supabase.
+### Current Position: **Milestone 16 — Settings expansion**
+Milestone 15 complete. End-to-end push notification device test deferred to Milestone 22 (requires real accounts).
+Next: Milestone 16 — `/ajustes/dispositivos`, `/ajustes/categorias`, `/ajustes/privacidad`, password reset.
 
 ### Incomplete (in order)
 - Milestone 15 step 8: live push test (manual — needs a subscribed device)
@@ -148,8 +148,7 @@ Store the private key ONLY as a Supabase Edge Function secret — never commit i
 - Any force-push
 
 ## Exact Next Actions (fresh session)
-Steps 1–7 and 8a (infrastructure) done. Continue with step 8b:
+Milestone 15 complete. Continue with Milestone 16:
 1. Read HANDOFF.md, NEXT_STEPS.md
 2. Run `git status --short` and `git log --oneline -5`
-3. Step 8b: Live device test — user subscribes at `/ajustes/notificaciones` on a real device, clicks "Probar notificación", verifies push arrives, checks `notification_delivery_attempts` in Supabase
-4. Once step 8b confirmed: mark Milestone 15 complete and continue to Milestone 16
+3. Build Milestone 16: `/ajustes/dispositivos`, `/ajustes/categorias`, `/ajustes/privacidad`, password reset/change per BUILD_PLAN.md

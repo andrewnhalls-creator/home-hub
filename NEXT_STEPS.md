@@ -8,28 +8,18 @@
 > **Session discipline:** Work one stage at a time. Stop and ask the user to start a fresh Claude Code session if context is getting large. After every completed stage, update `HANDOFF.md`, `NEXT_STEPS.md`, commit, push, and wait for "continue".
 
 ## Current Position
-**Milestone 15, Step 8b — Live device push test**
+**Milestone 16 — Settings expansion**
 
-Steps 1–7 and 8a complete:
-- Step 1: In-app notification centre (bell icon, modal, mark-as-read)
-- Step 2: `public/sw.js` service worker
-- Step 3: `ServiceWorkerRegistration` + `usePushSubscription` hook + subscription server actions
-- Step 4: `/ajustes/notificaciones` page — category toggles, push enable/disable, test button
-- Step 5: `supabase/functions/send-push/index.ts` — Edge Function scaffold written
-- Step 6a: Edge Function deployed (version 6, ACTIVE, `verify_jwt: true`)
-- Step 6b: VAPID secrets set and **confirmed working** (`VAPID_PUBLIC_KEY` corrected 2026-06-17)
-- Step 7: Supabase Cron — `send-push-cron` active, fires every minute, returns HTTP 200
-- Step 8a: Infrastructure health confirmed — cron + Edge Function returning `{"processed":0,"sent":0,"failed":0}`
+Milestone 15 complete. End-to-end push notification device test deferred to Milestone 22 (requires real user accounts).
 
 ## Immediate Next Task
 
-### Step 8b — Live Device Push Test (USER ACTION REQUIRED)
-- Open the app in a browser on a real device
-- Go to `/ajustes/notificaciones`, enable push, grant notification permission
-- Click "Probar notificación"
-- Verify push notification arrives on device
-- Check `notification_delivery_attempts` in Supabase for delivery status
-- iOS: PWA must be installed to Home Screen (iOS 16.4+ requirement)
+### Milestone 16 — Settings expansion
+Per BUILD_PLAN.md:
+- `/ajustes/dispositivos` — device/session list, revoke/remove device, tied to push_subscriptions deactivation
+- `/ajustes/categorias` — create/rename/recolour/archive categories per module; never hard-delete a category in use
+- `/ajustes/privacidad` — export household data as JSON, finance/shopping-history/documents as CSV
+- `/auth` — forgot/reset password, change password, change email
 
 ## After Milestone 15
 Continue in order per BUILD_PLAN.md:
