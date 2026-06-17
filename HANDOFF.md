@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (realtime sync + bug fixes)
+Updated: 2026-06-17 (document expiry alerts)
 
-## Current state: realtime shopping list sync + UI fixes complete ✓
+## Current state: document expiry push alerts complete ✓
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -36,6 +36,7 @@ npx supabase functions deploy send-push
 11. ✅ **FAB buttons → inline** — All fixed-position floating add buttons converted to full-width inline buttons at bottom of content.
 12. ✅ **Reminder delete removed** — Trash button removed from `ReminderCard`; only Documents retains delete.
 13. ✅ **Stuck notification badge fixed** — `deleteReminder` now marks related `notification_events` as read, clearing the bell badge.
+14. ✅ **Document expiry push alerts** — `scan_document_expiry_notifications()` SQL function + pg_cron job daily at 08:00 UTC. Queues `scheduled_notifications` for docs expiring in 30, 7, and 1 day. Deduplication via `idempotency_key`. Applied as migration 018.
 
 ## Next planned improvements (see NEXT_STEPS.md for full detail)
 1. Realtime shopping list sync
