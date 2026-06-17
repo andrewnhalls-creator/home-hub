@@ -64,7 +64,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               type="button"
               onClick={() => dismiss(toast.id)}
               aria-label="Cerrar aviso"
-              className="rounded text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]"
             >
               <X className="h-4 w-4" aria-hidden />
             </button>

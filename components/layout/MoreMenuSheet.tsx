@@ -50,19 +50,19 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
         aria-modal="true"
         aria-label="Menú"
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full rounded-t-2xl bg-card px-5 pt-3 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-modal)]"
+        className="animate-sheet-enter relative w-full rounded-t-2xl bg-card px-5 pt-3 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-modal)]"
       >
         {/* Handle */}
         <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-border" aria-hidden />
 
         {/* Header */}
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-brown">Menu</h2>
+          <h2 className="text-base font-semibold text-brown">Menú</h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>

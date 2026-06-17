@@ -1,9 +1,18 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const FOCUSABLE = [
+  'button:not([disabled])',
+  '[href]',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(', ');
 
 interface ModalProps {
   isOpen: boolean;
@@ -14,13 +23,42 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, title, children, className }: ModalProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!isOpen) return;
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
+
+    const previousFocus = document.activeElement as HTMLElement | null;
+
+    // Auto-focus first focusable element inside the modal
+    const focusables = () =>
+      Array.from(dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []);
+
+    requestAnimationFrame(() => {
+      focusables()[0]?.focus();
+    });
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") { onClose(); return; }
+
+      if (e.key === "Tab") {
+        const items = focusables();
+        if (items.length === 0) { e.preventDefault(); return; }
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      }
     }
+
     document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      previousFocus?.focus();
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -31,12 +69,13 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
         onClick={(event) => event.stopPropagation()}
         className={cn(
-          "max-h-[92vh] w-full overflow-y-auto overscroll-contain rounded-t-2xl bg-card p-5 shadow-sm sm:max-w-md sm:rounded-2xl",
+          "animate-modal-enter max-h-[92vh] w-full overflow-y-auto overscroll-contain rounded-t-2xl bg-card p-5 shadow-sm sm:max-w-md sm:rounded-2xl",
           className,
         )}
       >
@@ -48,7 +87,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]"
           >
             <X className="h-5 w-5" aria-hidden />
           </button>
