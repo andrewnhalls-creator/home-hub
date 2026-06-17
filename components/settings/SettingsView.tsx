@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogOut, Bell, ChevronRight, Smartphone, Tag, Shield, User } from "lucide-react";
+import { LogOut, Bell, ChevronRight, Smartphone, Tag, Shield, User, Download } from "lucide-react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { HouseholdNameForm } from "@/components/settings/HouseholdNameForm";
@@ -96,6 +96,7 @@ export function SettingsView({
 
       <Card className="p-0 overflow-hidden divide-y divide-sand">
         {[
+          { href: "/ajustes/instalar", icon: Download, label: "Instalar la app" },
           { href: "/ajustes/notificaciones", icon: Bell, label: "Notificaciones" },
           { href: "/ajustes/dispositivos", icon: Smartphone, label: "Dispositivos" },
           { href: "/ajustes/categorias", icon: Tag, label: "Categorías" },

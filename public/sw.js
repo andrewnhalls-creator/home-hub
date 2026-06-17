@@ -91,7 +91,7 @@ self.addEventListener("push", function (event) {
   const title = data.title || "Home Hub";
   const options = {
     body: data.body || "",
-    icon: "/favicon.ico",
+    icon: "/icons/icon-192.png",
     tag: data.tag || "home-hub-notification",
     data: { url: data.url || "/" },
     requireInteraction: false,
