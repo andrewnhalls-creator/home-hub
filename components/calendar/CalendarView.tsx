@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import {
   addDays,
   addMonths,
@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Card } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useToast } from "@/components/ui/Toast";
 import { CalendarEventForm } from "@/components/calendar/CalendarEventForm";
 import { createCalendarEvent, updateCalendarEvent, deleteCalendarEvent } from "@/app/(app)/calendario/actions";
 import { cn } from "@/lib/utils";
@@ -41,6 +42,8 @@ const TYPE_DOT_CLASS: Record<CalendarItemType, string> = {
 };
 
 export function CalendarView({ items }: CalendarViewProps) {
+  const { showToast } = useToast();
+  const [, startTransition] = useTransition();
   const [viewMode, setViewMode] = useState<ViewMode>("mensual");
   const [cursor, setCursor] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -251,7 +254,7 @@ export function CalendarView({ items }: CalendarViewProps) {
         <CalendarEventForm
           action={createCalendarEvent}
           defaultDate={selectedDate ?? format(new Date(), "yyyy-MM-dd")}
-          onSuccess={() => setIsAddOpen(false)}
+          onSuccess={() => { setIsAddOpen(false); showToast("Evento añadido"); }}
           onCancel={() => setIsAddOpen(false)}
         />
       </Modal>
@@ -262,16 +265,20 @@ export function CalendarView({ items }: CalendarViewProps) {
             <CalendarEventForm
               action={updateCalendarEvent.bind(null, editingItem.event.id)}
               event={editingItem.event}
-              onSuccess={() => setEditingItem(null)}
+              onSuccess={() => { setEditingItem(null); showToast("Evento actualizado"); }}
               onCancel={() => setEditingItem(null)}
             />
             <Button
               type="button"
               variant="danger"
-              onClick={async () => {
+              onClick={() => {
                 if (editingItem?.event) {
-                  await deleteCalendarEvent(editingItem.event.id);
-                  setEditingItem(null);
+                  const id = editingItem.event.id;
+                  startTransition(async () => {
+                    await deleteCalendarEvent(id);
+                    setEditingItem(null);
+                    showToast("Evento eliminado");
+                  });
                 }
               }}
             >

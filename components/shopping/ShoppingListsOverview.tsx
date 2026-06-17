@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useToast } from "@/components/ui/Toast";
 import Link from "next/link";
 import { Plus, Receipt } from "lucide-react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
@@ -37,6 +38,7 @@ const STATUS_LABEL: Record<ShoppingListStatus, string> = {
 };
 
 export function ShoppingListsOverview({ lists, analytics }: ShoppingListsOverviewProps) {
+  const { showToast } = useToast();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   return (
@@ -97,7 +99,7 @@ export function ShoppingListsOverview({ lists, analytics }: ShoppingListsOvervie
       </Button>
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Nueva lista de la compra">
-        <ShoppingListForm onSuccess={() => setIsAddOpen(false)} onCancel={() => setIsAddOpen(false)} />
+        <ShoppingListForm onSuccess={() => { setIsAddOpen(false); showToast("Lista creada"); }} onCancel={() => setIsAddOpen(false)} />
       </Modal>
     </div>
   );

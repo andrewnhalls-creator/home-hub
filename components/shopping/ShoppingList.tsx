@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useToast } from "@/components/ui/Toast";
 import { Plus, ShoppingCart, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -19,6 +20,7 @@ interface ShoppingListProps {
 }
 
 export function ShoppingList({ items, categories, shoppingListId }: ShoppingListProps) {
+  const { showToast } = useToast();
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [storeFilter, setStoreFilter] = useState("");
@@ -142,7 +144,7 @@ export function ShoppingList({ items, categories, shoppingListId }: ShoppingList
           action={addShoppingItem}
           categories={categories}
           shoppingListId={shoppingListId}
-          onSuccess={() => setIsAddOpen(false)}
+          onSuccess={() => { setIsAddOpen(false); showToast("Producto añadido"); }}
           onCancel={() => setIsAddOpen(false)}
         />
       </Modal>
@@ -157,7 +159,7 @@ export function ShoppingList({ items, categories, shoppingListId }: ShoppingList
             action={updateShoppingItem.bind(null, editingItem.id)}
             categories={categories}
             item={editingItem}
-            onSuccess={() => setEditingItem(null)}
+            onSuccess={() => { setEditingItem(null); showToast("Producto actualizado"); }}
             onCancel={() => setEditingItem(null)}
           />
         )}

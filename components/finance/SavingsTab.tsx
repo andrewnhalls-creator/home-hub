@@ -10,6 +10,7 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useToast } from "@/components/ui/Toast";
 import { formatCurrency } from "@/lib/format";
 import { createSavingsGoal, deleteSavingsGoal, addContribution, type FinanceFormState } from "@/app/(app)/finanzas/actions";
 import type { SavingsGoal } from "@/lib/types";
@@ -94,6 +95,7 @@ function ContributionForm({ goalId, onSuccess, onCancel }: { goalId: string; onS
 }
 
 export function SavingsTab({ goals }: SavingsTabProps) {
+  const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [contributingGoal, setContributingGoal] = useState<SavingsGoal | null>(null);
@@ -142,14 +144,14 @@ export function SavingsTab({ goals }: SavingsTabProps) {
       </Button>
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Crear objetivo de ahorro">
-        <AddGoalForm onSuccess={() => setIsAddOpen(false)} onCancel={() => setIsAddOpen(false)} />
+        <AddGoalForm onSuccess={() => { setIsAddOpen(false); showToast("Objetivo creado"); }} onCancel={() => setIsAddOpen(false)} />
       </Modal>
 
       <Modal isOpen={!!contributingGoal} onClose={() => setContributingGoal(null)} title="Añadir aportación">
         {contributingGoal && (
           <ContributionForm
             goalId={contributingGoal.id}
-            onSuccess={() => setContributingGoal(null)}
+            onSuccess={() => { setContributingGoal(null); showToast("Aportación añadida"); }}
             onCancel={() => setContributingGoal(null)}
           />
         )}
@@ -170,6 +172,7 @@ export function SavingsTab({ goals }: SavingsTabProps) {
               startTransition(async () => {
                 if (deletingGoal) await deleteSavingsGoal(deletingGoal.id);
                 setDeletingGoal(null);
+                showToast("Objetivo eliminado");
               })
             }
           >

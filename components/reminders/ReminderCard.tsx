@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
+import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";
 import { formatDateTime } from "@/lib/format";
 import type { Reminder } from "@/lib/types";
@@ -23,6 +24,7 @@ interface ReminderCardProps {
 }
 
 export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardProps) {
+  const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isSnoozeOpen, setIsSnoozeOpen] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -154,6 +156,7 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
               startTransition(async () => {
                 await deleteReminder(reminder.id);
                 setIsConfirmingDelete(false);
+                showToast("Recordatorio eliminado");
               })
             }
           >

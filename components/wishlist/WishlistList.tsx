@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Plus, Heart, ExternalLink, Pencil, Trash2 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Select } from "@/components/ui/Select";
+import { useToast } from "@/components/ui/Toast";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatCurrency } from "@/lib/format";
 import { WishlistItemForm } from "@/components/wishlist/WishlistItemForm";
@@ -32,6 +33,8 @@ const STATUS_BADGE: Record<string, "neutral" | "success" | "warning" | "danger">
 };
 
 export function WishlistList({ items }: WishlistListProps) {
+  const { showToast } = useToast();
+  const [, startTransition] = useTransition();
   const [statusFilter, setStatusFilter] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<WishlistItem | null>(null);
@@ -114,7 +117,7 @@ export function WishlistList({ items }: WishlistListProps) {
       </Button>
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir deseo">
-        <WishlistItemForm action={createWishlistItem} onSuccess={() => setIsAddOpen(false)} onCancel={() => setIsAddOpen(false)} />
+        <WishlistItemForm action={createWishlistItem} onSuccess={() => { setIsAddOpen(false); showToast("Deseo añadido"); }} onCancel={() => setIsAddOpen(false)} />
       </Modal>
 
       <Modal isOpen={!!editingItem} onClose={() => setEditingItem(null)} title="Editar deseo">
@@ -122,7 +125,7 @@ export function WishlistList({ items }: WishlistListProps) {
           <WishlistItemForm
             action={updateWishlistItem.bind(null, editingItem.id)}
             item={editingItem}
-            onSuccess={() => setEditingItem(null)}
+            onSuccess={() => { setEditingItem(null); showToast("Deseo actualizado"); }}
             onCancel={() => setEditingItem(null)}
           />
         )}
@@ -138,10 +141,11 @@ export function WishlistList({ items }: WishlistListProps) {
             type="button"
             variant="danger"
             className="flex-1"
-            onClick={async () => {
+            onClick={() => startTransition(async () => {
               if (deletingItem) await deleteWishlistItem(deletingItem.id);
               setDeletingItem(null);
-            }}
+              showToast("Deseo eliminado");
+            })}
           >
             Eliminar
           </Button>

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useToast } from "@/components/ui/Toast";
 import { formatDate } from "@/lib/format";
 import { DocumentForm } from "@/components/documents/DocumentForm";
 import { createDocument, updateDocument, archiveDocument, deleteDocument } from "@/app/(app)/documentos/actions";
@@ -18,6 +19,7 @@ interface DocumentsListProps {
 }
 
 export function DocumentsList({ documents }: DocumentsListProps) {
+  const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingDoc, setEditingDoc] = useState<HouseholdDocument | null>(null);
@@ -61,7 +63,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
                       type="button"
                       aria-label="Archivar documento"
                       disabled={isPending}
-                      onClick={() => startTransition(() => archiveDocument(doc.id))}
+                      onClick={() => startTransition(async () => { await archiveDocument(doc.id); showToast("Documento archivado"); })}
                       className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand"
                     >
                       <Archive className="h-4 w-4" aria-hidden />
@@ -92,7 +94,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
       </Button>
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir documento">
-        <DocumentForm action={createDocument} onSuccess={() => setIsAddOpen(false)} onCancel={() => setIsAddOpen(false)} />
+        <DocumentForm action={createDocument} onSuccess={() => { setIsAddOpen(false); showToast("Documento añadido"); }} onCancel={() => setIsAddOpen(false)} />
       </Modal>
 
       <Modal isOpen={!!editingDoc} onClose={() => setEditingDoc(null)} title="Editar documento">
@@ -100,7 +102,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
           <DocumentForm
             action={updateDocument.bind(null, editingDoc.id)}
             document={editingDoc}
-            onSuccess={() => setEditingDoc(null)}
+            onSuccess={() => { setEditingDoc(null); showToast("Documento actualizado"); }}
             onCancel={() => setEditingDoc(null)}
           />
         )}
@@ -121,6 +123,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
               startTransition(async () => {
                 if (deletingDoc) await deleteDocument(deletingDoc.id);
                 setDeletingDoc(null);
+                showToast("Documento eliminado");
               })
             }
           >

@@ -6,6 +6,7 @@ import { Plus, Bell } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";
 import { ReminderCard } from "@/components/reminders/ReminderCard";
 import { ReminderForm } from "@/components/reminders/ReminderForm";
@@ -33,6 +34,7 @@ const FILTERS: { value: Filter; label: string }[] = [
 ];
 
 export function ReminderList({ reminders, categories, members }: ReminderListProps) {
+  const { showToast } = useToast();
   const [filter, setFilter] = useState<Filter>("todos");
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingReminder, setEditingReminder] = useState<Reminder | null>(null);
@@ -98,7 +100,7 @@ export function ReminderList({ reminders, categories, members }: ReminderListPro
           action={createReminder}
           categories={categories}
           members={members}
-          onSuccess={() => setIsAddOpen(false)}
+          onSuccess={() => { setIsAddOpen(false); showToast("Recordatorio añadido"); }}
           onCancel={() => setIsAddOpen(false)}
         />
       </Modal>
@@ -110,7 +112,7 @@ export function ReminderList({ reminders, categories, members }: ReminderListPro
             categories={categories}
             members={members}
             reminder={editingReminder}
-            onSuccess={() => setEditingReminder(null)}
+            onSuccess={() => { setEditingReminder(null); showToast("Recordatorio actualizado"); }}
             onCancel={() => setEditingReminder(null)}
           />
         )}

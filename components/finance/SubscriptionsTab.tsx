@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useToast } from "@/components/ui/Toast";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { createSubscription, deleteSubscription, type FinanceFormState } from "@/app/(app)/finanzas/actions";
 import type { Category, Subscription } from "@/lib/types";
@@ -70,6 +71,7 @@ function AddSubscriptionForm({
 }
 
 export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTabProps) {
+  const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [deleting, setDeleting] = useState<Subscription | null>(null);
@@ -121,7 +123,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
       </Button>
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir suscripción">
-        <AddSubscriptionForm categories={categories} onSuccess={() => setIsAddOpen(false)} onCancel={() => setIsAddOpen(false)} />
+        <AddSubscriptionForm categories={categories} onSuccess={() => { setIsAddOpen(false); showToast("Suscripción añadida"); }} onCancel={() => setIsAddOpen(false)} />
       </Modal>
 
       <Modal isOpen={!!deleting} onClose={() => setDeleting(null)} title="Eliminar suscripción">
@@ -139,6 +141,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
               startTransition(async () => {
                 if (deleting) await deleteSubscription(deleting.id);
                 setDeleting(null);
+                showToast("Suscripción eliminada");
               })
             }
           >

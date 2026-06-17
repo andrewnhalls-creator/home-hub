@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useToast } from "@/components/ui/Toast";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { ExpenseForm } from "@/components/finance/ExpenseForm";
 import { createExpense, deleteExpense } from "@/app/(app)/finanzas/actions";
@@ -23,6 +24,7 @@ interface ExpensesTabProps {
 }
 
 export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps) {
+  const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [deletingExpense, setDeletingExpense] = useState<Expense | null>(null);
@@ -69,7 +71,7 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
           action={createExpense}
           categories={categories}
           members={members}
-          onSuccess={() => setIsAddOpen(false)}
+          onSuccess={() => { setIsAddOpen(false); showToast("Gasto añadido"); }}
           onCancel={() => setIsAddOpen(false)}
         />
       </Modal>
@@ -89,6 +91,7 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
               startTransition(async () => {
                 if (deletingExpense) await deleteExpense(deletingExpense.id);
                 setDeletingExpense(null);
+                showToast("Gasto eliminado");
               })
             }
           >

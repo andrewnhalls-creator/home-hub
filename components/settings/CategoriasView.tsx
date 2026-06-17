@@ -89,7 +89,7 @@ function CategoryRow({ cat }: { cat: Category }) {
   if (editing) {
     return (
       <li className="flex flex-col gap-3 py-3 border-b border-sand last:border-0">
-        <form action={updateAction} className="flex flex-col gap-3">
+        <form action={updateAction} noValidate className="flex flex-col gap-3">
           <input type="hidden" name="id" value={cat.id} />
           <input type="hidden" name="color" value={color} />
           <div className="flex items-center gap-2">

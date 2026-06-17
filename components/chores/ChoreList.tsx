@@ -8,6 +8,7 @@ import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ChoreCard } from "@/components/chores/ChoreCard";
 import { ChoreForm } from "@/components/chores/ChoreForm";
+import { useToast } from "@/components/ui/Toast";
 import { createChore, updateChore } from "@/app/(app)/tareas/actions";
 import type { Chore } from "@/lib/types";
 
@@ -27,6 +28,7 @@ const STATUS_OPTIONS = [
 ];
 
 export function ChoreList({ chores, members }: ChoreListProps) {
+  const { showToast } = useToast();
   const [assigneeFilter, setAssigneeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -93,7 +95,7 @@ export function ChoreList({ chores, members }: ChoreListProps) {
         <ChoreForm
           action={createChore}
           members={members}
-          onSuccess={() => setIsAddOpen(false)}
+          onSuccess={() => { setIsAddOpen(false); showToast("Tarea añadida"); }}
           onCancel={() => setIsAddOpen(false)}
         />
       </Modal>
@@ -104,7 +106,7 @@ export function ChoreList({ chores, members }: ChoreListProps) {
             action={updateChore.bind(null, editingChore.id)}
             members={members}
             chore={editingChore}
-            onSuccess={() => setEditingChore(null)}
+            onSuccess={() => { setEditingChore(null); showToast("Tarea actualizada"); }}
             onCancel={() => setEditingChore(null)}
           />
         )}

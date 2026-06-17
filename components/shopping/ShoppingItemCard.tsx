@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
+import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";
 import type { Category, ShoppingItem } from "@/lib/types";
 import { toggleShoppingItemComplete, deleteShoppingItem } from "@/app/(app)/compra/actions";
@@ -17,6 +18,7 @@ interface ShoppingItemCardProps {
 }
 
 export function ShoppingItemCard({ item, category, onEdit }: ShoppingItemCardProps) {
+  const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
@@ -109,6 +111,7 @@ export function ShoppingItemCard({ item, category, onEdit }: ShoppingItemCardPro
               startTransition(async () => {
                 await deleteShoppingItem(item.id);
                 setIsConfirmingDelete(false);
+                showToast("Producto eliminado");
               })
             }
           >

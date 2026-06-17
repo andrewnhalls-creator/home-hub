@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useToast } from "@/components/ui/Toast";
 import { formatCurrency } from "@/lib/format";
 import { FixedPaymentForm } from "@/components/finance/FixedPaymentForm";
 import {
@@ -39,6 +40,7 @@ const STATUS_LABEL: Record<PaymentInstance["status"], string> = {
 };
 
 export function FixedPaymentsTab({ payments, instances, categories }: FixedPaymentsTabProps) {
+  const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingPayment, setEditingPayment] = useState<FixedPayment | null>(null);
@@ -65,7 +67,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
           <FixedPaymentForm
             action={createFixedPayment}
             categories={categories}
-            onSuccess={() => setIsAddOpen(false)}
+            onSuccess={() => { setIsAddOpen(false); showToast("Pago fijo añadido"); }}
             onCancel={() => setIsAddOpen(false)}
           />
         </Modal>
@@ -163,7 +165,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
             action={updateFixedPayment.bind(null, editingPayment.id)}
             categories={categories}
             payment={editingPayment}
-            onSuccess={() => setEditingPayment(null)}
+            onSuccess={() => { setEditingPayment(null); showToast("Pago fijo actualizado"); }}
             onCancel={() => setEditingPayment(null)}
           />
         )}
@@ -183,6 +185,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
               startTransition(async () => {
                 if (deletingPayment) await deleteFixedPayment(deletingPayment.id);
                 setDeletingPayment(null);
+                showToast("Pago fijo eliminado");
               })
             }
           >
