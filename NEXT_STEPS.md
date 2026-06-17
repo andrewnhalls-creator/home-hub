@@ -7,14 +7,14 @@ The next phase is a full UI/UX redesign. See `UI_REDESIGN_PLAN.md` for the full 
 
 ---
 
-## Complete: Milestone UI-0 through UI-6
+## Complete: Milestone UI-0 through UI-7
 
-- [x] UI-0 through UI-5: see HANDOFF.md
-- [x] UI-6: PageLoader → skeleton shimmer; ReminderList pills → SegmentedControl; ModuleError + error.tsx for all 10 module routes
+- [x] UI-0 through UI-6: see HANDOFF.md
+- [x] UI-7: AppShell max-w-3xl content cap; TopBar h1 hidden on desktop; dashboard 2-col on lg+; trash section double-padding fixed
 
 ---
 
-## Next: Milestone UI-7 — Tablet/iPad responsive
+## Next: Milestone UI-8 — QA + final polish
 
 ---
 
@@ -48,12 +48,12 @@ The next phase is a full UI/UX redesign. See `UI_REDESIGN_PLAN.md` for the full 
 
 ---
 
-## Milestone UI-7 — Tablet/iPad responsive
-
-**Goal:** Dashboard 2-col grid, sidebar on md+, split layout for Calendar/Finance where feasible.
-
----
-
 ## Milestone UI-8 — QA + final polish
 
-**Goal:** Lint, typecheck, build, mobile/tablet viewport checks, Spanish copy audit.
+**Goal:** Lint, typecheck, build all pass (already do). Mobile viewport check at ~375px for all modules. Spanish copy audit — scan all visible strings. Fix any issues found.
+
+**Key checks:**
+- All module pages render correctly at 375px width
+- No English strings in user-facing UI
+- All loading/error/empty states look right
+- TopBar, BottomNav, Sidebar all consistent

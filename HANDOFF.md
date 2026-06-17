@@ -1,14 +1,20 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone UI-6 complete)
+Updated: 2026-06-17 (Milestone UI-7 complete)
 
-## Current milestone: UI-6 — Module polish (COMPLETE)
+## Current milestone: UI-7 — Tablet/iPad responsive (COMPLETE)
 
 ## Status
-All functional milestones (1–22) complete. UI-0 through UI-6 done.
-Next is UI-7 (tablet/iPad responsive).
+All functional milestones (1–22) complete. UI-0 through UI-7 done.
+Next is UI-8 (QA + final polish).
 
 ## Production URL
 https://home-hub-dun.vercel.app
+
+## What was done in Milestone UI-7
+- `components/layout/AppShell.tsx`: main content wrapped in `max-w-3xl mx-auto` — caps at 768px on large screens, centered on desktop
+- `components/layout/TopBar.tsx`: page `h1` hidden on `md:` (sidebar active item serves that role); household name now shows on `md:` instead of `sm:`; right section uses `flex-1 justify-end` for clean alignment
+- `app/(app)/dashboard/page.tsx`: metric grid → `grid-cols-2 md:grid-cols-3 lg:grid-cols-2`; on `lg:`, two-column layout with metrics on left and calendar widget + list sections on right
+- Trash section wrappers in recordatorios, documentos, compra/listas, finanzas: removed redundant `px-4` (AppShell already provides horizontal padding)
 
 ## What was done in Milestone UI-6
 - `components/ui/PageLoader.tsx`: upgraded from spinner to skeleton card shimmer (4 shimmer cards with avatar + two text lines); affects all 14 module loading states
