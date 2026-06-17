@@ -17,6 +17,7 @@ const ITEM_ACCENTS: Record<string, { iconColor: string; iconBg: string }> = {
   "/ajustes":                { iconColor: "text-muted",      iconBg: "bg-sand"          },
   "/ajustes/notificaciones": { iconColor: "text-coral",      iconBg: "bg-coral/10"      },
   "/ajustes/dispositivos":   { iconColor: "text-sage",       iconBg: "bg-sage/10"       },
+  "/papelera":               { iconColor: "text-muted",      iconBg: "bg-sand"          },
 };
 
 interface MoreMenuSheetProps {

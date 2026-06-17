@@ -11,6 +11,7 @@ import {
   Heart,
   Settings,
   Smartphone,
+  Trash2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -49,6 +50,7 @@ export const MENU_ITEMS: NavItem[] = [
   { href: "/ajustes",                label: "Ajustes",         icon: Settings },
   { href: "/ajustes/notificaciones", label: "Notificaciones",  icon: BellRing },
   { href: "/ajustes/dispositivos",   label: "Dispositivos",    icon: Smartphone },
+  { href: "/papelera",               label: "Papelera",        icon: Trash2 },
 ];
 
 /** Legacy: items previously shown in the Más bottom-sheet. Kept for reference. */
