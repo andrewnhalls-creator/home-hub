@@ -37,6 +37,7 @@ interface FinanceTabsProps {
     expensesThisMonthTotal: number;
     activeSubscriptionsTotal: number;
     savingsProgressPct: number | null;
+    monthlyBudget: number | null;
   };
   fixedPayments: FixedPayment[];
   paymentInstances: PaymentInstance[];

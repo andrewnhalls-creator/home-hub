@@ -42,6 +42,7 @@ export interface Household {
   name: string;
   locale: string;
   currency: string;
+  monthly_budget: number | null;
   created_by: string | null;
   created_at: string;
   updated_at: string;

@@ -537,3 +537,15 @@ export async function restoreSubscription(
   revalidatePath("/finanzas");
   return {};
 }
+
+export async function updateMonthlyBudget(amount: number | null): Promise<{ error?: string }> {
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("households")
+    .update({ monthly_budget: amount })
+    .eq("id", householdId);
+  if (error) return { error: "No se ha podido guardar el presupuesto." };
+  revalidatePath("/finanzas");
+  return {};
+}

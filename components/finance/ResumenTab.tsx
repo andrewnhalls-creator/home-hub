@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
 import { formatCurrency } from "@/lib/format";
+import { BudgetCard } from "@/components/finance/BudgetCard";
 import type { Mortgage, MortgagePayment } from "@/lib/types";
 
 interface ResumenTabProps {
@@ -12,6 +13,7 @@ interface ResumenTabProps {
   expensesThisMonthTotal: number;
   activeSubscriptionsTotal: number;
   savingsProgressPct: number | null;
+  monthlyBudget: number | null;
   mortgages?: Mortgage[];
   mortgagePayments?: MortgagePayment[];
   onGoToMortgage?: () => void;
@@ -132,6 +134,7 @@ export function ResumenTab({
   expensesThisMonthTotal,
   activeSubscriptionsTotal,
   savingsProgressPct,
+  monthlyBudget,
   mortgages = [],
   mortgagePayments = [],
   onGoToMortgage,
@@ -140,6 +143,7 @@ export function ResumenTab({
 
   return (
     <div className="flex flex-col gap-3">
+      <BudgetCard monthlyBudget={monthlyBudget} spent={expensesThisMonthTotal} />
       {/* 6-chip KPI grid — numbers only, colour reserved for problems */}
       <div className="grid grid-cols-3 gap-2">
         <KpiChip label="Próximos" value={String(upcomingCount)} />
