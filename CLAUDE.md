@@ -153,3 +153,64 @@ A module is not done until: the page exists; data saves to and loads from Supaba
 17. Do not include secrets, private keys, `.env.local` values, or service role keys in summaries, logs, docs, commits, or handoff files.
 18. If context seems to be getting large, stop early, update handoff files, commit, push, and tell the user to start a fresh session.
 19. Use repository files and Git history as the source of truth, not chat history.
+
+# Context budget rules
+
+At the start of each session:
+
+1. If Claude Code has a context usage command available, check current context usage.
+2. If no context usage command is available, estimate context risk from the amount of files read, tool calls used, and output generated.
+3. Tell the user whether the session starts with low, medium, or high context risk.
+
+During the session:
+
+1. Avoid large file reads unless absolutely necessary.
+2. Do not read package-lock.json unless debugging dependencies.
+3. Do not inspect node_modules.
+4. Do not inspect .next.
+5. Do not inspect build output folders.
+6. Do not inspect generated files unless required.
+7. Do not dump full logs into chat.
+8. Do not dump full git diffs into chat.
+9. Do not paste long file contents into chat.
+10. Do not use broad repository scans unless needed.
+11. Prefer targeted file reads.
+12. Prefer short command outputs.
+
+Use these safer commands where possible:
+
+* git status --short
+* git diff --stat
+* git diff --name-only
+* git log --oneline -5
+* npm run build 2>&1 | tail -120
+* npm run lint 2>&1 | tail -120
+
+MCP and tool usage:
+
+1. Do not call MCP tools unless needed for the current milestone.
+2. Do not call Supabase MCP unless the current milestone needs database, auth, RLS, Edge Functions, secrets, Cron, or logs.
+3. Do not call Vercel MCP unless the current milestone needs deployment, environment variables, domains, or deployment status.
+4. Do not add new MCP tools.
+5. Avoid repeated MCP calls that return large JSON.
+6. Summarize tool results instead of copying long outputs into chat.
+
+Context warning triggers:
+
+1. If context usage becomes medium-high, finish the current small step, update handoff, commit and push.
+2. If context usage becomes high, stop at the next safe checkpoint.
+3. If Claude Code warns about context, stop and save state immediately.
+4. If compaction is needed, update HANDOFF.md and NEXT_STEPS.md first, then compact.
+5. If compaction fails, do not keep working. Commit/push safe changes and tell the user it is safe to exit.
+
+Handoff size control:
+
+1. Keep HANDOFF.md concise.
+2. HANDOFF.md should describe current state only.
+3. Do not turn HANDOFF.md into a full project history.
+4. Keep NEXT_STEPS.md focused on the next 1 to 3 milestones.
+5. Move older historical detail to BUILD_LOG.md only if needed.
+6. Do not paste full handoff contents into chat.
+
+Stop rule:
+If the session has completed one milestone, or if context risk becomes high, stop, update handoff files, commit, push, and tell the user whether it is safe to exit.
