@@ -7,17 +7,7 @@ App and Edge Function fully deployed. All v1 + post-launch items complete.
 
 ## Planned improvements (suggested order)
 
-### 1. Richer calendar
-Make the calendar more useful for day-to-day household planning.
-
-- Multi-day events (store `start_date` + `end_date` on calendar_events, render as spanning blocks)
-- Drag-to-reschedule on the week view (touch-friendly, debounced save)
-- "Añadir al calendario" shortcut from reminder/chore/payment detail views
-- Event colour customisation per event (not just per type)
-
----
-
-### 4. Meal plan → shopping list generator
+### 1. Meal plan → shopping list generator
 One-tap: generate a shopping list from the current week's meal plan.
 
 - Button on `/menu` page: "Generar lista de la compra"
