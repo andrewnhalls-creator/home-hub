@@ -4,18 +4,21 @@ import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { OfflineBanner } from "@/components/ui/OfflineBanner";
 import { PageTransition } from "@/components/layout/PageTransition";
+import { RealtimeSync } from "@/components/RealtimeSync";
 import type { NotificationEvent } from "@/lib/types";
 
 interface AppShellProps {
+  householdId: string;
   householdName?: string;
   notifications?: NotificationEvent[];
   unreadCount?: number;
   children: ReactNode;
 }
 
-export function AppShell({ householdName, notifications, unreadCount, children }: AppShellProps) {
+export function AppShell({ householdId, householdName, notifications, unreadCount, children }: AppShellProps) {
   return (
     <div className="flex min-h-dvh [overflow-x:clip] bg-cream">
+      <RealtimeSync householdId={householdId} />
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-card focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-brown focus:shadow-card"
