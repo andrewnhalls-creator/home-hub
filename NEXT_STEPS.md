@@ -7,17 +7,7 @@ App and Edge Function fully deployed. All v1 + post-launch items complete.
 
 ## Planned improvements (suggested order)
 
-### 1. Dark mode (follows system)
-Automatically switches between light and dark based on the iOS/iPadOS/Android system setting.
-
-- Add dark-mode overrides for all CSS colour tokens in `globals.css` inside a `@media (prefers-color-scheme: dark)` block
-- Key surfaces to remap: `--color-cream`, `--color-card`, `--color-sand`, `--color-border`, `--color-brown`, `--color-muted`
-- Ensure all text contrast meets WCAG AA in dark mode independently
-- Test on real device with system dark mode toggled
-
----
-
-### 2. Expense analytics charts
+### 1. Expense analytics charts
 Visual spend breakdowns on the Finanzas → Gastos tab.
 
 - Monthly spend bar chart (last 6 months)

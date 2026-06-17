@@ -1,9 +1,9 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (all post-launch items complete)
+Updated: 2026-06-17 (dark mode added)
 
-## Current state: post-launch polish complete ✓
+## Current state: dark mode complete ✓
 
-All planned post-launch improvements are done and pushed.
+System-aware dark mode added. App follows iOS/Android/macOS system setting automatically.
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -20,24 +20,20 @@ npx supabase functions deploy send-push
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `3b966f1` (push notification quiet hours)
+- Last commit: `96b516e` (dark mode)
 - Pushed to origin main ✓
-- Deploy pending for app + Edge Function
+- Deploy pending (app only; Edge Function unchanged)
 
-## Completed post-launch items
+## Completed improvements (chronological)
 1. ✅ **Web font** — Plus Jakarta Sans via `next/font/google`
 2. ✅ **Page transitions** — fade-up 220ms via `PageTransition` wrapper
 3. ✅ **Global search `/buscar`** — 9 modules, search icon in top bar
 4. ✅ **`/papelera` recovery route** — 7 modules, linked from Menu sheet
-5. ✅ **Push notification quiet hours**
-   - `quiet_hours_start` / `quiet_hours_end` columns already existed in `notification_preferences`
-   - `NotificationsSettings.tsx`: new "Horario silencioso" card — toggle + time pickers (De / Hasta)
-   - `actions.ts`: `upsertNotificationPreferences` now saves both quiet hours fields
-   - `send-push/index.ts`: `isInQuietHours()` checks current Europe/Madrid time against the range (handles midnight crossover); called from `isPushAllowed()` before category check
+5. ✅ **Push notification quiet hours** — toggle + time pickers in settings; Edge Function enforces window
+6. ✅ **Dark mode** — `@media (prefers-color-scheme: dark)` in `globals.css`; remaps surface/text/border/shadow tokens; one `bg-white→bg-card` fix in `InstallGuideView.tsx`
 
 ## Next planned improvements (see NEXT_STEPS.md for full detail)
-1. Dark mode (follows system setting)
-2. Expense analytics charts
+1. Expense analytics charts
 3. Richer calendar (multi-day events, drag-to-reschedule)
 4. Meal plan → shopping list generator
 5. Realtime shopping list sync
