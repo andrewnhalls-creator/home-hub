@@ -1,25 +1,19 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (post-FIN-9 polish complete)
+Updated: 2026-06-17 (v1 complete — all milestones done)
 
-## Current state: all tasks from NEXT_STEPS done (deploy pending)
+## Current state: v1 shipped ✓
 
-## Last session changes (commit 24c3443)
-
-### 1. Sticky top bar fixed
-- `AppShell.tsx`: changed `overflow-x-hidden` → `[overflow-x:clip]` on the outer wrapper.
-  `overflow: hidden` on an ancestor breaks `position: sticky`; `clip` does not create a scroll container, so the sticky header now works correctly on all views.
-
-### 2. Mortgage summary card in Resumen tab
-- `ResumenTab.tsx`: accepts `mortgages`, `mortgagePayments`, `onGoToMortgage` props.
-  Renders a `MortgageCard` for each active (non-deleted) mortgage showing: saldo pendiente, cuota mensual, próximo pago date, amortised % progress bar, and a "Ver hipoteca →" chip that switches to the Hipoteca tab.
-- `FinanceTabs.tsx`: passes mortgages/payments and `onGoToMortgage` callback to ResumenTab.
-
-### 3. Delete-payment confirmation in MortgageTab
-- `MortgageTab.tsx`: trash icon in payment history now sets `deletingPaymentId` state instead of firing immediately.
-  A confirmation modal asks before calling `deleteMortgagePayment`.
+All planned v1 milestones are complete and live in production.
 
 ## Production URL
 https://home-hub-dun.vercel.app
+
+## Last known good state
+- Build, lint, typecheck all pass
+- Last commits: `195b890` (UI/UX audit — touch targets + press states), `82af7d3` (UI/UX audit — animations/focus trap), `3b8972f` (reminder timezone fix)
+- Deployed to Vercel production ✓
+- Push notifications working end-to-end on real device ✓
+- Reminder timezone bug corrected ✓
 
 ## Deploy command
 ```
@@ -27,13 +21,9 @@ npx vercel --prod
 ```
 (GitHub-triggered deploys blocked on Hobby plan — always use CLI)
 
-## Last known good state
-- Build, lint, typecheck all pass
-- Committed: 24c3443
-- Pushed to origin main
-- Migration 016_mortgages applied to Supabase
-
-## Remaining work
-- **Deploy**: run `npx vercel --prod` to publish to production
-- **Push notification test**: end-to-end device test still pending (infrastructure working)
-- **Post-MVP**: global search, web fonts, animated transitions
+## Post-launch ideas (not blocking)
+- Global search `/buscar` page — design-ready, deferred post-MVP
+- Web font upgrade (Inter or Plus Jakarta Sans)
+- Animated page transitions
+- More granular push notification scheduling
+- Dedicated `/papelera` route for all modules
