@@ -65,7 +65,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
 
   return createPortal(
     <div
-      className="animate-backdrop-enter fixed inset-0 z-50 flex items-end justify-center bg-brown/40 sm:items-center sm:p-4"
+      className="animate-backdrop-enter fixed inset-0 z-50 flex items-end justify-center bg-black/60 sm:items-center sm:p-4"
       onClick={onClose}
     >
       <div
