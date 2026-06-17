@@ -141,7 +141,7 @@ export function ShoppingListDetail({ list, trips, itemsCount }: ShoppingListDeta
       </Card>
 
       <Link href={`/compra?lista=${list.id}`}>
-        <Card className="flex items-center gap-3 transition-colors hover:bg-sand active:bg-sand">
+        <Card className="flex items-center gap-3 transition hover:bg-sand active:scale-[0.98]">
           <ShoppingCart className="h-5 w-5 text-terracotta" aria-hidden />
           <p className="text-sm font-medium text-brown">Ver productos de esta lista ({itemsCount})</p>
         </Card>

@@ -193,7 +193,7 @@ export function CalendarView({ items }: CalendarViewProps) {
               type="button"
               aria-label="Semana anterior"
               onClick={() => navWeek(-1)}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
               <ChevronLeft className="h-5 w-5" aria-hidden />
             </button>
@@ -202,7 +202,7 @@ export function CalendarView({ items }: CalendarViewProps) {
               type="button"
               aria-label="Semana siguiente"
               onClick={() => navWeek(1)}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
               <ChevronRight className="h-5 w-5" aria-hidden />
             </button>
@@ -269,7 +269,7 @@ export function CalendarView({ items }: CalendarViewProps) {
               type="button"
               aria-label="Mes anterior"
               onClick={() => setCursor((d) => subMonths(d, 1))}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
               <ChevronLeft className="h-5 w-5" aria-hidden />
             </button>
@@ -278,7 +278,7 @@ export function CalendarView({ items }: CalendarViewProps) {
               type="button"
               aria-label="Mes siguiente"
               onClick={() => setCursor((d) => addMonths(d, 1))}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
               <ChevronRight className="h-5 w-5" aria-hidden />
             </button>

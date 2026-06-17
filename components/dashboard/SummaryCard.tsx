@@ -12,7 +12,7 @@ interface SummaryCardProps {
 export function SummaryCard({ icon: Icon, label, value, href }: SummaryCardProps) {
   return (
     <Link href={href}>
-      <Card className="flex items-center gap-3 transition-colors hover:bg-sand active:bg-sand">
+      <Card className="flex items-center gap-3 transition hover:bg-sand active:scale-[0.98]">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-terracotta/10 text-terracotta">
           <Icon className="h-5 w-5" aria-hidden />
         </div>

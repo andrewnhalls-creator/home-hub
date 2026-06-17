@@ -55,7 +55,7 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
             <Link
               href="/buscar"
               aria-label="Buscar"
-              className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
               <Search className="h-5 w-5" aria-hidden />
             </Link>
@@ -68,10 +68,10 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
               aria-label="Abrir menú"
               aria-haspopup="dialog"
               aria-expanded={isMenuOpen}
-              className="flex h-10 min-w-[44px] items-center justify-center gap-1 rounded-xl px-2 text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta md:hidden"
+              className="flex h-10 min-w-[44px] items-center justify-center gap-1 rounded-xl px-2 text-muted transition hover:bg-sand active:scale-[0.93] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta md:hidden"
             >
               <Menu className="h-5 w-5" aria-hidden />
-              <span className="text-xs font-semibold text-brown">Menu</span>
+              <span className="text-xs font-semibold text-brown">Más</span>
             </button>
           </div>
         </div>

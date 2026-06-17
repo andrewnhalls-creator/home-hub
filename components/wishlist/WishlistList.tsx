@@ -88,7 +88,7 @@ export function WishlistList({ items }: WishlistListProps) {
                     type="button"
                     aria-label="Editar deseo"
                     onClick={() => setEditingItem(item)}
-                    className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                   >
                     <Pencil className="h-4 w-4" aria-hidden />
                   </button>
@@ -96,7 +96,7 @@ export function WishlistList({ items }: WishlistListProps) {
                     type="button"
                     aria-label="Eliminar deseo"
                     onClick={() => setDeletingItem(item)}
-                    className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                   >
                     <Trash2 className="h-4 w-4" aria-hidden />
                   </button>

@@ -83,7 +83,7 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
                   href={item.href}
                   onClick={onClose}
                   className={cn(
-                    "flex flex-col items-center gap-2.5 rounded-2xl border border-border bg-card px-2 py-4 text-center transition-colors hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+                    "flex flex-col items-center gap-2.5 rounded-2xl border border-border bg-card px-2 py-4 text-center transition hover:bg-sand active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
                   )}
                 >
                   <div className={cn("flex h-12 w-12 items-center justify-center rounded-xl", accent.iconBg)}>

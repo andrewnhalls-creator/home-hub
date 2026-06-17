@@ -49,7 +49,7 @@ export function SearchView({ query, sections }: SearchViewProps) {
             type="button"
             aria-label="Borrar búsqueda"
             onClick={handleClear}
-            className="absolute right-2 flex h-7 w-7 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+            className="absolute right-2 flex h-7 w-7 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.85]"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>
@@ -87,7 +87,7 @@ export function SearchView({ query, sections }: SearchViewProps) {
                     <li key={result.id}>
                       <Link
                         href={result.href}
-                        className="flex min-h-[44px] items-center rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-brown transition-colors hover:bg-sand active:bg-sand"
+                        className="flex min-h-[44px] items-center rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-brown transition hover:bg-sand active:scale-[0.98]"
                       >
                         {result.title}
                       </Link>

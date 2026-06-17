@@ -61,7 +61,7 @@ export function NotificationCentre({ notifications, unreadCount }: NotificationC
         type="button"
         aria-label={unreadCount > 0 ? `Notificaciones, ${unreadCount} sin leer` : "Notificaciones"}
         onClick={() => setIsOpen(true)}
-        className="relative flex h-11 w-11 items-center justify-center rounded-full text-brown hover:bg-sand active:bg-sand"
+        className="relative flex h-11 w-11 items-center justify-center rounded-full text-brown transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
       >
         <Bell className="h-5 w-5" aria-hidden />
         {unreadCount > 0 && (
@@ -105,8 +105,8 @@ export function NotificationCentre({ notifications, unreadCount }: NotificationC
                           onClick={() => !notification.is_read && handleMarkRead(notification.id)}
                           disabled={isPending}
                           className={cn(
-                            "flex w-full items-start gap-3 rounded-xl border-l-4 bg-card px-3 py-3 text-left",
-                            notification.is_read ? "border-transparent opacity-70" : "border-terracotta",
+                            "flex w-full items-start gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-sand",
+                            notification.is_read ? "opacity-60" : "bg-terracotta/8",
                           )}
                         >
                           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sand text-terracotta">

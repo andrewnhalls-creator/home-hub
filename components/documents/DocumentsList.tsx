@@ -55,7 +55,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
                       type="button"
                       aria-label="Editar documento"
                       onClick={() => setEditingDoc(doc)}
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
                       <Pencil className="h-4 w-4" aria-hidden />
                     </button>
@@ -64,7 +64,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
                       aria-label="Archivar documento"
                       disabled={isPending}
                       onClick={() => startTransition(async () => { await archiveDocument(doc.id); showToast("Documento archivado"); })}
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
                       <Archive className="h-4 w-4" aria-hidden />
                     </button>
@@ -72,7 +72,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
                       type="button"
                       aria-label="Eliminar documento"
                       onClick={() => setDeletingDoc(doc)}
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
                       <Trash2 className="h-4 w-4" aria-hidden />
                     </button>

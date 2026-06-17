@@ -33,7 +33,7 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
           aria-label={isDone ? "Marcar como pendiente" : "Marcar como hecho"}
           disabled={isPending}
           onClick={() => startTransition(() => toggleReminderStatus(reminder.id, !isDone))}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-terracotta active:bg-terracotta/10 disabled:opacity-50"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-terracotta transition active:scale-[0.85] active:bg-terracotta/10 disabled:opacity-50"
         >
           {isDone ? <CheckCircle2 className="h-6 w-6" aria-hidden /> : <Circle className="h-6 w-6" aria-hidden />}
         </button>
@@ -60,7 +60,7 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
               type="button"
               aria-label="Posponer"
               onClick={() => setIsSnoozeOpen(true)}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
               <Clock className="h-4 w-4" aria-hidden />
             </button>
@@ -69,7 +69,7 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
             type="button"
             aria-label="Editar recordatorio"
             onClick={onEdit}
-            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
           >
             <Pencil className="h-4 w-4" aria-hidden />
           </button>

@@ -137,7 +137,7 @@ export function InstallGuideView() {
       <Card className="p-0 overflow-hidden">
         <Link
           href="/ajustes/notificaciones"
-          className="flex min-h-[56px] items-center justify-between gap-3 px-4 py-3 hover:bg-sand active:bg-sand"
+          className="flex min-h-[56px] items-center justify-between gap-3 px-4 py-3 transition hover:bg-sand active:scale-[0.98]"
         >
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-terracotta/10">

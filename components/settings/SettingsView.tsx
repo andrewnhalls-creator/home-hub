@@ -106,7 +106,7 @@ export function SettingsView({
           <Link
             key={href}
             href={href}
-            className="flex min-h-[44px] items-center justify-between gap-3 px-4 py-3 text-sm text-brown hover:bg-sand active:bg-sand"
+            className="flex min-h-[44px] items-center justify-between gap-3 px-4 py-3 text-sm text-brown transition hover:bg-sand active:scale-[0.98]"
           >
             <span className="flex items-center gap-3">
               <Icon className="h-4 w-4 text-terracotta" aria-hidden />
