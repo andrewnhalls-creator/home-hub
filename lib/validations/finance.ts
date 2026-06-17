@@ -42,3 +42,28 @@ export const subscriptionSchema = z.object({
   isActive: z.coerce.boolean().default(true),
   notes: z.string().optional(),
 });
+
+export const mortgageSchema = z.object({
+  name: z.string().min(1, "Este campo es obligatorio."),
+  lender: z.string().optional(),
+  originalPrincipal: z.coerce.number().positive("Introduce un importe válido."),
+  currentBalance: z.coerce.number().min(0, "El saldo no puede ser negativo."),
+  monthlyPayment: z.coerce.number().positive("Introduce un importe válido."),
+  interestRate: z.coerce.number().min(0).max(100).optional().or(z.literal("")),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  paymentDay: z.coerce.number().int().min(1).max(31).optional().or(z.literal("")),
+  notes: z.string().optional(),
+});
+
+export const mortgagePaymentSchema = z.object({
+  mortgageId: z.string().uuid(),
+  dueDate: z.string().min(1, "Este campo es obligatorio."),
+  paidDate: z.string().optional(),
+  amount: z.coerce.number().positive("Introduce un importe válido."),
+  principalAmount: z.coerce.number().min(0).optional().or(z.literal("")),
+  interestAmount: z.coerce.number().min(0).optional().or(z.literal("")),
+  extraPayment: z.coerce.number().min(0).optional().or(z.literal("")),
+  status: z.enum(["pendiente", "pagado", "omitido"]).default("pendiente"),
+  notes: z.string().optional(),
+});

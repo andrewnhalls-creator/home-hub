@@ -367,6 +367,51 @@ export interface ActivityLogEntry {
   created_at: string;
 }
 
+export type MortgageStatus = "activa" | "pagada" | "cancelada";
+export type MortgagePaymentStatus = "pendiente" | "pagado" | "omitido";
+
+export interface Mortgage {
+  id: string;
+  household_id: string;
+  name: string;
+  lender: string | null;
+  original_principal: number;
+  current_balance: number;
+  monthly_payment: number;
+  interest_rate: number | null;
+  start_date: string | null;
+  end_date: string | null;
+  payment_day: number | null;
+  currency: string;
+  status: MortgageStatus;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  archived_at: string | null;
+  archived_by: string | null;
+  deleted_at: string | null;
+  deleted_by: string | null;
+}
+
+export interface MortgagePayment {
+  id: string;
+  household_id: string;
+  mortgage_id: string;
+  due_date: string;
+  paid_date: string | null;
+  amount: number;
+  principal_amount: number | null;
+  interest_amount: number | null;
+  extra_payment: number;
+  status: MortgagePaymentStatus;
+  paid_by: string | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface NotificationEvent {
   id: string;
   household_id: string;

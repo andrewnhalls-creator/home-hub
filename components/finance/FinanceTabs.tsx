@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Landmark } from "lucide-react";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { ResumenTab } from "@/components/finance/ResumenTab";
 import { FixedPaymentsTab } from "@/components/finance/FixedPaymentsTab";
 import { ExpensesTab } from "@/components/finance/ExpensesTab";
 import { SavingsTab } from "@/components/finance/SavingsTab";
 import { SubscriptionsTab } from "@/components/finance/SubscriptionsTab";
-import type { Category, Expense, FixedPayment, PaymentInstance, SavingsGoal, Subscription } from "@/lib/types";
+import { MortgageTab } from "@/components/finance/MortgageTab";
+import type { Category, Expense, FixedPayment, Mortgage, MortgagePayment, PaymentInstance, SavingsGoal, Subscription } from "@/lib/types";
 
 interface Member {
   user_id: string;
@@ -34,6 +33,8 @@ interface FinanceTabsProps {
   expenses: Expense[];
   savingsGoals: SavingsGoal[];
   subscriptions: Subscription[];
+  mortgages: Mortgage[];
+  mortgagePayments: MortgagePayment[];
   financeCategories: Category[];
   members: Member[];
 }
@@ -61,6 +62,8 @@ export function FinanceTabs({
   expenses,
   savingsGoals,
   subscriptions,
+  mortgages,
+  mortgagePayments,
   financeCategories,
   members,
 }: FinanceTabsProps) {
@@ -90,11 +93,7 @@ export function FinanceTabs({
         <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
       )}
       {tab === "hipoteca" && (
-        <EmptyState
-          icon={Landmark}
-          title="Hipoteca"
-          description="Próximamente podrás hacer seguimiento de tu hipoteca, saldo pendiente, cuota mensual e historial de pagos."
-        />
+        <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
       )}
     </div>
   );

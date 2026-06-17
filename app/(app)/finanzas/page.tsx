@@ -28,6 +28,8 @@ export default async function FinancePage() {
     { data: expenses },
     { data: savingsGoals },
     { data: subscriptions },
+    { data: mortgages },
+    { data: mortgagePayments },
     { data: financeCategories },
     { data: members },
     { data: deletedFixed },
@@ -60,6 +62,17 @@ export default async function FinancePage() {
       .eq("household_id", householdId)
       .is("deleted_at", null)
       .order("name", { ascending: true }),
+    supabase
+      .from("mortgages")
+      .select("*")
+      .eq("household_id", householdId)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("mortgage_payments")
+      .select("*")
+      .eq("household_id", householdId)
+      .order("due_date", { ascending: false }),
     supabase
       .from("categories")
       .select("*")
@@ -164,6 +177,8 @@ export default async function FinancePage() {
         expenses={expenses ?? []}
         savingsGoals={savingsGoals ?? []}
         subscriptions={subscriptions ?? []}
+        mortgages={mortgages ?? []}
+        mortgagePayments={mortgagePayments ?? []}
         financeCategories={financeCategories ?? []}
         members={members ?? []}
       />
