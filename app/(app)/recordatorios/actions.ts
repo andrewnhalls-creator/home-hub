@@ -17,7 +17,20 @@ export interface ReminderFormState {
 function combineDueAt(dueDate?: string, dueTime?: string): string | null {
   if (!dueDate) return null;
   const time = dueTime || "09:00";
-  return new Date(`${dueDate}T${time}:00`).toISOString();
+  // The server runs UTC, so we must convert Europe/Madrid local time to UTC explicitly.
+  // Strategy: treat the input as UTC to get a reference instant, ask Intl what
+  // Europe/Madrid shows at that instant, compute the offset, then apply it.
+  const utcGuess = new Date(`${dueDate}T${time}:00Z`);
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Europe/Madrid",
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    hour12: false,
+  }).formatToParts(utcGuess);
+  const get = (t: string) => parseInt(parts.find((p) => p.type === t)?.value ?? "0");
+  const madridAsUtcMs = Date.UTC(get("year"), get("month") - 1, get("day"), get("hour"), get("minute"), get("second"));
+  const offsetMs = utcGuess.getTime() - madridAsUtcMs; // negative for UTC+ zones e.g. CEST = -7200000
+  return new Date(utcGuess.getTime() + offsetMs).toISOString();
 }
 
 async function scheduleReminderNotification(
