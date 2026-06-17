@@ -1,52 +1,83 @@
 # Next Steps
 
-## Current: Milestone 22 — Final review (manual tests)
+## Phase: UI/UX Redesign — "Warm Home Cockpit"
 
-### Automated checks (DONE)
-- [x] UI text audit — all Spanish, only "Home Hub" brand name in English
-- [x] Secrets scan — no secrets in git history or source files
-- [x] RLS audit — 28 tables with RLS, all policies use is_household_member()
-- [x] lint → clean
-- [x] typecheck → clean
+All functional milestones (1–22) are complete. The app is live at https://home-hub-dun.vercel.app.
+The next phase is a full UI/UX redesign. See `UI_REDESIGN_PLAN.md` for the full audit and plan.
 
-### Manual tests (YOU must run these)
+---
 
-**1. Smoke-test every module (live URL: https://home-hub-dun.vercel.app)**
-- [ ] Sign in / sign up flow
-- [ ] Dashboard — widgets load, recent activity shows
-- [ ] Compra (shopping): create list, add items, check off items, archive list
-- [ ] Menú (weekly menu): set a meal for each day of the week
-- [ ] Recordatorios: create, edit, delete a reminder
-- [ ] Tareas: create, complete, delete a chore
-- [ ] Calendario: create, edit, delete an event
-- [ ] Finanzas → pagos fijos: add payment, mark as paid, view history
-- [ ] Finanzas → gastos variables: add a weekly spend
-- [ ] Finanzas → ahorro: create a savings goal, update progress
-- [ ] Documentos: upload/link a document, archive, restore from trash
-- [ ] Deseos: add, edit, delete wishlist items
-- [ ] Ajustes → household name, members, invite code
-- [ ] Ajustes → cuenta: change password
-- [ ] Ajustes → notificaciones: subscribe to push
-- [ ] Ajustes → instalar: install guide shows correctly
+## Current: Milestone UI-0 — COMPLETE
 
-**2. Push notification end-to-end (real device required)**
-- [ ] Create a real user account on the live app
-- [ ] On a real device (or Chrome desktop), open /ajustes/notificaciones and subscribe
-- [ ] Create a reminder with a due time within the next 2 minutes
-- [ ] Wait — verify push notification arrives on the device
+- [x] UI audit: identified all problem areas
+- [x] `UI_REDESIGN_PLAN.md` created
+- [x] `DESIGN_SYSTEM.md` updated with shadow tokens, radius tokens, new components
+- [x] `NEXT_STEPS.md` updated
+- [x] `HANDOFF.md` updated
 
-**3. RLS cross-household**
-- [ ] Create two separate accounts in two different households
-- [ ] Log in as user A, note which shopping list IDs exist
-- [ ] Log in as user B — confirm user B cannot see user A's lists, events, reminders, etc.
-- [ ] Try to directly fetch user A's data via the Supabase REST API with user B's JWT — confirm 0 rows returned
+---
 
-**4. Mobile usability (375px viewport)**
-- [ ] Test every screen at 375px width in browser devtools
-- [ ] Bottom navigation is visible and tappable
-- [ ] All forms are usable at small screen width
-- [ ] /ajustes/instalar shows iOS install steps correctly
+## Next: Milestone UI-1 — Design system foundation
 
-### Notes
-- No new features in Milestone 22 — verification only
-- If any issues are found, fix them and commit before signing off
+**Goal:** Create shared design tokens and polish reusable UI components. No page-level changes yet.
+
+**Files to touch:**
+- `app/globals.css` — add shadow/radius CSS tokens
+- `components/ui/Card.tsx` — add variant prop (default, featured, subtle, metric)
+- `components/ui/EmptyState.tsx` — improve icon area, spacing, copy treatment
+- `components/ui/Button.tsx` — verify sizes, confirm lg size for FABs
+- `components/ui/WeekStrip.tsx` — NEW: shared week row component
+- `components/ui/SegmentedControl.tsx` — NEW: pill tab selector for Finance + Calendar
+- `components/ui/MetricCard.tsx` — NEW: dashboard metric tile
+
+**Checks:** `npm run lint`, `npm run typecheck`, `npm run build`
+
+---
+
+## Milestone UI-2 — Navigation + app shell
+
+**Goal:** New bottom nav order (Inicio, Calendario, Compra, Finanzas, Más). Más becomes a polished sheet.
+
+**Files:** `lib/constants.ts`, `components/layout/BottomNav.tsx`, `components/layout/MoreMenuSheet.tsx`, `components/layout/Sidebar.tsx`
+
+---
+
+## Milestone UI-3 — Dashboard redesign
+
+**Goal:** Redesign /dashboard as home cockpit with greeting card, 6 metric tiles, week calendar widget, and upcoming sections.
+
+**Files:** `app/(app)/dashboard/page.tsx`, new dashboard components
+
+---
+
+## Milestone UI-4 — Finance redesign
+
+**Goal:** Fix mobile layout, use SegmentedControl for tabs, improve KPI card grid.
+
+**Files:** `components/finance/FinanceTabs.tsx`, `components/finance/ResumenTab.tsx`, `app/(app)/finanzas/page.tsx`
+
+---
+
+## Milestone UI-5 — Calendar redesign
+
+**Goal:** Default to weekly view, add WeekStrip, rename Agenda view, improve week day layout.
+
+**Files:** `components/calendar/CalendarView.tsx`
+
+---
+
+## Milestone UI-6 — Module polish
+
+**Goal:** Consistent headers, empty/loading/error states, card styles across all modules.
+
+---
+
+## Milestone UI-7 — Tablet/iPad responsive
+
+**Goal:** Dashboard 2-col grid, sidebar on md+, split layout for Calendar/Finance where feasible.
+
+---
+
+## Milestone UI-8 — QA + final polish
+
+**Goal:** Lint, typecheck, build, mobile/tablet viewport checks, Spanish copy audit.

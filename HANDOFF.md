@@ -1,39 +1,50 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone 22 automated checks complete)
+Updated: 2026-06-17 (Milestone UI-0 complete)
 
-## Current milestone: 22 — Final review (manual tests pending)
+## Current milestone: UI-0 — UI audit and redesign plan (COMPLETE)
 
 ## Status
-- Milestone 22 automated checks: COMPLETE
-- Milestone 22 manual tests: PENDING (requires real device + browser)
-
-## What was verified in Milestone 22 (automated)
-- UI text audit: all rendered strings are Spanish (Spain). Only "Home Hub" brand name is English — correct.
-- Secrets scan: no secrets committed in any file or git history. `.env.local`, `.env`, `.claude/` are gitignored.
-- Edge Function reads VAPID/service-role keys from Deno.env only — never hardcoded.
-- RLS: 28 tables have RLS enabled. All household-scoped policies use `is_household_member()`.
-- `npm run lint` → clean (zero warnings/errors)
-- `npm run typecheck` → clean (zero errors)
+All functional milestones (1–22) complete. UI/UX redesign phase now beginning.
+Milestone UI-0 (audit + plan) is complete. Next is UI-1 (design system foundation).
 
 ## Production URL
 https://home-hub-dun.vercel.app
 
-## Manual tests still required (Milestone 22)
-See NEXT_STEPS.md for the full checklist. Key items:
-1. Smoke-test every module CRUD at the live URL
-2. Push notification end-to-end on a real device (subscribe at /ajustes/notificaciones, verify delivery)
-3. RLS cross-household: two separate user accounts should not see each other's data
-4. Mobile usability at 375px and PWA install flow at /ajustes/instalar
+## What was done in Milestone UI-0
+- Full UI audit of: navigation, dashboard, finance tabs, calendar, components, design tokens
+- `UI_REDESIGN_PLAN.md` created with: audit findings, component plan, navigation redesign, dashboard plan, finance plan, calendar plan, per-milestone file list, risks
+- `DESIGN_SYSTEM.md` updated: shadow tokens, border radius tokens, new component list, updated navigation structure
+- `NEXT_STEPS.md` updated: full UI redesign milestone sequence
 
-## Already done (full history)
-- Milestone 21: Vercel deployment live
-- Milestone 20: PWA manifest, icons, install guidance
-- Milestone 19: Offline support for shopping
-- Milestone 18: Loading states, toasts, noValidate
-- Milestone 17: Activity log + trash/restore UI
-- Milestone 16: Settings, forgot/reset password
-- All modules: Spanish UI, RLS, Zod validation, empty/loading/error states
+## Key findings from audit
+
+### Navigation
+- Calendario is in the "Más" overflow — it should be primary
+- New primary nav: Inicio, Calendario, Compra, Finanzas, Más
+- Menú moves to Más
+
+### Dashboard
+- Only 2 metric cards (Compra + Menú) — needs 6 covering all main modules
+- No current week calendar widget
+- No status line in greeting
+- ListSections are functional but flat
+
+### Finance
+- Tab row (pill buttons) works but overflows on narrow mobile
+- KPI layout needs checking on mobile
+
+### Calendar
+- Defaults to monthly view — should default to weekly
+- No shared WeekStrip component
+
+### Components
+- Missing: WeekStrip, SegmentedControl, MetricCard, GreetingCard, WeekCalendarWidget, MoreMenuSheet
+- Needs polish: Card (variants), EmptyState, SummaryCard, ListSection, BottomNav active state
 
 ## Last known good state
-- Build, lint, typecheck all pass locally and on Vercel
-- No uncommitted changes
+- Build, lint, typecheck all pass
+- No uncommitted changes (before this session)
+- Supabase + Vercel live and healthy
+
+## Previously done (full history)
+- Milestones 1–22: full functional app, Spanish UI, RLS, Zod validation, push notifications, PWA, offline shopping, activity log, trash/restore, settings, deployment

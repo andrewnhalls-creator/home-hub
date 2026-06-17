@@ -115,6 +115,56 @@ Rules:
 - Soft-deleted records move to a "Papelera" view reachable from the relevant module (not a single global trash) — a simple filtered list with "Restaurar" and a permanent-delete option behind an extra confirmation ("Esto no se puede deshacer.").
 - Archived records (shopping lists, documents) show an "Archivado" `Badge` (neutral variant) and are excluded from the default list view by a filter toggle, not a separate page.
 
+## Shadow tokens (UI redesign additions)
+
+Warm-tinted shadows to replace Tailwind's default cool-grey shadows:
+
+| Token | Value | Usage |
+|---|---|---|
+| `--shadow-card` | `0 1px 3px 0 rgb(92 64 51 / 0.06), 0 1px 2px -1px rgb(92 64 51 / 0.06)` | Default card |
+| `--shadow-card-hover` | `0 4px 6px -1px rgb(92 64 51 / 0.08), 0 2px 4px -2px rgb(92 64 51 / 0.08)` | Hovered/active card |
+| `--shadow-modal` | `0 20px 25px -5px rgb(92 64 51 / 0.12), 0 8px 10px -6px rgb(92 64 51 / 0.08)` | Modals, bottom sheets |
+
+## Border radius tokens
+
+| Token | Value | Usage |
+|---|---|---|
+| `--radius-sm` | `0.5rem` (8px) | Inputs, badges, small elements |
+| `--radius-md` | `0.75rem` (12px) | Buttons |
+| `--radius-lg` | `1rem` (16px) | Cards (`rounded-2xl` ≈ already used) |
+| `--radius-xl` | `1.25rem` (20px) | Modals, bottom sheets |
+| `--radius-full` | `9999px` | Pills, avatar circles |
+
+## New shared UI components (UI redesign)
+
+Components being added during the UI redesign milestones:
+
+| Component | Path | Purpose |
+|---|---|---|
+| `WeekStrip` | `components/ui/WeekStrip.tsx` | Horizontal Mon–Sun strip with today highlight and event dots; shared between dashboard and calendar |
+| `SegmentedControl` | `components/ui/SegmentedControl.tsx` | Compact horizontal pill-style tab selector; replaces raw button rows in Finance and Calendar |
+| `MetricCard` | `components/ui/MetricCard.tsx` | Dashboard metric tile: icon + large metric + label + status line + deep-link |
+| `GreetingCard` | `components/dashboard/GreetingCard.tsx` | Hola header with household name and contextual status line |
+| `DashboardMetricCard` | `components/dashboard/DashboardMetricCard.tsx` | Module entry card for dashboard grid |
+| `WeekCalendarWidget` | `components/dashboard/WeekCalendarWidget.tsx` | Dashboard calendar preview: week strip + next events + CTAs |
+| `MoreMenuSheet` | `components/layout/MoreMenuSheet.tsx` | Polished bottom sheet grid for the Más overflow menu |
+
+## Navigation structure (updated for UI redesign)
+
+Primary bottom nav (5 items):
+
+1. Inicio (`/dashboard`)
+2. Calendario (`/calendario`) — moved from Más to primary
+3. Compra (`/compra`)
+4. Finanzas (`/finanzas`)
+5. Más (sheet)
+
+Más sheet items:
+
+- Recordatorios, Tareas, Menú, Documentos, Deseos, Ajustes, Archivo y papelera
+
+> Note: Menú moved from primary nav to Más. Calendario promoted to primary.
+
 ## Accessibility
 
 - Minimum WCAG AA contrast for all text against its background; adjust any pastel token shade that fails at the size/weight used.
