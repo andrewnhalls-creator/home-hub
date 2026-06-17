@@ -1,25 +1,32 @@
 # Next Steps
 
-## Immediate next task: Milestone 17 Part C — Trash/archive UI
+## Current: Milestone 18 — Polish
 
-### 1. Create `components/ui/TrashSection.tsx`
-Generic reusable client component. Pattern:
-- `TrashRow` sub-component: holds `useActionState(restoreAction, {})`, renders item label + sublabel + form with `<input type="hidden" name="id" value={item.id} />` + "Restaurar" submit button
-- `TrashSection` component: collapsible section with toggle button, title, list of TrashRow components
-- Props: `title`, `items: Array<{ id, label, sublabel?, deletedAt }>`, `restoreAction: (_prevState: { error?: string }, formData: FormData) => Promise<{ error?: string }>`
+### 1. Responsive pass
+- Check every module page at ~375px mobile width
+- Fix layout issues: overflow, wrapping, tap target sizes (min 44×44px)
 
-### 2. Update module pages (fetch deleted/archived, render TrashSection)
-- `app/(app)/recordatorios/page.tsx` — fetch `deleted_at is not null` reminders; render TrashSection below ReminderList using `restoreReminder`
-- `app/(app)/finanzas/page.tsx` — fetch deleted records per type; render TrashSection per tab using respective restore actions
-- `app/(app)/calendario/page.tsx` — fetch deleted events; render TrashSection using `restoreCalendarEvent`
-- `app/(app)/documentos/page.tsx` — fetch archived (deleted_at null + archived_at not null) AND deleted separately; render ArchiveSection + TrashSection using `unarchiveDocument` / `restoreDocument`
-- `app/(app)/compra/listas/page.tsx` — fetch archived + deleted lists; render archive + trash sections using `unarchiveShoppingList` / `restoreShoppingList`
+### 2. Empty / loading / error states
+- Verify each module has a proper empty state component (most already have EmptyState)
+- Verify loading states are in place (Suspense or loading.tsx per route)
+- Toasts for save/delete feedback (check existing toast usage, fill gaps)
+- Confirm destructive actions have confirmation dialogs
 
-### 3. Finish Milestone 17
-- Run `npm run lint` and `npm run typecheck`
-- Commit all Milestone 17 changes
-- Update HANDOFF.md and NEXT_STEPS.md
+### 3. Form validation audit
+- Every form must have `noValidate` on the `<form>` element
+- Every form must use Zod schema + Spanish error messages
+- Run through: tareas, recordatorios, calendario, documentos, finanzas (all tabs), compra, deseos, ajustes
+
+### 4. Accessibility pass
+- All inputs have associated `<label>` or `aria-label`
+- Focus-visible states on all interactive elements
+- Icon-only buttons have Spanish `aria-label`
+- Colour contrast WCAG AA
+
+### 5. Commit
+- `npm run lint && npm run typecheck && npm run build`
+- Commit: `Polish UI and validation`
 - Push to origin/main
 
-## After Milestone 17: Milestone 18
-See BUILD_PLAN.md for details.
+## After Milestone 18: Milestone 19
+- Offline support for shopping list (cache items, queue completions, sync on reconnect)

@@ -3,6 +3,13 @@ import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { ensureCurrentMonthPaymentInstances } from "@/app/(app)/finanzas/actions";
 import { FinanceTabs } from "@/components/finance/FinanceTabs";
+import { TrashSection } from "@/components/ui/TrashSection";
+import {
+  restoreFixedPayment,
+  restoreExpense,
+  restoreSavingsGoal,
+  restoreSubscription,
+} from "./actions";
 
 export default async function FinancePage() {
   const { householdId } = await requireHousehold();
@@ -23,6 +30,10 @@ export default async function FinancePage() {
     { data: subscriptions },
     { data: financeCategories },
     { data: members },
+    { data: deletedFixed },
+    { data: deletedExpenses },
+    { data: deletedGoals },
+    { data: deletedSubs },
   ] = await Promise.all([
     supabase
       .from("fixed_payments")
@@ -56,6 +67,30 @@ export default async function FinancePage() {
       .eq("module", "finance")
       .order("name", { ascending: true }),
     supabase.from("household_members").select("user_id, display_name").eq("household_id", householdId),
+    supabase
+      .from("fixed_payments")
+      .select("id, name, deleted_at")
+      .eq("household_id", householdId)
+      .not("deleted_at", "is", null)
+      .order("deleted_at", { ascending: false }),
+    supabase
+      .from("expenses")
+      .select("id, title, expense_date, deleted_at")
+      .eq("household_id", householdId)
+      .not("deleted_at", "is", null)
+      .order("deleted_at", { ascending: false }),
+    supabase
+      .from("savings_goals")
+      .select("id, name, deleted_at")
+      .eq("household_id", householdId)
+      .not("deleted_at", "is", null)
+      .order("deleted_at", { ascending: false }),
+    supabase
+      .from("subscriptions")
+      .select("id, name, deleted_at")
+      .eq("household_id", householdId)
+      .not("deleted_at", "is", null)
+      .order("deleted_at", { ascending: false }),
   ]);
 
   const allInstances = paymentInstances ?? [];
@@ -87,25 +122,77 @@ export default async function FinancePage() {
         100
       : null;
 
+  const fixedTrash = (deletedFixed ?? []).map((r) => ({
+    id: r.id,
+    label: r.name,
+    deletedAt: r.deleted_at as string,
+  }));
+  const expenseTrash = (deletedExpenses ?? []).map((r) => ({
+    id: r.id,
+    label: r.title ?? "Gasto",
+    sublabel: r.expense_date
+      ? new Date(r.expense_date).toLocaleDateString("es-ES")
+      : undefined,
+    deletedAt: r.deleted_at as string,
+  }));
+  const goalsTrash = (deletedGoals ?? []).map((r) => ({
+    id: r.id,
+    label: r.name,
+    deletedAt: r.deleted_at as string,
+  }));
+  const subsTrash = (deletedSubs ?? []).map((r) => ({
+    id: r.id,
+    label: r.name,
+    deletedAt: r.deleted_at as string,
+  }));
+
   return (
-    <FinanceTabs
-      resumen={{
-        upcomingCount,
-        overdueCount,
-        paidThisMonthTotal,
-        pendingThisMonthTotal,
-        totalFixedThisMonth,
-        expensesThisMonthTotal,
-        activeSubscriptionsTotal,
-        savingsProgressPct,
-      }}
-      fixedPayments={fixedPayments ?? []}
-      paymentInstances={thisMonthInstances}
-      expenses={expenses ?? []}
-      savingsGoals={savingsGoals ?? []}
-      subscriptions={subscriptions ?? []}
-      financeCategories={financeCategories ?? []}
-      members={members ?? []}
-    />
+    <>
+      <FinanceTabs
+        resumen={{
+          upcomingCount,
+          overdueCount,
+          paidThisMonthTotal,
+          pendingThisMonthTotal,
+          totalFixedThisMonth,
+          expensesThisMonthTotal,
+          activeSubscriptionsTotal,
+          savingsProgressPct,
+        }}
+        fixedPayments={fixedPayments ?? []}
+        paymentInstances={thisMonthInstances}
+        expenses={expenses ?? []}
+        savingsGoals={savingsGoals ?? []}
+        subscriptions={subscriptions ?? []}
+        financeCategories={financeCategories ?? []}
+        members={members ?? []}
+      />
+      <div className="px-4 pb-6 max-w-lg mx-auto space-y-0">
+        <TrashSection
+          title="Papelera — Pagos fijos"
+          items={fixedTrash}
+          restoreAction={restoreFixedPayment}
+          emptyMessage="No hay pagos fijos eliminados"
+        />
+        <TrashSection
+          title="Papelera — Gastos"
+          items={expenseTrash}
+          restoreAction={restoreExpense}
+          emptyMessage="No hay gastos eliminados"
+        />
+        <TrashSection
+          title="Papelera — Objetivos de ahorro"
+          items={goalsTrash}
+          restoreAction={restoreSavingsGoal}
+          emptyMessage="No hay objetivos eliminados"
+        />
+        <TrashSection
+          title="Papelera — Suscripciones"
+          items={subsTrash}
+          restoreAction={restoreSubscription}
+          emptyMessage="No hay suscripciones eliminadas"
+        />
+      </div>
+    </>
   );
 }

@@ -3,6 +3,8 @@ import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { buildCalendarItems } from "@/lib/calendar";
 import { CalendarView } from "@/components/calendar/CalendarView";
+import { TrashSection } from "@/components/ui/TrashSection";
+import { restoreCalendarEvent } from "./actions";
 
 export default async function CalendarPage() {
   const { householdId } = await requireHousehold();
@@ -16,6 +18,7 @@ export default async function CalendarPage() {
     { data: subscriptions },
     { data: documents },
     { data: meals },
+    { data: deletedEvents },
   ] = await Promise.all([
     supabase.from("calendar_events").select("*").eq("household_id", householdId).is("deleted_at", null),
     supabase
@@ -52,6 +55,12 @@ export default async function CalendarPage() {
       .from("meal_plans")
       .select("id, planned_date, custom_name, recipes(name)")
       .eq("household_id", householdId),
+    supabase
+      .from("calendar_events")
+      .select("id, title, event_date, deleted_at")
+      .eq("household_id", householdId)
+      .not("deleted_at", "is", null)
+      .order("deleted_at", { ascending: false }),
   ]);
 
   const today = new Date();
@@ -67,5 +76,26 @@ export default async function CalendarPage() {
     rangeEnd: addDays(today, 365),
   });
 
-  return <CalendarView items={items} />;
+  const trashItems = (deletedEvents ?? []).map((e) => ({
+    id: e.id,
+    label: e.title,
+    sublabel: e.event_date
+      ? new Date(e.event_date).toLocaleDateString("es-ES")
+      : undefined,
+    deletedAt: e.deleted_at as string,
+  }));
+
+  return (
+    <>
+      <CalendarView items={items} />
+      <div className="px-4 pb-6 max-w-2xl mx-auto">
+        <TrashSection
+          title="Papelera del calendario"
+          items={trashItems}
+          restoreAction={restoreCalendarEvent}
+          emptyMessage="No hay eventos eliminados"
+        />
+      </div>
+    </>
+  );
 }
