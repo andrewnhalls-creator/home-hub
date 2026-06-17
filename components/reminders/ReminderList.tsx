@@ -6,8 +6,8 @@ import { Plus, Bell } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { useToast } from "@/components/ui/Toast";
-import { cn } from "@/lib/utils";
 import { ReminderCard } from "@/components/reminders/ReminderCard";
 import { ReminderForm } from "@/components/reminders/ReminderForm";
 import { createReminder, updateReminder } from "@/app/(app)/recordatorios/actions";
@@ -54,21 +54,13 @@ export function ReminderList({ reminders, categories, members }: ReminderListPro
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-2 overflow-x-auto">
-        {FILTERS.map((item) => (
-          <button
-            key={item.value}
-            type="button"
-            onClick={() => setFilter(item.value)}
-            className={cn(
-              "shrink-0 rounded-full px-4 py-2 text-sm font-medium",
-              filter === item.value ? "bg-terracotta text-cream" : "bg-card text-muted",
-            )}
-          >
-            {item.label}
-          </button>
-        ))}
-      </div>
+      <SegmentedControl
+        options={FILTERS}
+        value={filter}
+        onChange={setFilter}
+        scrollable
+        aria-label="Filtrar recordatorios"
+      />
 
       {filtered.length === 0 ? (
         <EmptyState icon={Bell} title="Nada pendiente por ahora." description="Añade un recordatorio para empezar." />
