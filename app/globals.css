@@ -16,6 +16,18 @@
   --color-success: #6fa37a;
   --color-warning-text: #7a5b1e;
   --color-danger: #c1554a;
+
+  /* Warm-tinted shadow tokens */
+  --shadow-card: 0 1px 3px 0 rgb(92 64 51 / 0.06), 0 1px 2px -1px rgb(92 64 51 / 0.06);
+  --shadow-card-hover: 0 4px 6px -1px rgb(92 64 51 / 0.08), 0 2px 4px -2px rgb(92 64 51 / 0.08);
+  --shadow-modal: 0 20px 25px -5px rgb(92 64 51 / 0.12), 0 8px 10px -6px rgb(92 64 51 / 0.08);
+
+  /* Border radius tokens */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-full: 9999px;
 }
 
 @theme inline {
@@ -34,6 +46,11 @@
   --color-success: var(--color-success);
   --color-warning-text: var(--color-warning-text);
   --color-danger: var(--color-danger);
+
+  /* Shadow utilities: shadow-card, shadow-card-hover, shadow-modal */
+  --shadow-card: var(--shadow-card);
+  --shadow-card-hover: var(--shadow-card-hover);
+  --shadow-modal: var(--shadow-modal);
 }
 
 body {

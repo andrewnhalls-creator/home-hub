@@ -1,13 +1,23 @@
 import { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
+type CardVariant = "default" | "featured" | "subtle" | "metric";
+
+const variantClasses: Record<CardVariant, string> = {
+  default: "bg-card border border-border shadow-[var(--shadow-card)]",
+  featured: "bg-card border-2 border-terracotta/25 shadow-[var(--shadow-card)]",
+  subtle: "bg-sand border border-border/60",
+  metric: "bg-card border border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow",
+};
+
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  variant?: CardVariant;
+}
+
+export function Card({ className, variant = "default", ...props }: CardProps) {
   return (
     <div
-      className={cn(
-        "rounded-2xl border border-border bg-card p-4 shadow-sm",
-        className,
-      )}
+      className={cn("rounded-2xl p-4", variantClasses[variant], className)}
       {...props}
     />
   );

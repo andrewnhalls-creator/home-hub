@@ -7,34 +7,14 @@ The next phase is a full UI/UX redesign. See `UI_REDESIGN_PLAN.md` for the full 
 
 ---
 
-## Current: Milestone UI-0 — COMPLETE
+## Complete: Milestone UI-0 + UI-1
 
-- [x] UI audit: identified all problem areas
-- [x] `UI_REDESIGN_PLAN.md` created
-- [x] `DESIGN_SYSTEM.md` updated with shadow tokens, radius tokens, new components
-- [x] `NEXT_STEPS.md` updated
-- [x] `HANDOFF.md` updated
+- [x] UI-0: audit, `UI_REDESIGN_PLAN.md`, `DESIGN_SYSTEM.md` updated
+- [x] UI-1: shadow/radius tokens in `globals.css`; Card variants; Button size prop; EmptyState polish; WeekStrip, SegmentedControl, MetricCard created
 
 ---
 
-## Next: Milestone UI-1 — Design system foundation
-
-**Goal:** Create shared design tokens and polish reusable UI components. No page-level changes yet.
-
-**Files to touch:**
-- `app/globals.css` — add shadow/radius CSS tokens
-- `components/ui/Card.tsx` — add variant prop (default, featured, subtle, metric)
-- `components/ui/EmptyState.tsx` — improve icon area, spacing, copy treatment
-- `components/ui/Button.tsx` — verify sizes, confirm lg size for FABs
-- `components/ui/WeekStrip.tsx` — NEW: shared week row component
-- `components/ui/SegmentedControl.tsx` — NEW: pill tab selector for Finance + Calendar
-- `components/ui/MetricCard.tsx` — NEW: dashboard metric tile
-
-**Checks:** `npm run lint`, `npm run typecheck`, `npm run build`
-
----
-
-## Milestone UI-2 — Navigation + app shell
+## Next: Milestone UI-2 — Navigation + app shell
 
 **Goal:** New bottom nav order (Inicio, Calendario, Compra, Finanzas, Más). Más becomes a polished sheet.
 
