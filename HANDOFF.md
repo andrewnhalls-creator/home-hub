@@ -1,12 +1,23 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Deployment unblocked — app live)
+Updated: 2026-06-17 (Web Interface Guidelines pass — build clean, deployed)
 
-## Current milestone: DEPLOYED ✓
+## Current milestone: DEPLOYED + ACCESSIBILITY PASS ✓
 
 ## Status
 All functional milestones (1–22) complete. Full UI/UX redesign (UI-0 through UI-8) complete.
+Web Interface Guidelines audit done — 8 fixes applied and deployed. No outstanding milestones.
 Deployed via Vercel CLI (`npx vercel --prod`) — GitHub-triggered deploys remain blocked on Hobby plan
-(collaborator restriction), so use CLI for future deploys. No outstanding milestones.
+(collaborator restriction), so use CLI for future deploys.
+
+## Last session: Web Interface Guidelines fixes (2026-06-17)
+- `globals.css`: added `color-scheme: light` and `prefers-reduced-motion: reduce` rule
+- `PageLoader`: `animate-pulse` → `motion-safe:animate-pulse`
+- `Toast`: error variant uses `role="alert"` (assertive); dismiss button gets `focus-visible:ring`
+- `Input`: `focus:` → `focus-visible:` so ring only appears on keyboard focus
+- `Modal`: added `overscroll-contain` on scrollable dialog
+- `WeekStrip`: `tabIndex={-1}` on non-interactive day buttons
+- `MetricCard`: `tabular-nums` on metric value
+- Build, lint, typecheck all pass. Deployed successfully.
 
 ## Production URL
 https://home-hub-dun.vercel.app
