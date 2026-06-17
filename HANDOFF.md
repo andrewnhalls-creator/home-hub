@@ -1,14 +1,20 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone UI-1 complete)
+Updated: 2026-06-17 (Milestone UI-2 complete)
 
-## Current milestone: UI-1 — Design system foundation (COMPLETE)
+## Current milestone: UI-2 — Navigation + app shell (COMPLETE)
 
 ## Status
-All functional milestones (1–22) complete. UI-0 (audit) and UI-1 (design system) complete.
-Next is UI-2 (navigation + app shell).
+All functional milestones (1–22) complete. UI-0, UI-1, UI-2 done.
+Next is UI-3 (dashboard redesign).
 
 ## Production URL
 https://home-hub-dun.vercel.app
+
+## What was done in Milestone UI-2
+- `lib/constants.ts`: `NAV_ITEMS` reordered (Inicio, Calendario, Compra, Finanzas first); `PRIMARY_NAV_ITEMS` updated to the new 4 (Calendario replaces Menú); `MORE_NAV_ITEMS` now: Recordatorios, Tareas, Menú, Documentos, Deseos, Ajustes
+- `components/layout/MoreMenuSheet.tsx` (new): dedicated bottom sheet with handle bar, backdrop, 3-col grid of tiles with per-module accent icon colors; uses `createPortal`; Escape key + backdrop click close
+- `components/layout/BottomNav.tsx`: uses `MoreMenuSheet` instead of generic Modal; active icon scales up; `aria-expanded` on Más button
+- `components/layout/Sidebar.tsx`: separator before Ajustes; icon colored terracotta on active; subtle hover states
 
 ## What was done in Milestone UI-1
 - `app/globals.css`: added warm shadow tokens (`--shadow-card`, `--shadow-card-hover`, `--shadow-modal`) and radius tokens (`--radius-sm/md/lg/xl/full`) to `:root` + exposed shadow tokens in `@theme inline` as Tailwind utilities

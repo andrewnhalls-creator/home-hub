@@ -20,19 +20,19 @@ export type NavItem = {
 
 export const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Inicio", icon: Home },
+  { href: "/calendario", label: "Calendario", icon: CalendarDays },
   { href: "/compra", label: "Compra", icon: ShoppingCart },
-  { href: "/menu", label: "Menú", icon: UtensilsCrossed },
+  { href: "/finanzas", label: "Finanzas", icon: Wallet },
   { href: "/recordatorios", label: "Recordatorios", icon: Bell },
   { href: "/tareas", label: "Tareas", icon: ListChecks },
-  { href: "/calendario", label: "Calendario", icon: CalendarDays },
-  { href: "/finanzas", label: "Finanzas", icon: Wallet },
+  { href: "/menu", label: "Menú", icon: UtensilsCrossed },
   { href: "/documentos", label: "Documentos", icon: FileText },
   { href: "/deseos", label: "Deseos", icon: Heart },
   { href: "/ajustes", label: "Ajustes", icon: Settings },
 ];
 
 export const PRIMARY_NAV_ITEMS: NavItem[] = NAV_ITEMS.filter((item) =>
-  ["/dashboard", "/compra", "/menu", "/finanzas"].includes(item.href),
+  ["/dashboard", "/calendario", "/compra", "/finanzas"].includes(item.href),
 );
 
 export const MORE_NAV_ITEMS: NavItem[] = NAV_ITEMS.filter(

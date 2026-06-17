@@ -7,14 +7,15 @@ The next phase is a full UI/UX redesign. See `UI_REDESIGN_PLAN.md` for the full 
 
 ---
 
-## Complete: Milestone UI-0 + UI-1
+## Complete: Milestone UI-0, UI-1, UI-2
 
 - [x] UI-0: audit, `UI_REDESIGN_PLAN.md`, `DESIGN_SYSTEM.md` updated
-- [x] UI-1: shadow/radius tokens in `globals.css`; Card variants; Button size prop; EmptyState polish; WeekStrip, SegmentedControl, MetricCard created
+- [x] UI-1: shadow/radius tokens; Card variants; Button size; EmptyState polish; WeekStrip, SegmentedControl, MetricCard
+- [x] UI-2: new primary nav (Inicio/Calendario/Compra/Finanzas/Más); MoreMenuSheet with 3-col grid + accents; Sidebar separator + icon polish
 
 ---
 
-## Next: Milestone UI-2 — Navigation + app shell
+## Next: Milestone UI-3 — Dashboard redesign
 
 **Goal:** New bottom nav order (Inicio, Calendario, Compra, Finanzas, Más). Más becomes a polished sheet.
 
