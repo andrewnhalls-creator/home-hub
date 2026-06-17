@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import type { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { requireHousehold } from "@/lib/auth";
@@ -65,6 +66,90 @@ export async function deleteMealPlan(mealPlanId: string) {
   await supabase.from("meal_plans").delete().eq("id", mealPlanId).eq("household_id", householdId);
 
   revalidatePath("/menu");
+}
+
+export async function generateShoppingListFromMealPlan(formData: FormData) {
+  const weekStartDate = formData.get("weekStartDate") as string;
+  const weekEndDate = formData.get("weekEndDate") as string;
+  const weekLabel = formData.get("weekLabel") as string;
+
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  // Collect unique recipe IDs planned for this week
+  const { data: mealPlans } = await supabase
+    .from("meal_plans")
+    .select("recipe_id")
+    .eq("household_id", householdId)
+    .gte("planned_date", weekStartDate)
+    .lte("planned_date", weekEndDate)
+    .not("recipe_id", "is", null);
+
+  const recipeIds = [
+    ...new Set(
+      (mealPlans ?? []).map((m) => m.recipe_id).filter((id): id is string => id !== null),
+    ),
+  ];
+
+  // Fetch all ingredients for those recipes
+  type Ingredient = { name: string; quantity: number | null; unit: string | null; category_id: string | null };
+  let rawIngredients: Ingredient[] = [];
+  if (recipeIds.length > 0) {
+    const { data } = await supabase
+      .from("recipe_ingredients")
+      .select("name, quantity, unit, category_id")
+      .in("recipe_id", recipeIds);
+    rawIngredients = (data ?? []) as Ingredient[];
+  }
+
+  // Deduplicate by (normalised name, unit) — sum numeric quantities
+  const deduped = new Map<string, Ingredient>();
+  for (const ing of rawIngredients) {
+    const key = `${ing.name.trim().toLowerCase()}||${ing.unit ?? ""}`;
+    const existing = deduped.get(key);
+    if (existing) {
+      if (existing.quantity !== null && ing.quantity !== null) {
+        existing.quantity += ing.quantity;
+      }
+    } else {
+      deduped.set(key, { ...ing });
+    }
+  }
+
+  // Create the shopping list
+  const { data: list, error: listError } = await supabase
+    .from("shopping_lists")
+    .insert({
+      household_id: householdId,
+      name: `Menú ${weekLabel}`,
+      week_start_date: weekStartDate,
+      week_end_date: weekEndDate,
+      status: "activa",
+      created_by: user.id,
+    })
+    .select("id")
+    .single();
+
+  if (listError || !list) redirect("/menu");
+
+  // Insert deduplicated items linked to the new list
+  const items = [...deduped.values()];
+  if (items.length > 0) {
+    await supabase.from("shopping_items").insert(
+      items.map((ing) => ({
+        household_id: householdId,
+        shopping_list_id: list.id,
+        name: ing.name,
+        quantity: ing.quantity,
+        unit: ing.unit,
+        category_id: ing.category_id,
+        created_by: user.id,
+      })),
+    );
+  }
+
+  revalidatePath("/compra/listas");
+  redirect(`/compra/listas/${list.id}`);
 }
 
 function flattenFieldErrors(error: z.ZodError) {
