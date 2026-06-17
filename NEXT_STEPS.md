@@ -10,9 +10,9 @@ App and Edge Function fully deployed. All v1 + post-launch items complete.
 ### 1. Dark mode (follows system)
 Automatically switches between light and dark based on the iOS/iPadOS/Android system setting.
 
-- Add `darkMode: 'media'` strategy (Tailwind v4 uses `@media (prefers-color-scheme: dark)` natively)
-- Define dark-mode overrides for all CSS colour tokens in `globals.css` inside a `@media (prefers-color-scheme: dark)` block
+- Add dark-mode overrides for all CSS colour tokens in `globals.css` inside a `@media (prefers-color-scheme: dark)` block
 - Key surfaces to remap: `--color-cream`, `--color-card`, `--color-sand`, `--color-border`, `--color-brown`, `--color-muted`
+- Ensure all text contrast meets WCAG AA in dark mode independently
 - Test on real device with system dark mode toggled
 
 ---
@@ -23,7 +23,7 @@ Visual spend breakdowns on the Finanzas → Gastos tab.
 - Monthly spend bar chart (last 6 months)
 - Category breakdown donut/pie chart for the selected month
 - Week-over-week comparison line for grocery spend (links to shopping list data)
-- Library: use `recharts` (already common in Next.js projects, small bundle) or native SVG for simplicity
+- Library: `recharts` (small bundle, good Next.js support) or native SVG
 - All chart colours must be accessible (not red/green only) and respect `prefers-reduced-motion`
 
 ---
@@ -84,8 +84,70 @@ Visual contribution history for each savings goal.
 
 ---
 
-## Also considered (lower priority)
-- Household activity feed ("quién hizo qué" log)
-- CSV/PDF export for finance data
-- Recipe import from URL (paste link, auto-fill name + ingredients)
-- Per-device notification sound / vibration preferences
+### 9. Household activity feed
+A "quién hizo qué" log showing recent actions across the household.
+
+- Dedicated `/actividad` page or a widget on the dashboard
+- Shows: who added/completed/deleted items, with timestamp and module icon
+- Source: `activity_log` table (already referenced in types as `ActivityLogEntry`)
+- Filter by member or by module
+- Only shows last 30 days to keep it relevant
+
+---
+
+### 10. CSV export for finance data
+Export expenses, fixed payments, and savings history as a spreadsheet.
+
+- Button on Finanzas page: "Exportar datos"
+- Generates a CSV client-side (no server needed) using the data already loaded
+- Separate sheets/files for: gastos, pagos fijos, suscripciones, metas de ahorro
+- Filename includes household name and date range
+
+---
+
+### 11. Recipe import from URL
+Paste a recipe link, auto-fill name and ingredients.
+
+- Input field on the new recipe form: "Importar desde URL"
+- Server action fetches the URL, parses structured recipe data (JSON-LD `Recipe` schema is on most food sites)
+- Pre-fills name, description, servings, ingredients — user reviews before saving
+- Falls back gracefully if the site doesn't have structured data
+
+---
+
+### 12. PDF export for documents / finance summary
+Generate a printable summary for things like mortgage paperwork or insurance records.
+
+- "Exportar PDF" button on the Documentos page and Finanzas Resumen tab
+- Uses `@react-pdf/renderer` or a simple print-stylesheet approach
+- Finance summary: fixed payments, subscriptions, mortgage overview, savings goals
+- Documents summary: list of docs with type, provider, expiry date
+
+---
+
+### 13. Per-device notification sound / vibration preferences
+Let each device customise how notifications feel.
+
+- Extend `push_subscriptions` table with `sound_enabled` and `vibration_enabled` booleans
+- Settings in `/ajustes/dispositivos`: toggle sound and vibration per registered device
+- Pass preference in the push payload so the service worker can apply it on delivery
+
+---
+
+### 14. Recurring chore history and streaks
+Make chores more motivating with a completion history view.
+
+- History tab per chore: calendar heatmap of completions
+- Streak counter (current + longest)
+- "Completado por" tracking — who marked it done
+- Useful for accountability between household members
+
+---
+
+### 15. Wishlist voting / approval flow
+Let both members approve or veto wishlist items before they're purchased.
+
+- "Aprobado por ambos" status that requires both members to tap Aprobar
+- Notification to the other member when a new item is added
+- Prevents surprise purchases — both people have visibility
+
