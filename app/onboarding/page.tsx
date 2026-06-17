@@ -19,7 +19,7 @@ export default function OnboardingPage() {
       <div className="w-full max-w-sm">
         <h1 className="text-2xl font-semibold text-brown">Bienvenido a Home Hub</h1>
         <p className="mt-1 text-sm text-muted">
-          Crea un hogar nuevo o únete al de tu pareja con un código de invitación.
+          Crea un hogar nuevo o únete a uno con un código de invitación.
         </p>
 
         <div className="mt-6 flex rounded-xl border border-border bg-card p-1">

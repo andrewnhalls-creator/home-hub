@@ -101,6 +101,16 @@ export async function generateInviteCode(): Promise<InviteActionState> {
   }
 
   const supabase = await createClient();
+
+  const { count } = await supabase
+    .from("household_members")
+    .select("id", { count: "exact", head: true })
+    .eq("household_id", householdId);
+
+  if ((count ?? 0) >= 3) {
+    return { error: "Este hogar ya tiene el máximo de 3 miembros." };
+  }
+
   const code = generateCode();
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 

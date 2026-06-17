@@ -59,7 +59,7 @@ export function InviteSection({ initialCode, initialExpiresAt }: InviteSectionPr
           )}
         </div>
       ) : (
-        <p className="text-sm text-muted">Genera un código para invitar a tu pareja a este hogar.</p>
+        <p className="text-sm text-muted">Genera un código para invitar a alguien a este hogar.</p>
       )}
 
       {error && <p className="text-sm text-danger">{error}</p>}

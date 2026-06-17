@@ -73,10 +73,10 @@ export function SettingsView({
         </ul>
       </Card>
 
-      {role === "owner" && (
+      {role === "owner" && members.length < 3 && (
         <Card>
-          <CardTitle>Invitar a tu pareja</CardTitle>
-          <CardDescription>Comparte este código para que se una a tu hogar.</CardDescription>
+          <CardTitle>Añadir miembro</CardTitle>
+          <CardDescription>Comparte este código para que alguien se una a tu hogar.</CardDescription>
           <div className="mt-3">
             <InviteSection
               initialCode={initialInvite?.code ?? null}
@@ -88,7 +88,7 @@ export function SettingsView({
 
       <Card>
         <CardTitle>Tu perfil</CardTitle>
-        <CardDescription>Tu nombre tal como lo verá tu pareja.</CardDescription>
+        <CardDescription>Tu nombre tal como te verán los demás miembros.</CardDescription>
         <div className="mt-3">
           <ProfileNameForm displayName={profile?.display_name ?? ""} />
         </div>
