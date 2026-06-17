@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { isPast } from "date-fns";
-import { Circle, CheckCircle2, Pencil, Trash2, Clock } from "lucide-react";
+import { Circle, CheckCircle2, Pencil, Clock } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -11,11 +11,7 @@ import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";
 import { formatDateTime } from "@/lib/format";
 import type { Reminder } from "@/lib/types";
-import {
-  toggleReminderStatus,
-  snoozeReminder,
-  deleteReminder,
-} from "@/app/(app)/recordatorios/actions";
+import { toggleReminderStatus, snoozeReminder } from "@/app/(app)/recordatorios/actions";
 
 interface ReminderCardProps {
   reminder: Reminder;
@@ -27,7 +23,6 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
   const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isSnoozeOpen, setIsSnoozeOpen] = useState(false);
-  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
   const isDone = reminder.status === "hecho";
   const isOverdue = !isDone && reminder.due_at && isPast(new Date(reminder.due_at));
@@ -79,14 +74,6 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
             className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
           >
             <Pencil className="h-4 w-4" aria-hidden />
-          </button>
-          <button
-            type="button"
-            aria-label="Eliminar recordatorio"
-            onClick={() => setIsConfirmingDelete(true)}
-            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand active:bg-sand"
-          >
-            <Trash2 className="h-4 w-4" aria-hidden />
           </button>
         </div>
       </Card>
@@ -142,28 +129,6 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
         </div>
       </Modal>
 
-      <Modal isOpen={isConfirmingDelete} onClose={() => setIsConfirmingDelete(false)} title="Eliminar recordatorio">
-        <p className="text-sm text-brown">¿Seguro que quieres eliminarlo?</p>
-        <div className="mt-4 flex gap-3">
-          <Button type="button" variant="secondary" className="flex-1" onClick={() => setIsConfirmingDelete(false)}>
-            Cancelar
-          </Button>
-          <Button
-            type="button"
-            variant="danger"
-            className="flex-1"
-            onClick={() =>
-              startTransition(async () => {
-                await deleteReminder(reminder.id);
-                setIsConfirmingDelete(false);
-                showToast("Recordatorio eliminado");
-              })
-            }
-          >
-            Eliminar
-          </Button>
-        </div>
-      </Modal>
     </>
   );
 }

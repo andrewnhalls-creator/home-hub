@@ -81,7 +81,7 @@ export function ReminderList({ reminders, categories, members }: ReminderListPro
       <Button
         type="button"
         onClick={() => setIsAddOpen(true)}
-        className="fixed bottom-20 right-4 z-30 rounded-full px-5 shadow-md md:bottom-6"
+        className="mt-4 w-full"
       >
         <Plus className="h-4 w-4" aria-hidden />
         Añadir recordatorio

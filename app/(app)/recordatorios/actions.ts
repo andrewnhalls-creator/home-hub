@@ -215,7 +215,15 @@ export async function deleteReminder(reminderId: string) {
     .eq("id", reminderId)
     .eq("household_id", householdId);
 
-  await cancelScheduledNotifications("reminder", reminderId);
+  await Promise.all([
+    cancelScheduledNotifications("reminder", reminderId),
+    supabase
+      .from("notification_events")
+      .update({ is_read: true, read_at: new Date().toISOString() })
+      .eq("entity_type", "reminder")
+      .eq("entity_id", reminderId)
+      .eq("is_read", false),
+  ]);
   void logActivity({ householdId, actorId: user.id, entityType: "reminder", entityId: reminderId, action: "deleted", summary: `Eliminó el recordatorio: ${reminder?.title ?? reminderId}` });
 
   revalidatePath("/recordatorios");
