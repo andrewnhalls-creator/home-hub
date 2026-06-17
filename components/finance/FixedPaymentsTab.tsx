@@ -54,15 +54,17 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
   if (payments.length === 0) {
     return (
       <>
-        <EmptyState icon={CalendarClock} title="Todavía no hay pagos fijos." description="Añade el primero para empezar." />
-        <Button
-          type="button"
-          onClick={() => setIsAddOpen(true)}
-          className="mt-4 w-full"
-        >
-          <Plus className="h-4 w-4" aria-hidden />
-          Añadir pago fijo
-        </Button>
+        <EmptyState
+          icon={CalendarClock}
+          title="Sin pagos fijos todavía."
+          description="Añade aquí lo que pagáis siempre igual: alquiler, seguros, préstamos... y haz seguimiento de cada cuota mes a mes."
+          action={
+            <Button type="button" onClick={() => setIsAddOpen(true)}>
+              <Plus className="h-4 w-4" aria-hidden />
+              Añadir pago fijo
+            </Button>
+          }
+        />
         <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir pago fijo">
           <FixedPaymentForm
             action={createFixedPayment}

@@ -54,7 +54,21 @@ export function WishlistList({ items }: WishlistListProps) {
       />
 
       {filtered.length === 0 ? (
-        <EmptyState icon={Heart} title="Todavía no hay deseos." description="Añade el primero para empezar." />
+        items.length === 0 ? (
+          <EmptyState
+            icon={Heart}
+            title="La lista de deseos está vacía."
+            description="Apuntad lo que queréis comprar, asignadle una prioridad y pasad de 'idea' a 'comprado' juntos."
+            action={
+              <Button type="button" onClick={() => setIsAddOpen(true)}>
+                <Plus className="h-4 w-4" aria-hidden />
+                Añadir deseo
+              </Button>
+            }
+          />
+        ) : (
+          <EmptyState icon={Heart} title="Sin resultados." description="No hay deseos con el estado seleccionado. Prueba a cambiar el filtro." />
+        )
       ) : (
         <ul className="flex flex-col gap-3">
           {filtered.map((item) => (
@@ -87,6 +101,7 @@ export function WishlistList({ items }: WishlistListProps) {
                   <button
                     type="button"
                     aria-label="Editar deseo"
+                    title="Editar"
                     onClick={() => setEditingItem(item)}
                     className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                   >
@@ -95,6 +110,7 @@ export function WishlistList({ items }: WishlistListProps) {
                   <button
                     type="button"
                     aria-label="Eliminar deseo"
+                    title="Eliminar"
                     onClick={() => setDeletingItem(item)}
                     className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                   >

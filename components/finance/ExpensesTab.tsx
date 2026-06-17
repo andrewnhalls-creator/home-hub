@@ -34,7 +34,17 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
     <div className="flex flex-col gap-3">
       <ExpenseCharts expenses={expenses} categories={categories} />
       {expenses.length === 0 ? (
-        <EmptyState icon={ShoppingBag} title="Todavía no hay gastos registrados." description="Añade el primero para empezar." />
+        <EmptyState
+          icon={ShoppingBag}
+          title="Sin gastos registrados."
+          description="Apuntad los gastos variables del hogar — supermercado, restaurantes, ropa — y ved en qué se va el dinero cada mes."
+          action={
+            <Button type="button" onClick={() => setIsAddOpen(true)}>
+              <Plus className="h-4 w-4" aria-hidden />
+              Añadir gasto
+            </Button>
+          }
+        />
       ) : (
         <ul className="flex flex-col gap-3">
           {expenses.map((expense) => (

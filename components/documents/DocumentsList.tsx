@@ -30,7 +30,17 @@ export function DocumentsList({ documents }: DocumentsListProps) {
   return (
     <div className="flex flex-col gap-3">
       {documents.length === 0 ? (
-        <EmptyState icon={FileText} title="Todavía no hay documentos." description="Añade el primero para empezar." />
+        <EmptyState
+          icon={FileText}
+          title="Sin documentos todavía."
+          description="Guarda aquí carnets, seguros, contratos y garantías. La app os avisará antes de que alguno caduque."
+          action={
+            <Button type="button" onClick={() => setIsAddOpen(true)}>
+              <Plus className="h-4 w-4" aria-hidden />
+              Añadir documento
+            </Button>
+          }
+        />
       ) : (
         <ul className="flex flex-col gap-3">
           {documents.map((doc) => {
@@ -54,6 +64,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
                     <button
                       type="button"
                       aria-label="Editar documento"
+                      title="Editar"
                       onClick={() => setEditingDoc(doc)}
                       className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
@@ -62,6 +73,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
                     <button
                       type="button"
                       aria-label="Archivar documento"
+                      title="Archivar (guarda el documento sin eliminarlo)"
                       disabled={isPending}
                       onClick={() => startTransition(async () => { await archiveDocument(doc.id); showToast("Documento archivado"); })}
                       className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
@@ -71,6 +83,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
                     <button
                       type="button"
                       aria-label="Eliminar documento"
+                      title="Eliminar"
                       onClick={() => setDeletingDoc(doc)}
                       className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >

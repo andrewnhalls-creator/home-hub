@@ -104,7 +104,17 @@ export function SavingsTab({ goals }: SavingsTabProps) {
   return (
     <div className="flex flex-col gap-3">
       {goals.length === 0 ? (
-        <EmptyState icon={PiggyBank} title="Todavía no hay objetivos de ahorro." description="Crea el primero para empezar." />
+        <EmptyState
+          icon={PiggyBank}
+          title="Sin objetivos de ahorro todavía."
+          description="Definid una meta, apuntad lo que ya lleváis ahorrado y haced el seguimiento juntos hasta llegar."
+          action={
+            <Button type="button" onClick={() => setIsAddOpen(true)}>
+              <Plus className="h-4 w-4" aria-hidden />
+              Crear objetivo
+            </Button>
+          }
+        />
       ) : (
         <ul className="flex flex-col gap-3">
           {goals.map((goal) => (

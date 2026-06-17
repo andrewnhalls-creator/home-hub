@@ -81,7 +81,17 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
   return (
     <div className="flex flex-col gap-3">
       {subscriptions.length === 0 ? (
-        <EmptyState icon={RefreshCcw} title="Todavía no hay suscripciones." description="Añade la primera para empezar." />
+        <EmptyState
+          icon={RefreshCcw}
+          title="Sin suscripciones todavía."
+          description="Apuntad lo que pagáis recurrentemente — plataformas, gimnasio, servicios — y controlad cuánto suma al mes."
+          action={
+            <Button type="button" onClick={() => setIsAddOpen(true)}>
+              <Plus className="h-4 w-4" aria-hidden />
+              Añadir suscripción
+            </Button>
+          }
+        />
       ) : (
         <ul className="flex flex-col gap-3">
           {subscriptions.map((subscription) => {
