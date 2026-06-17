@@ -1,25 +1,33 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Milestone 21 complete)
+Updated: 2026-06-17 (Milestone 22 automated checks complete)
 
-## Current milestone: 22 — Final review
+## Current milestone: 22 — Final review (manual tests pending)
 
 ## Status
-- Milestone 21 (Deployment): COMPLETE — live at https://home-hub-dun.vercel.app
+- Milestone 22 automated checks: COMPLETE
+- Milestone 22 manual tests: PENDING (requires real device + browser)
 
-## What was done in Milestone 21
-- Vercel project created: `home-hub` under team `andrewnhalls-2415s-projects`
-- Git integration enabled: every push to `main` auto-deploys to production
-- Environment variables set in Vercel dashboard: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY`
-- Build passed: ✓ Compiled in 14.2s (Turbopack), TypeScript clean, 31 routes generated
-- Deployment ID: `dpl_9DAnKaE9xWYVBURCAgsi7UsQ8R8N` — state READY
-- VAPID private key and Supabase secrets remain in Supabase Edge Function secrets only (not in Vercel)
-- Supabase Cron (`send-push-cron`) confirmed active from Milestone 15 — unchanged
+## What was verified in Milestone 22 (automated)
+- UI text audit: all rendered strings are Spanish (Spain). Only "Home Hub" brand name is English — correct.
+- Secrets scan: no secrets committed in any file or git history. `.env.local`, `.env`, `.claude/` are gitignored.
+- Edge Function reads VAPID/service-role keys from Deno.env only — never hardcoded.
+- RLS: 28 tables have RLS enabled. All household-scoped policies use `is_household_member()`.
+- `npm run lint` → clean (zero warnings/errors)
+- `npm run typecheck` → clean (zero errors)
 
 ## Production URL
 https://home-hub-dun.vercel.app
 
-## Already done
-- Milestone 20: PWA manifest, icons, install guidance page
+## Manual tests still required (Milestone 22)
+See NEXT_STEPS.md for the full checklist. Key items:
+1. Smoke-test every module CRUD at the live URL
+2. Push notification end-to-end on a real device (subscribe at /ajustes/notificaciones, verify delivery)
+3. RLS cross-household: two separate user accounts should not see each other's data
+4. Mobile usability at 375px and PWA install flow at /ajustes/instalar
+
+## Already done (full history)
+- Milestone 21: Vercel deployment live
+- Milestone 20: PWA manifest, icons, install guidance
 - Milestone 19: Offline support for shopping
 - Milestone 18: Loading states, toasts, noValidate
 - Milestone 17: Activity log + trash/restore UI
@@ -28,4 +36,4 @@ https://home-hub-dun.vercel.app
 
 ## Last known good state
 - Build, lint, typecheck all pass locally and on Vercel
-- Committed and pushed; Vercel auto-deployed from `a08e534`
+- No uncommitted changes
