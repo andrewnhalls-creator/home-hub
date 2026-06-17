@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogOut, Bell, ChevronRight } from "lucide-react";
+import { LogOut, Bell, ChevronRight, Smartphone, Tag, Shield, User } from "lucide-react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { HouseholdNameForm } from "@/components/settings/HouseholdNameForm";
@@ -94,17 +94,26 @@ export function SettingsView({
         </div>
       </Card>
 
-      <Card className="p-0 overflow-hidden">
-        <Link
-          href="/ajustes/notificaciones"
-          className="flex min-h-[44px] items-center justify-between gap-3 px-4 py-3 text-sm text-brown hover:bg-sand"
-        >
-          <span className="flex items-center gap-3">
-            <Bell className="h-4 w-4 text-terracotta" aria-hidden />
-            Notificaciones
-          </span>
-          <ChevronRight className="h-4 w-4 text-muted" aria-hidden />
-        </Link>
+      <Card className="p-0 overflow-hidden divide-y divide-sand">
+        {[
+          { href: "/ajustes/notificaciones", icon: Bell, label: "Notificaciones" },
+          { href: "/ajustes/dispositivos", icon: Smartphone, label: "Dispositivos" },
+          { href: "/ajustes/categorias", icon: Tag, label: "Categorías" },
+          { href: "/ajustes/privacidad", icon: Shield, label: "Privacidad y datos" },
+          { href: "/ajustes/cuenta", icon: User, label: "Cuenta" },
+        ].map(({ href, icon: Icon, label }) => (
+          <Link
+            key={href}
+            href={href}
+            className="flex min-h-[44px] items-center justify-between gap-3 px-4 py-3 text-sm text-brown hover:bg-sand"
+          >
+            <span className="flex items-center gap-3">
+              <Icon className="h-4 w-4 text-terracotta" aria-hidden />
+              {label}
+            </span>
+            <ChevronRight className="h-4 w-4 text-muted" aria-hidden />
+          </Link>
+        ))}
       </Card>
 
       <Card>

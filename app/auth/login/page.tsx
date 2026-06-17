@@ -28,14 +28,21 @@ export default function LoginPage() {
             required
             error={state.fieldErrors?.email}
           />
-          <Input
-            label="Contraseña"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            error={state.fieldErrors?.password}
-          />
+          <div className="flex flex-col gap-1">
+            <Input
+              label="Contraseña"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              error={state.fieldErrors?.password}
+            />
+            <div className="flex justify-end">
+              <Link href="/auth/forgot-password" className="text-xs text-muted hover:text-terracotta">
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
+          </div>
 
           {state.error && <p className="text-sm text-danger">{state.error}</p>}
 
