@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useToast } from "@/components/ui/Toast";
 import { Plus, ShoppingCart, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -11,19 +11,50 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ShoppingItemCard } from "@/components/shopping/ShoppingItemCard";
 import { ShoppingItemForm } from "@/components/shopping/ShoppingItemForm";
 import { addShoppingItem, updateShoppingItem } from "@/app/(app)/compra/actions";
+import { createClient } from "@/lib/supabase/client";
 import type { Category, ShoppingItem } from "@/lib/types";
 
 interface ShoppingListProps {
   items: ShoppingItem[];
   categories: Category[];
+  householdId: string;
   shoppingListId?: string;
 }
 
-export function ShoppingList({ items, categories, shoppingListId }: ShoppingListProps) {
+export function ShoppingList({ items, categories, householdId, shoppingListId }: ShoppingListProps) {
   const { showToast } = useToast();
+  const [localItems, setLocalItems] = useState<ShoppingItem[]>(items);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [storeFilter, setStoreFilter] = useState("");
+
+  useEffect(() => {
+    const supabase = createClient();
+    const channel = supabase
+      .channel(`shopping_items:${householdId}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "shopping_items", filter: `household_id=eq.${householdId}` },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            const newItem = payload.new as ShoppingItem;
+            if (shoppingListId && newItem.shopping_list_id !== shoppingListId) return;
+            setLocalItems((prev) => [newItem, ...prev]);
+          } else if (payload.eventType === "UPDATE") {
+            setLocalItems((prev) =>
+              prev.map((item) => (item.id === payload.new.id ? (payload.new as ShoppingItem) : item)),
+            );
+          } else if (payload.eventType === "DELETE") {
+            setLocalItems((prev) => prev.filter((item) => item.id !== payload.old.id));
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [householdId, shoppingListId]);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ShoppingItem | null>(null);
   const [showCompleted, setShowCompleted] = useState(false);
@@ -35,8 +66,8 @@ export function ShoppingList({ items, categories, shoppingListId }: ShoppingList
 
   const stores = useMemo(
     () =>
-      Array.from(new Set(items.map((item) => item.store).filter((store): store is string => !!store))),
-    [items],
+      Array.from(new Set(localItems.map((item) => item.store).filter((store): store is string => !!store))),
+    [localItems],
   );
 
   const matchesFilters = (item: ShoppingItem) => {
@@ -46,8 +77,8 @@ export function ShoppingList({ items, categories, shoppingListId }: ShoppingList
     return true;
   };
 
-  const activeItems = items.filter((item) => !item.is_completed && matchesFilters(item));
-  const completedItems = items.filter((item) => item.is_completed && matchesFilters(item));
+  const activeItems = localItems.filter((item) => !item.is_completed && matchesFilters(item));
+  const completedItems = localItems.filter((item) => item.is_completed && matchesFilters(item));
 
   return (
     <div className="flex flex-col gap-4">
@@ -90,7 +121,7 @@ export function ShoppingList({ items, categories, shoppingListId }: ShoppingList
       ) : (
         <ul className="flex flex-col gap-3">
           {activeItems.map((item) => (
-            <li key={item.id}>
+            <li key={`${item.id}-${item.is_completed}`}>
               <ShoppingItemCard
                 item={item}
                 category={item.category_id ? categoryById.get(item.category_id) : undefined}
@@ -117,7 +148,7 @@ export function ShoppingList({ items, categories, shoppingListId }: ShoppingList
           {showCompleted && (
             <ul className="mt-3 flex flex-col gap-3">
               {completedItems.map((item) => (
-                <li key={item.id}>
+                <li key={`${item.id}-${item.is_completed}`}>
                   <ShoppingItemCard
                     item={item}
                     category={item.category_id ? categoryById.get(item.category_id) : undefined}

@@ -54,7 +54,7 @@ export default async function ShoppingPage({
           Historial de compras
         </Link>
       )}
-      <ShoppingList items={items ?? []} categories={categories ?? []} shoppingListId={shoppingListId} />
+      <ShoppingList items={items ?? []} categories={categories ?? []} householdId={householdId} shoppingListId={shoppingListId} />
     </div>
   );
 }
