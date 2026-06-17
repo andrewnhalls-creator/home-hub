@@ -7,17 +7,7 @@ App and Edge Function fully deployed. All v1 + post-launch items complete.
 
 ## Planned improvements (suggested order)
 
-### 1. Meal plan → shopping list generator
-One-tap: generate a shopping list from the current week's meal plan.
-
-- Button on `/menu` page: "Generar lista de la compra"
-- Reads all recipes planned for the week, collects their ingredients
-- Creates a new shopping list with all ingredients as items (deduplicating where possible)
-- User can review and edit before saving
-
----
-
-### 5. Realtime shopping list sync
+### 1. Realtime shopping list sync
 When one person checks off an item, the other sees it immediately.
 
 - Use Supabase Realtime channel on `shopping_items` filtered by `household_id`

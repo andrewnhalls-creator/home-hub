@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (richer calendar)
+Updated: 2026-06-17 (meal→shopping generator)
 
-## Current state: richer calendar complete ✓
+## Current state: meal plan → shopping list generator complete ✓
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -18,7 +18,7 @@ npx supabase functions deploy send-push
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `b5ff3f6` (richer calendar)
+- Last commit: `6d1b2bc` (meal→shopping generator)
 - Pushed to origin main ✓
 - Deploy pending (app only; Edge Function unchanged)
 
@@ -31,9 +31,10 @@ npx supabase functions deploy send-push
 6. ✅ **Dark mode** — `@media (prefers-color-scheme: dark)` in `globals.css`; remaps surface/text/border/shadow tokens; one `bg-white→bg-card` fix in `InstallGuideView.tsx`
 7. ✅ **Expense analytics charts** — `ExpenseCharts.tsx` with recharts: monthly bar (6mo), weekly bar (4wk), category donut (current month). Rendered above expense list in Gastos tab.
 8. ✅ **Richer calendar** — DB migration 017 adds `end_date` + `color` to `calendar_events`. Multi-day events expand across date range. Per-event colour picker (8 swatches) in form. Week/agenda views show "d MMM – d MMM" range label. All views use event colour override.
+9. ✅ **Meal plan → shopping list generator** — "Generar lista de la compra" button on `/menu` page. Action collects unique recipe IDs for the week, fetches all ingredients, deduplicates by (name, unit) summing quantities, creates a named `shopping_list`, inserts items, redirects to list for review.
 
 ## Next planned improvements (see NEXT_STEPS.md for full detail)
-1. Meal plan → shopping list generator
+1. Realtime shopping list sync
 3. Richer calendar (multi-day events, drag-to-reschedule)
 4. Meal plan → shopping list generator
 5. Realtime shopping list sync
