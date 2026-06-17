@@ -1,9 +1,23 @@
 # Next Steps
 
 ## Current state
-All v1 features complete. Post-launch improvements in progress.
-Realtime sync, budget tracker, document alerts, and inline add buttons all done.
-Savings goal progress charts skipped (user decision).
+All v1 features complete. Design identity established (Granito glass palette).
+Critique run: 26/40. P0 + P1s fixed this session.
+
+## Immediate design follow-up (next session)
+
+### 1. `/impeccable onboard` — add contextual hints
+Critique scored Help & Documentation 1/4. No tooltips, no empty-state guidance for new modules, no hints after first run.
+- Add `title` or tooltip to non-obvious icon buttons
+- Improve empty states across modules with actionable Spanish copy
+- Especially needed for: Documentos, Deseos, Finanzas (less-used modules)
+
+### 2. `/impeccable audit app/` — full a11y + responsive check
+The critique was code-only (no browser). Run a proper audit against the live app to catch contrast failures on the new dark palette and any responsive regressions.
+
+### 3. Deploy to production
+Run `npx vercel --prod` to push the Granito palette live.
+---
 
 ---
 

@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (UI/UX + animation polish)
+Updated: 2026-06-17 (Granito design identity + glass palette)
 
-## Current state: UI/UX and animation polish complete ✓
+## Current state: Design identity established, glass palette applied ✓
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -18,10 +18,20 @@ npx supabase functions deploy send-push
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `f055167` (animation polish — sliding tabs, backdrop fades, stagger, scaleX progress)
+- Last commit: `c8d4102` (glass consistency sweep — P1 fixes + token cleanup)
 - Pushed to origin main ✓
 - Deploy pending (run `npx vercel --prod` to deploy)
 - Edge Function unchanged (no redeploy needed)
+
+## Design identity (new this session)
+- **PRODUCT.md** and **DESIGN.md** written — register, brand personality, anti-references, full visual system
+- **Palette: "Granito"** — dark-first: warm charcoal bg (`oklch(0.17 0.010 62)`), glass card surfaces (`oklch(1 0 0 / 0.08)` + `backdrop-blur-xl`), terracotta primary (`oklch(0.58 0.130 32)`, clay-red not orange), wood-brown accent
+- **Dark-first**: `:root` is dark; `@media (prefers-color-scheme: light)` overrides to warm stone. `color-scheme: dark light`
+- **Glass applied to**: Card (all variants), BottomNav, TopBar, Modal, GreetingCard
+- **Button**: raised tile shadow (top glaze highlight + bottom edge + drop), `translateY(1px)` on press
+- **themeColor**: `#1e1b14` (dark charcoal, matches app bg)
+- **Critique run**: score 26/40. P0 fixed (modal backdrop). P1s fixed (modal blur, GreetingCard glass). Remaining: P2 `/impeccable onboard` for help/tooltips score (1/4)
+- **Critique snapshot**: `.impeccable/critique/2026-06-17T21-21-46Z__app.md`
 
 ## Completed improvements (chronological)
 1. ✅ **Web font** — Plus Jakarta Sans via `next/font/google`
