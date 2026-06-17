@@ -1,27 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  /* Apple Home Glass palette */
-  --color-cream: #f5f8ff;
-  --color-sand: #eaf3ff;
-  --color-card: #ffffff;
-  --color-terracotta: #0a84ff;
-  --color-coral: #5ac8fa;
-  --color-sage: #2dd4bf;
-  --color-olive: #059669;
-  --color-amber: #ffb020;
-  --color-rose: #8b5cf6;
-  --color-brown: #111827;
-  --color-muted: #5b6472;
-  --color-border: #d8e6f7;
-  --color-success: #34c759;
-  --color-warning-text: #92400e;
-  --color-danger: #ff453a;
+  /* Aceite de oliva palette */
+  --color-cream: oklch(1.000 0.000 0);         /* bg — whitewashed wall */
+  --color-sand: oklch(0.975 0.012 105);         /* secondary bg — sun-warm stone */
+  --color-card: oklch(0.988 0.006 103);         /* card lift above bg */
+  --color-terracotta: oklch(0.40 0.108 110);    /* primary — deep olive */
+  --color-coral: oklch(0.56 0.090 110);         /* primary hover / lighter */
+  --color-sage: oklch(0.60 0.085 148);          /* chores, success */
+  --color-olive: oklch(0.46 0.080 140);         /* dark sage for text-on-sage */
+  --color-amber: oklch(0.75 0.140 75);          /* warning, due soon */
+  --color-rose: oklch(0.52 0.095 52);           /* accent — wood brown (kitchen table) */
+  --color-brown: oklch(0.22 0.022 82);          /* primary text */
+  --color-muted: oklch(0.52 0.016 88);          /* secondary text */
+  --color-border: oklch(0.915 0.018 102);       /* subtle separator */
+  --color-success: oklch(0.62 0.120 148);       /* success */
+  --color-warning-text: oklch(0.35 0.085 70);   /* text on amber bg */
+  --color-danger: oklch(0.52 0.185 25);         /* danger / destructive */
 
-  /* Blue-glass shadow tokens */
-  --shadow-card: 0 1px 3px 0 rgb(10 132 255 / 0.06), 0 1px 2px -1px rgb(10 132 255 / 0.05);
-  --shadow-card-hover: 0 4px 12px -1px rgb(10 132 255 / 0.10), 0 2px 6px -2px rgb(10 132 255 / 0.08);
-  --shadow-modal: 0 20px 40px -5px rgb(17 24 39 / 0.14), 0 8px 16px -6px rgb(17 24 39 / 0.08);
+  /* Olive-warm shadow tokens */
+  --shadow-card: 0 1px 3px 0 oklch(0.40 0.108 110 / 0.08), 0 1px 2px -1px oklch(0.40 0.108 110 / 0.06);
+  --shadow-card-hover: 0 4px 12px -1px oklch(0.40 0.108 110 / 0.12), 0 2px 6px -2px oklch(0.40 0.108 110 / 0.08);
+  --shadow-modal: 0 20px 40px -5px oklch(0.22 0.022 82 / 0.16), 0 8px 16px -6px oklch(0.22 0.022 82 / 0.10);
 
   /* Border radius tokens */
   --radius-sm: 0.5rem;
@@ -64,22 +64,27 @@ body {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Surfaces */
-    --color-cream: #0d1117;
-    --color-sand: #161b22;
-    --color-card: #1e2430;
+    /* Surfaces — warm charcoal, olive-leaning not blue-cool */
+    --color-cream: oklch(0.14 0.015 85);
+    --color-sand: oklch(0.20 0.018 87);
+    --color-card: oklch(0.24 0.020 88);
 
     /* Text */
-    --color-brown: #e6edf3;
-    --color-muted: #7d8590;
+    --color-brown: oklch(0.93 0.010 95);
+    --color-muted: oklch(0.58 0.014 90);
 
     /* Border */
-    --color-border: #30363d;
+    --color-border: oklch(0.30 0.022 95);
 
-    /* Shadows — heavier on dark to create depth */
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.35), 0 1px 2px -1px rgb(0 0 0 / 0.25);
-    --shadow-card-hover: 0 4px 12px -1px rgb(0 0 0 / 0.45), 0 2px 6px -2px rgb(0 0 0 / 0.35);
-    --shadow-modal: 0 20px 40px -5px rgb(0 0 0 / 0.55), 0 8px 16px -6px rgb(0 0 0 / 0.45);
+    /* Primary / accent lighten for dark bg contrast */
+    --color-terracotta: oklch(0.65 0.095 108);
+    --color-coral: oklch(0.75 0.080 108);
+    --color-rose: oklch(0.68 0.080 52);
+
+    /* Shadows — deeper on dark */
+    --shadow-card: 0 1px 3px 0 oklch(0 0 0 / 0.35), 0 1px 2px -1px oklch(0 0 0 / 0.25);
+    --shadow-card-hover: 0 4px 12px -1px oklch(0 0 0 / 0.45), 0 2px 6px -2px oklch(0 0 0 / 0.35);
+    --shadow-modal: 0 20px 40px -5px oklch(0 0 0 / 0.55), 0 8px 16px -6px oklch(0 0 0 / 0.45);
   }
 }
 
