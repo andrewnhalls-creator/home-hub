@@ -80,6 +80,16 @@ body {
   display: none;
 }
 
+/* Page transition */
+@keyframes page-fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+.animate-page-in {
+  animation: page-fade-up 220ms ease-out both;
+}
+
 /* Entrance animations for modals and bottom sheets */
 @keyframes modal-enter {
   from { opacity: 0; transform: translateY(0.5rem) scale(0.98); }

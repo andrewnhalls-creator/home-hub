@@ -3,6 +3,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { OfflineBanner } from "@/components/ui/OfflineBanner";
+import { PageTransition } from "@/components/layout/PageTransition";
 import type { NotificationEvent } from "@/lib/types";
 
 interface AppShellProps {
@@ -27,7 +28,7 @@ export function AppShell({ householdName, notifications, unreadCount, children }
         <OfflineBanner />
         <main id="main-content" className="flex-1 px-4 pb-24 pt-4 md:px-6 md:pb-6">
           <div className="mx-auto w-full max-w-3xl">
-            {children}
+            <PageTransition>{children}</PageTransition>
           </div>
         </main>
       </div>
