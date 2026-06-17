@@ -13,7 +13,13 @@ Make sure `npx vercel whoami` shows `andrewnhalls-2415` before deploying.
 
 ---
 
-## Next session: three tasks (do in order)
+## Done this session (deploy needed)
+- **Finance tabs mobile layout**: replaced horizontal strip with 2-column icon+label grid on mobile; tablet+ keeps scrollable strip
+- **Bottom nav**: Inicio (Home) added as first item on the left; nav now has 4 items: Inicio, Calendario, Compra, Finanzas
+
+---
+
+## Next session: tasks (do in order)
 
 ### 1. Static top bar (always visible, Menu never disappears)
 The top bar currently hides or scrolls away on some views. Make it fixed/sticky so

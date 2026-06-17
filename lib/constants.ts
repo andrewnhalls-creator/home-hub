@@ -33,9 +33,9 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/ajustes",      label: "Ajustes",      icon: Settings },
 ];
 
-/** Three primary routes shown in the bottom navigation bar. */
+/** Four primary routes shown in the bottom navigation bar. */
 export const PRIMARY_NAV_ITEMS: NavItem[] = NAV_ITEMS.filter((item) =>
-  ["/calendario", "/compra", "/finanzas"].includes(item.href),
+  ["/dashboard", "/calendario", "/compra", "/finanzas"].includes(item.href),
 );
 
 /** Items shown in the top-bar Menu sheet (includes Inicio since it's not in the bottom nav). */
