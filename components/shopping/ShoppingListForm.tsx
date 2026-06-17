@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useMemo } from "react";
+import { format, startOfWeek } from "date-fns";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { createShoppingList, type ShoppingListFormState } from "@/app/(app)/compra/listas/actions";
@@ -9,6 +10,10 @@ const initialState: ShoppingListFormState = {};
 
 export function ShoppingListForm({ onSuccess, onCancel }: { onSuccess: () => void; onCancel: () => void }) {
   const [state, formAction, isPending] = useActionState(createShoppingList, initialState);
+  const weekPlaceholder = useMemo(() => {
+    const monday = startOfWeek(new Date(), { weekStartsOn: 1 });
+    return `Semana del ${format(monday, "dd/MM")}`;
+  }, []);
 
   useEffect(() => {
     if (state.success) onSuccess();
@@ -20,7 +25,7 @@ export function ShoppingListForm({ onSuccess, onCancel }: { onSuccess: () => voi
         label="Nombre"
         name="name"
         required
-        placeholder="Semana del 16/06"
+        placeholder={weekPlaceholder}
         error={state.fieldErrors?.name}
       />
       <div className="grid grid-cols-2 gap-3">

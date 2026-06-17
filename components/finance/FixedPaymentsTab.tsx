@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, CalendarClock } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -54,7 +54,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
   if (payments.length === 0) {
     return (
       <>
-        <EmptyState title="Todavía no hay pagos fijos." description="Añade el primero para empezar." />
+        <EmptyState icon={CalendarClock} title="Todavía no hay pagos fijos." description="Añade el primero para empezar." />
         <Button
           type="button"
           onClick={() => setIsAddOpen(true)}

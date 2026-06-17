@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState, useTransition } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, PiggyBank } from "lucide-react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
@@ -104,7 +104,7 @@ export function SavingsTab({ goals }: SavingsTabProps) {
   return (
     <div className="flex flex-col gap-3">
       {goals.length === 0 ? (
-        <EmptyState title="Todavía no hay objetivos de ahorro." description="Crea el primero para empezar." />
+        <EmptyState icon={PiggyBank} title="Todavía no hay objetivos de ahorro." description="Crea el primero para empezar." />
       ) : (
         <ul className="flex flex-col gap-3">
           {goals.map((goal) => (

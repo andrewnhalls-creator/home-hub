@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, ShoppingBag } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
@@ -32,7 +32,7 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
   return (
     <div className="flex flex-col gap-3">
       {expenses.length === 0 ? (
-        <EmptyState title="Todavía no hay gastos registrados." description="Añade el primero para empezar." />
+        <EmptyState icon={ShoppingBag} title="Todavía no hay gastos registrados." description="Añade el primero para empezar." />
       ) : (
         <ul className="flex flex-col gap-3">
           {expenses.map((expense) => (

@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState, useTransition } from "react";
 import { isBefore, addDays } from "date-fns";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, RefreshCcw } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -81,7 +81,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
   return (
     <div className="flex flex-col gap-3">
       {subscriptions.length === 0 ? (
-        <EmptyState title="Todavía no hay suscripciones." description="Añade la primera para empezar." />
+        <EmptyState icon={RefreshCcw} title="Todavía no hay suscripciones." description="Añade la primera para empezar." />
       ) : (
         <ul className="flex flex-col gap-3">
           {subscriptions.map((subscription) => {
