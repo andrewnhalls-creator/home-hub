@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (audit P1/P2 fixes applied — targeting 19/20)
+Updated: 2026-06-18 (all audit fixes applied — P1/P2/P3 done)
 
-## Current state: Audit fixes complete, deploy pending
+## Current state: All audit fixes complete, DESIGN.md synced, deploy pending
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -43,9 +43,8 @@ Run: 2026-06-18. P1/P2 fixes applied 2026-06-18.
 | Anti-Patterns | 3→4/4 | Eyebrow headers removed in SearchView, NotificationCentre, MortgageTab |
 
 ### Remaining open issues
-- **[P2]** All inputs — `placeholder:text-muted` contrast borderline (~4.5:1). Verify live; darken muted to `oklch(0.40 0.016 86)` in globals.css if under threshold.
+- **[P2]** All inputs — `placeholder:text-muted` contrast borderline (~4.5:1). Verify live after deploy; darken muted to `oklch(0.40 0.016 86)` in globals.css if under threshold.
 - **[P3]** `SummaryCard.tsx` — identical 2×n card grid. Consider per-module accent colours.
-- **[P3]** `CalendarEventForm.tsx:40-47` — event colour swatches include cold iOS palette. Replace with warmer equivalents.
 
 ## This session's changes (2026-06-18)
 1. ✅ **Onboarding improvements** — Empty states teach module value + inline CTA buttons.
@@ -53,6 +52,8 @@ Run: 2026-06-18. P1/P2 fixes applied 2026-06-18.
 3. ✅ **Glassmorphism removed** — Card, BottomNav, TopBar, Modal, GreetingCard.
 4. ✅ **Audit run** — 16/20. P1/P2/P3 issues documented.
 5. ✅ **Audit P1/P2 fixes** — Brand chart colors, min font sizes (text-xs), eyebrow headers removed.
+6. ✅ **Audit P3 fix** — CalendarEventForm event colours replaced with warm brand palette.
+7. ✅ **DESIGN.md** — Fully rewritten to document Azulejo palette (was still showing old Aceite de oliva/Granito values).
 
 ## Completed improvements (chronological)
 1. ✅ Web font — Plus Jakarta Sans

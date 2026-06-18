@@ -15,17 +15,12 @@ npx vercel --prod
 ```
 
 ### 2. [P2] Verify muted placeholder contrast live
-After deploying, check `placeholder:text-muted` in any input with a contrast tool.
+After deploying, open any form input in the live app, use browser devtools or a contrast checker on the placeholder text.
 If under 4.5:1, darken muted in `globals.css`: `oklch(0.44 0.016 86)` → `oklch(0.40 0.016 86)`.
 Command: `/impeccable polish`
 
-### 3. Update DESIGN.md
-DESIGN.md still documents old Aceite de oliva / Granito values. Bring it in sync with Azulejo (globals.css is the source of truth).
-Command: `/impeccable document`
-
-### 4. [P3] CalendarEventForm colour swatches
-`components/calendar/CalendarEventForm.tsx:40-47` — event colour swatches include cold iOS palette.
-Replace with warmer brand-palette equivalents.
+### 3. [P3] SummaryCard accent colours (optional polish)
+`components/dashboard/SummaryCard.tsx` — all summary cards use the same colour. Consider giving each module card its accent token (terracotta, sage, amber, rose…) for faster visual scanning.
 
 ---
 
