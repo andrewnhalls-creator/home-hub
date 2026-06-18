@@ -80,7 +80,7 @@ export function SearchView({ query, sections }: SearchViewProps) {
               <div key={section.label}>
                 <div className="mb-2 flex items-center gap-2">
                   <Icon className="h-3.5 w-3.5 text-muted" aria-hidden />
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted">{section.label}</p>
+                  <p className="text-xs font-medium text-muted">{section.label}</p>
                 </div>
                 <ul className="flex flex-col gap-1">
                   {section.results.map((result) => (

@@ -26,7 +26,8 @@ import {
 import type { Expense, Category } from "@/lib/types";
 import { formatCurrency } from "@/lib/format";
 
-const SLICE_COLORS = ["#0a84ff", "#5ac8fa", "#2dd4bf", "#ffb020", "#8b5cf6", "#059669", "#ff6b6b"];
+// Brand palette hex equivalents for recharts (SVG attributes don't support CSS custom properties)
+const SLICE_COLORS = ["#c55535", "#42795a", "#c79927", "#a86040", "#3d6645", "#706d64", "#7a4030"];
 
 interface ChartTooltipProps {
   active?: boolean;
@@ -192,7 +193,7 @@ export function ExpenseCharts({ expenses, categories }: Props) {
                 width={48}
               />
               <Tooltip content={<BarTooltipContent />} cursor={{ fill: "var(--color-sand)", opacity: 0.6 }} />
-              <Bar dataKey="total" fill="#0a84ff" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+              <Bar dataKey="total" fill="#c55535" radius={[4, 4, 0, 0]} isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -218,7 +219,7 @@ export function ExpenseCharts({ expenses, categories }: Props) {
                 width={48}
               />
               <Tooltip content={<BarTooltipContent />} cursor={{ fill: "var(--color-sand)", opacity: 0.6 }} />
-              <Bar dataKey="total" fill="#2dd4bf" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+              <Bar dataKey="total" fill="#42795a" radius={[4, 4, 0, 0]} isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         </div>

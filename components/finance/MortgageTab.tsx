@@ -223,7 +223,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
       {/* Payment history */}
       {showHistory && (
         <div className="flex flex-col gap-2 border-t border-border pt-3">
-          <p className="text-xs font-medium text-muted uppercase tracking-wide">Historial de pagos</p>
+          <p className="text-xs font-medium text-muted">Historial de pagos</p>
           {mortgagePayments.length === 0 ? (
             <p className="text-sm text-muted">Aún no hay pagos registrados.</p>
           ) : (

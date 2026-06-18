@@ -55,7 +55,7 @@ export function WeekCalendarWidget({ weekStartStr, events }: WeekCalendarWidgetP
             return (
               <li key={event.id} className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
                 <div className="flex h-8 w-8 shrink-0 flex-col items-center justify-center rounded-lg bg-terracotta/10">
-                  <span className="text-[10px] font-semibold uppercase leading-none text-terracotta">
+                  <span className="text-xs font-semibold uppercase leading-none text-terracotta">
                     {format(eventDate, "MMM", { locale: es })}
                   </span>
                   <span className="text-sm font-bold leading-none text-terracotta">

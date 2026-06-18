@@ -338,7 +338,7 @@ export function CalendarView({ items }: CalendarViewProps) {
               {upcoming.map((item) => {
                 const rangeLabel = itemDateRangeLabel(item);
                 const accentColor = item.color ?? "var(--color-terracotta)";
-                const accentBg = item.color ? `${item.color}1a` : "rgb(10 132 255 / 0.1)";
+                const accentBg = item.color ? `${item.color}1a` : "oklch(0.52 0.128 32 / 0.1)";
                 return (
                   <li key={item.id}>
                     <Card className="flex items-center gap-3 p-3">
@@ -347,7 +347,7 @@ export function CalendarView({ items }: CalendarViewProps) {
                         style={{ background: accentBg }}
                       >
                         <span
-                          className="text-[10px] font-semibold uppercase leading-none"
+                          className="text-xs font-semibold uppercase leading-none"
                           style={{ color: accentColor }}
                         >
                           {format(new Date(`${item.date}T00:00:00`), "MMM", { locale: es })}

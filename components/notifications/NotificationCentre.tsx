@@ -93,7 +93,7 @@ export function NotificationCentre({ notifications, unreadCount }: NotificationC
             )}
             {groups.map((group) => (
               <div key={group.label} className="flex flex-col gap-2">
-                <p className="text-xs font-medium uppercase tracking-wide text-muted">{group.label}</p>
+                <p className="text-xs font-medium text-muted">{group.label}</p>
                 <ul className="flex flex-col gap-2">
                   {group.items.map((notification) => {
                     const meta = NOTIFICATION_CATEGORY_META[notification.category];
