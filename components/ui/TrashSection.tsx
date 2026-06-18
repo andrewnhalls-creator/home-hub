@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { ChevronDown, ChevronRight, RotateCcw } from "lucide-react";
+import { CaretDown, CaretRight, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -49,7 +49,7 @@ function TrashRow({
           aria-label={`Restaurar ${item.label}`}
           className="flex items-center gap-1 text-xs text-terracotta hover:opacity-80 font-medium px-2 py-1 rounded-lg hover:bg-terracotta/10 transition-colors disabled:opacity-50"
         >
-          <RotateCcw size={12} />
+          <ArrowCounterClockwise size={12} />
           Restaurar
         </button>
       </form>
@@ -84,7 +84,7 @@ export function TrashSection({
           {title}
         </span>
         <span className="text-muted">
-          {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+          {open ? <CaretDown size={14} /> : <CaretRight size={14} />}
         </span>
       </button>
 

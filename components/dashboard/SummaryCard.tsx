@@ -1,9 +1,9 @@
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
+import type { Icon } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 
 interface SummaryCardProps {
-  icon: LucideIcon;
+  icon: Icon;
   label: string;
   value: string;
   href: string;

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { isToday, isWithinInterval, addDays } from "date-fns";
-import { Plus, Bell } from "lucide-react";
+import { Plus, Bell } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";

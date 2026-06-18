@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useTransition } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
@@ -63,7 +63,7 @@ export function IngredientList({ recipeId, ingredients, categories }: Ingredient
                 onClick={() => startDeleteTransition(() => deleteIngredient(recipeId, ingredient.id))}
                 className="text-muted hover:text-danger"
               >
-                <Trash2 className="h-4 w-4" aria-hidden />
+                <Trash className="h-4 w-4" aria-hidden />
               </button>
             </li>
           ))}

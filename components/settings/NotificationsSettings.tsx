@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { BellOff, Loader2, Send, AlertTriangle, Moon } from "lucide-react";
+import { BellSlash, Spinner, PaperPlaneTilt, Warning, Moon } from "@phosphor-icons/react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { usePushSubscription } from "@/hooks/usePushSubscription";
@@ -122,7 +122,7 @@ export function NotificationsSettings({ initialPrefs }: NotificationsSettingsPro
         <div className="mt-4 flex flex-col gap-3">
           {!isSupported && (
             <div className="flex items-start gap-2 rounded-xl bg-sand p-3 text-sm text-muted">
-              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber" aria-hidden />
+              <Warning className="mt-0.5 h-4 w-4 shrink-0 text-amber" aria-hidden />
               <span>
                 Tu dispositivo o navegador no admite notificaciones push. En iOS, instala la app en la pantalla
                 de inicio (iOS 16.4+) y vuelve a intentarlo.
@@ -132,7 +132,7 @@ export function NotificationsSettings({ initialPrefs }: NotificationsSettingsPro
 
           {isSupported && permission === "denied" && (
             <div className="flex items-start gap-2 rounded-xl bg-sand p-3 text-sm text-muted">
-              <BellOff className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />
+              <BellSlash className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />
               <span>
                 Las notificaciones están bloqueadas. Ve a los ajustes de tu navegador y permite las
                 notificaciones para este sitio.
@@ -183,7 +183,7 @@ export function NotificationsSettings({ initialPrefs }: NotificationsSettingsPro
               disabled={isWorking || testSent}
               className="flex items-center gap-2 self-start text-sm font-medium text-terracotta disabled:opacity-50"
             >
-              <Send className="h-4 w-4" aria-hidden />
+              <PaperPlaneTilt className="h-4 w-4" aria-hidden />
               {testSent ? "Prueba enviada — revisa tu centro de notificaciones" : "Probar notificación"}
             </button>
           )}
@@ -314,7 +314,7 @@ export function NotificationsSettings({ initialPrefs }: NotificationsSettingsPro
 
       {isPending && (
         <div className="flex items-center gap-2 text-sm text-muted" aria-live="polite">
-          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+          <Spinner className="h-4 w-4 animate-spin" aria-hidden />
           Guardando…
         </div>
       )}

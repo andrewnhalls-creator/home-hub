@@ -55,7 +55,7 @@ export function WeekStrip({
           >
             <span
               className={cn(
-                "text-xs font-medium uppercase tracking-wide",
+                "text-xs font-medium",
                 isWeekend ? "text-coral" : "text-muted",
                 selected && "text-terracotta",
               )}

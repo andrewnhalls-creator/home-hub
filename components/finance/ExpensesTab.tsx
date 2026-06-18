@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Trash2, ShoppingBag } from "lucide-react";
+import { Plus, Trash, ShoppingBag } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
@@ -61,7 +61,7 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
                   onClick={() => setDeletingExpense(expense)}
                   className="text-muted hover:text-danger"
                 >
-                  <Trash2 className="h-4 w-4" aria-hidden />
+                  <Trash className="h-4 w-4" aria-hidden />
                 </button>
               </Card>
             </li>

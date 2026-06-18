@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash } from "@phosphor-icons/react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { deleteRecipe } from "@/app/(app)/menu/recetas/actions";
@@ -13,7 +13,7 @@ export function RecipeDeleteButton({ recipeId }: { recipeId: string }) {
   return (
     <>
       <Button type="button" variant="danger" onClick={() => setIsOpen(true)}>
-        <Trash2 className="h-4 w-4" aria-hidden />
+        <Trash className="h-4 w-4" aria-hidden />
         Eliminar receta
       </Button>
 

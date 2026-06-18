@@ -5,15 +5,15 @@ import { formatDistanceToNow, isToday, isYesterday, parseISO, format } from "dat
 import { es } from "date-fns/locale";
 import {
   ShoppingCart,
-  UtensilsCrossed,
+  ForkKnife,
   Bell,
   Wallet,
   ListChecks,
   Heart,
   FileText,
-  Activity,
-  type LucideIcon,
-} from "lucide-react";
+  Pulse,
+  type Icon,
+} from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { ActivityLogEntry } from "@/lib/types";
@@ -39,10 +39,10 @@ const FILTERS: FilterOption[] = [
   { label: "Deseos",        value: "deseos",      entityTypes: ["wishlist_item"] },
 ];
 
-const MODULE_ICON: Record<string, LucideIcon> = {
+const MODULE_ICON: Record<string, Icon> = {
   shopping_item:  ShoppingCart,
-  recipe:         UtensilsCrossed,
-  menu_plan:      UtensilsCrossed,
+  recipe:         ForkKnife,
+  menu_plan:      ForkKnife,
   reminder:       Bell,
   expense:        Wallet,
   fixed_payment:  Wallet,
@@ -126,7 +126,7 @@ export function ActivityFeed({ entries, memberMap }: ActivityFeedProps) {
 
       {filtered.length === 0 ? (
         <EmptyState
-          icon={Activity}
+          icon={Pulse}
           title="Sin actividad"
           description="Todavía no hay actividad registrada."
         />
@@ -134,12 +134,12 @@ export function ActivityFeed({ entries, memberMap }: ActivityFeedProps) {
         <div className="flex flex-col gap-6">
           {groups.map((group) => (
             <section key={group.key}>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
+              <p className="mb-2 text-xs font-semibold text-muted">
                 {group.label}
               </p>
               <ul className="flex flex-col gap-0">
                 {group.items.map((entry, i) => {
-                  const Icon = MODULE_ICON[entry.entity_type ?? ""] ?? Activity;
+                  const Icon = MODULE_ICON[entry.entity_type ?? ""] ?? Pulse;
                   const colorClass = MODULE_COLOR[entry.entity_type ?? ""] ?? "bg-sand text-muted";
                   const isLast = i === group.items.length - 1;
                   const memberName = entry.actor_id ? (memberMap[entry.actor_id] ?? "Miembro") : null;

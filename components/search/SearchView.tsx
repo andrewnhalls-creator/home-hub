@@ -3,13 +3,13 @@
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Search, X } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { MagnifyingGlass, X } from "@phosphor-icons/react";
+import type { Icon } from "@phosphor-icons/react";
 import { EmptyState } from "@/components/ui/EmptyState";
 
 export interface SearchSection {
   label: string;
-  icon: LucideIcon;
+  icon: Icon;
   results: Array<{ id: string; title: string; href: string }>;
 }
 
@@ -32,7 +32,7 @@ export function SearchView({ query, sections }: SearchViewProps) {
   return (
     <div className="flex flex-col gap-5">
       <form action="/buscar" method="get" role="search" className="relative flex items-center">
-        <Search className="pointer-events-none absolute left-3.5 h-4 w-4 text-muted" aria-hidden />
+        <MagnifyingGlass className="pointer-events-none absolute left-3.5 h-4 w-4 text-muted" aria-hidden />
         <input
           ref={inputRef}
           name="q"
@@ -58,7 +58,7 @@ export function SearchView({ query, sections }: SearchViewProps) {
 
       {!hasQuery && (
         <EmptyState
-          icon={Search}
+          icon={MagnifyingGlass}
           title="Busca en toda la app"
           description="Escribe al menos 2 caracteres para buscar productos, tareas, documentos y más."
         />
@@ -66,7 +66,7 @@ export function SearchView({ query, sections }: SearchViewProps) {
 
       {hasQuery && !hasResults && (
         <EmptyState
-          icon={Search}
+          icon={MagnifyingGlass}
           title={`Sin resultados para «${query}»`}
           description="Prueba con otra palabra o comprueba la ortografía."
         />

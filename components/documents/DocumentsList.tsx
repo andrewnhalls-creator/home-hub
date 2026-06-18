@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { isPast, isBefore, addDays } from "date-fns";
-import { Plus, FileText, Pencil, Archive, Trash2 } from "lucide-react";
+import { Plus, FileText, PencilSimple, Archive, Trash } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -73,7 +73,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
                       onClick={() => setEditingDoc(doc)}
                       className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
-                      <Pencil className="h-4 w-4" aria-hidden />
+                      <PencilSimple className="h-4 w-4" aria-hidden />
                     </button>
                     <button
                       type="button"
@@ -92,7 +92,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
                       onClick={() => setDeletingDoc(doc)}
                       className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
-                      <Trash2 className="h-4 w-4" aria-hidden />
+                      <Trash className="h-4 w-4" aria-hidden />
                     </button>
                   </div>
                 </Card>

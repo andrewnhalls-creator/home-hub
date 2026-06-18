@@ -16,7 +16,7 @@ import {
   subMonths,
 } from "date-fns";
 import { es } from "date-fns/locale";
-import { ChevronLeft, ChevronRight, Plus, Lock, CalendarDays } from "lucide-react";
+import { CaretLeft, CaretRight, Plus, Lock, CalendarDots } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Card } from "@/components/ui/Card";
@@ -195,7 +195,7 @@ export function CalendarView({ items }: CalendarViewProps) {
               onClick={() => navWeek(-1)}
               className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
-              <ChevronLeft className="h-5 w-5" aria-hidden />
+              <CaretLeft className="h-5 w-5" aria-hidden />
             </button>
             <p className="text-sm font-medium text-brown">{weekNavLabel}</p>
             <button
@@ -204,7 +204,7 @@ export function CalendarView({ items }: CalendarViewProps) {
               onClick={() => navWeek(1)}
               className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
-              <ChevronRight className="h-5 w-5" aria-hidden />
+              <CaretRight className="h-5 w-5" aria-hidden />
             </button>
           </div>
 
@@ -271,7 +271,7 @@ export function CalendarView({ items }: CalendarViewProps) {
               onClick={() => setCursor((d) => subMonths(d, 1))}
               className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
-              <ChevronLeft className="h-5 w-5" aria-hidden />
+              <CaretLeft className="h-5 w-5" aria-hidden />
             </button>
             <p className="text-sm font-medium text-brown">{monthNavLabel}</p>
             <button
@@ -280,7 +280,7 @@ export function CalendarView({ items }: CalendarViewProps) {
               onClick={() => setCursor((d) => addMonths(d, 1))}
               className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
-              <ChevronRight className="h-5 w-5" aria-hidden />
+              <CaretRight className="h-5 w-5" aria-hidden />
             </button>
           </div>
 
@@ -329,7 +329,7 @@ export function CalendarView({ items }: CalendarViewProps) {
         <>
           {upcoming.length === 0 ? (
             <EmptyState
-              icon={CalendarDays}
+              icon={CalendarDots}
               title="Nada pendiente por ahora."
               description="Añade un evento para empezar."
             />

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useToast } from "@/components/ui/Toast";
 import Link from "next/link";
-import { Plus, Receipt } from "lucide-react";
+import { Plus, Receipt } from "@phosphor-icons/react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";

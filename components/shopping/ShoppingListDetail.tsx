@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState, useTransition } from "react";
 import Link from "next/link";
-import { Trash2, ShoppingCart } from "lucide-react";
+import { Trash, ShoppingCart } from "@phosphor-icons/react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -169,7 +169,7 @@ export function ShoppingListDetail({ list, trips, itemsCount }: ShoppingListDeta
                     onClick={() => startTransition(() => deleteShoppingTrip(list.id, trip.id))}
                     className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:text-danger active:bg-sand"
                   >
-                    <Trash2 className="h-4 w-4" aria-hidden />
+                    <Trash className="h-4 w-4" aria-hidden />
                   </button>
                 </span>
               </li>

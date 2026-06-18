@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle } from "lucide-react";
+import { Warning } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button";
 
 interface ModuleErrorProps {
@@ -11,7 +11,7 @@ export function ModuleError({ reset }: ModuleErrorProps) {
   return (
     <div className="flex flex-col items-center gap-4 py-16 text-center">
       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-danger/10">
-        <AlertTriangle className="h-7 w-7 text-danger" aria-hidden />
+        <Warning className="h-7 w-7 text-danger" aria-hidden />
       </div>
       <div className="flex flex-col gap-1">
         <p className="text-sm font-semibold text-brown">Algo ha ido mal</p>

@@ -9,10 +9,10 @@ import {
   Wallet,
   FileText,
   Heart,
-  UtensilsCrossed,
-  RefreshCcw,
+  ForkKnife,
+  ArrowCounterClockwise,
   PiggyBank,
-} from "lucide-react";
+} from "@phosphor-icons/react/dist/ssr";
 
 export const dynamic = "force-dynamic";
 
@@ -77,7 +77,7 @@ export default async function BuscarPage({ searchParams }: BuscarPageProps) {
     },
     {
       label: "Suscripciones",
-      icon: RefreshCcw,
+      icon: ArrowCounterClockwise,
       results: (subs ?? []).map((r) => ({ id: r.id, title: r.name, href: "/finanzas" })),
     },
     {
@@ -92,7 +92,7 @@ export default async function BuscarPage({ searchParams }: BuscarPageProps) {
     },
     {
       label: "Recetas",
-      icon: UtensilsCrossed,
+      icon: ForkKnife,
       results: (recipes ?? []).map((r) => ({ id: r.id, title: r.name, href: `/menu/recetas/${r.id}` })),
     },
     {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Link2, CheckCircle } from "lucide-react";
+import { Link, CheckCircle } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button";
 import { RecipeForm } from "@/components/meals/RecipeForm";
 import type { RecipeFormState } from "@/app/(app)/menu/recetas/actions";
@@ -48,7 +48,7 @@ export function NewRecipeClient({ createAction, importAction }: NewRecipeClientP
       {/* URL import section */}
       <div className="rounded-xl border border-border bg-card p-4 flex flex-col gap-3">
         <div className="flex items-center gap-2">
-          <Link2 className="h-4 w-4 text-muted" aria-hidden />
+          <Link className="h-4 w-4 text-muted" aria-hidden />
           <p className="text-sm font-medium text-brown">Importar desde URL</p>
         </div>
         <form action={importFormAction} className="flex gap-2">

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Receipt, X } from "lucide-react";
+import { Receipt, X } from "@phosphor-icons/react/dist/ssr";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { ShoppingList } from "@/components/shopping/ShoppingList";

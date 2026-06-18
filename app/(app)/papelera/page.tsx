@@ -1,4 +1,4 @@
-import { Trash2 } from "lucide-react";
+import { Trash } from "@phosphor-icons/react/dist/ssr";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { TrashSection } from "@/components/ui/TrashSection";
@@ -126,7 +126,7 @@ export default async function PapeleraPage() {
       {isEmpty ? (
         <div className="mt-6">
           <EmptyState
-            icon={Trash2}
+            icon={Trash}
             title="La papelera está vacía."
             description="Los elementos eliminados aparecerán aquí."
           />

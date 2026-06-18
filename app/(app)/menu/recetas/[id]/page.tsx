@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "@phosphor-icons/react/dist/ssr";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { RecipeForm } from "@/components/meals/RecipeForm";

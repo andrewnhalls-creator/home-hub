@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Flame, Trophy, ListChecks } from "lucide-react";
+import { Fire, Trophy, ListChecks } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { CompletionHeatmap } from "@/components/chores/CompletionHeatmap";
 
@@ -52,7 +52,7 @@ export function ChoreHistory({ title, frequency, grid, streaks, totalCompletions
       {/* Streak stats */}
       <div className="grid grid-cols-3 gap-3">
         <Card className="flex flex-col items-center gap-1 py-3 text-center">
-          <Flame className="h-5 w-5 text-terracotta" aria-hidden />
+          <Fire className="h-5 w-5 text-terracotta" aria-hidden />
           <p className="text-xl font-bold text-brown tabular-nums">{streaks.current}</p>
           <p className="text-xs text-muted">Racha actual</p>
         </Card>

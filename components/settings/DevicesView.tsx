@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useTransition } from "react";
-import { Smartphone, Trash2, AlertTriangle, Volume2, VolumeX, Vibrate, type LucideIcon } from "lucide-react";
+import { DeviceMobile, Trash, Warning, SpeakerHigh, SpeakerSlash, Vibrate, type Icon } from "@phosphor-icons/react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -54,7 +54,7 @@ function DeviceRow({ sub }: { sub: Subscription }) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sage/20">
-            <Smartphone className="h-4 w-4 text-sage" aria-hidden />
+            <DeviceMobile className="h-4 w-4 text-sage" aria-hidden />
           </div>
           <div className="flex flex-col gap-0.5">
             <span className="text-sm font-medium text-brown">{label}</span>
@@ -86,7 +86,7 @@ function DeviceRow({ sub }: { sub: Subscription }) {
               aria-label={`Quitar ${label}`}
               className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-danger hover:bg-danger/10 disabled:opacity-50"
             >
-              <Trash2 className="h-4 w-4" aria-hidden />
+              <Trash className="h-4 w-4" aria-hidden />
             </button>
           </form>
         )}
@@ -108,8 +108,8 @@ function DeviceRow({ sub }: { sub: Subscription }) {
             )}
           >
             {sub.sound_enabled
-              ? <Volume2 className="h-3.5 w-3.5" aria-hidden />
-              : <VolumeX className="h-3.5 w-3.5" aria-hidden />
+              ? <SpeakerHigh className="h-3.5 w-3.5" aria-hidden />
+              : <SpeakerSlash className="h-3.5 w-3.5" aria-hidden />
             }
             Sonido
           </button>
@@ -177,7 +177,7 @@ export function DevicesView({ subscriptions }: DevicesViewProps) {
         {active.length === 0 ? (
           <div className="mt-3">
             <EmptyState
-              icon={Smartphone as LucideIcon}
+              icon={DeviceMobile as Icon}
               title="Sin dispositivos"
               description="Activa las notificaciones en Ajustes → Notificaciones para registrar este dispositivo."
             />
@@ -193,7 +193,7 @@ export function DevicesView({ subscriptions }: DevicesViewProps) {
         {active.length > 1 && (
           <div className="mt-3 border-t border-sand pt-3">
             <div className="flex items-start gap-2 text-xs text-muted">
-              <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber" aria-hidden />
+              <Warning className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber" aria-hidden />
               <span>
                 Quitar todos los dispositivos desactivará las notificaciones push en todos ellos.
               </span>

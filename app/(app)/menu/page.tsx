@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
+import { CaretLeft, CaretRight, BookOpen } from "@phosphor-icons/react/dist/ssr";
 import { addDays, addWeeks, format, startOfWeek, subWeeks } from "date-fns";
 import { es } from "date-fns/locale";
 import { requireHousehold } from "@/lib/auth";
@@ -67,7 +67,7 @@ export default async function MenuPage({
           aria-label="Semana anterior"
           className="flex h-10 w-10 items-center justify-center rounded-full text-muted hover:bg-sand"
         >
-          <ChevronLeft className="h-5 w-5" aria-hidden />
+          <CaretLeft className="h-5 w-5" aria-hidden />
         </Link>
         <p className="text-sm font-medium text-brown">
           {format(weekStart, "dd/MM/yyyy")} - {format(weekEnd, "dd/MM/yyyy")}
@@ -77,7 +77,7 @@ export default async function MenuPage({
           aria-label="Semana siguiente"
           className="flex h-10 w-10 items-center justify-center rounded-full text-muted hover:bg-sand"
         >
-          <ChevronRight className="h-5 w-5" aria-hidden />
+          <CaretRight className="h-5 w-5" aria-hidden />
         </Link>
       </div>
 

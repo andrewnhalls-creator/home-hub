@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { isPast } from "date-fns";
-import { Circle, CheckCircle2, Pencil, Clock } from "lucide-react";
+import { Circle, CheckCircle, PencilSimple, Clock } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -35,7 +35,7 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
           onClick={() => startTransition(() => toggleReminderStatus(reminder.id, !isDone))}
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-terracotta transition active:scale-[0.85] active:bg-terracotta/10 disabled:opacity-50"
         >
-          {isDone ? <CheckCircle2 className="h-6 w-6" aria-hidden /> : <Circle className="h-6 w-6" aria-hidden />}
+          {isDone ? <CheckCircle className="h-6 w-6" aria-hidden /> : <Circle className="h-6 w-6" aria-hidden />}
         </button>
 
         <div className="min-w-0 flex-1">
@@ -71,7 +71,7 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
             onClick={onEdit}
             className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
           >
-            <Pencil className="h-4 w-4" aria-hidden />
+            <PencilSimple className="h-4 w-4" aria-hidden />
           </button>
         </div>
       </Card>

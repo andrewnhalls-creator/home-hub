@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useActionState, useEffect } from "react";
-import { Plus, Pencil, Archive, ArchiveRestore, X, Check, type LucideIcon } from "lucide-react";
+import { Plus, PencilSimple, Archive, ArrowBendUpLeft, X, Check, type Icon } from "@phosphor-icons/react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -155,7 +155,7 @@ function CategoryRow({ cat }: { cat: Category }) {
             aria-label={`Editar ${cat.name}`}
             className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-muted transition hover:text-brown hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
           >
-            <Pencil className="h-3.5 w-3.5" aria-hidden />
+            <PencilSimple className="h-3.5 w-3.5" aria-hidden />
           </button>
         )}
 
@@ -180,7 +180,7 @@ function CategoryRow({ cat }: { cat: Category }) {
               aria-label={`Restaurar ${cat.name}`}
               className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-muted hover:text-sage hover:bg-sage/10 disabled:opacity-50"
             >
-              <ArchiveRestore className="h-3.5 w-3.5" aria-hidden />
+              <ArrowBendUpLeft className="h-3.5 w-3.5" aria-hidden />
             </button>
           </form>
         )}
@@ -286,7 +286,7 @@ function ModuleSection({ module, categories }: { module: string; categories: Cat
       {active.length === 0 && archived.length === 0 ? (
         <div className="mt-2">
           <EmptyState
-            icon={Archive as LucideIcon}
+            icon={Archive as Icon}
             title="Sin categorías"
             description="Añade una categoría para este módulo."
           />

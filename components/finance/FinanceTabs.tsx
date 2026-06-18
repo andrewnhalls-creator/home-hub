@@ -4,14 +4,14 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import {
-  BarChart2,
+  ChartBar,
   CreditCard,
   ShoppingBag,
   PiggyBank,
-  RefreshCw,
-  Landmark,
-  type LucideIcon,
-} from "lucide-react";
+  ArrowsClockwise,
+  Bank,
+  type Icon,
+} from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { ResumenTab } from "@/components/finance/ResumenTab";
@@ -53,13 +53,13 @@ interface FinanceTabsProps {
 
 type Tab = "resumen" | "pagos" | "gastos" | "ahorro" | "suscripciones" | "hipoteca";
 
-const TABS: { value: Tab; label: string; icon: LucideIcon }[] = [
-  { value: "resumen",       label: "Resumen",       icon: BarChart2   },
+const TABS: { value: Tab; label: string; icon: Icon }[] = [
+  { value: "resumen",       label: "Resumen",       icon: ChartBar   },
   { value: "pagos",         label: "Pagos",         icon: CreditCard  },
   { value: "gastos",        label: "Gastos",        icon: ShoppingBag },
   { value: "ahorro",        label: "Ahorro",        icon: PiggyBank   },
-  { value: "suscripciones", label: "Suscripciones", icon: RefreshCw   },
-  { value: "hipoteca",      label: "Hipoteca",      icon: Landmark    },
+  { value: "suscripciones", label: "Suscripciones", icon: ArrowsClockwise   },
+  { value: "hipoteca",      label: "Hipoteca",      icon: Bank    },
 ];
 
 function currentMonthLabel(): string {

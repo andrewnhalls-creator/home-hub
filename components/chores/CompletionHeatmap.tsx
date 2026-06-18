@@ -27,7 +27,7 @@ export function CompletionHeatmap({ grid }: CompletionHeatmapProps) {
       {/* Day labels */}
       <div className="flex flex-col justify-between py-0.5">
         {DAY_LABELS.map((d) => (
-          <span key={d} className="flex h-4 items-center text-[10px] leading-none text-muted">
+          <span key={d} className="flex h-4 items-center text-[12px] leading-none text-muted">
             {d}
           </span>
         ))}

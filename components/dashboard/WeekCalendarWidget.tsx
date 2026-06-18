@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { parse, format, isToday } from "date-fns";
 import { es } from "date-fns/locale";
-import { CalendarDays } from "lucide-react";
+import { CalendarDots } from "@phosphor-icons/react";
 import { WeekStrip } from "@/components/ui/WeekStrip";
 import { Card, CardTitle } from "@/components/ui/Card";
 
@@ -81,7 +81,7 @@ export function WeekCalendarWidget({ weekStartStr, events }: WeekCalendarWidgetP
           href="/calendario"
           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-sand py-2.5 text-sm font-medium text-brown transition-colors hover:bg-border"
         >
-          <CalendarDays className="h-4 w-4" aria-hidden />
+          <CalendarDots className="h-4 w-4" aria-hidden />
           Ver todo
         </Link>
         <Link

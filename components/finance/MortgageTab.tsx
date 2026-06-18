@@ -2,14 +2,14 @@
 
 import { useState, useTransition } from "react";
 import {
-  Landmark,
+  Bank,
   Plus,
-  Pencil,
-  Trash2,
-  CheckCircle2,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+  PencilSimple,
+  Trash,
+  CheckCircle,
+  CaretDown,
+  CaretUp,
+} from "@phosphor-icons/react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
@@ -119,7 +119,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
             aria-label="Editar hipoteca"
             onClick={() => onEdit(mortgage)}
           >
-            <Pencil size={15} />
+            <PencilSimple size={15} />
           </Button>
           <Button
             type="button"
@@ -129,7 +129,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
             onClick={() => onDelete(mortgage)}
             className="text-danger hover:text-danger"
           >
-            <Trash2 size={15} />
+            <Trash size={15} />
           </Button>
         </div>
       </div>
@@ -190,7 +190,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
             onClick={() => handleMarkPaid(pendingPayment.id)}
             className="text-xs"
           >
-            <CheckCircle2 size={14} className="mr-1" />
+            <CheckCircle size={14} className="mr-1" />
             Pagar
           </Button>
         </div>
@@ -216,7 +216,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
           aria-expanded={showHistory}
         >
           Historial
-          {showHistory ? <ChevronUp size={14} className="ml-1" /> : <ChevronDown size={14} className="ml-1" />}
+          {showHistory ? <CaretUp size={14} className="ml-1" /> : <CaretDown size={14} className="ml-1" />}
         </Button>
       </div>
 
@@ -257,7 +257,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
                       onClick={() => setDeletingPaymentId(p.id)}
                       className="rounded-lg p-1 text-muted transition-colors hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
-                      <Trash2 size={13} />
+                      <Trash size={13} />
                     </button>
                   </div>
                 </li>
@@ -325,7 +325,7 @@ export function MortgageTab({ mortgages, payments }: MortgageTabProps) {
     return (
       <>
         <EmptyState
-          icon={Landmark}
+          icon={Bank}
           title="Sin hipoteca registrada"
           description="Añade tu hipoteca para hacer seguimiento del saldo pendiente, cuota mensual e historial de pagos."
           action={

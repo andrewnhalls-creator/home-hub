@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState, useTransition } from "react";
-import { Plus, Trash2, PiggyBank } from "lucide-react";
+import { Plus, Trash, PiggyBank } from "@phosphor-icons/react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
@@ -128,7 +128,7 @@ export function SavingsTab({ goals }: SavingsTabProps) {
                     onClick={() => setDeletingGoal(goal)}
                     className="text-muted hover:text-danger"
                   >
-                    <Trash2 className="h-4 w-4" aria-hidden />
+                    <Trash className="h-4 w-4" aria-hidden />
                   </button>
                 </div>
                 <p className="mt-1 text-sm text-muted">

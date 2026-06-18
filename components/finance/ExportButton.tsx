@@ -1,6 +1,6 @@
 "use client";
 
-import { Download } from "lucide-react";
+import { DownloadSimple } from "@phosphor-icons/react";
 import type { Expense, FixedPayment, SavingsGoal, Subscription } from "@/lib/types";
 
 interface ExportButtonProps {
@@ -83,7 +83,7 @@ export function ExportButton({ expenses, fixedPayments, subscriptions, savingsGo
       onClick={handleExport}
       className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-brown transition hover:bg-sand active:scale-[0.97]"
     >
-      <Download className="h-3.5 w-3.5 text-muted" aria-hidden />
+      <DownloadSimple className="h-3.5 w-3.5 text-muted" aria-hidden />
       Exportar datos
     </button>
   );

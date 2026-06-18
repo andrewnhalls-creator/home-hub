@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Heart, ExternalLink, Pencil, Trash2, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Plus, Heart, ArrowSquareOut, PencilSimple, Trash, ThumbsUp, ThumbsDown } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -121,7 +121,7 @@ export function WishlistList({ items, members, currentUserId }: WishlistListProp
                           rel="noopener noreferrer"
                           className="mt-1 inline-flex items-center gap-1 text-xs text-terracotta"
                         >
-                          <ExternalLink className="h-3 w-3" aria-hidden />
+                          <ArrowSquareOut className="h-3 w-3" aria-hidden />
                           Ver enlace
                         </a>
                       )}
@@ -134,7 +134,7 @@ export function WishlistList({ items, members, currentUserId }: WishlistListProp
                         onClick={() => setEditingItem(item)}
                         className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                       >
-                        <Pencil className="h-4 w-4" aria-hidden />
+                        <PencilSimple className="h-4 w-4" aria-hidden />
                       </button>
                       <button
                         type="button"
@@ -142,7 +142,7 @@ export function WishlistList({ items, members, currentUserId }: WishlistListProp
                         onClick={() => setDeletingItem(item)}
                         className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                       >
-                        <Trash2 className="h-4 w-4" aria-hidden />
+                        <Trash className="h-4 w-4" aria-hidden />
                       </button>
                     </div>
                   </div>

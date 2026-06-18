@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState, useTransition } from "react";
 import { isBefore, addDays } from "date-fns";
-import { Plus, Trash2, RefreshCcw } from "lucide-react";
+import { Plus, Trash, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -82,7 +82,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
     <div className="flex flex-col gap-3">
       {subscriptions.length === 0 ? (
         <EmptyState
-          icon={RefreshCcw}
+          icon={ArrowCounterClockwise}
           title="Sin suscripciones todavía."
           description="Apuntad lo que pagáis recurrentemente — plataformas, gimnasio, servicios — y controlad cuánto suma al mes."
           action={
@@ -114,7 +114,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
                     onClick={() => setDeleting(subscription)}
                     className="text-muted hover:text-danger"
                   >
-                    <Trash2 className="h-4 w-4" aria-hidden />
+                    <Trash className="h-4 w-4" aria-hidden />
                   </button>
                 </Card>
               </li>

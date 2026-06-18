@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { isToday, isYesterday, format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Bell, CheckCheck } from "lucide-react";
+import { Bell, Checks } from "@phosphor-icons/react";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatRelativeTime } from "@/lib/format";
@@ -65,7 +65,7 @@ export function NotificationCentre({ notifications, unreadCount }: NotificationC
       >
         <Bell className="h-5 w-5" aria-hidden />
         {unreadCount > 0 && (
-          <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-terracotta px-1 text-[10px] font-medium text-cream">
+          <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-terracotta px-1 text-[12px] font-medium text-cream">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -87,7 +87,7 @@ export function NotificationCentre({ notifications, unreadCount }: NotificationC
                 disabled={isPending}
                 className="flex items-center gap-1.5 self-end text-sm font-medium text-terracotta disabled:opacity-50"
               >
-                <CheckCheck className="h-4 w-4" aria-hidden />
+                <Checks className="h-4 w-4" aria-hidden />
                 Marcar todo como leído
               </button>
             )}

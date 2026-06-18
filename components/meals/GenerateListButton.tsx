@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "@phosphor-icons/react";
 import { generateShoppingListFromMealPlan } from "@/app/(app)/menu/actions";
 
 function SubmitBtn() {

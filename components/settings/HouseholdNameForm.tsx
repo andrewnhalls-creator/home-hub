@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { Pencil } from "lucide-react";
+import { PencilSimple } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { updateHouseholdName, type SettingsActionState } from "@/app/(app)/ajustes/actions";
@@ -65,7 +65,7 @@ export function HouseholdNameForm({ name, canEdit }: HouseholdNameFormProps) {
           onClick={() => setIsEditing(true)}
           className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
         >
-          <Pencil className="h-4 w-4" aria-hidden />
+          <PencilSimple className="h-4 w-4" aria-hidden />
         </button>
       </div>
     );

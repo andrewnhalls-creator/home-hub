@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { Plus, Pencil, Trash2, CalendarClock } from "lucide-react";
+import { Plus, PencilSimple, Trash, CalendarDot } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -55,7 +55,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
     return (
       <>
         <EmptyState
-          icon={CalendarClock}
+          icon={CalendarDot}
           title="Sin pagos fijos todavía."
           description="Añade aquí lo que pagáis siempre igual: alquiler, seguros, préstamos... y haz seguimiento de cada cuota mes a mes."
           action={
@@ -104,7 +104,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
                       onClick={() => setEditingPayment(payment)}
                       className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
-                      <Pencil className="h-4 w-4" aria-hidden />
+                      <PencilSimple className="h-4 w-4" aria-hidden />
                     </button>
                     <button
                       type="button"
@@ -112,7 +112,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
                       onClick={() => setDeletingPayment(payment)}
                       className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
-                      <Trash2 className="h-4 w-4" aria-hidden />
+                      <Trash className="h-4 w-4" aria-hidden />
                     </button>
                   </div>
                 </div>

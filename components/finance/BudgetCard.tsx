@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Pencil, Check, X } from "lucide-react";
+import { PencilSimple, Check, X } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -84,7 +84,7 @@ export function BudgetCard({ monthlyBudget, spent }: BudgetCardProps) {
   if (monthlyBudget == null || monthlyBudget <= 0) {
     return (
       <Button type="button" variant="secondary" onClick={() => setEditing(true)}>
-        <Pencil className="h-4 w-4" aria-hidden />
+        <PencilSimple className="h-4 w-4" aria-hidden />
         Establecer presupuesto mensual
       </Button>
     );
@@ -100,7 +100,7 @@ export function BudgetCard({ monthlyBudget, spent }: BudgetCardProps) {
           onClick={() => setEditing(true)}
           className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand"
         >
-          <Pencil className="h-3.5 w-3.5" aria-hidden />
+          <PencilSimple className="h-3.5 w-3.5" aria-hidden />
         </button>
       </div>
 

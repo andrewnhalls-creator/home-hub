@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Check, Copy, KeyRound } from "lucide-react";
+import { Check, Copy, Key } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button";
 import { formatDate } from "@/lib/format";
 import { generateInviteCode } from "@/app/(app)/ajustes/actions";
@@ -43,7 +43,7 @@ export function InviteSection({ initialCode, initialExpiresAt }: InviteSectionPr
       {code ? (
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2 rounded-xl border border-dashed border-terracotta bg-terracotta/5 px-4 py-3">
-            <KeyRound className="h-4 w-4 text-terracotta" aria-hidden />
+            <Key className="h-4 w-4 text-terracotta" aria-hidden />
             <span className="flex-1 font-mono text-lg tracking-widest text-brown">{code}</span>
             <button
               type="button"

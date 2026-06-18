@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { CaretRight } from "@phosphor-icons/react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 
@@ -29,7 +29,7 @@ export function ListSection({ title, href, items, emptyMessage }: ListSectionPro
           aria-label={`Ver todo — ${title}`}
         >
           Ver todo
-          <ChevronRight className="h-4 w-4" aria-hidden />
+          <CaretRight className="h-4 w-4" aria-hidden />
         </Link>
       </div>
 

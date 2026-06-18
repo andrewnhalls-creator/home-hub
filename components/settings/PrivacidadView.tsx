@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, FileJson, FileSpreadsheet, ShieldCheck } from "lucide-react";
+import { DownloadSimple, FileCode, Table, ShieldCheck } from "@phosphor-icons/react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 
 function ExportButton({
@@ -27,7 +27,7 @@ function ExportButton({
         <span className="text-sm font-medium text-brown">{label}</span>
         <span className="text-xs text-muted">{description}</span>
       </div>
-      <Download className="h-4 w-4 text-muted shrink-0" aria-hidden />
+      <DownloadSimple className="h-4 w-4 text-muted shrink-0" aria-hidden />
     </a>
   );
 }
@@ -58,13 +58,13 @@ export function PrivacidadView() {
         <div className="mt-4 flex flex-col gap-3">
           <ExportButton
             href="/api/ajustes/exportar?formato=json"
-            icon={<FileJson className="h-5 w-5" />}
+            icon={<FileCode className="h-5 w-5" />}
             label="Exportar todo (JSON)"
             description="Todos los módulos: compra, menú, finanzas, recordatorios, tareas, calendario, documentos y deseos."
           />
           <ExportButton
             href="/api/ajustes/exportar?formato=csv"
-            icon={<FileSpreadsheet className="h-5 w-5" />}
+            icon={<Table className="h-5 w-5" />}
             label="Exportar finanzas (CSV)"
             description="Gastos, pagos fijos, metas de ahorro y listas de la compra — compatible con Excel y Google Sheets."
           />

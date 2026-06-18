@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogOut, Bell, ChevronRight, Smartphone, Tag, Shield, User, Download } from "lucide-react";
+import { SignOut, Bell, CaretRight, DeviceMobile, Tag, Shield, User, DownloadSimple } from "@phosphor-icons/react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { HouseholdNameForm } from "@/components/settings/HouseholdNameForm";
@@ -96,9 +96,9 @@ export function SettingsView({
 
       <Card className="p-0 overflow-hidden divide-y divide-sand">
         {[
-          { href: "/ajustes/instalar", icon: Download, label: "Instalar la app" },
+          { href: "/ajustes/instalar", icon: DownloadSimple, label: "Instalar la app" },
           { href: "/ajustes/notificaciones", icon: Bell, label: "Notificaciones" },
-          { href: "/ajustes/dispositivos", icon: Smartphone, label: "Dispositivos" },
+          { href: "/ajustes/dispositivos", icon: DeviceMobile, label: "Dispositivos" },
           { href: "/ajustes/categorias", icon: Tag, label: "Categorías" },
           { href: "/ajustes/privacidad", icon: Shield, label: "Privacidad y datos" },
           { href: "/ajustes/cuenta", icon: User, label: "Cuenta" },
@@ -112,7 +112,7 @@ export function SettingsView({
               <Icon className="h-4 w-4 text-terracotta" aria-hidden />
               {label}
             </span>
-            <ChevronRight className="h-4 w-4 text-muted" aria-hidden />
+            <CaretRight className="h-4 w-4 text-muted" aria-hidden />
           </Link>
         ))}
       </Card>
@@ -123,7 +123,7 @@ export function SettingsView({
             type="submit"
             className="flex w-full items-center justify-center gap-2 rounded-xl border border-danger px-4 py-3 text-sm font-medium text-danger hover:bg-danger/10"
           >
-            <LogOut className="h-4 w-4" aria-hidden />
+            <SignOut className="h-4 w-4" aria-hidden />
             Cerrar sesión
           </button>
         </form>

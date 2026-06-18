@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Bell, ChevronRight, CheckCircle } from "lucide-react";
+import { Bell, CaretRight, CheckCircle } from "@phosphor-icons/react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 
 type Platform = "iphone" | "android" | "mac" | "windows";
@@ -148,7 +148,7 @@ export function InstallGuideView() {
               <p className="text-xs text-muted">Verifica que las notificaciones llegan correctamente</p>
             </div>
           </div>
-          <ChevronRight className="h-4 w-4 shrink-0 text-muted" aria-hidden />
+          <CaretRight className="h-4 w-4 shrink-0 text-muted" aria-hidden />
         </Link>
       </Card>
 
