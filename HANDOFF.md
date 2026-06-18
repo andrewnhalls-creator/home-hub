@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (Stage 3 complete)
+Updated: 2026-06-18 (Stage 4 complete)
 
-## Current state: Deployed ✓ — Stages 1–3 critique fixes done
+## Current state: Deployed ✓ — Stages 1–4 all done
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -12,7 +12,7 @@ Edge Function unchanged — no redeploy needed unless Edge Function changes.
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `7af7ecf` (Stage 3: Phosphor Light icons + Card double-bezel depth)
+- Last commit: `7beab77` (Stage 4: quick-add bar, sort, attribution, daily brief)
 - Pushed to origin main ✓
 - Deployed to production ✓
 
@@ -57,12 +57,12 @@ All fixes are queued in NEXT_STEPS.md. Start each new session by picking up from
 | ~~A11y~~ | ~~`MoreMenuSheet` uses `aria-label` not `aria-labelledby`~~ | ✓ done |
 | ~~Visual~~ | ~~Icon weight: Lucide → Phosphor `weight="light"`~~ | ✓ done |
 | ~~Visual~~ | ~~Cards single-layer — add double-bezel depth~~ | ✓ done |
-| Layout | `AppShell` main `pb-24` doesn't account for iPhone safe area | `AppShell.tsx` |
-| Product | Dashboard shows counts not "what to do now" — daily brief concept | `dashboard/page.tsx` |
-| Product | Shopping list sorted `created_at DESC` — no category-sort for in-store | `compra/page.tsx` |
-| Product | No household attribution on shopping items ("added by" / "taken by") | `ShoppingItemCard.tsx` |
-| Product | Item completion requires modal not single tap | `ShoppingItemCard.tsx` |
-| Product | No quick-add bar — every item needs a modal form | `ShoppingList.tsx` |
+| ~~Layout~~ | ~~`AppShell` safe area~~  | ✓ done |
+| ~~Product~~ | ~~Dashboard daily brief~~ | ✓ done |
+| ~~Product~~ | ~~Shopping sort by category~~ | ✓ done |
+| ~~Product~~ | ~~Household attribution~~ | ✓ done |
+| ~~Product~~ | ~~Single-tap completion animation~~ | ✓ done |
+| ~~Product~~ | ~~Quick-add bar~~ | ✓ done |
 
 ## SQL migrations applied
 - 001–019: full schema (see previous sessions)
