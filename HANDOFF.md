@@ -1,9 +1,10 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (Features 1–6 complete; Feature 7 remaining)
+Updated: 2026-06-18 (Glassmorphism redesign — Phase 1 complete)
 
 ## Current state
-6 of 7 planned features complete. Build, lint, typecheck all pass.
-**Do not deploy until Feature 7 is done and the deploy checklist is complete.**
+Glassmorphism redesign in progress. Phase 1 (design system foundation) complete.
+Features 1–6 still complete; Feature 7 (PDF export) is pending — resume after redesign phases.
+Build, lint, typecheck all pass.
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -13,15 +14,24 @@ GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `3cbf729` (Feature 6: Chore history, heatmap, and streaks)
+- Last commit: glassmorphism Phase 1 (globals.css + TypeUI setup)
 - Pushed to origin main ✓
 
-## Design identity (Azulejo — light-first)
-- **Palette:** warm off-white bg `oklch(0.972 0.006 86)`, near-white cards, terracotta primary `oklch(0.52 0.128 32)`
-- **Light-first:** `:root` is light; dark mode via `@media (prefers-color-scheme: dark)`
-- **Surfaces:** solid Card (no glassmorphism); `default` and `featured` variants have a subtle outer bezel ring
-- **Font:** Plus Jakarta Sans (`--font-jakarta`)
-- **Icons:** Phosphor `weight="light"` on BottomNav, TopBar, MoreMenuSheet, MetricGrid. Lucide remains on Sidebar and all other components.
+## Design identity (Glassmorphism · Deep Indigo · Dark-first)
+- **Background:** deep indigo `#0D0B1F` with subtle atmospheric gradient (mint + indigo orbs)
+- **Brand accent:** mint green `#8AFFC4` (replaces terracotta)
+- **Surfaces:** frosted glass — `rgba(255,255,255,0.07)` + `backdrop-filter: blur(20px)` + edge highlights
+- **Text:** light `#F0F6FC` headings, `#94A3B8` body
+- **Font:** Plus Jakarta Sans (Google Sans stand-in, already loaded)
+- **Glass utility:** `.glass` class in globals.css applies full backdrop-filter treatment
+- **Token strategy:** old token names kept (`cream`, `card`, `terracotta`, etc.) but remapped to glassmorphism values — components pick up the new look without code changes
+
+## TypeUI design system
+- Workspace design system: "Glassmorphism Design System" (ID: 75d7e77e-5fe0-4711-a3ff-1c9159a929bc)
+- Files: `.agents/skills/typeui-design-system/` (29 files, committed)
+- `.claude/skills/typeui-design-system/` (gitignored, local only)
+- TypeUI fundamentals: installed to `.claude/skills/typeui-fundamentals/` (gitignored)
+- Local spec folder: `glassmorphism-design-system/` (source of truth for component specs)
 
 ## Navigation structure
 ### Mobile bottom bar (5 items)
@@ -33,23 +43,23 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · **Actividad*
 ### TopBar
 Logo "Home Hub" (→ /dashboard) · page title (centre, mobile) · MagnifyingGlass · Notifications
 
-## Features completed this session
-1. ✅ CSV export for finance data (`components/finance/ExportButton.tsx`)
-2. ✅ Household activity feed at `/actividad` (`components/activity/ActivityFeed.tsx`)
-3. ✅ Recipe import from URL via JSON-LD (`components/meals/NewRecipeClient.tsx`)
-4. ✅ Wishlist voting / approval flow (migration 020, `components/wishlist/WishlistList.tsx`)
-5. ✅ Per-device notification preferences (migration 021, Edge Function v8, `components/settings/DevicesView.tsx`)
-6. ✅ Chore history, heatmap, and streaks (migration 022, `/tareas/[id]`)
-
 ## SQL migrations applied
-- 001–019: full schema (previous sessions)
+- 001–019: full schema
 - 020: `wishlist_items.votes jsonb`
 - 021: `push_subscriptions.sound_enabled`, `vibration_enabled`
 - 022: `chore_completions` table with RLS
 
 ## Edge Function
-- `send-push` v8 — deployed; now includes per-subscription sound/vibrate in payload
+- `send-push` v8 — deployed
 
 ## pg_cron jobs
 - jobid 1: `send-push-cron` — every minute
 - jobid 2: `document-expiry-scan` — daily 08:00 UTC
+
+## Glassmorphism redesign phases
+- ✅ Phase 1: globals.css tokens + TypeUI setup
+- ⬜ Phase 2: Core UI components (Card, Button, Input, Modal, Badge, Toast, EmptyState)
+- ⬜ Phase 3: Navigation shell (BottomNav, TopBar, AppShell, Sidebar)
+- ⬜ Phase 4: Key pages (Dashboard, Finance, Calendar)
+- ⬜ Phase 5: Module pages + polish
+- ⬜ Feature 7: PDF export (paused during redesign)

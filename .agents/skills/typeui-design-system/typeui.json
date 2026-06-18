@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "source": "workspace-visual-schema",
+  "name": "Glassmorphism Design System",
+  "slug": "glassmorphism-design-system",
+  "project": {
+    "name": "Glassmorphism",
+    "logoUrl": null
+  },
+  "importSource": {
+    "type": "manual",
+    "importedAt": "2026-06-18T09:27:44.832Z",
+    "sourceName": "TypeUI design skill: Glassmorphism"
+  },
+  "components": []
+}

@@ -1,0 +1,13 @@
+{
+  "designSystemId": "75d7e77e-5fe0-4711-a3ff-1c9159a929bc",
+  "installScope": "project",
+  "skillFolderName": "typeui-design-system",
+  "slug": "glassmorphism-design-system",
+  "source": "workspace",
+  "templateSlug": "glassmorphism",
+  "type": "typeui-design-system",
+  "variant": "workspace",
+  "versionId": "5cf26786-8d5e-4975-aeec-1e3e485e8568",
+  "versionNumber": 1,
+  "workspaceId": "751e1db8-a821-428a-934f-d46c5ab74b13"
+}
