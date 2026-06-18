@@ -1,43 +1,69 @@
 # Next Steps
 
 ## Current state
-Impeccable audit + critique complete (2026-06-18). P0/P1 issues resolved in the core UI components and the modules touched during the audit session. Remaining tech debt: modules not yet touched still have Lucide imports, possible `text-[11px]` occurrences, and may have inline `backdrop-filter` that wasn't caught.
+All modules built and deployed. Push notifications confirmed working on real device. One active bug: "Más" button broken. Four tasks remain before the project is complete.
 
 ---
 
-## Stage: Per-module audit pass
+## Task 1 — Fix the "Más" button (BLOCKER)
 
-Run a systematic sweep across every module to apply the same fixes that were applied to the core UI during the audit session.
+The "Más" nav item in BottomNav takes users to a page that doesn't work. This blocks access to Menú, Recordatorios, Tareas, Documentos, Deseos, Actividad, and Ajustes.
 
-### What to check in each module
+**What to investigate:**
+- What route does the Más button link to? (Check `components/layout/BottomNav.tsx`)
+- Does `MoreMenuSheet` render as a bottom sheet or does it navigate? If it navigates, is the target page wired correctly?
+- Check `components/layout/MoreMenuSheet.tsx` — does it exist and is it imported in the layout?
+- Check the browser console for errors on the broken page
 
-1. **Lucide imports** — any `from "lucide-react"` must be migrated to `@phosphor-icons/react` (or `/dist/ssr` for server components)
-2. **Sub-12px text** — grep for `text-\[1[01]px\]` and fix to `text-xs` (12px) minimum
-3. **Inline `backdrop-filter`** — any `backdropFilter` in inline `style` props on content surfaces (cards, list items, inputs, empty states)
-4. **`uppercase tracking-wide` section labels** — replace with `text-xs font-medium text-muted`
-5. **`border-white/[0.12]`** — replace with `border-border` for token consistency
+**Fix:** restore correct sheet/navigation behaviour so all 7 secondary nav items are accessible.
 
-### Modules to sweep
-- `components/finance/` — KpiChip, TransactionList, PaymentCard, etc.
-- `components/meals/` — RecipeCard, WeekGrid (MealSlot already fixed)
-- `components/reminders/` — ReminderCard, ReminderForm
-- `components/chores/` — ChoreCard, ChoreForm
-- `components/calendar/` — EventCard, CalendarGrid
-- `components/documents/` — DocumentCard, DocumentForm
-- `components/wishlist/` — WishlistCard
-- `app/(app)/` pages — any page with ad-hoc glass divs bypassing Card component
+---
 
-### Quick grep commands
+## Task 2 — Per-module audit sweep
+
+Sweep every module component for remaining tech debt from the impeccable audit. The core UI components were fixed in the 2026-06-18 audit session; module-specific components have not been touched.
+
+**What to check in each module:**
+
+1. **Lucide imports** — any `from "lucide-react"` → migrate to `@phosphor-icons/react` (or `/dist/ssr` for server components)
+2. **Sub-12px text** — `text-[10px]` or `text-[11px]` → fix to `text-xs` (12px) minimum
+3. **Inline `backdrop-filter`** — on cards, list items, inputs, empty states → remove
+4. **`uppercase tracking-wide` section labels** → replace with `text-xs font-medium text-muted`
+5. **`border-white/[0.12]`** → replace with `border-border`
+
+**Quick grep commands to find violations:**
 ```bash
 grep -r "lucide-react" components/ app/ --include="*.tsx" -l
 grep -r "text-\[1[01]px\]" components/ app/ --include="*.tsx" -l
 grep -r "backdropFilter" components/ app/ --include="*.tsx" -l
 grep -r "uppercase tracking-wide" components/ app/ --include="*.tsx" -l
-grep -r "border-white/\[0.12\]" components/ app/ --include="*.tsx" -l
+grep -r 'border-white/\[0\.12\]' components/ app/ --include="*.tsx" -l
 ```
+
+**Modules to sweep:** `components/finance/`, `components/meals/`, `components/reminders/`, `components/chores/`, `components/calendar/`, `components/documents/`, `components/wishlist/`, `app/(app)/` pages.
 
 ---
 
-## After the module sweep
+## Task 3 — Final review + build
 
-Run `/impeccable critique` again to get an updated score. Target: ≥30/40 (was 23/40 before the first audit session).
+Run through all of this before the repo is locked:
+
+- [ ] `npm run lint && npm run typecheck && npm run build` — must pass 0 errors
+- [ ] Stray English text sweep — every visible string in every module must be Spanish (Spain)
+- [ ] Smoke-test core CRUD on the live Vercel deployment: compra, menú, recordatorios, tareas, calendario, finanzas, documentos, deseos, ajustes
+- [ ] Mobile layout check at ~375px viewport on every module
+- [ ] RLS spot-check: confirm a second test account cannot see the first household's data
+- [ ] Confirm no secrets committed (`git log --all -- '*.env*'` and `git grep -i "service_role"`)
+
+---
+
+## Task 4 — Make GitHub repo private
+
+The repo is currently public (required for Vercel Hobby auto-deploys).
+
+**Options:**
+- **Upgrade to Vercel Pro** (~$20/month) → keep auto-deploys, set repo private immediately
+- **Keep Hobby + stay public** → acceptable since no secrets are in the repo; revisit later
+- **Switch to Vercel CLI deploys** → run `vercel deploy` manually from the terminal; repo can be private; no GitHub integration needed
+
+Once decided, set repo visibility at: https://github.com/andrewnhalls-creator/home-hub/settings

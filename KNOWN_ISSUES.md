@@ -7,12 +7,15 @@
 - **Resolution**: Set repo to private on GitHub once the project is finished and no further deploys are needed (or on upgrade to Vercel Pro).
 - **Risk**: Code is readable publicly. No secrets are committed (`.env.local` is gitignored). Service-role key and VAPID private key are only in Supabase/Vercel dashboard, never in the repo.
 
-### Push notification end-to-end device test pending
-- **Stage**: Milestone 22 (final review)
-- **Impact**: Infrastructure confirmed healthy (cron → Edge Function returns HTTP 200). Actual device delivery test requires real user accounts and a real device.
-- **Resolution**: Manual test — create real accounts, subscribe at `/ajustes/notificaciones`, verify push arrives end-to-end. See NEXT_STEPS.md.
+### "Más" button broken — takes to a non-working page
+- **Reported**: 2026-06-18
+- **Impact**: The "Más" nav item in BottomNav navigates to a page that doesn't work. Blocks access to Menú, Recordatorios, Tareas, Documentos, Deseos, Actividad, Ajustes (all the modules behind the sheet).
+- **Resolution**: Investigate `MoreMenuSheet` / the Más route — likely a missing page, a broken sheet component, or a nav wiring issue. Fix before final review.
 
 ## Resolved
+
+### Push notification end-to-end device test ✅
+- **Resolved 2026-06-18**: Real-device test confirmed — push notifications deliver end-to-end.
 
 ### PWA icons (PNG) not yet created ✅
 - **Resolved 2026-06-17**: `icon-192.png`, `icon-512.png`, and `apple-touch-icon.png` added to `public/icons/`. `sw.js` icon path updated to `/icons/icon-192.png`.
