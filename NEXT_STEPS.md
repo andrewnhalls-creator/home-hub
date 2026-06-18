@@ -1,26 +1,17 @@
 # Next Steps
 
 ## Current state
-All v1 features complete. Azulejo light palette in place, glassmorphism removed, onboarding improved.
-Audit: 16/20. P1/P2 fixes ready to action next session.
+All v1 features complete. Azulejo palette live, audit clean, nav restructured.
 Deploy pending: run `npx vercel --prod`.
 
 ---
 
-## Next session — remaining items
+## Immediate
 
 ### 1. Deploy to production
 ```
 npx vercel --prod
 ```
-
-### 2. [P2] Verify muted placeholder contrast live
-After deploying, open any form input in the live app, use browser devtools or a contrast checker on the placeholder text.
-If under 4.5:1, darken muted in `globals.css`: `oklch(0.44 0.016 86)` → `oklch(0.40 0.016 86)`.
-Command: `/impeccable polish`
-
-### 3. [P3] SummaryCard accent colours (optional polish)
-`components/dashboard/SummaryCard.tsx` — all summary cards use the same colour. Consider giving each module card its accent token (terracotta, sage, amber, rose…) for faster visual scanning.
 
 ---
 
@@ -34,10 +25,10 @@ Command: `/impeccable polish`
 ### 2. CSV export for finance data
 - Button on Finanzas: "Exportar datos"
 - Client-side CSV from already-loaded data
-- Separate files: gastos, pagos fijos, suscripciones, metas de ahorro
+- Files: gastos, pagos fijos, suscripciones, metas de ahorro
 
 ### 3. Recipe import from URL
-- Input: "Importar desde URL" on new recipe form
+- Input "Importar desde URL" on new recipe form
 - Server action fetches URL, parses JSON-LD `Recipe` schema
 - Pre-fills name, description, servings, ingredients
 

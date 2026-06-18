@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (all audit fixes applied — P1/P2/P3 done)
+Updated: 2026-06-18 (nav restructure + audit clean)
 
-## Current state: All audit fixes complete, DESIGN.md synced, deploy pending
+## Current state: All audit fixes done, nav restructured, deploy pending
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -11,77 +11,54 @@ https://home-hub-dun.vercel.app
 npx vercel --prod
 ```
 (GitHub-triggered deploys blocked on Hobby plan — always use CLI)
-After deploying app, also redeploy the Edge Function:
-```
-npx supabase functions deploy send-push
-```
+Edge Function unchanged — no redeploy needed.
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `4ab5cf3` (Update HANDOFF and NEXT_STEPS for Azulejo redesign session)
+- Last commit: `78f137e` (Move Más to bottom nav; restore Inicio and Menú semanal)
 - Pushed to origin main ✓
 - **Deploy pending** — run `npx vercel --prod` to go live
-- Edge Function unchanged (no redeploy needed)
 
 ## Current design identity (Azulejo — light-first)
-- **Palette: "Azulejo"** — light-first: warm off-white bg (`oklch(0.972 0.006 86)`), near-white solid cards, terracotta primary (`oklch(0.52 0.128 32)`)
-- **Light-first**: `:root` is light; `@media (prefers-color-scheme: dark)` overrides to warm charcoal. `color-scheme: light dark`
-- **No glassmorphism**: all `backdrop-blur` removed from Card, BottomNav, TopBar, Modal, GreetingCard
-- **Solid surfaces**: Card `bg-card border border-border shadow-[var(--shadow-card)]`; dark card `oklch(0.24 0.018 65)`
-- **Button**: clean warm terracotta glow shadow, no ceramic tile highlights
-- **GreetingCard**: `bg-terracotta/8` warm tinted surface
-- **BottomNav / TopBar**: `bg-card border-border`, solid
+- **Palette: "Azulejo"** — warm off-white bg `oklch(0.972 0.006 86)`, near-white cards, terracotta primary `oklch(0.52 0.128 32)`
+- **Light-first**: `:root` is light; dark mode via `@media (prefers-color-scheme: dark)`
+- **No glassmorphism**: all backdrop-blur removed from Card, BottomNav, TopBar, Modal, GreetingCard
+- **Solid surfaces**: Card `bg-card border border-border shadow-[var(--shadow-card)]`
 
-## Audit results (targeting 19/20)
-Run: 2026-06-18. P1/P2 fixes applied 2026-06-18.
-| Dimension | Score | Status |
-|---|---|---|
-| Accessibility | 3→4/4 | `text-[10px]` fixed in WeekCalendarWidget, CalendarView, WeekStrip |
-| Performance | 4/4 | Clean |
-| Theming | 3→4/4 | ExpenseCharts now uses brand palette (terracotta/sage/amber/rose/olive) |
-| Responsive | 3→4/4 | Font sizes fixed |
-| Anti-Patterns | 3→4/4 | Eyebrow headers removed in SearchView, NotificationCentre, MortgageTab |
+## Navigation structure (current)
+### Mobile bottom bar (5 items)
+Inicio · Calendario · Compra · Finanzas · **Más**
+- Más is a button (not a link) — opens MoreMenuSheet from BottomNav
+- TopBar no longer has a Más button
 
-### Remaining open issues
-- **[P2]** All inputs — `placeholder:text-muted` contrast borderline (~4.5:1). Verify live after deploy; darken muted to `oklch(0.40 0.016 86)` in globals.css if under threshold.
-- **[P3]** `SummaryCard.tsx` — identical 2×n card grid. Consider per-module accent colours.
+### Más sheet contents
+Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Ajustes · Notificaciones · Dispositivos · Papelera
+
+### TopBar (mobile)
+Logo "Home Hub" (links to /dashboard) · page title (centre) · Search · Notifications
+
+## Audit results (targeting 19–20/20 — all fixes applied)
+| Dimension | Fix applied |
+|---|---|
+| Accessibility | `text-[10px]`/`[11px]` → `text-xs` across calendar, WeekStrip |
+| Theming | ExpenseCharts brand palette (terracotta/sage/amber/rose/olive) |
+| Theming | CalendarView iOS blue fallback → `oklch(0.52 0.128 32 / 0.1)` |
+| Anti-Patterns | Eyebrow headers removed (SearchView, NotificationCentre, MortgageTab) |
+| Anti-Patterns | CalendarEventForm event colours → warm brand palette |
+| Accessibility | Muted token darkened `oklch(0.44→0.40 0.016 86)` — placeholder contrast |
 
 ## This session's changes (2026-06-18)
-1. ✅ **Onboarding improvements** — Empty states teach module value + inline CTA buttons.
-2. ✅ **Full palette redesign** — Azulejo light-warm replaces Granito dark-glass. globals.css rewritten.
-3. ✅ **Glassmorphism removed** — Card, BottomNav, TopBar, Modal, GreetingCard.
-4. ✅ **Audit run** — 16/20. P1/P2/P3 issues documented.
-5. ✅ **Audit P1/P2 fixes** — Brand chart colors, min font sizes (text-xs), eyebrow headers removed.
-6. ✅ **Audit P3 fix** — CalendarEventForm event colours replaced with warm brand palette.
-7. ✅ **DESIGN.md** — Fully rewritten to document Azulejo palette (was still showing old Aceite de oliva/Granito values).
-
-## Completed improvements (chronological)
-1. ✅ Web font — Plus Jakarta Sans
-2. ✅ Page transitions — fade-up 180ms
-3. ✅ Global search `/buscar`
-4. ✅ `/papelera` recovery route
-5. ✅ Push notification quiet hours
-6. ✅ Dark mode support
-7. ✅ Expense analytics charts (recharts)
-8. ✅ Richer calendar (multi-day, per-event colour)
-9. ✅ Meal plan → shopping list generator
-10. ✅ Realtime shopping list sync
-11. ✅ FAB → inline buttons
-12. ✅ Reminder delete removed
-13. ✅ Stuck notification badge fixed
-14. ✅ Document expiry push alerts (migration 018)
-15. ✅ Monthly budget tracker (migration 019)
-16. ✅ Global realtime sync (14 tables, debounced router.refresh)
-17. ✅ Interaction + animation polish (pass 1)
-18. ✅ Animation system (pass 2)
-19. ✅ Onboarding / empty state improvements
-20. ✅ Azulejo light palette + glassmorphism removal
+1. ✅ Audit P1/P2 fixes — chart colours, font sizes, eyebrow headers
+2. ✅ Audit P3 fix — CalendarEventForm warm event colours
+3. ✅ DESIGN.md — fully rewritten for Azulejo palette
+4. ✅ Muted token darkened for WCAG AA placeholder contrast
+5. ✅ Bottom nav restructured: Inicio · Calendario · Compra · Finanzas · Más
+6. ✅ Más button moved from TopBar → BottomNav
+7. ✅ Menú semanal restored to Más sheet
 
 ## SQL migrations applied
-- 001–017: initial schema through calendar multi-day/colour
-- 018: `scan_document_expiry_notifications()` function + pg_cron job (jobid 2)
-- 019: `monthly_budget` column on `households`
+- 001–019: full schema (see previous sessions)
 
 ## pg_cron jobs
-- jobid 1: `send-push-cron` — every minute, processes pending `scheduled_notifications`
-- jobid 2: `document-expiry-scan` — daily 08:00 UTC, calls `scan_document_expiry_notifications()`
+- jobid 1: `send-push-cron` — every minute
+- jobid 2: `document-expiry-scan` — daily 08:00 UTC
