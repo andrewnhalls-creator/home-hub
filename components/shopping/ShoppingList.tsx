@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import { useToast } from "@/components/ui/Toast";
-import { Plus, ShoppingCart, ChevronDown, X } from "lucide-react";
+import { Plus, ShoppingCart, ChevronDown, X, ArrowUpDown, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Modal } from "@/components/ui/Modal";
@@ -11,21 +11,34 @@ import { ShoppingItemCard } from "@/components/shopping/ShoppingItemCard";
 import { ShoppingItemForm } from "@/components/shopping/ShoppingItemForm";
 import { addShoppingItem, updateShoppingItem } from "@/app/(app)/compra/actions";
 import { createClient } from "@/lib/supabase/client";
-import type { Category, ShoppingItem } from "@/lib/types";
+import type { Category, HouseholdMember, ShoppingItem } from "@/lib/types";
 
 interface ShoppingListProps {
   items: ShoppingItem[];
   categories: Category[];
+  members: Pick<HouseholdMember, "user_id" | "display_name">[];
   householdId: string;
   shoppingListId?: string;
 }
 
-export function ShoppingList({ items, categories, householdId, shoppingListId }: ShoppingListProps) {
+export function ShoppingList({ items, categories, members, householdId, shoppingListId }: ShoppingListProps) {
   const { showToast } = useToast();
   const [localItems, setLocalItems] = useState<ShoppingItem[]>(items);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [storeFilter, setStoreFilter] = useState("");
+  const [sortMode, setSortMode] = useState<"fecha" | "categoria">("fecha");
+  const [quickName, setQuickName] = useState("");
+  const [quickState, quickAction, quickPending] = useActionState(addShoppingItem, {});
+
+  useEffect(() => {
+    const stored = localStorage.getItem("shopping-sort") as "fecha" | "categoria" | null;
+    if (stored) setSortMode(stored);
+  }, []);
+
+  useEffect(() => {
+    if (quickState.success) setQuickName("");
+  }, [quickState.success]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -69,6 +82,11 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
     [localItems],
   );
 
+  const memberById = useMemo(
+    () => new Map(members.map((m) => [m.user_id, m.display_name ?? m.user_id])),
+    [members],
+  );
+
   const matchesFilters = (item: ShoppingItem) => {
     if (search && !item.name.toLowerCase().includes(search.toLowerCase())) return false;
     if (categoryFilter && item.category_id !== categoryFilter) return false;
@@ -76,11 +94,48 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
     return true;
   };
 
-  const activeItems = localItems.filter((item) => !item.is_completed && matchesFilters(item));
+  const sortByCategory = (arr: ShoppingItem[]) =>
+    [...arr].sort((a, b) => {
+      const catA = a.category_id ? (categoryById.get(a.category_id)?.name ?? "￿") : "￿";
+      const catB = b.category_id ? (categoryById.get(b.category_id)?.name ?? "￿") : "￿";
+      return catA.localeCompare(catB, "es");
+    });
+
+  const filtered = localItems.filter((item) => !item.is_completed && matchesFilters(item));
+  const activeItems = sortMode === "categoria" ? sortByCategory(filtered) : filtered;
   const completedItems = localItems.filter((item) => item.is_completed && matchesFilters(item));
 
   return (
     <div className="flex flex-col gap-4">
+      {/* Quick-add bar */}
+      <form action={quickAction} className="flex items-center gap-2">
+        {shoppingListId && <input type="hidden" name="shoppingListId" value={shoppingListId} />}
+        <input
+          name="name"
+          value={quickName}
+          onChange={(e) => setQuickName(e.target.value)}
+          placeholder="Añadir producto..."
+          autoComplete="off"
+          className="h-11 flex-1 rounded-xl border border-border bg-card px-4 text-sm text-brown placeholder:text-muted outline-none focus:ring-2 focus:ring-terracotta"
+        />
+        <button
+          type="submit"
+          disabled={quickPending || !quickName.trim()}
+          aria-label="Añadir"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-terracotta text-white transition-transform active:scale-95 disabled:opacity-40"
+        >
+          <Plus className="h-5 w-5" aria-hidden />
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsAddOpen(true)}
+          aria-label="Añadir con más detalles"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-muted hover:text-brown"
+        >
+          <SlidersHorizontal className="h-4 w-4" aria-hidden />
+        </button>
+      </form>
+
       <div className="flex gap-2">
         <Input
           label="Buscar"
@@ -136,6 +191,21 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
         </div>
       )}
 
+      <div className="flex items-center justify-end">
+        <button
+          type="button"
+          onClick={() => {
+            const next = sortMode === "fecha" ? "categoria" : "fecha";
+            setSortMode(next);
+            localStorage.setItem("shopping-sort", next);
+          }}
+          className="flex items-center gap-1.5 text-xs font-medium text-muted hover:text-brown"
+        >
+          <ArrowUpDown className="h-3.5 w-3.5" aria-hidden />
+          {sortMode === "fecha" ? "Por fecha" : "Por categoría"}
+        </button>
+      </div>
+
       {activeItems.length === 0 ? (
         <EmptyState
           icon={ShoppingCart}
@@ -149,6 +219,7 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
               <ShoppingItemCard
                 item={item}
                 category={item.category_id ? categoryById.get(item.category_id) : undefined}
+                membersById={memberById}
                 onEdit={() => setEditingItem(item)}
               />
             </li>
@@ -177,6 +248,7 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
                   <ShoppingItemCard
                     item={item}
                     category={item.category_id ? categoryById.get(item.category_id) : undefined}
+                    membersById={memberById}
                     onEdit={() => setEditingItem(item)}
                   />
                 </li>
@@ -185,15 +257,6 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
           )}
         </div>
       )}
-
-      <button
-        type="button"
-        onClick={() => setIsAddOpen(true)}
-        aria-label="Añadir producto"
-        className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-4 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-terracotta text-white shadow-lg hover:bg-coral active:scale-95 transition-transform"
-      >
-        <Plus className="h-6 w-6" aria-hidden />
-      </button>
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir producto">
         <ShoppingItemForm

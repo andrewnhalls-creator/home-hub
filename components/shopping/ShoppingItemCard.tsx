@@ -16,10 +16,11 @@ import { useOfflineToggleQueue } from "@/hooks/useOfflineToggleQueue";
 interface ShoppingItemCardProps {
   item: ShoppingItem;
   category?: Category;
+  membersById?: Map<string, string>;
   onEdit: () => void;
 }
 
-export function ShoppingItemCard({ item, category, onEdit }: ShoppingItemCardProps) {
+export function ShoppingItemCard({ item, category, membersById, onEdit }: ShoppingItemCardProps) {
   const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -37,7 +38,7 @@ export function ShoppingItemCard({ item, category, onEdit }: ShoppingItemCardPro
 
   return (
     <>
-      <Card className="flex items-start gap-3">
+      <Card className={cn("flex items-start gap-3 transition-opacity duration-300", localCompleted && "opacity-60")}>
         <button
           type="button"
           aria-label={localCompleted ? "Volver a pendiente" : "Marcar como comprado"}
@@ -71,6 +72,12 @@ export function ShoppingItemCard({ item, category, onEdit }: ShoppingItemCardPro
           </p>
           {meta && <p className="text-xs text-muted">{meta}</p>}
           {item.notes && <p className="mt-1 text-xs text-muted">{item.notes}</p>}
+          {membersById && membersById.size > 1 && !localCompleted && item.created_by && membersById.get(item.created_by) && (
+            <p className="mt-0.5 text-xs text-muted/70">Añadido por {membersById.get(item.created_by)}</p>
+          )}
+          {localCompleted && item.completed_by && membersById?.get(item.completed_by) && (
+            <p className="mt-0.5 text-xs text-muted/70">Cogido por {membersById.get(item.completed_by)}</p>
+          )}
         </div>
 
         {item.priority !== "normal" && (

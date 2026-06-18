@@ -1,4 +1,5 @@
 import { MetricGrid } from "@/components/dashboard/MetricGrid";
+import { UtensilsCrossed, CalendarDays, AlertCircle } from "lucide-react";
 import { startOfWeek, endOfWeek, format, isPast, addDays } from "date-fns";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -25,6 +26,7 @@ export default async function DashboardPage() {
     { data: payments, count: paymentsCount },
     { data: subscriptions },
     { data: calendarEvents },
+    { data: todayMeals },
   ] = await Promise.all([
     supabase
       .from("shopping_items")
@@ -75,6 +77,13 @@ export default async function DashboardPage() {
       .gte("event_date", weekStart)
       .lte("event_date", weekEnd)
       .order("event_date", { ascending: true }),
+    supabase
+      .from("meal_plans")
+      .select("id, meal_type, custom_name, recipes(name)")
+      .eq("household_id", householdId)
+      .eq("planned_date", todayStr)
+      .in("meal_type", ["comida", "cena"])
+      .order("meal_type", { ascending: true }),
   ]);
 
   const firstName = (user.user_metadata?.display_name as string | undefined)?.split(" ")[0];
@@ -90,6 +99,17 @@ export default async function DashboardPage() {
   const dayOfMonth = today.getDate();
   const hasOverduePayments = (payments ?? []).some((p) => p.due_day < dayOfMonth);
 
+  const todayEvents = (calendarEvents ?? []).filter((e) => e.event_date === todayStr).slice(0, 2);
+  const overdueToday = (reminders ?? []).filter((r) => r.due_at && isPast(new Date(r.due_at))).slice(0, 2);
+  const mealItems = (todayMeals ?? []).map((m) => {
+    const r = m.recipes as unknown;
+    const recipeName = Array.isArray(r) ? (r[0]?.name ?? null) : ((r as { name: string } | null)?.name ?? null);
+    const displayName = m.custom_name ?? recipeName;
+    const label = m.meal_type === "comida" ? "Comida" : "Cena";
+    return displayName ? `${label}: ${displayName}` : null;
+  }).filter((x): x is string => x !== null);
+  const hasTodayBrief = mealItems.length > 0 || todayEvents.length > 0 || overdueToday.length > 0;
+
   return (
     <div className="flex flex-col gap-5">
       {/* Greeting — always full width */}
@@ -98,6 +118,33 @@ export default async function DashboardPage() {
         householdName={householdName}
         pendingCount={pendingCount}
       />
+
+      {/* Hoy — only when there's something to show */}
+      {hasTodayBrief && (
+        <div className="rounded-2xl border border-border bg-card p-4">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">Hoy</p>
+          <ul className="flex flex-col gap-2">
+            {mealItems.map((label) => (
+              <li key={label} className="flex items-center gap-2 text-sm text-brown">
+                <UtensilsCrossed className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden />
+                {label}
+              </li>
+            ))}
+            {todayEvents.map((e) => (
+              <li key={e.id} className="flex items-center gap-2 text-sm text-brown">
+                <CalendarDays className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden />
+                {e.title}
+              </li>
+            ))}
+            {overdueToday.map((r) => (
+              <li key={r.id} className="flex items-center gap-2 text-sm font-medium text-danger">
+                <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                {r.title}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* On lg+: 2-col layout (metric grid left, calendar + lists right) */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">

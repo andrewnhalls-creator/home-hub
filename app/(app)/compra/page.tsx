@@ -23,7 +23,7 @@ export default async function ShoppingPage({
     itemsQuery = itemsQuery.eq("shopping_list_id", shoppingListId);
   }
 
-  const [{ data: items }, { data: categories }, listResult] = await Promise.all([
+  const [{ data: items }, { data: categories }, { data: members }, listResult] = await Promise.all([
     itemsQuery,
     supabase
       .from("categories")
@@ -31,6 +31,10 @@ export default async function ShoppingPage({
       .eq("household_id", householdId)
       .eq("module", "shopping")
       .order("name", { ascending: true }),
+    supabase
+      .from("household_members")
+      .select("user_id, display_name")
+      .eq("household_id", householdId),
     shoppingListId
       ? supabase.from("shopping_lists").select("name").eq("id", shoppingListId).single()
       : Promise.resolve({ data: null }),
@@ -54,7 +58,7 @@ export default async function ShoppingPage({
           Historial de compras
         </Link>
       )}
-      <ShoppingList items={items ?? []} categories={categories ?? []} householdId={householdId} shoppingListId={shoppingListId} />
+      <ShoppingList items={items ?? []} categories={categories ?? []} members={members ?? []} householdId={householdId} shoppingListId={shoppingListId} />
     </div>
   );
 }
