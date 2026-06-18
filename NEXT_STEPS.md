@@ -1,23 +1,24 @@
 # Next Steps
 
 ## Current state
-All v1 features complete. Design identity established (Granito glass palette).
-Critique run: 26/40. P0 + P1s fixed this session.
+All v1 features complete. Azulejo light palette in place, glassmorphism removed, onboarding improved.
+Deploy pending: run `npx vercel --prod`.
 
-## Immediate design follow-up (next session)
+## Immediate (next session)
 
-### 1. `/impeccable onboard` — add contextual hints
-Critique scored Help & Documentation 1/4. No tooltips, no empty-state guidance for new modules, no hints after first run.
-- Add `title` or tooltip to non-obvious icon buttons
-- Improve empty states across modules with actionable Spanish copy
-- Especially needed for: Documentos, Deseos, Finanzas (less-used modules)
+### 1. Deploy to production
+```
+npx vercel --prod
+```
 
-### 2. `/impeccable audit app/` — full a11y + responsive check
-The critique was code-only (no browser). Run a proper audit against the live app to catch contrast failures on the new dark palette and any responsive regressions.
+### 2. `/impeccable audit app/` — a11y + responsive check
+Run a proper audit against the live app on the new light palette:
+- Contrast check: muted text on warm-off-white bg, terracotta on light surfaces
+- Responsive check at 375px mobile viewport
+- Dark mode: verify solid dark cards look good without glass
 
-### 3. Deploy to production
-Run `npx vercel --prod` to push the Granito palette live.
----
+### 3. Update DESIGN.md to reflect Azulejo palette
+DESIGN.md still documents the old Aceite de oliva / Granito values. Bring it in sync with what's actually in globals.css.
 
 ---
 
@@ -25,66 +26,32 @@ Run `npx vercel --prod` to push the Granito palette live.
 
 ### 1. Household activity feed
 A "quién hizo qué" log showing recent actions across the household.
-
-- Dedicated `/actividad` page or a widget on the dashboard
-- Shows: who added/completed/deleted items, with timestamp and module icon
-- Source: `activity_log` table (already referenced in types as `ActivityLogEntry`)
-- Filter by member or by module
-- Only shows last 30 days
-
----
+- Dedicated `/actividad` page or widget on dashboard
+- Source: `activity_log` table (already in types as `ActivityLogEntry`)
+- Filter by member or module, last 30 days
 
 ### 2. CSV export for finance data
-Export expenses, fixed payments, and savings history as a spreadsheet.
-
-- Button on Finanzas page: "Exportar datos"
-- Generates CSV client-side (no server needed) from already-loaded data
-- Separate files for: gastos, pagos fijos, suscripciones, metas de ahorro
-- Filename includes household name and date range
-
----
+- Button on Finanzas: "Exportar datos"
+- Client-side CSV from already-loaded data
+- Separate files: gastos, pagos fijos, suscripciones, metas de ahorro
 
 ### 3. Recipe import from URL
-Paste a recipe link, auto-fill name and ingredients.
-
-- Input field on the new recipe form: "Importar desde URL"
-- Server action fetches the URL, parses JSON-LD `Recipe` schema
-- Pre-fills name, description, servings, ingredients — user reviews before saving
-- Graceful fallback if site has no structured data
-
----
+- Input: "Importar desde URL" on new recipe form
+- Server action fetches URL, parses JSON-LD `Recipe` schema
+- Pre-fills name, description, servings, ingredients
 
 ### 4. PDF export for documents / finance summary
-Generate a printable summary for mortgage paperwork, insurance records, etc.
-
-- "Exportar PDF" button on Documentos page and Finanzas Resumen tab
-- Uses `@react-pdf/renderer` or print stylesheet
-- Finance: fixed payments, subscriptions, mortgage overview, savings goals
-- Documents: list with type, provider, expiry date
-
----
+- "Exportar PDF" on Documentos and Finanzas Resumen
+- `@react-pdf/renderer` or print stylesheet
 
 ### 5. Per-device notification sound / vibration preferences
-- Extend `push_subscriptions` with `sound_enabled` and `vibration_enabled`
-- Settings in `/ajustes/dispositivos`: toggle per registered device
-- Pass preference in push payload for service worker to apply on delivery
-
----
+- Extend `push_subscriptions` with `sound_enabled`, `vibration_enabled`
+- Settings in `/ajustes/dispositivos`
 
 ### 6. Recurring chore history and streaks
 - History tab per chore: calendar heatmap of completions
-- Streak counter (current + longest)
-- "Completado por" tracking — who marked it done
-
----
+- Streak counter (current + longest), "completado por" tracking
 
 ### 7. Wishlist voting / approval flow
 - "Aprobado por ambos" status requiring both members to approve
 - Notification to other member when new item added
-- Prevents surprise purchases
-
----
-
-## Known pending deploys
-- Run `npx vercel --prod` to deploy all session changes to production
-- Edge Function unchanged — no redeploy needed

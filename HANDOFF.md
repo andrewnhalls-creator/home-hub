@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-17 (Granito design identity + glass palette)
+Updated: 2026-06-18 (light palette + glass removal + onboarding improvements)
 
-## Current state: Design identity established, glass palette applied ✓
+## Current state: Azulejo light palette live, glassmorphism removed ✓
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -18,40 +18,46 @@ npx supabase functions deploy send-push
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `c8d4102` (glass consistency sweep — P1 fixes + token cleanup)
+- Last commit: `175b040` (Redesign: light-first palette, remove glassmorphism)
 - Pushed to origin main ✓
-- Deploy pending (run `npx vercel --prod` to deploy)
+- **Deploy pending** — run `npx vercel --prod` to go live
 - Edge Function unchanged (no redeploy needed)
 
-## Design identity (new this session)
-- **PRODUCT.md** and **DESIGN.md** written — register, brand personality, anti-references, full visual system
-- **Palette: "Granito"** — dark-first: warm charcoal bg (`oklch(0.17 0.010 62)`), glass card surfaces (`oklch(1 0 0 / 0.08)` + `backdrop-blur-xl`), terracotta primary (`oklch(0.58 0.130 32)`, clay-red not orange), wood-brown accent
-- **Dark-first**: `:root` is dark; `@media (prefers-color-scheme: light)` overrides to warm stone. `color-scheme: dark light`
-- **Glass applied to**: Card (all variants), BottomNav, TopBar, Modal, GreetingCard
-- **Button**: raised tile shadow (top glaze highlight + bottom edge + drop), `translateY(1px)` on press
-- **themeColor**: `#1e1b14` (dark charcoal, matches app bg)
-- **Critique run**: score 26/40. P0 fixed (modal backdrop). P1s fixed (modal blur, GreetingCard glass). Remaining: P2 `/impeccable onboard` for help/tooltips score (1/4)
-- **Critique snapshot**: `.impeccable/critique/2026-06-17T21-21-46Z__app.md`
+## Current design identity (Azulejo — light-first)
+- **Palette: "Azulejo"** — light-first: warm off-white bg (`oklch(0.972 0.006 86)`), near-white solid cards, terracotta primary (`oklch(0.52 0.128 32)`)
+- **Light-first**: `:root` is light; `@media (prefers-color-scheme: dark)` overrides to warm charcoal. `color-scheme: light dark`
+- **No glassmorphism**: all `backdrop-blur` removed from Card, BottomNav, TopBar, Modal, GreetingCard
+- **Solid surfaces**: Card uses `bg-card border border-border shadow-[var(--shadow-card)]`; dark mode card is `oklch(0.24 0.018 65)` (solid, not transparent)
+- **Button**: clean warm terracotta glow shadow (`0 2px 10px oklch(0.52 0.128 32 / 0.22)`), no ceramic tile highlights
+- **GreetingCard**: `bg-terracotta/8` warm tinted surface, no glass
+- **BottomNav / TopBar**: `bg-card border-border`, solid
+
+## This session's changes (2026-06-18)
+1. ✅ **Onboarding improvements** — All empty states now teach module value + have inline CTA buttons. Documentos, Deseos, Finanzas (×4 tabs) rewritten with contextual copy. Archive/edit/trash `title` tooltips added. Deseos differentiates first-use vs filter-empty state.
+2. ✅ **Full palette redesign** — Removed Granito dark-glass, replaced with Azulejo light-warm. globals.css rewritten: light `:root`, solid card tokens, clean btn shadow.
+3. ✅ **Glassmorphism removed** — Card, BottomNav, TopBar, Modal, GreetingCard all stripped of `backdrop-blur-xl`/`backdrop-blur-2xl` and transparent bg values.
 
 ## Completed improvements (chronological)
-1. ✅ **Web font** — Plus Jakarta Sans via `next/font/google`
-2. ✅ **Page transitions** — fade-up 220ms via `PageTransition` wrapper
-3. ✅ **Global search `/buscar`** — 9 modules, search icon in top bar
-4. ✅ **`/papelera` recovery route** — 7 modules, linked from Menu sheet
-5. ✅ **Push notification quiet hours** — toggle + time pickers in settings; Edge Function enforces window
-6. ✅ **Dark mode** — `@media (prefers-color-scheme: dark)` in `globals.css`; remaps surface/text/border/shadow tokens
-7. ✅ **Expense analytics charts** — `ExpenseCharts.tsx` with recharts: monthly bar (6mo), weekly bar (4wk), category donut (current month)
-8. ✅ **Richer calendar** — migration 017 adds `end_date` + `color` to `calendar_events`. Multi-day events, per-event colour picker (8 swatches)
-9. ✅ **Meal plan → shopping list generator** — "Generar lista de la compra" button on `/menu` page
-10. ✅ **Realtime shopping list sync** — Supabase Realtime channel on `shopping_items`; granular INSERT/UPDATE/DELETE updates in `ShoppingList` local state
-11. ✅ **FAB buttons → inline** — All fixed-position floating add buttons converted to full-width inline buttons
-12. ✅ **Reminder delete removed** — Trash button removed from `ReminderCard`; only Documents retains delete
-13. ✅ **Stuck notification badge fixed** — `deleteReminder` marks related `notification_events` as read
-14. ✅ **Document expiry push alerts** — `scan_document_expiry_notifications()` SQL function + pg_cron daily at 08:00 UTC. Migration 018. 30/7/1 day alerts, deduplication via `idempotency_key`
-15. ✅ **Monthly budget tracker** — `monthly_budget` on `households` (migration 019). `BudgetCard`: progress bar green→amber→red, inline edit. Tracks variable expenses vs budget
-16. ✅ **Global realtime sync** — `RealtimeSync` component in AppShell watches 14 tables via one Supabase Realtime channel, debounces `router.refresh()` (200ms). Every page updates live across all devices in the household
-17. ✅ **Interaction + animation polish (pass 1)** — `transition-colors` → `transition` on Button so `active:scale` eases back; toast entry animation; sheet-enter now fades in; page transition tightened to 180ms with strong cubic-bezier; `active:scale` press feedback added to every icon button across all modules; `focus-visible:ring` added to all icon-only action buttons; unread notification `border-l-4` replaced with `bg-terracotta/8` tint; TopBar "Menu" → "Más"
-18. ✅ **Animation system (pass 2)** — Sliding `SegmentedControl` indicator pill (useLayoutEffect, no flash); tab content fade via `key={tab} animate-tab-enter`; Modal + MoreMenuSheet backdrops fade in; all progress bars switched from `width%` to GPU-composited `transform:scaleX` with `@starting-style` 0→value on mount; list stagger (8-item cascade) on dashboard ListSection and shopping items; `FinanceTabs` mobile grid buttons get `active:scale-[0.97]`
+1. ✅ Web font — Plus Jakarta Sans
+2. ✅ Page transitions — fade-up 180ms
+3. ✅ Global search `/buscar`
+4. ✅ `/papelera` recovery route
+5. ✅ Push notification quiet hours
+6. ✅ Dark mode support
+7. ✅ Expense analytics charts (recharts)
+8. ✅ Richer calendar (multi-day, per-event colour)
+9. ✅ Meal plan → shopping list generator
+10. ✅ Realtime shopping list sync
+11. ✅ FAB → inline buttons
+12. ✅ Reminder delete removed
+13. ✅ Stuck notification badge fixed
+14. ✅ Document expiry push alerts (migration 018)
+15. ✅ Monthly budget tracker (migration 019)
+16. ✅ Global realtime sync (14 tables, debounced router.refresh)
+17. ✅ Interaction + animation polish (pass 1)
+18. ✅ Animation system (pass 2)
+19. ✅ Onboarding / empty state improvements
+20. ✅ Azulejo light palette + glassmorphism removal
 
 ## SQL migrations applied
 - 001–017: initial schema through calendar multi-day/colour
