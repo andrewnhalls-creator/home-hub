@@ -75,7 +75,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
         aria-labelledby="modal-title"
         onClick={(event) => event.stopPropagation()}
         className={cn(
-          "animate-modal-enter max-h-[92vh] w-full overflow-y-auto overscroll-contain rounded-t-2xl bg-card backdrop-blur-xl p-5 shadow-[var(--shadow-modal)] sm:max-w-md sm:rounded-2xl",
+          "animate-modal-enter max-h-[92vh] w-full overflow-y-auto overscroll-contain rounded-t-2xl bg-card p-5 shadow-[var(--shadow-modal)] sm:max-w-md sm:rounded-2xl",
           className,
         )}
       >

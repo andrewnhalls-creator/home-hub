@@ -17,7 +17,7 @@ export function GreetingCard({ firstName, householdName, pendingCount }: Greetin
         : `Tienes ${pendingCount} cosas pendientes.`;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-terracotta/20 bg-card backdrop-blur-xl p-5 shadow-[var(--shadow-card)]">
+    <div className="relative overflow-hidden rounded-2xl border border-terracotta/15 bg-terracotta/8 p-5">
       {/* Decorative circles */}
       <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-terracotta/10" aria-hidden />
       <div className="absolute -right-2 -top-2 h-12 w-12 rounded-full bg-terracotta/12" aria-hidden />

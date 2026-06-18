@@ -11,7 +11,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Navegación principal"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-white/6 pb-[env(safe-area-inset-bottom)] backdrop-blur-2xl md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       <ul className="flex">
         {PRIMARY_NAV_ITEMS.map((item) => {

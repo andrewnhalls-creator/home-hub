@@ -1,65 +1,59 @@
 @import "tailwindcss";
 
 :root {
-  /* ── Granito · liquid glass · dark-first ─────────────────────────────────
-     Dark warm charcoal base. Glass surfaces (semi-transparent + backdrop blur)
-     float above it. Terracotta accent — clay-red, not orange.
-     Light mode override below in @media (prefers-color-scheme: light).
+  /* ── Azulejo · light-warm · solid surfaces ──────────────────────────────────
+     Light warm-stone base. Clean solid cards float above it.
+     Terracotta primary — deep Spanish clay, not orange.
+     Dark mode handled below in @media (prefers-color-scheme: dark).
   ─────────────────────────────────────────────────────────────────────────── */
 
   /* Surfaces */
-  --color-cream: oklch(0.17 0.010 62);           /* app bg — warm charcoal */
-  --color-sand: oklch(0.27 0.012 64);             /* hover / secondary bg */
-  --color-card: oklch(1.000 0.000 0 / 0.08);     /* glass surface — 8% white */
+  --color-cream: oklch(0.972 0.006 86);           /* warm off-white bg */
+  --color-sand:  oklch(0.940 0.010 85);            /* hover / section bg */
+  --color-card:  oklch(0.999 0.002 90);            /* card — floats above bg */
 
   /* Brand */
-  --color-terracotta: oklch(0.58 0.130 32);       /* primary — clay terracotta */
-  --color-coral: oklch(0.66 0.115 35);            /* hover / lighter terracotta */
+  --color-terracotta: oklch(0.52 0.128 32);        /* primary — deep clay terracotta */
+  --color-coral:      oklch(0.60 0.112 35);         /* hover / lighter variant */
 
   /* Secondary accents */
-  --color-sage: oklch(0.62 0.085 148);
-  --color-olive: oklch(0.48 0.080 140);
-  --color-amber: oklch(0.75 0.140 75);
-  --color-rose: oklch(0.65 0.090 52);             /* warm wood on dark */
+  --color-sage:  oklch(0.50 0.090 148);
+  --color-olive: oklch(0.42 0.080 140);
+  --color-amber: oklch(0.70 0.135 75);
+  --color-rose:  oklch(0.50 0.095 52);
 
   /* Text */
-  --color-brown: oklch(0.93 0.010 95);            /* primary — near-white warm */
-  --color-muted: oklch(0.58 0.014 90);            /* secondary */
+  --color-brown:  oklch(0.20 0.020 82);            /* dark warm ink */
+  --color-muted:  oklch(0.44 0.016 86);            /* secondary — ≥4.5:1 on card */
 
   /* UI chrome */
-  --color-border: oklch(1.000 0.000 0 / 0.12);   /* glass edge — white 12% */
-  --color-success: oklch(0.62 0.120 148);
-  --color-warning-text: oklch(0.92 0.010 80);     /* text on amber (near-white) */
-  --color-danger: oklch(0.60 0.185 25);
+  --color-border:       oklch(0.88 0.012 86);
+  --color-success:      oklch(0.50 0.120 148);
+  --color-warning-text: oklch(0.35 0.085 70);
+  --color-danger:       oklch(0.50 0.185 25);
 
-  /* Card glass shadows — inset top highlight gives the glass edge catch */
+  /* Shadows — clean warm, no glass highlights */
   --shadow-card:
-    inset 0 1px 0 oklch(1.000 0.000 0 / 0.18),
-    0 1px 3px 0 oklch(0 0 0 / 0.30),
-    0 1px 2px -1px oklch(0 0 0 / 0.20);
+    0 1px 3px 0 oklch(0 0 0 / 0.06),
+    0 1px 2px -1px oklch(0 0 0 / 0.04);
   --shadow-card-hover:
-    inset 0 1px 0 oklch(1.000 0.000 0 / 0.24),
-    0 4px 12px -1px oklch(0 0 0 / 0.45),
-    0 2px 6px -2px oklch(0 0 0 / 0.28);
+    0 4px 16px -1px oklch(0 0 0 / 0.09),
+    0 2px 6px -2px oklch(0 0 0 / 0.06);
   --shadow-modal:
-    inset 0 1px 0 oklch(1.000 0.000 0 / 0.15),
-    0 20px 40px -5px oklch(0 0 0 / 0.55),
-    0 8px 16px -6px oklch(0 0 0 / 0.40);
+    0 20px 60px -5px oklch(0 0 0 / 0.14),
+    0 8px 20px -6px oklch(0 0 0 / 0.08);
 
-  /* Button — raised terracotta tile */
+  /* Button — soft warm glow, no skeuomorphic tile */
   --shadow-btn:
-    inset 0 1px 0 oklch(0.70 0.115 36 / 0.40),
-    inset 0 -1px 0 oklch(0.42 0.120 28 / 0.45),
-    0 2px 0 oklch(0 0 0 / 0.40),
-    0 3px 8px oklch(0 0 0 / 0.28);
+    0 1px 2px oklch(0 0 0 / 0.08),
+    0 2px 10px oklch(0.52 0.128 32 / 0.22);
   --shadow-btn-active:
-    inset 0 1px 3px oklch(0 0 0 / 0.35),
-    inset 0 0px 0 oklch(0 0 0 / 0);
+    inset 0 1px 3px oklch(0 0 0 / 0.15);
 
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.25rem;
+  --radius-sm:   0.5rem;
+  --radius-md:   0.75rem;
+  --radius-lg:   1rem;
+  --radius-xl:   1.25rem;
   --radius-full: 9999px;
 }
 
@@ -82,7 +76,6 @@
   --color-warning-text: var(--color-warning-text);
   --color-danger: var(--color-danger);
 
-  /* Shadow utilities: shadow-card, shadow-card-hover, shadow-modal */
   --shadow-card: var(--shadow-card);
   --shadow-card-hover: var(--shadow-card-hover);
   --shadow-modal: var(--shadow-modal);
@@ -91,49 +84,49 @@
 body {
   background: var(--color-cream);
   color: var(--color-brown);
-  color-scheme: dark light;
+  color-scheme: light dark;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    /* Light variant — warm stone surfaces, same brand accent */
-    --color-cream: oklch(0.96 0.006 72);           /* warm near-white bg */
-    --color-sand: oklch(0.91 0.010 70);             /* secondary surface */
-    --color-card: oklch(0.99 0.004 72);             /* solid card — no glass on light */
+    /* Dark warm charcoal — solid surfaces, no glass */
+    --color-cream: oklch(0.17 0.010 62);
+    --color-sand:  oklch(0.23 0.012 64);
+    --color-card:  oklch(0.24 0.018 65);            /* solid dark card */
 
-    /* Text flips to dark */
-    --color-brown: oklch(0.22 0.022 82);
-    --color-muted: oklch(0.52 0.016 88);
+    --color-terracotta: oklch(0.62 0.125 32);
+    --color-coral:      oklch(0.70 0.108 35);
 
-    /* Solid border on light */
-    --color-border: oklch(0.87 0.014 72);
+    --color-sage:  oklch(0.62 0.085 148);
+    --color-olive: oklch(0.48 0.080 140);
+    --color-amber: oklch(0.75 0.135 75);
+    --color-rose:  oklch(0.65 0.090 52);
 
-    --color-warning-text: oklch(0.35 0.085 70);
+    --color-brown:  oklch(0.93 0.010 95);
+    --color-muted:  oklch(0.56 0.014 90);
 
-    /* Lighter accent values work on both */
-    --color-rose: oklch(0.52 0.095 52);
+    --color-border:       oklch(0.30 0.018 68);
+    --color-success:      oklch(0.62 0.120 148);
+    --color-warning-text: oklch(0.92 0.010 80);
+    --color-danger:       oklch(0.60 0.185 25);
 
-    /* Light mode shadows — warm, no glass highlight needed */
     --shadow-card:
-      0 1px 3px 0 oklch(0.40 0.060 62 / 0.10),
-      0 1px 2px -1px oklch(0.40 0.060 62 / 0.08);
+      0 1px 3px 0 oklch(0 0 0 / 0.30),
+      0 1px 2px -1px oklch(0 0 0 / 0.20);
     --shadow-card-hover:
-      0 4px 12px -1px oklch(0.40 0.060 62 / 0.14),
-      0 2px 6px -2px oklch(0.40 0.060 62 / 0.10);
+      0 4px 12px -1px oklch(0 0 0 / 0.45),
+      0 2px 6px -2px oklch(0 0 0 / 0.28);
     --shadow-modal:
-      0 20px 40px -5px oklch(0.22 0.022 82 / 0.18),
-      0 8px 16px -6px oklch(0.22 0.022 82 / 0.12);
+      0 20px 40px -5px oklch(0 0 0 / 0.55),
+      0 8px 16px -6px oklch(0 0 0 / 0.40);
     --shadow-btn:
-      inset 0 1px 0 oklch(0.70 0.115 36 / 0.30),
-      inset 0 -1px 0 oklch(0.42 0.120 28 / 0.35),
-      0 2px 0 oklch(0.22 0.022 82 / 0.22),
-      0 3px 8px oklch(0.22 0.022 82 / 0.14);
+      0 1px 2px oklch(0 0 0 / 0.30),
+      0 2px 10px oklch(0.62 0.125 32 / 0.30);
     --shadow-btn-active:
-      inset 0 1px 3px oklch(0.22 0.022 82 / 0.22),
-      inset 0 0px 0 oklch(0.22 0.022 82 / 0);
+      inset 0 1px 3px oklch(0 0 0 / 0.40);
   }
 
-  body { color-scheme: light; }
+  body { color-scheme: dark; }
 }
 
 @media (prefers-reduced-motion: reduce) {
