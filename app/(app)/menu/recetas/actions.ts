@@ -205,6 +205,108 @@ export async function addRecipeIngredientsToShoppingList(recipeId: string) {
   revalidatePath("/compra");
 }
 
+// ---------------------------------------------------------------------------
+// Recipe URL import
+// ---------------------------------------------------------------------------
+
+export interface ImportRecipeState {
+  error?: string;
+  data?: {
+    name: string;
+    description?: string;
+    servings?: number;
+    ingredients?: string[];
+  };
+}
+
+export async function importRecipeFromUrl(
+  _prevState: ImportRecipeState,
+  formData: FormData,
+): Promise<ImportRecipeState> {
+  const raw = String(formData.get("url") ?? "").trim();
+
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return { error: "La URL no es válida. Introduce una URL completa (https://...)." };
+  }
+
+  if (url.protocol !== "https:" && url.protocol !== "http:") {
+    return { error: "Solo se admiten URLs con protocolo http o https." };
+  }
+
+  // Reject obviously private/loopback hosts
+  const host = url.hostname.toLowerCase();
+  const blockedPatterns = [/^localhost$/, /^127\./, /^10\./, /^192\.168\./, /^172\.(1[6-9]|2\d|3[01])\./];
+  if (blockedPatterns.some((r) => r.test(host))) {
+    return { error: "No se ha podido importar la receta. Comprueba la URL e inténtalo de nuevo." };
+  }
+
+  let html: string;
+  try {
+    const res = await fetch(raw, {
+      headers: { "User-Agent": "HomeHub/1.0 (+recipe-import)" },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    html = await res.text();
+  } catch {
+    return { error: "No hemos podido importar la receta. Comprueba la URL e inténtalo de nuevo." };
+  }
+
+  // Extract all JSON-LD blocks
+  const scriptRe = /<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = scriptRe.exec(html)) !== null) {
+    try {
+      const json = JSON.parse(match[1]) as unknown;
+      const items: unknown[] = Array.isArray(json)
+        ? json
+        : typeof json === "object" && json !== null && "@graph" in json
+          ? (json as Record<string, unknown[]>)["@graph"]
+          : [json];
+
+      for (const item of items) {
+        if (typeof item !== "object" || item === null) continue;
+        const obj = item as Record<string, unknown>;
+        const type = obj["@type"];
+        const isRecipe = type === "Recipe" || (Array.isArray(type) && type.includes("Recipe"));
+        if (!isRecipe) continue;
+
+        const name = typeof obj["name"] === "string" ? obj["name"].trim() : undefined;
+        if (!name) continue;
+
+        const description =
+          typeof obj["description"] === "string" ? obj["description"].trim() : undefined;
+
+        const rawYield = obj["recipeYield"];
+        let servings: number | undefined;
+        if (typeof rawYield === "number") {
+          servings = rawYield;
+        } else if (typeof rawYield === "string") {
+          const n = parseInt(rawYield, 10);
+          if (!isNaN(n)) servings = n;
+        } else if (Array.isArray(rawYield) && rawYield.length > 0) {
+          const n = parseInt(String(rawYield[0]), 10);
+          if (!isNaN(n)) servings = n;
+        }
+
+        const rawIngredients = obj["recipeIngredient"];
+        const ingredients = Array.isArray(rawIngredients)
+          ? rawIngredients.filter((s): s is string => typeof s === "string")
+          : undefined;
+
+        return { data: { name, description, servings, ingredients } };
+      }
+    } catch {
+      // malformed JSON-LD block — try next
+    }
+  }
+
+  return { error: "No hemos podido importar la receta. Comprueba la URL e inténtalo de nuevo." };
+}
+
 function flattenFieldErrors(error: z.ZodError) {
   const fieldErrors: Record<string, string> = {};
   for (const issue of error.issues) {
