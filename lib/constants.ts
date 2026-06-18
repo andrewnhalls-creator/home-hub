@@ -12,6 +12,7 @@ import {
   Settings,
   Smartphone,
   Trash2,
+  History,
   type LucideIcon,
 } from "lucide-react";
 
@@ -32,6 +33,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/documentos",   label: "Documentos",   icon: FileText },
   { href: "/deseos",       label: "Deseos",       icon: Heart },
   { href: "/ajustes",      label: "Ajustes",      icon: Settings },
+  { href: "/actividad",    label: "Actividad",    icon: History },
 ];
 
 /** Four primary routes shown in the bottom nav bar. Más button is the fifth item. */
@@ -49,6 +51,7 @@ export const MENU_ITEMS: NavItem[] = [
   { href: "/tareas",                 label: "Tareas",          icon: ListChecks },
   { href: "/documentos",             label: "Documentos",      icon: FileText },
   { href: "/deseos",                 label: "Deseos",          icon: Heart },
+  { href: "/actividad",              label: "Actividad",       icon: History },
   { href: "/ajustes",                label: "Ajustes",         icon: Settings },
   { href: "/ajustes/notificaciones", label: "Notificaciones",  icon: BellRing },
   { href: "/ajustes/dispositivos",   label: "Dispositivos",    icon: Smartphone },
