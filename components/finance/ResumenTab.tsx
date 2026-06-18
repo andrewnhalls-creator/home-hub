@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
+import { PrintButton } from "@/components/ui/PrintButton";
 import { formatCurrency } from "@/lib/format";
 import { BudgetCard } from "@/components/finance/BudgetCard";
 import type { Mortgage, MortgagePayment } from "@/lib/types";
@@ -146,6 +147,9 @@ export function ResumenTab({
 
   return (
     <div className="flex flex-col gap-3">
+      <div className="flex justify-end">
+        <PrintButton label="Exportar PDF" />
+      </div>
       <BudgetCard monthlyBudget={monthlyBudget} spent={expensesThisMonthTotal} />
       {/* 6-chip KPI grid — numbers only, colour reserved for problems */}
       <div className="grid grid-cols-3 gap-2">

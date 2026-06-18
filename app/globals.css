@@ -283,3 +283,61 @@ body {
     transform: scaleX(0);
   }
 }
+
+/* ── Print / PDF export ────────────────────────────────────────────────────── */
+@media print {
+  /* Remap all tokens to a clean light palette — every glass component auto-resets */
+  :root {
+    --color-cream:      #ffffff;
+    --color-sand:       #f8f8f8;
+    --color-card:       #ffffff;
+    --color-brown:      #1a1a2e;
+    --color-muted:      #64748b;
+    --color-border:     #e2e8f0;
+    --color-terracotta: #1a6641;
+    --color-coral:      #155d38;
+    --color-success:    #166534;
+    --color-danger:     #991b1b;
+    --color-amber:      #92400e;
+    --shadow-card:      none;
+    --shadow-card-hover: none;
+    color-scheme: light;
+  }
+
+  /* Hide all navigation and UI chrome */
+  nav,
+  header,
+  aside,
+  .no-print,
+  [role="dialog"],
+  [aria-live="polite"] {
+    display: none !important;
+  }
+
+  /* Clean page background */
+  body {
+    background: #ffffff !important;
+    color: #1a1a2e !important;
+  }
+
+  /* Remove backdrop-filter (not rendered in print) */
+  * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Remove bottom-nav padding from main */
+  main {
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Avoid page breaks inside cards */
+  [class*="rounded"] {
+    break-inside: avoid;
+  }
+
+  /* Simple borders on glass surfaces */
+  [class*="border-white"] {
+    border-color: #e2e8f0 !important;
+  }
+}

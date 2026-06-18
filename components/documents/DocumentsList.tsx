@@ -10,6 +10,7 @@ import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
 import { formatDate } from "@/lib/format";
+import { PrintButton } from "@/components/ui/PrintButton";
 import { DocumentForm } from "@/components/documents/DocumentForm";
 import { createDocument, updateDocument, archiveDocument, deleteDocument } from "@/app/(app)/documentos/actions";
 import type { HouseholdDocument } from "@/lib/types";
@@ -42,7 +43,11 @@ export function DocumentsList({ documents }: DocumentsListProps) {
           }
         />
       ) : (
-        <ul className="flex flex-col gap-3">
+        <>
+          <div className="flex justify-end">
+            <PrintButton label="Exportar PDF" />
+          </div>
+          <ul className="flex flex-col gap-3">
           {documents.map((doc) => {
             const expiry = doc.expiry_date ? new Date(doc.expiry_date) : null;
             const isExpired = expiry && isPast(expiry);
@@ -95,6 +100,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
             );
           })}
         </ul>
+        </>
       )}
 
       <Button
