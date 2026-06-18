@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (Stage 2 complete)
+Updated: 2026-06-18 (Stage 3 complete)
 
-## Current state: Deployed ✓ — Stage 1 + 2 critique fixes done
+## Current state: Deployed ✓ — Stages 1–3 critique fixes done
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -12,7 +12,7 @@ Edge Function unchanged — no redeploy needed unless Edge Function changes.
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `40f5cab` (Stage 2: filter chips, GreetingCard, a11y, safe-area fixes)
+- Last commit: `7af7ecf` (Stage 3: Phosphor Light icons + Card double-bezel depth)
 - Pushed to origin main ✓
 - Deployed to production ✓
 
@@ -55,8 +55,8 @@ All fixes are queued in NEXT_STEPS.md. Start each new session by picking up from
 | ~~A11y~~ | ~~MoreMenuSheet focus not trapped~~ | ✓ done |
 | ~~A11y~~ | ~~"Show completed" toggle missing `aria-expanded`~~ | ✓ done |
 | ~~A11y~~ | ~~`MoreMenuSheet` uses `aria-label` not `aria-labelledby`~~ | ✓ done |
-| Visual | Icon weight: Lucide default stroke → Phosphor `weight="light"` (global) | all components |
-| Visual | Cards single-layer — add double-bezel depth treatment | `components/ui/Card.tsx` |
+| ~~Visual~~ | ~~Icon weight: Lucide → Phosphor `weight="light"`~~ | ✓ done |
+| ~~Visual~~ | ~~Cards single-layer — add double-bezel depth~~ | ✓ done |
 | Layout | `AppShell` main `pb-24` doesn't account for iPhone safe area | `AppShell.tsx` |
 | Product | Dashboard shows counts not "what to do now" — daily brief concept | `dashboard/page.tsx` |
 | Product | Shopping list sorted `created_at DESC` — no category-sort for in-store | `compra/page.tsx` |

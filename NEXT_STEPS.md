@@ -1,31 +1,8 @@
 # Next Steps
 
 ## Current state
-Stages 1 + 2 complete (2026-06-18). All P0/P1/P2/P3/A11y critique fixes done.
-Impeccable critique run 2026-06-18: **25/40** — 12 issues resolved, Stage 3 next.
-
----
-
-## Stage 3 — Visual upgrades (icon weight + component depth)
-
-### 3a. Icon weight: Lucide → Phosphor Light
-- **Problem**: Lucide at default stroke weight (2px) reads as a generic productivity app — the exact anti-reference in PRODUCT.md (Todoist, TickTick). For a warm domestic app, lighter strokes feel more personal.
-- **Install**: `npm install @phosphor-icons/react`
-- **Migration strategy**:
-  - Start with the most visible surfaces: BottomNav, MoreMenuSheet, TopBar, dashboard MetricCards.
-  - Use `weight="light"` and `size={22}` as the standard throughout.
-  - Do not mix Phosphor and Lucide in the same component. Migrate module by module.
-  - Keep Lucide for any icon with no Phosphor equivalent (check before migrating each one).
-- **Do NOT change**: icons inside form inputs or small badges where `size={16}` is used — migrate those last.
-
-### 3b. Card double-bezel depth treatment
-- **File**: `components/ui/Card.tsx`
-- **Problem**: Cards are single-layer (`bg-card border border-border`). No physical depth or lift.
-- **Fix**: Add a subtle outer shell wrapping the inner card content.
-  - Outer: `p-[3px] bg-border/50 rounded-[calc(var(--radius-lg)+3px)]`
-  - Inner: existing `bg-card rounded-[var(--radius-lg)]` — unchanged visually but now sits inside the outer shell.
-  - Apply only to `variant="default"` and `variant="featured"`. Leave `variant="subtle"` flat.
-  - Verify this doesn't break any existing usage — check all pages after applying.
+Stages 1–3 complete (2026-06-18). All critique fixes done.
+Impeccable critique run 2026-06-18: **25/40** — all 16 issues resolved. Stage 4 next.
 
 ---
 
