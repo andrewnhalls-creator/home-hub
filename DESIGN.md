@@ -26,7 +26,7 @@ All values in OKLCH. Semantic token names map to CSS custom properties in `app/g
 | `amber` | `oklch(0.70 0.135 75)` | Warning, "due soon" |
 | `rose` | `oklch(0.50 0.095 52)` | Accent — wishlist, savings, secondary highlights |
 | `brown` | `oklch(0.20 0.020 82)` | Primary body text |
-| `muted` | `oklch(0.44 0.016 86)` | Secondary / helper text — ≥4.5:1 on card |
+| `muted` | `oklch(0.40 0.016 86)` | Secondary / helper text — ≥4.5:1 on card |
 | `border` | `oklch(0.88 0.012 86)` | Subtle separators, card borders |
 | `success` | `oklch(0.50 0.120 148)` | Completed states |
 | `warning-text` | `oklch(0.35 0.085 70)` | Text on amber background |

@@ -24,7 +24,7 @@
 
   /* Text */
   --color-brown:  oklch(0.20 0.020 82);            /* dark warm ink */
-  --color-muted:  oklch(0.44 0.016 86);            /* secondary — ≥4.5:1 on card */
+  --color-muted:  oklch(0.40 0.016 86);            /* secondary — ≥4.5:1 on card */
 
   /* UI chrome */
   --color-border:       oklch(0.88 0.012 86);
