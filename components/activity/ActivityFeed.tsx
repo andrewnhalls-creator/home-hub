@@ -115,8 +115,8 @@ export function ActivityFeed({ entries, memberMap }: ActivityFeedProps) {
             className={cn(
               "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition active:scale-[0.97]",
               activeFilter === f.value
-                ? "border-terracotta bg-terracotta text-white"
-                : "border-border bg-card text-brown hover:bg-sand",
+                ? "border-terracotta bg-terracotta text-cream"
+                : "border-white/[0.10] bg-white/[0.05] text-brown hover:bg-white/[0.10]",
             )}
           >
             {f.label}

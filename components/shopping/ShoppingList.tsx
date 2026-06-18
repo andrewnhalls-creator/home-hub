@@ -122,7 +122,7 @@ export function ShoppingList({ items, categories, members, householdId, shopping
           type="submit"
           disabled={quickPending || !quickName.trim()}
           aria-label="Añadir"
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-terracotta text-white transition-transform active:scale-95 disabled:opacity-40"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-terracotta text-cream transition-transform active:scale-95 disabled:opacity-40"
         >
           <Plus className="h-5 w-5" aria-hidden />
         </button>

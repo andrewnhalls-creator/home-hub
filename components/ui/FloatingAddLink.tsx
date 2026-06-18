@@ -13,7 +13,7 @@ export function FloatingAddLink({ href, label, className }: FloatingAddLinkProps
     <Link
       href={href}
       className={cn(
-        "mt-4 inline-flex w-full min-h-[44px] items-center justify-center gap-2 rounded-xl bg-terracotta px-5 py-3 text-sm font-medium text-white hover:bg-coral",
+        "mt-4 inline-flex w-full min-h-[44px] items-center justify-center gap-2 rounded-[var(--radius-xl)] bg-terracotta px-5 py-3 text-sm font-medium text-cream hover:bg-coral",
         className,
       )}
     >

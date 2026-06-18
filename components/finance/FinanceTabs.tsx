@@ -108,12 +108,12 @@ export function FinanceTabs({
               className={cn(
                 "flex items-center gap-2.5 rounded-xl border px-3 py-3 text-left text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]",
                 active
-                  ? "border-terracotta/30 bg-terracotta text-white shadow-[var(--shadow-card)]"
-                  : "border-border bg-card text-brown hover:bg-sand",
+                  ? "border-terracotta/30 bg-terracotta text-cream shadow-[var(--shadow-card)]"
+                  : "border-white/[0.10] bg-white/[0.05] text-brown hover:bg-white/[0.10]",
               )}
             >
               <Icon
-                className={cn("h-4 w-4 shrink-0", active ? "text-white" : "text-muted")}
+                className={cn("h-4 w-4 shrink-0", active ? "text-cream" : "text-muted")}
                 aria-hidden
               />
               <span className="truncate">{label}</span>

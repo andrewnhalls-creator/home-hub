@@ -52,7 +52,7 @@ export function SegmentedControl<T extends string>({
   const indicatorEl = indicator ? (
     <div
       aria-hidden
-      className="absolute rounded-lg bg-card shadow-[var(--shadow-card)] transition-all duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]"
+      className="absolute rounded-lg bg-white/[0.14] shadow-sm transition-all duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]"
       style={{
         top: indicator.top,
         left: indicator.left,

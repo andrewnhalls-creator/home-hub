@@ -65,8 +65,8 @@ export function WeekStrip({
             <span
               className={cn(
                 "flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold",
-                today && !selected && "bg-terracotta text-white",
-                selected && "bg-terracotta text-white",
+                today && !selected && "bg-terracotta text-cream",
+                selected && "bg-terracotta text-cream",
                 !today && !selected && "text-brown",
               )}
             >

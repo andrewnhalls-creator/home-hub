@@ -64,7 +64,7 @@ export function InstallGuideView() {
               className={[
                 "flex min-h-[44px] items-center justify-center rounded-xl border px-3 py-2 text-sm font-medium transition-colors",
                 selected === p
-                  ? "border-terracotta bg-terracotta text-white"
+                  ? "border-terracotta bg-terracotta text-cream"
                   : "border-sand bg-card text-brown hover:border-terracotta/50",
               ].join(" ")}
               aria-pressed={selected === p}
