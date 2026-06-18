@@ -2,6 +2,11 @@
 
 ## Active
 
+### GitHub repo is temporarily public
+- **Reason**: Vercel Hobby plan requires a public GitHub repo for CLI/GitHub-triggered deploys. Making it private would block deployments without upgrading.
+- **Resolution**: Set repo to private on GitHub once the project is finished and no further deploys are needed (or on upgrade to Vercel Pro).
+- **Risk**: Code is readable publicly. No secrets are committed (`.env.local` is gitignored). Service-role key and VAPID private key are only in Supabase/Vercel dashboard, never in the repo.
+
 ### Push notification end-to-end device test pending
 - **Stage**: Milestone 22 (final review)
 - **Impact**: Infrastructure confirmed healthy (cron → Edge Function returns HTTP 200). Actual device delivery test requires real user accounts and a real device.
