@@ -1,12 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Nunito, Fraunces } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
 
-const jakarta = Plus_Jakarta_Sans({
+const nunito = Nunito({
   subsets: ["latin"],
-  variable: "--font-jakarta",
+  variable: "--font-nunito",
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+  weight: ["700"],
 });
 
 export const metadata: Metadata = {
@@ -38,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es-ES" className={`${jakarta.variable} h-full antialiased`}>
+    <html lang="es-ES" className={`${nunito.variable} ${fraunces.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-cream text-brown font-sans">
         <ToastProvider>{children}</ToastProvider>
       </body>

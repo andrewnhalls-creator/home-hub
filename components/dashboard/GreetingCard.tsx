@@ -19,7 +19,7 @@ export function GreetingCard({ firstName, householdName, pendingCount }: Greetin
   return (
     <div className="rounded-2xl border border-terracotta/15 bg-terracotta/8 p-5">
       <div className="flex flex-col gap-0.5">
-        <p className="text-2xl font-bold text-brown">{greeting}</p>
+        <p className="font-display text-2xl font-bold text-brown tracking-tight">{greeting}</p>
         <p className="text-sm text-muted">{householdName}</p>
         <div className="mt-3 flex items-center gap-2">
           <div

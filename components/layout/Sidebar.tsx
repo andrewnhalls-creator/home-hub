@@ -16,7 +16,7 @@ export function Sidebar() {
       style={{ background: "rgba(13,11,31,0.75)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
     >
       <div className="mb-5 px-3">
-        <span className="text-xl font-semibold text-terracotta">Home Hub</span>
+        <span className="font-display text-xl font-bold text-terracotta tracking-tight">Home Hub</span>
       </div>
       <nav aria-label="Navegación principal" className="flex flex-col gap-0.5">
         {NAV_ITEMS.map((item) => {

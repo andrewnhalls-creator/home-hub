@@ -12,9 +12,9 @@
   --color-sand:   #121130;   /* was hover/section bg — now slightly lighter indigo */
   --color-card:   rgba(255, 255, 255, 0.07);  /* glass surface tint — blur added via .glass */
 
-  /* ── Brand (terracotta → mint green) ── */
-  --color-terracotta: #8AFFC4;   /* primary action — mint */
-  --color-coral:      #6BEFAB;   /* hover variant — deeper mint */
+  /* ── Brand (terracotta → saffron gold) ── */
+  --color-terracotta: #E8C547;   /* primary action — saffron, warm Spanish light */
+  --color-coral:      #D4AE2E;   /* hover variant — deeper gold */
 
   /* ── Secondary accents ── */
   --color-sage:  #2DD4BF;   /* teal */
@@ -91,7 +91,8 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
 
   /* Surfaces */
   --color-cream:  var(--color-cream);
@@ -139,9 +140,10 @@
 /* ── Body — atmospheric deep indigo gradient ───────────────────────────────── */
 body {
   background:
-    radial-gradient(ellipse 80% 60% at 15% 85%, rgba(138, 255, 196, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 15% 85%, rgba(232, 197, 71, 0.05) 0%, transparent 55%),
     radial-gradient(ellipse 70% 50% at 85% 15%, rgba(129, 140, 248, 0.07) 0%, transparent 50%),
     radial-gradient(ellipse 90% 80% at 50% 50%, rgba(26, 24, 71, 0.60) 0%, transparent 90%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpolygon points='20,2 38,20 20,38 2,20' fill='none' stroke='rgba(255,255,255,0.055)' stroke-width='0.6'/%3E%3Cpolygon points='20,13 27,20 20,27 13,20' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='0.5'/%3E%3Cline x1='2' y1='20' x2='38' y2='20' stroke='rgba(255,255,255,0.025)' stroke-width='0.4'/%3E%3Cline x1='20' y1='2' x2='20' y2='38' stroke='rgba(255,255,255,0.025)' stroke-width='0.4'/%3E%3C/svg%3E"),
     var(--color-cream);
   color: var(--color-muted);
   color-scheme: dark;

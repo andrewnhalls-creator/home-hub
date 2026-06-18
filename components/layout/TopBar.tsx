@@ -32,7 +32,7 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
             className="shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta md:hidden"
             aria-label="Inicio"
           >
-            <span className="text-base font-bold text-terracotta" translate="no">Home Hub</span>
+            <span className="font-display text-base font-bold text-terracotta tracking-tight" translate="no">Home Hub</span>
           </Link>
 
           {/* Center: current page title (hidden on Home and desktop) */}
