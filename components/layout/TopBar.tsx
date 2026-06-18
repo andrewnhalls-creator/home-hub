@@ -21,7 +21,10 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
   const isHome = pathname?.startsWith("/dashboard");
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-card px-4 py-3 md:px-6">
+    <header
+      className="sticky top-0 z-30 border-b border-white/[0.10] px-4 py-3 md:px-6"
+      style={{ background: "rgba(13,11,31,0.80)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+    >
         <div className="flex items-center gap-2">
           {/* Left: Home Hub brand link — mobile only */}
           <Link

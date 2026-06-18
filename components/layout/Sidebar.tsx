@@ -11,7 +11,10 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-60 shrink-0 border-r border-border bg-card px-3 py-6 md:flex md:flex-col md:gap-1 md:overflow-y-auto">
+    <aside
+      className="hidden w-60 shrink-0 border-r border-white/[0.10] px-3 py-6 md:flex md:flex-col md:gap-1 md:overflow-y-auto"
+      style={{ background: "rgba(13,11,31,0.75)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+    >
       <div className="mb-5 px-3">
         <span className="text-xl font-semibold text-terracotta">Home Hub</span>
       </div>
@@ -22,7 +25,7 @@ export function Sidebar() {
           return (
             <div key={item.href}>
               {SEPARATOR_BEFORE.includes(item.href) && (
-                <div className="my-2 border-t border-border" role="separator" />
+                <div className="my-2 border-t border-white/[0.10]" role="separator" />
               )}
               <Link
                 href={item.href}
@@ -30,8 +33,8 @@ export function Sidebar() {
                 className={cn(
                   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                   isActive
-                    ? "bg-terracotta/10 text-terracotta"
-                    : "text-brown hover:bg-sand hover:text-brown",
+                    ? "bg-terracotta/[0.15] text-terracotta"
+                    : "text-brown hover:bg-white/[0.08] hover:text-brown",
                 )}
               >
                 <Icon
