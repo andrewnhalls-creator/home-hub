@@ -1,46 +1,23 @@
 # Next Steps
 
 ## Current state
-All modules built and deployed. Push notifications confirmed working on real device. One active bug: "Más" button broken. Four tasks remain before the project is complete.
+Task 1 done. Task 2 mostly done — one audit item remains. Last commit: `28c44d9` (not yet pushed).
 
 ---
 
-## Task 1 — Fix the "Más" button (BLOCKER)
+## Task 2 (remaining) — Fix border-white/[0.12]
 
-The "Más" nav item in BottomNav takes users to a page that doesn't work. This blocks access to Menú, Recordatorios, Tareas, Documentos, Deseos, Actividad, and Ajustes.
+Still present in 7 files (replace with `border-border`):
 
-**What to investigate:**
-- What route does the Más button link to? (Check `components/layout/BottomNav.tsx`)
-- Does `MoreMenuSheet` render as a bottom sheet or does it navigate? If it navigates, is the target page wired correctly?
-- Check `components/layout/MoreMenuSheet.tsx` — does it exist and is it imported in the layout?
-- Check the browser console for errors on the broken page
-
-**Fix:** restore correct sheet/navigation behaviour so all 7 secondary nav items are accessible.
-
----
-
-## Task 2 — Per-module audit sweep
-
-Sweep every module component for remaining tech debt from the impeccable audit. The core UI components were fixed in the 2026-06-18 audit session; module-specific components have not been touched.
-
-**What to check in each module:**
-
-1. **Lucide imports** — any `from "lucide-react"` → migrate to `@phosphor-icons/react` (or `/dist/ssr` for server components)
-2. **Sub-12px text** — `text-[10px]` or `text-[11px]` → fix to `text-xs` (12px) minimum
-3. **Inline `backdrop-filter`** — on cards, list items, inputs, empty states → remove
-4. **`uppercase tracking-wide` section labels** → replace with `text-xs font-medium text-muted`
-5. **`border-white/[0.12]`** → replace with `border-border`
-
-**Quick grep commands to find violations:**
 ```bash
-grep -r "lucide-react" components/ app/ --include="*.tsx" -l
-grep -r "text-\[1[01]px\]" components/ app/ --include="*.tsx" -l
-grep -r "backdropFilter" components/ app/ --include="*.tsx" -l
-grep -r "uppercase tracking-wide" components/ app/ --include="*.tsx" -l
-grep -r 'border-white/\[0\.12\]' components/ app/ --include="*.tsx" -l
+grep -rn 'border-white/\[0\.12\]' components/ app/ --include="*.tsx"
 ```
 
-**Modules to sweep:** `components/finance/`, `components/meals/`, `components/reminders/`, `components/chores/`, `components/calendar/`, `components/documents/`, `components/wishlist/`, `app/(app)/` pages.
+Files: `components/ui/Card.tsx`, `components/ui/Modal.tsx`, `components/ui/PrintButton.tsx`, `components/ui/Input.tsx`, `components/ui/Select.tsx`, `components/ui/Textarea.tsx`, `components/layout/MoreMenuSheet.tsx`
+
+Fix: in each file, replace_all `border-white/[0.12]` → `border-border`. Then re-commit.
+
+Note: backdrop-filter in MoreMenuSheet.tsx is intentional — sheets are allowed blur(24px) per the two-tier glass rule.
 
 ---
 

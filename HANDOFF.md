@@ -1,9 +1,8 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (Impeccable audit + design critique complete)
+Updated: 2026-06-18 (Tasks 1 + 2 complete; Tasks 3 + 4 pending)
 
 ## Current state
-Full impeccable audit + critique run against codebase. All critical (P0) and high-priority (P1) issues fixed.
-Build, lint, typecheck all pass (0 errors).
+Tasks 1 and 2 complete. Build, lint, typecheck all pass (0 errors). Changes NOT yet pushed to origin.
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -13,8 +12,8 @@ GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `22394f7` — "Audit fixes: remove universal glassmorphism, unify icons, harden quick-add, regen DESIGN.md"
-- Pushed to origin main ✓
+- Last commit: `28c44d9` — "Audit sweep: migrate all lucide-react icons to Phosphor, fix sub-12px text and uppercase labels"
+- NOT yet pushed to origin — push before starting Task 3
 
 ## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
 - **Background:** deep indigo `#0D0B1F` + azulejo SVG tile + depth ellipse — no floating orbs
@@ -26,16 +25,10 @@ GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo
 - **Icons:** Phosphor Icons v2 only; SSR path (`/dist/ssr`) for server components
 - **Token strategy:** CSS var names inherited from original Azulejo design — actual values documented in DESIGN.md
 
-## Audit fixes applied (2026-06-18)
-- Removed `backdrop-filter` from all content surfaces: Card, MetricCard, Input, Select, Textarea, EmptyState, dashboard page, ResumenTab
-- Migrated Lucide → Phosphor in all touched UI components (Button, Select, Modal, Toast, ShoppingList, dashboard)
-- Fixed all `text-[11px]` violations → `text-[12px]`: BottomNav, ResumenTab (×5), MealSlot
-- Removed toast side-stripe `w-0.5` accent span (absolute ban)
-- Removed dashboard `uppercase tracking-wide` from section label (absolute ban)
-- Standardised `border-white/[0.12]` → `border-border` in MetricCard and ResumenTab
-- Wired quick-add success/error toasts in ShoppingList (was silently failing)
-- Regenerated DESIGN.md with accurate token values and two-tier glass rule
-- Critique snapshot saved: `.impeccable/critique/2026-06-18T13-33-04Z__home-hub-full-app.md` (score 23/40)
+## Completed work (2026-06-18)
+- Task 1: Fixed Más sheet crash — missing `/actividad` → `ClockClockwise` icon entry (`3791097`)
+- Task 2: Full audit sweep — migrated all 51 files from lucide-react to @phosphor-icons/react, fixed 2× sub-12px text, removed 2× uppercase tracking-wide labels (`28c44d9`)
+- All previous impeccable audit P0/P1 fixes (see git log for `22394f7`)
 
 ## Navigation structure
 ### Mobile bottom bar (5 items)
@@ -64,3 +57,7 @@ Logo "Home Hub" (→ /dashboard) · page title (centre, mobile) · MagnifyingGla
 - ✅ Glassmorphism redesign Phases 1–5
 - ✅ Feature 7: PDF export (browser print, @media print token remap)
 - ✅ Impeccable audit + critique (2026-06-18) — P0/P1 issues resolved, DESIGN.md regenerated
+- ✅ Task 1: Más button crash fixed (`3791097`)
+- ✅ Task 2: Full Lucide → Phosphor migration + sub-12px + uppercase sweep (`28c44d9`)
+- ⏳ Task 3: Final review + build (push, then run)
+- ⏳ Task 4: GitHub repo privacy decision
