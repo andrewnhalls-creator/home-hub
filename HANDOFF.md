@@ -1,29 +1,28 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (nav restructure + audit clean + deployed)
+Updated: 2026-06-18 (impeccable critique run — fixes queued)
 
-## Current state: All audit fixes done, nav restructured, deployed to production ✓
+## Current state: Deployed ✓ — critique complete, fixes pending
 
 ## Production URL
 https://home-hub-dun.vercel.app
 
-## Deploy command
-```
-npx vercel --prod
-```
-(GitHub-triggered deploys blocked on Hobby plan — always use CLI)
-Edge Function unchanged — no redeploy needed.
+## Deploy
+GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo — intentional, see KNOWN_ISSUES.md).
+Edge Function unchanged — no redeploy needed unless Edge Function changes.
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `1804194` (Update HANDOFF and NEXT_STEPS: nav restructure session complete)
+- Last commit: `291cbfa` (Document public repo as deliberate Vercel Hobby plan constraint)
 - Pushed to origin main ✓
-- **Deployed to production ✓** — live at https://home-hub-dun.vercel.app
+- Deployed to production ✓
 
 ## Current design identity (Azulejo — light-first)
 - **Palette: "Azulejo"** — warm off-white bg `oklch(0.972 0.006 86)`, near-white cards, terracotta primary `oklch(0.52 0.128 32)`
 - **Light-first**: `:root` is light; dark mode via `@media (prefers-color-scheme: dark)`
-- **No glassmorphism**: all backdrop-blur removed from Card, BottomNav, TopBar, Modal, GreetingCard
+- **No glassmorphism**: backdrop-blur removed from Card, BottomNav, TopBar, Modal, GreetingCard
 - **Solid surfaces**: Card `bg-card border border-border shadow-[var(--shadow-card)]`
+- **Font**: Plus Jakarta Sans (`--font-jakarta`)
+- **Icons**: Lucide React (migration to Phosphor Light queued — see NEXT_STEPS.md)
 
 ## Navigation structure (current)
 ### Mobile bottom bar (5 items)
@@ -37,24 +36,33 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Ajustes · N
 ### TopBar (mobile)
 Logo "Home Hub" (links to /dashboard) · page title (centre) · Search · Notifications
 
-## Audit results (targeting 19–20/20 — all fixes applied)
-| Dimension | Fix applied |
-|---|---|
-| Accessibility | `text-[10px]`/`[11px]` → `text-xs` across calendar, WeekStrip |
-| Theming | ExpenseCharts brand palette (terracotta/sage/amber/rose/olive) |
-| Theming | CalendarView iOS blue fallback → `oklch(0.52 0.128 32 / 0.1)` |
-| Anti-Patterns | Eyebrow headers removed (SearchView, NotificationCentre, MortgageTab) |
-| Anti-Patterns | CalendarEventForm event colours → warm brand palette |
-| Accessibility | Muted token darkened `oklch(0.44→0.40 0.016 86)` — placeholder contrast |
+## Impeccable critique results (2026-06-18)
+Score: **25/40** (Acceptable — significant improvements needed)
+Snapshot: `.impeccable/critique/2026-06-18T06-27-51Z__home-hub-project.md`
 
-## This session's changes (2026-06-18)
-1. ✅ Audit P1/P2 fixes — chart colours, font sizes, eyebrow headers
-2. ✅ Audit P3 fix — CalendarEventForm warm event colours
-3. ✅ DESIGN.md — fully rewritten for Azulejo palette
-4. ✅ Muted token darkened for WCAG AA placeholder contrast
-5. ✅ Bottom nav restructured: Inicio · Calendario · Compra · Finanzas · Más
-6. ✅ Más button moved from TopBar → BottomNav
-7. ✅ Menú semanal restored to Más sheet
+All fixes are queued in NEXT_STEPS.md. Start each new session by picking up from Stage 1 below.
+
+### Open issues by priority
+
+| Priority | Issue | File |
+|---|---|---|
+| P0 | "Añadir" button buried below fold — needs fixed FAB | `ShoppingList.tsx` |
+| P1 | Silent failure on shopping mutations — `onError` not wired | `ShoppingList.tsx` |
+| P1 | Dashboard metric grid undifferentiated — no urgency/attention state | `MetricCard.tsx`, `dashboard/page.tsx` |
+| P2 | Active filter state invisible — no dismissible chip when filter applied | `ShoppingList.tsx` |
+| P2 | GreetingCard decorative circles — AI template pattern, remove | `GreetingCard.tsx` |
+| P3 | Trash disclosure uses raw Unicode `▸`/`▾` — replace with Lucide icons | `finanzas/page.tsx` |
+| A11y | MoreMenuSheet focus not trapped — keyboard users escape into dimmed bg | `MoreMenuSheet.tsx` |
+| A11y | "Show completed" toggle missing `aria-expanded` | `ShoppingList.tsx` |
+| A11y | `MoreMenuSheet` uses `aria-label` string not `aria-labelledby` to `<h2>` | `MoreMenuSheet.tsx` |
+| Visual | Icon weight: Lucide default stroke → Phosphor `weight="light"` (global) | all components |
+| Visual | Cards single-layer — add double-bezel depth treatment | `components/ui/Card.tsx` |
+| Layout | `AppShell` main `pb-24` doesn't account for iPhone safe area | `AppShell.tsx` |
+| Product | Dashboard shows counts not "what to do now" — daily brief concept | `dashboard/page.tsx` |
+| Product | Shopping list sorted `created_at DESC` — no category-sort for in-store | `compra/page.tsx` |
+| Product | No household attribution on shopping items ("added by" / "taken by") | `ShoppingItemCard.tsx` |
+| Product | Item completion requires modal not single tap | `ShoppingItemCard.tsx` |
+| Product | No quick-add bar — every item needs a modal form | `ShoppingList.tsx` |
 
 ## SQL migrations applied
 - 001–019: full schema (see previous sessions)
