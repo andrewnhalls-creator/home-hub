@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (nav restructure + audit clean)
+Updated: 2026-06-18 (nav restructure + audit clean + deployed)
 
-## Current state: All audit fixes done, nav restructured, deploy pending
+## Current state: All audit fixes done, nav restructured, deployed to production ✓
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -15,9 +15,9 @@ Edge Function unchanged — no redeploy needed.
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `78f137e` (Move Más to bottom nav; restore Inicio and Menú semanal)
+- Last commit: `1804194` (Update HANDOFF and NEXT_STEPS: nav restructure session complete)
 - Pushed to origin main ✓
-- **Deploy pending** — run `npx vercel --prod` to go live
+- **Deployed to production ✓** — live at https://home-hub-dun.vercel.app
 
 ## Current design identity (Azulejo — light-first)
 - **Palette: "Azulejo"** — warm off-white bg `oklch(0.972 0.006 86)`, near-white cards, terracotta primary `oklch(0.52 0.128 32)`

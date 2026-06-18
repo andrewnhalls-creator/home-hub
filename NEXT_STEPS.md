@@ -2,16 +2,7 @@
 
 ## Current state
 All v1 features complete. Azulejo palette live, audit clean, nav restructured.
-Deploy pending: run `npx vercel --prod`.
-
----
-
-## Immediate
-
-### 1. Deploy to production
-```
-npx vercel --prod
-```
+Deployed to production ✓ — https://home-hub-dun.vercel.app
 
 ---
 
