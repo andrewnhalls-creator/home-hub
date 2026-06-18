@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { isPast } from "date-fns";
 import { Circle, CheckCircle2, Pencil, Trash2 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
@@ -50,6 +51,12 @@ export function ChoreCard({ chore, assignedName, onEdit }: ChoreCardProps) {
               .join(" · ")}
           </p>
           {chore.description && <p className="mt-1 text-xs text-muted">{chore.description}</p>}
+          <Link
+            href={`/tareas/${chore.id}`}
+            className="mt-1 inline-block text-xs text-terracotta hover:underline"
+          >
+            Ver historial
+          </Link>
         </div>
 
         {!isDone && <Badge variant={isOverdue ? "danger" : "neutral"}>{isOverdue ? "Vencido" : "Pendiente"}</Badge>}

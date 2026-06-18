@@ -171,6 +171,13 @@ export async function completeChore(choreId: string) {
 
   await cancelScheduledNotifications("chore", choreId);
 
+  // Record in completion history regardless of frequency
+  void supabase.from("chore_completions").insert({
+    chore_id: choreId,
+    household_id: householdId,
+    completed_by: user.id,
+  });
+
   if (chore.frequency === "puntual" || !chore.next_due_date) {
     await supabase.from("chores").update({ status: "hecho" }).eq("id", choreId).eq("household_id", householdId);
     void logActivity({ householdId, actorId: user.id, entityType: "chore", entityId: choreId, action: "completed", summary: `Completó la tarea: ${chore.title}` });
