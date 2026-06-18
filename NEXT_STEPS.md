@@ -1,47 +1,8 @@
 # Next Steps
 
 ## Current state
-Stage 1 complete (2026-06-18). Fixed FAB on shopping, error toasts wired, MetricCard attention state live.
-Impeccable critique run 2026-06-18: **25/40** — Stage 1 done, Stage 2 next.
-
----
-
-## Stage 2 — P2/P3 polish + accessibility
-
-### 2a. Active filter chip in ShoppingList (P2)
-- **File**: `components/shopping/ShoppingList.tsx`
-- **Problem**: When a category or store filter is active, there is no visible indicator. Users in a supermarket cannot tell they are seeing a filtered list.
-- **Fix**: When any filter is active, render a dismissible chip above the list.
-  - Format: "Categoría: Lácteos ×" — tapping × clears that filter.
-  - Use `bg-terracotta/10 text-terracotta text-xs rounded-full px-3 py-1` styling consistent with the badge system.
-  - One chip per active filter.
-
-### 2b. Remove GreetingCard decorative circles (P2)
-- **File**: `components/layout/GreetingCard.tsx`
-- **Problem**: Two `absolute rounded-full bg-terracotta/10` circles in the top-right corner are the most recognisable AI-generated decoration pattern. They signal template, not personality.
-- **Fix**: Delete both circle divs. The terracotta-tinted card background is sufficient. If a visual accent is wanted, use one small contextual SVG icon (house, key, or heart).
-
-### 2c. Fix trash disclosure in Finanzas (P3)
-- **File**: `app/finanzas/page.tsx`
-- **Problem**: Open/close toggle uses raw `▸`/`▾` Unicode triangles — inconsistent with the Lucide icon system and inaccessible.
-- **Fix**: Replace with `<ChevronRight size={14} />` / `<ChevronDown size={14} />` from `lucide-react`, styled with `text-muted transition-transform`.
-
-### 2d. MoreMenuSheet accessibility fixes
-- **File**: `components/layout/MoreMenuSheet.tsx`
-- **Problem 1**: `aria-modal="true"` declared but no focus trap — keyboard users can Tab past the sheet into the dimmed background.
-- **Problem 2**: Uses `aria-label="Menú"` (string) not `aria-labelledby` pointing to the visible `<h2>`.
-- **Fix 1**: Add focus trap. Options: `@radix-ui/react-focus-scope` (already a transitive dep via Radix primitives), or add `inert` attribute to the `<main>` content when the sheet is open.
-- **Fix 2**: Give the `<h2>` an `id="more-menu-title"` and change `aria-label` to `aria-labelledby="more-menu-title"`.
-
-### 2e. ShoppingList "show completed" toggle accessibility
-- **File**: `components/shopping/ShoppingList.tsx`
-- **Problem**: The "show/hide completed" toggle button has no `aria-expanded` attribute — screen reader users get no feedback about the section state.
-- **Fix**: Add `aria-expanded={showCompleted}` to the toggle button.
-
-### 2f. AppShell safe-area padding fix
-- **File**: `components/layout/AppShell.tsx` (or wherever `pb-24` is set on `<main>`)
-- **Problem**: `pb-24` does not account for the iPhone home indicator — content is clipped on iPhone X+ devices.
-- **Fix**: Change to `pb-[calc(6rem+env(safe-area-inset-bottom))]`.
+Stages 1 + 2 complete (2026-06-18). All P0/P1/P2/P3/A11y critique fixes done.
+Impeccable critique run 2026-06-18: **25/40** — 12 issues resolved, Stage 3 next.
 
 ---
 

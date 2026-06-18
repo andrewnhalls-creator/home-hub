@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (Stage 1 complete)
+Updated: 2026-06-18 (Stage 2 complete)
 
-## Current state: Deployed ✓ — Stage 1 critique fixes done
+## Current state: Deployed ✓ — Stage 1 + 2 critique fixes done
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -12,7 +12,7 @@ Edge Function unchanged — no redeploy needed unless Edge Function changes.
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `c248bb2` (Stage 1: FAB, error toasts, MetricCard attention state)
+- Last commit: `40f5cab` (Stage 2: filter chips, GreetingCard, a11y, safe-area fixes)
 - Pushed to origin main ✓
 - Deployed to production ✓
 
@@ -49,12 +49,12 @@ All fixes are queued in NEXT_STEPS.md. Start each new session by picking up from
 | ~~P0~~ | ~~"Añadir" button buried below fold — needs fixed FAB~~ | ✓ done |
 | ~~P1~~ | ~~Silent failure on shopping mutations — `onError` not wired~~ | ✓ done |
 | ~~P1~~ | ~~Dashboard metric grid undifferentiated — no urgency/attention state~~ | ✓ done |
-| P2 | Active filter state invisible — no dismissible chip when filter applied | `ShoppingList.tsx` |
-| P2 | GreetingCard decorative circles — AI template pattern, remove | `GreetingCard.tsx` |
-| P3 | Trash disclosure uses raw Unicode `▸`/`▾` — replace with Lucide icons | `finanzas/page.tsx` |
-| A11y | MoreMenuSheet focus not trapped — keyboard users escape into dimmed bg | `MoreMenuSheet.tsx` |
-| A11y | "Show completed" toggle missing `aria-expanded` | `ShoppingList.tsx` |
-| A11y | `MoreMenuSheet` uses `aria-label` string not `aria-labelledby` to `<h2>` | `MoreMenuSheet.tsx` |
+| ~~P2~~ | ~~Active filter state invisible~~ | ✓ done |
+| ~~P2~~ | ~~GreetingCard decorative circles~~ | ✓ done |
+| ~~P3~~ | ~~Trash disclosure Unicode triangles~~ | ✓ done |
+| ~~A11y~~ | ~~MoreMenuSheet focus not trapped~~ | ✓ done |
+| ~~A11y~~ | ~~"Show completed" toggle missing `aria-expanded`~~ | ✓ done |
+| ~~A11y~~ | ~~`MoreMenuSheet` uses `aria-label` not `aria-labelledby`~~ | ✓ done |
 | Visual | Icon weight: Lucide default stroke → Phosphor `weight="light"` (global) | all components |
 | Visual | Cards single-layer — add double-bezel depth treatment | `components/ui/Card.tsx` |
 | Layout | `AppShell` main `pb-24` doesn't account for iPhone safe area | `AppShell.tsx` |
