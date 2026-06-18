@@ -37,14 +37,14 @@ const REMIND_OPTIONS = [
 ];
 
 const EVENT_COLORS = [
-  "#0a84ff",
-  "#5ac8fa",
-  "#2dd4bf",
-  "#059669",
-  "#ffb020",
-  "#ff9f0a",
-  "#8b5cf6",
-  "#ff453a",
+  "#c55535", // terracotta
+  "#d9704e", // coral
+  "#c99a2e", // amber
+  "#42795a", // sage
+  "#3d6443", // olive
+  "#a86040", // rose
+  "#7a4060", // plum
+  "#b03030", // crimson
 ];
 
 export function CalendarEventForm({
