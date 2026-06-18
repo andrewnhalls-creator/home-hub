@@ -48,23 +48,32 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={toast.id}
             role={toast.variant === "error" ? "alert" : "status"}
             className={cn(
-              "animate-toast-enter pointer-events-auto flex w-full max-w-sm items-center gap-2 rounded-xl border px-4 py-3 text-sm shadow-sm",
+              "animate-toast-enter pointer-events-auto relative flex w-full max-w-sm items-center gap-3 overflow-hidden rounded-[var(--radius-xl)] border px-4 py-3 text-sm shadow-[var(--shadow-lg)]",
               toast.variant === "success"
-                ? "border-success/30 bg-card text-brown"
-                : "border-danger/30 bg-card text-brown",
+                ? "border-success/25 bg-white/[0.08] text-brown"
+                : "border-danger/25 bg-white/[0.08] text-brown",
             )}
+            style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
           >
+            {/* Colored left accent */}
+            <span
+              aria-hidden
+              className={cn(
+                "absolute inset-y-0 left-0 w-0.5",
+                toast.variant === "success" ? "bg-success" : "bg-danger",
+              )}
+            />
             {toast.variant === "success" ? (
               <CheckCircle2 className="h-5 w-5 shrink-0 text-success" aria-hidden />
             ) : (
               <AlertCircle className="h-5 w-5 shrink-0 text-danger" aria-hidden />
             )}
-            <span className="flex-1">{toast.message}</span>
+            <span className="flex-1 pl-0.5">{toast.message}</span>
             <button
               type="button"
               onClick={() => dismiss(toast.id)}
               aria-label="Cerrar aviso"
-              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-muted transition-colors hover:text-brown focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta/50 active:scale-[0.97]"
             >
               <X className="h-4 w-4" aria-hidden />
             </button>

@@ -30,7 +30,6 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
 
     const previousFocus = document.activeElement as HTMLElement | null;
 
-    // Auto-focus first focusable element inside the modal
     const focusables = () =>
       Array.from(dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []);
 
@@ -65,34 +64,59 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
 
   return createPortal(
     <div
-      className="animate-backdrop-enter fixed inset-0 z-50 flex items-end justify-center bg-black/60 sm:items-center sm:p-4"
+      className="animate-backdrop-enter fixed inset-0 z-50 flex items-end justify-center bg-black/70 sm:items-center sm:p-4"
+      style={{ backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
       onClick={onClose}
     >
+      {/* Glass panel — outer shell handles visuals; inner div handles scroll */}
       <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
-        onClick={(event) => event.stopPropagation()}
         className={cn(
-          "animate-modal-enter max-h-[92vh] w-full overflow-y-auto overscroll-contain rounded-t-2xl bg-card p-5 shadow-[var(--shadow-modal)] sm:max-w-md sm:rounded-2xl",
+          "animate-modal-enter relative w-full border border-white/[0.12] shadow-[var(--shadow-modal)] sm:max-w-md",
+          "rounded-t-[var(--radius-xl)] sm:rounded-[var(--radius-xl)]",
           className,
         )}
+        style={{
+          background: "rgba(13, 11, 31, 0.85)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+        }}
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between">
-          <h2 id="modal-title" className="text-lg font-semibold text-brown">
-            {title}
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Cerrar"
-            className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]"
-          >
-            <X className="h-5 w-5" aria-hidden />
-          </button>
+        {/* Edge highlights */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[var(--radius-xl)]"
+          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)" }}
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 w-px"
+          style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.12), transparent)" }}
+        />
+
+        {/* Scrollable content */}
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+          className="max-h-[92vh] overflow-y-auto overscroll-contain p-5"
+        >
+          <div className="mb-4 flex items-center justify-between">
+            <h2 id="modal-title" className="text-lg font-semibold text-brown">
+              {title}
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Cerrar"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta/50 active:scale-[0.97]"
+            >
+              <X className="h-5 w-5" aria-hidden />
+            </button>
+          </div>
+          {children}
         </div>
-        {children}
       </div>
     </div>,
     document.body,

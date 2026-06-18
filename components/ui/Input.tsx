@@ -8,7 +8,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, helperText, id, required, ...props }, ref) => {
+  ({ className, label, error, helperText, id, required, style, ...props }, ref) => {
     const generatedId = useId();
     const inputId = id ?? generatedId;
     const errorId = `${inputId}-error`;
@@ -27,18 +27,19 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={!!error}
           aria-describedby={error ? errorId : helperText ? helperId : undefined}
           className={cn(
-            "min-h-[44px] rounded-xl border border-border bg-card px-3 py-2 text-base text-brown placeholder:text-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
-            error && "border-danger focus-visible:ring-danger",
+            "min-h-[44px] w-full rounded-[var(--radius-xl)] border border-white/[0.12] bg-white/[0.06] px-3 py-2.5 text-sm text-brown placeholder:text-muted transition-[border-color,box-shadow] duration-150 focus:outline-none focus:border-terracotta/70 focus:ring-1 focus:ring-terracotta/50 disabled:cursor-not-allowed disabled:opacity-40",
+            error && "border-danger/60 focus:border-danger/80 focus:ring-danger/40",
             className,
           )}
+          style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", ...style }}
           {...props}
         />
         {error ? (
-          <p id={errorId} className="text-sm text-danger">
+          <p id={errorId} className="text-xs text-danger">
             {error}
           </p>
         ) : helperText ? (
-          <p id={helperId} className="text-sm text-muted">
+          <p id={helperId} className="text-xs text-muted">
             {helperText}
           </p>
         ) : null}

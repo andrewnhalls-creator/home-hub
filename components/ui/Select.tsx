@@ -16,7 +16,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   (
-    { className, label, error, options, placeholder, id, required, ...props },
+    { className, label, error, options, placeholder, id, required, style, ...props },
     ref,
   ) => {
     const generatedId = useId();
@@ -37,10 +37,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             aria-invalid={!!error}
             aria-describedby={error ? errorId : undefined}
             className={cn(
-              "min-h-[44px] w-full appearance-none rounded-xl border border-border bg-card px-3 py-2 pr-10 text-base text-brown focus:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
-              error && "border-danger focus-visible:ring-danger",
+              "min-h-[44px] w-full appearance-none rounded-[var(--radius-xl)] border border-white/[0.12] bg-white/[0.06] px-3 py-2.5 pr-10 text-sm text-brown transition-[border-color,box-shadow] duration-150 focus:outline-none focus:border-terracotta/70 focus:ring-1 focus:ring-terracotta/50 disabled:cursor-not-allowed disabled:opacity-40 [color-scheme:dark]",
+              error && "border-danger/60 focus:border-danger/80 focus:ring-danger/40",
               className,
             )}
+            style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", ...style }}
             {...props}
           >
             {placeholder && (
@@ -49,7 +50,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
               </option>
             )}
             {options.map((option) => (
-              <option key={option.value} value={option.value}>
+              <option key={option.value} value={option.value} className="bg-[#0D0B1F] text-brown">
                 {option.label}
               </option>
             ))}
@@ -60,7 +61,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           />
         </div>
         {error && (
-          <p id={errorId} className="text-sm text-danger">
+          <p id={errorId} className="text-xs text-danger">
             {error}
           </p>
         )}

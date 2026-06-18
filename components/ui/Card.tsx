@@ -3,55 +3,54 @@ import { cn } from "@/lib/utils";
 
 type CardVariant = "default" | "featured" | "subtle" | "metric";
 
-const outerClasses: Partial<Record<CardVariant, string>> = {
-  default:  "p-[3px] bg-border/50 rounded-[calc(var(--radius-lg)+3px)] shadow-[var(--shadow-card)]",
-  featured: "p-[3px] bg-terracotta/20 rounded-[calc(var(--radius-lg)+3px)] shadow-[var(--shadow-card)]",
-};
-
-const innerClasses: Record<CardVariant, string> = {
-  default:  "bg-card rounded-[var(--radius-lg)] p-4",
-  featured: "bg-card rounded-[var(--radius-lg)] p-4",
-  subtle:   "bg-sand border border-border rounded-2xl p-4",
-  metric:   "bg-card border border-border rounded-2xl p-4 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-200",
-};
-
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: CardVariant;
 }
 
-export function Card({ className, variant = "default", children, ...rest }: CardProps) {
-  const outer = outerClasses[variant];
-  if (outer) {
-    return (
-      <div className={outer}>
-        <div className={cn(innerClasses[variant], className)} {...rest}>
-          {children}
-        </div>
-      </div>
-    );
-  }
+const variantBase =
+  "relative overflow-hidden rounded-[var(--radius-xl)] border bg-white/[0.07] p-4";
+
+const variantClasses: Record<CardVariant, string> = {
+  default:  "border-white/[0.12] shadow-[var(--shadow-card)]",
+  featured: "border-terracotta/40 shadow-[0_0_0_1px_var(--color-terracotta),var(--shadow-card)]",
+  subtle:   "border-white/[0.06] bg-white/[0.04]",
+  metric:
+    "border-white/[0.12] shadow-[var(--shadow-card)] transition-[background,box-shadow] duration-200 hover:bg-white/[0.12] hover:shadow-[var(--shadow-card-hover)]",
+};
+
+export function Card({ className, variant = "default", children, style, ...rest }: CardProps) {
   return (
-    <div className={cn(innerClasses[variant], className)} {...rest}>
+    <div
+      className={cn(variantBase, variantClasses[variant], className)}
+      style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", ...style }}
+      {...rest}
+    >
+      {/* Top edge light refraction */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)" }}
+      />
+      {/* Left edge light refraction */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 w-px"
+        style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.15), transparent, rgba(255,255,255,0.05))" }}
+      />
       {children}
     </div>
   );
 }
 
-export function CardTitle({
-  className,
-  ...props
-}: HTMLAttributes<HTMLHeadingElement>) {
+export function CardTitle({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn("text-lg font-semibold text-brown", className)}
+      className={cn("text-base font-semibold text-brown sm:text-lg", className)}
       {...props}
     />
   );
 }
 
-export function CardDescription({
-  className,
-  ...props
-}: HTMLAttributes<HTMLParagraphElement>) {
+export function CardDescription({ className, ...props }: HTMLAttributes<HTMLParagraphElement>) {
   return <p className={cn("text-sm text-muted", className)} {...props} />;
 }

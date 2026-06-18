@@ -18,7 +18,7 @@ export function ProgressBar({ value, max, className, label }: ProgressBarProps) 
         aria-valuemin={0}
         aria-valuemax={max}
         aria-label={label}
-        className="h-2.5 w-full overflow-hidden rounded-full bg-sand"
+        className="h-2 w-full overflow-hidden rounded-full bg-white/[0.10]"
       >
         <div
           className="progress-fill h-full w-full rounded-full bg-terracotta"
