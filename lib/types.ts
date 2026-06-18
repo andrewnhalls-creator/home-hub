@@ -332,6 +332,7 @@ export interface WishlistItem {
   target_month: string | null;
   url: string | null;
   status: WishlistStatus;
+  votes: Record<string, "quiero" | "no_ahora">;
   notes: string | null;
   created_by: string | null;
   created_at: string;
