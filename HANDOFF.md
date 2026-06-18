@@ -1,10 +1,10 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (Glassmorphism redesign — Phase 1 complete)
+Updated: 2026-06-18 (Glassmorphism redesign — Phases 1–5 complete)
 
 ## Current state
-Glassmorphism redesign in progress. Phase 1 (design system foundation) complete.
-Features 1–6 still complete; Feature 7 (PDF export) is pending — resume after redesign phases.
-Build, lint, typecheck all pass.
+Glassmorphism redesign complete. All 5 phases shipped and pushed.
+Feature 7 (PDF export) is next — resume now that redesign is done.
+Build, lint, typecheck all pass (0 errors).
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -58,8 +58,8 @@ Logo "Home Hub" (→ /dashboard) · page title (centre, mobile) · MagnifyingGla
 
 ## Glassmorphism redesign phases
 - ✅ Phase 1: globals.css tokens + TypeUI setup
-- ⬜ Phase 2: Core UI components (Card, Button, Input, Modal, Badge, Toast, EmptyState)
-- ⬜ Phase 3: Navigation shell (BottomNav, TopBar, AppShell, Sidebar)
-- ⬜ Phase 4: Key pages (Dashboard, Finance, Calendar)
-- ⬜ Phase 5: Module pages + polish
-- ⬜ Feature 7: PDF export (paused during redesign)
+- ✅ Phase 2: Core UI components (Card, Button, Input, Modal, Badge, Toast, EmptyState, Checkbox, ProgressBar)
+- ✅ Phase 3: Navigation shell (BottomNav, TopBar, Sidebar, MoreMenuSheet)
+- ✅ Phase 4: Key pages (Dashboard MetricCard, Finance KpiChip, Calendar today ring)
+- ✅ Phase 5: Module polish — all text-white→text-cream contrast fixes, OfflineBanner dark mode, SegmentedControl indicator
+- ⬜ Feature 7: PDF export (next)
