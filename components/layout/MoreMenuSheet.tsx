@@ -8,16 +8,14 @@ import { MENU_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const ITEM_ACCENTS: Record<string, { iconColor: string; iconBg: string }> = {
-  "/dashboard":              { iconColor: "text-terracotta", iconBg: "bg-terracotta/10" },
-  "/recordatorios":          { iconColor: "text-amber",      iconBg: "bg-amber/20"      },
-  "/tareas":                 { iconColor: "text-olive",      iconBg: "bg-olive/10"      },
-  "/menu":                   { iconColor: "text-sage",       iconBg: "bg-sage/20"       },
-  "/documentos":             { iconColor: "text-muted",      iconBg: "bg-sand"          },
-  "/deseos":                 { iconColor: "text-rose",       iconBg: "bg-rose/20"       },
-  "/ajustes":                { iconColor: "text-muted",      iconBg: "bg-sand"          },
-  "/ajustes/notificaciones": { iconColor: "text-coral",      iconBg: "bg-coral/10"      },
-  "/ajustes/dispositivos":   { iconColor: "text-sage",       iconBg: "bg-sage/10"       },
-  "/papelera":               { iconColor: "text-muted",      iconBg: "bg-sand"          },
+  "/recordatorios":          { iconColor: "text-amber",  iconBg: "bg-amber/20"  },
+  "/tareas":                 { iconColor: "text-olive",  iconBg: "bg-olive/10"  },
+  "/documentos":             { iconColor: "text-muted",  iconBg: "bg-sand"      },
+  "/deseos":                 { iconColor: "text-rose",   iconBg: "bg-rose/20"   },
+  "/ajustes":                { iconColor: "text-muted",  iconBg: "bg-sand"      },
+  "/ajustes/notificaciones": { iconColor: "text-coral",  iconBg: "bg-coral/10"  },
+  "/ajustes/dispositivos":   { iconColor: "text-sage",   iconBg: "bg-sage/10"   },
+  "/papelera":               { iconColor: "text-muted",  iconBg: "bg-sand"      },
 };
 
 interface MoreMenuSheetProps {
