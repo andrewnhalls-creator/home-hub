@@ -3,8 +3,24 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { X } from "lucide-react";
+import {
+  X,
+  ForkKnife, Bell, ListChecks, FileText, Heart,
+  GearSix, BellRinging, DeviceMobile, Trash,
+} from "@phosphor-icons/react";
 import { MENU_ITEMS } from "@/lib/constants";
+
+const PHOSPHOR_MENU_ICONS: Record<string, React.ElementType> = {
+  "/menu":                   ForkKnife,
+  "/recordatorios":          Bell,
+  "/tareas":                 ListChecks,
+  "/documentos":             FileText,
+  "/deseos":                 Heart,
+  "/ajustes":                GearSix,
+  "/ajustes/notificaciones": BellRinging,
+  "/ajustes/dispositivos":   DeviceMobile,
+  "/papelera":               Trash,
+};
 import { cn } from "@/lib/utils";
 
 const ITEM_ACCENTS: Record<string, { iconColor: string; iconBg: string }> = {
@@ -82,14 +98,14 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
             aria-label="Cerrar"
             className="flex h-11 w-11 items-center justify-center rounded-full text-muted hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]"
           >
-            <X className="h-4 w-4" aria-hidden />
+            <X weight="light" size={18} aria-hidden />
           </button>
         </div>
 
         {/* Grid */}
         <ul className="grid grid-cols-3 gap-3">
           {MENU_ITEMS.map((item) => {
-            const Icon = item.icon;
+            const Icon = PHOSPHOR_MENU_ICONS[item.href];
             const accent = ITEM_ACCENTS[item.href] ?? {
               iconColor: "text-terracotta",
               iconBg: "bg-terracotta/10",
@@ -104,7 +120,7 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
                   )}
                 >
                   <div className={cn("flex h-12 w-12 items-center justify-center rounded-xl", accent.iconBg)}>
-                    <Icon className={cn("h-6 w-6", accent.iconColor)} aria-hidden />
+                    <Icon weight="light" size={24} className={accent.iconColor} aria-hidden />
                   </div>
                   <span className="text-xs font-medium leading-tight text-brown">{item.label}</span>
                 </Link>

@@ -3,10 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MoreHorizontal } from "lucide-react";
+import { House, CalendarDots, ShoppingCart, Wallet, DotsThree } from "@phosphor-icons/react";
 import { PRIMARY_NAV_ITEMS } from "@/lib/constants";
 import { MoreMenuSheet } from "@/components/layout/MoreMenuSheet";
 import { cn } from "@/lib/utils";
+
+const PHOSPHOR_NAV_ICONS: Record<string, React.ElementType> = {
+  "/dashboard":  House,
+  "/calendario": CalendarDots,
+  "/compra":     ShoppingCart,
+  "/finanzas":   Wallet,
+};
 
 export function BottomNav() {
   const pathname = usePathname();
@@ -21,7 +28,7 @@ export function BottomNav() {
         <ul className="flex">
           {PRIMARY_NAV_ITEMS.map((item) => {
             const isActive = pathname?.startsWith(item.href);
-            const Icon = item.icon;
+            const Icon = PHOSPHOR_NAV_ICONS[item.href];
             return (
               <li key={item.href} className="flex-1">
                 <Link
@@ -33,7 +40,9 @@ export function BottomNav() {
                   )}
                 >
                   <Icon
-                    className={cn("h-5 w-5 transition-transform", isActive && "scale-110")}
+                    weight="light"
+                    size={22}
+                    className={cn("transition-transform", isActive && "scale-110")}
                     aria-hidden
                   />
                   <span className="whitespace-nowrap">{item.label}</span>
@@ -55,8 +64,10 @@ export function BottomNav() {
                 isMenuOpen ? "text-terracotta" : "text-muted",
               )}
             >
-              <MoreHorizontal
-                className={cn("h-5 w-5 transition-transform", isMenuOpen && "scale-110")}
+              <DotsThree
+                weight="light"
+                size={22}
+                className={cn("transition-transform", isMenuOpen && "scale-110")}
                 aria-hidden
               />
               <span className="whitespace-nowrap">Más</span>

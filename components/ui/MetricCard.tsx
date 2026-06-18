@@ -1,9 +1,8 @@
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MetricCardProps {
-  icon: LucideIcon;
+  icon: React.ElementType;
   iconColor?: string;
   iconBg?: string;
   label: string;
@@ -37,7 +36,7 @@ export function MetricCard({
       )}
     >
       <div className={cn("flex h-10 w-10 items-center justify-center rounded-xl", attention ? "bg-terracotta/10" : iconBg)}>
-        <Icon className={cn("h-5 w-5", attention ? "text-terracotta" : iconColor)} aria-hidden />
+        <Icon weight="light" size={20} className={cn(attention ? "text-terracotta" : iconColor)} aria-hidden />
       </div>
       <div className="flex flex-col gap-0.5">
         <span className="text-2xl font-bold text-brown leading-none tabular-nums">{metric}</span>

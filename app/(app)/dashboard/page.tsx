@@ -1,16 +1,8 @@
-import {
-  ShoppingCart,
-  UtensilsCrossed,
-  Bell,
-  ListChecks,
-  CalendarDays,
-  Wallet,
-} from "lucide-react";
+import { MetricGrid } from "@/components/dashboard/MetricGrid";
 import { startOfWeek, endOfWeek, format, isPast, addDays } from "date-fns";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formatCurrency, formatDate } from "@/lib/format";
-import { MetricCard } from "@/components/ui/MetricCard";
 import { GreetingCard } from "@/components/dashboard/GreetingCard";
 import { WeekCalendarWidget } from "@/components/dashboard/WeekCalendarWidget";
 import { ListSection } from "@/components/dashboard/ListSection";
@@ -109,60 +101,17 @@ export default async function DashboardPage() {
 
       {/* On lg+: 2-col layout (metric grid left, calendar + lists right) */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        {/* Left: 6 metric tiles — 2-col on mobile/tablet, 3-col on md+ */}
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-2 lg:content-start">
-          <MetricCard
-            icon={ShoppingCart}
-            label="Compra"
-            metric={shopping}
-            status={shopping === 0 ? "Lista vacía" : "pendientes"}
-            href="/compra"
-          />
-          <MetricCard
-            icon={UtensilsCrossed}
-            iconColor="text-olive"
-            iconBg="bg-sage/20"
-            label="Menú"
-            metric={meals}
-            status={meals === 0 ? "Sin planificar" : "de 7 comidas"}
-            href="/menu"
-          />
-          <MetricCard
-            icon={Bell}
-            iconBg="bg-amber/20"
-            label="Recordatorios"
-            metric={pending}
-            status={pending === 0 ? "Nada pendiente" : "pendientes"}
-            attention={hasOverdueReminders}
-            href="/recordatorios"
-          />
-          <MetricCard
-            icon={ListChecks}
-            iconColor="text-olive"
-            iconBg="bg-olive/10"
-            label="Tareas"
-            metric={tasks}
-            status={tasks === 0 ? "Al día" : "pendientes"}
-            href="/tareas"
-          />
-          <MetricCard
-            icon={CalendarDays}
-            label="Hoy"
-            metric={todayEventsCount}
-            status={todayEventsCount === 0 ? "Sin eventos hoy" : "eventos"}
-            href="/calendario"
-          />
-          <MetricCard
-            icon={Wallet}
-            iconColor="text-coral"
-            iconBg="bg-rose/20"
-            label="Finanzas"
-            metric={activePayments}
-            status={activePayments === 0 ? "Sin pagos activos" : "pagos activos"}
-            attention={hasOverduePayments}
-            href="/finanzas"
-          />
-        </div>
+        {/* Left: 6 metric tiles */}
+        <MetricGrid
+          shopping={shopping}
+          meals={meals}
+          pending={pending}
+          tasks={tasks}
+          todayEventsCount={todayEventsCount}
+          activePayments={activePayments}
+          hasOverdueReminders={hasOverdueReminders}
+          hasOverduePayments={hasOverduePayments}
+        />
 
         {/* Right: calendar widget + upcoming sections */}
         <div className="flex flex-col gap-5">

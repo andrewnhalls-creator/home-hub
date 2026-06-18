@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search } from "lucide-react";
+import { MagnifyingGlass } from "@phosphor-icons/react";
 import { NAV_ITEMS } from "@/lib/constants";
 import { NotificationCentre } from "@/components/notifications/NotificationCentre";
 import type { NotificationEvent } from "@/lib/types";
@@ -53,7 +53,7 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
               aria-label="Buscar"
               className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
             >
-              <Search className="h-5 w-5" aria-hidden />
+              <MagnifyingGlass weight="light" size={22} aria-hidden />
             </Link>
             <NotificationCentre notifications={notifications} unreadCount={unreadCount} />
           </div>
