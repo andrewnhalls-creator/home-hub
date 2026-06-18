@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   X,
   ForkKnife, Bell, ListChecks, FileText, Heart,
-  GearSix, BellRinging, DeviceMobile, Trash,
+  GearSix, BellRinging, DeviceMobile, Trash, ClockClockwise,
 } from "@phosphor-icons/react";
 import { MENU_ITEMS } from "@/lib/constants";
 
@@ -16,6 +16,7 @@ const PHOSPHOR_MENU_ICONS: Record<string, React.ElementType> = {
   "/tareas":                 ListChecks,
   "/documentos":             FileText,
   "/deseos":                 Heart,
+  "/actividad":              ClockClockwise,
   "/ajustes":                GearSix,
   "/ajustes/notificaciones": BellRinging,
   "/ajustes/dispositivos":   DeviceMobile,
@@ -29,6 +30,7 @@ const ITEM_ACCENTS: Record<string, { iconColor: string; iconBg: string }> = {
   "/tareas":                 { iconColor: "text-olive",  iconBg: "bg-olive/10"  },
   "/documentos":             { iconColor: "text-muted",  iconBg: "bg-white/[0.08]" },
   "/deseos":                 { iconColor: "text-rose",   iconBg: "bg-rose/20"      },
+  "/actividad":              { iconColor: "text-amber",  iconBg: "bg-amber/10"     },
   "/ajustes":                { iconColor: "text-muted",  iconBg: "bg-white/[0.08]" },
   "/ajustes/notificaciones": { iconColor: "text-coral",  iconBg: "bg-coral/10"     },
   "/ajustes/dispositivos":   { iconColor: "text-sage",   iconBg: "bg-sage/10"      },
