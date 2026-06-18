@@ -7,39 +7,25 @@ Deploy pending: run `npx vercel --prod`.
 
 ---
 
-## Next session — audit fixes (do in order)
+## Next session — remaining items
 
-### 1. Deploy to production first
+### 1. Deploy to production
 ```
 npx vercel --prod
 ```
 
-### 2. [P1] Fix ExpenseCharts off-brand colors
-**File**: `components/finance/ExpenseCharts.tsx:29,195,245`
-Replace `SLICE_COLORS` (`#0a84ff` iOS blue etc.) and bar `fill` with brand palette.
-Suggested warm chart palette:
-- Bar fill: terracotta `oklch(0.52 0.128 32)`
-- Slices: terracotta, sage, amber, rose, olive, muted (use CSS hex equivalents)
-Command: `/impeccable colorize components/finance/ExpenseCharts.tsx`
-
-### 3. [P1] Fix 10px calendar text
-**Files**: `components/dashboard/WeekCalendarWidget.tsx:58`, `components/calendar/CalendarView.tsx:350`
-Change `text-[10px]` → `text-xs` (12px). Also `text-[11px]` in `WeekStrip.tsx:58` → `text-xs`.
-Command: `/impeccable typeset`
-
-### 4. [P2] Remove uppercase eyebrow section headers
-**Files**: `components/search/SearchView.tsx:83`, `components/notifications/NotificationCentre.tsx:96`, `components/finance/MortgageTab.tsx:226`
-Remove `uppercase tracking-wide` from section label classes. Use plain `text-xs font-medium text-muted` or a `border-t` separator.
-Command: `/impeccable clarify`
-
-### 5. [P2] Verify muted placeholder contrast live
-Deploy first, then check `placeholder:text-muted` in any input on the live app with a contrast tool.
-If under 4.5:1, darken muted in `globals.css` from `oklch(0.44 0.016 86)` → `oklch(0.40 0.016 86)`.
+### 2. [P2] Verify muted placeholder contrast live
+After deploying, check `placeholder:text-muted` in any input with a contrast tool.
+If under 4.5:1, darken muted in `globals.css`: `oklch(0.44 0.016 86)` → `oklch(0.40 0.016 86)`.
 Command: `/impeccable polish`
 
-### 6. Update DESIGN.md
+### 3. Update DESIGN.md
 DESIGN.md still documents old Aceite de oliva / Granito values. Bring it in sync with Azulejo (globals.css is the source of truth).
 Command: `/impeccable document`
+
+### 4. [P3] CalendarEventForm colour swatches
+`components/calendar/CalendarEventForm.tsx:40-47` — event colour swatches include cold iOS palette.
+Replace with warmer brand-palette equivalents.
 
 ---
 

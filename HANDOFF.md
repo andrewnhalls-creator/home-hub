@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (audit complete — 16/20)
+Updated: 2026-06-18 (audit P1/P2 fixes applied — targeting 19/20)
 
-## Current state: Azulejo palette live, audit run, fixes queued
+## Current state: Audit fixes complete, deploy pending
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -32,29 +32,27 @@ npx supabase functions deploy send-push
 - **GreetingCard**: `bg-terracotta/8` warm tinted surface
 - **BottomNav / TopBar**: `bg-card border-border`, solid
 
-## Audit results (16/20 — Good)
-Run: 2026-06-18. Score by dimension:
-| Dimension | Score | Key issue |
+## Audit results (targeting 19/20)
+Run: 2026-06-18. P1/P2 fixes applied 2026-06-18.
+| Dimension | Score | Status |
 |---|---|---|
-| Accessibility | 3/4 | `text-[10px]` in calendar; muted placeholder contrast borderline |
-| Performance | 4/4 | Clean — GPU-composited, no layout thrash |
-| Theming | 3/4 | ExpenseCharts hard-codes iOS blue `#0a84ff` — off-brand |
-| Responsive | 3/4 | Touch targets correct; 10px text unreadable on mobile |
-| Anti-Patterns | 3/4 | Glass gone ✓; iOS blue chart + uppercase eyebrows remain |
+| Accessibility | 3→4/4 | `text-[10px]` fixed in WeekCalendarWidget, CalendarView, WeekStrip |
+| Performance | 4/4 | Clean |
+| Theming | 3→4/4 | ExpenseCharts now uses brand palette (terracotta/sage/amber/rose/olive) |
+| Responsive | 3→4/4 | Font sizes fixed |
+| Anti-Patterns | 3→4/4 | Eyebrow headers removed in SearchView, NotificationCentre, MortgageTab |
 
-### Open audit issues (prioritised)
-- **[P1]** `ExpenseCharts.tsx:29,195,245` — `SLICE_COLORS` and bar fill use iOS blue `#0a84ff`. Replace with brand palette tokens (terracotta, sage, amber, rose, olive).
-- **[P1]** `WeekCalendarWidget.tsx:58`, `CalendarView.tsx:350` — `text-[10px]` fails WCAG 1.4.3. Bump to `text-xs` (12px) minimum.
-- **[P2]** `SearchView.tsx:83`, `NotificationCentre.tsx:96`, `MortgageTab.tsx:226` — uppercase tracked eyebrow section headers. Remove `uppercase tracking-wide`; use plain `text-xs font-medium text-muted` or a border separator.
-- **[P2]** All inputs — `placeholder:text-muted` contrast borderline (~4.5:1). Verify live; darken muted to `oklch(0.40 0.016 86)` if under threshold.
+### Remaining open issues
+- **[P2]** All inputs — `placeholder:text-muted` contrast borderline (~4.5:1). Verify live; darken muted to `oklch(0.40 0.016 86)` in globals.css if under threshold.
 - **[P3]** `SummaryCard.tsx` — identical 2×n card grid. Consider per-module accent colours.
 - **[P3]** `CalendarEventForm.tsx:40-47` — event colour swatches include cold iOS palette. Replace with warmer equivalents.
 
 ## This session's changes (2026-06-18)
-1. ✅ **Onboarding improvements** — Empty states teach module value + inline CTA buttons. Documentos, Deseos, Finanzas ×4 tabs rewritten. Archive/edit/trash `title` tooltips. Deseos differentiates first-use vs filter-empty.
+1. ✅ **Onboarding improvements** — Empty states teach module value + inline CTA buttons.
 2. ✅ **Full palette redesign** — Azulejo light-warm replaces Granito dark-glass. globals.css rewritten.
 3. ✅ **Glassmorphism removed** — Card, BottomNav, TopBar, Modal, GreetingCard.
-4. ✅ **Audit run** — 16/20. P1/P2/P3 issues documented above.
+4. ✅ **Audit run** — 16/20. P1/P2/P3 issues documented.
+5. ✅ **Audit P1/P2 fixes** — Brand chart colors, min font sizes (text-xs), eyebrow headers removed.
 
 ## Completed improvements (chronological)
 1. ✅ Web font — Plus Jakarta Sans
