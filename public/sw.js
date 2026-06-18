@@ -95,6 +95,8 @@ self.addEventListener("push", function (event) {
     tag: data.tag || "home-hub-notification",
     data: { url: data.url || "/" },
     requireInteraction: false,
+    silent: data.sound === false,
+    vibrate: data.vibrate !== false ? [100, 50, 100] : [],
   };
 
   event.waitUntil(self.registration.showNotification(title, options));

@@ -44,6 +44,8 @@ interface PushSubscriptionRow {
   endpoint: string;
   p256dh: string;
   auth_key: string;
+  sound_enabled: boolean;
+  vibration_enabled: boolean;
 }
 
 interface NotificationEventRow {
@@ -131,7 +133,7 @@ async function deliverToSubscriptions(
 ): Promise<{ sent: number; failed: number }> {
   const { data: subscriptions } = await db
     .from("push_subscriptions")
-    .select("id, endpoint, p256dh, auth_key")
+    .select("id, endpoint, p256dh, auth_key, sound_enabled, vibration_enabled")
     .eq("user_id", userId)
     .eq("is_active", true);
 
@@ -139,11 +141,18 @@ async function deliverToSubscriptions(
     return { sent: 0, failed: 0 };
   }
 
-  const payload = JSON.stringify({ title, body: body ?? "", url });
+  // payload is built per-subscription so sound/vibration prefs are respected
   let sent = 0;
   let failed = 0;
 
   for (const sub of subscriptions as PushSubscriptionRow[]) {
+    const payload = JSON.stringify({
+      title,
+      body: body ?? "",
+      url,
+      sound: sub.sound_enabled !== false,
+      vibrate: sub.vibration_enabled !== false,
+    });
     try {
       await webpush.sendNotification(
         {

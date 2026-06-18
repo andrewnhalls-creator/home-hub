@@ -31,6 +31,25 @@ export async function removeDevice(
   return { success: true };
 }
 
+export async function updateSubscriptionPrefs(
+  subscriptionId: string,
+  prefs: { sound_enabled?: boolean; vibration_enabled?: boolean },
+): Promise<DevicesActionState> {
+  const { user } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("push_subscriptions")
+    .update(prefs)
+    .eq("id", subscriptionId)
+    .eq("user_id", user.id);
+
+  if (error) return { error: "No se ha podido actualizar la preferencia." };
+
+  revalidatePath("/ajustes/dispositivos");
+  return { success: true };
+}
+
 export async function removeAllDevices(): Promise<DevicesActionState> {
   const { user } = await requireHousehold();
   const supabase = await createClient();

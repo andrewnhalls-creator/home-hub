@@ -8,7 +8,7 @@ export default async function DispositivosPage() {
 
   const { data: subscriptions } = await supabase
     .from("push_subscriptions")
-    .select("id, device_name, user_agent, is_active, last_seen_at, created_at, deactivated_at")
+    .select("id, device_name, user_agent, is_active, last_seen_at, created_at, deactivated_at, sound_enabled, vibration_enabled")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 

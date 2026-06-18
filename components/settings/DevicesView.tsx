@@ -1,11 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
-import { Smartphone, Trash2, AlertTriangle, type LucideIcon } from "lucide-react";
+import { useActionState, useTransition } from "react";
+import { Smartphone, Trash2, AlertTriangle, Volume2, VolumeX, Vibrate, type LucideIcon } from "lucide-react";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { removeDevice, removeAllDevices } from "@/app/(app)/ajustes/dispositivos/actions";
+import { cn } from "@/lib/utils";
+import { removeDevice, removeAllDevices, updateSubscriptionPrefs } from "@/app/(app)/ajustes/dispositivos/actions";
 import type { DevicesActionState } from "@/app/(app)/ajustes/dispositivos/actions";
 
 interface Subscription {
@@ -16,6 +17,8 @@ interface Subscription {
   last_seen_at: string | null;
   created_at: string;
   deactivated_at: string | null;
+  sound_enabled: boolean;
+  vibration_enabled: boolean;
 }
 
 interface DevicesViewProps {
@@ -26,6 +29,7 @@ const initialState: DevicesActionState = {};
 
 function DeviceRow({ sub }: { sub: Subscription }) {
   const [state, formAction, pending] = useActionState(removeDevice, initialState);
+  const [, startTransition] = useTransition();
 
   const label = sub.device_name || deriveDeviceName(sub.user_agent);
   const lastSeen = sub.last_seen_at
@@ -39,45 +43,92 @@ function DeviceRow({ sub }: { sub: Subscription }) {
       })
     : null;
 
+  function togglePref(pref: "sound_enabled" | "vibration_enabled", current: boolean) {
+    startTransition(async () => {
+      await updateSubscriptionPrefs(sub.id, { [pref]: !current });
+    });
+  }
+
   return (
-    <li className="flex items-start justify-between gap-3 py-3 border-b border-sand last:border-0">
-      <div className="flex items-start gap-3">
-        <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sage/20">
-          <Smartphone className="h-4 w-4 text-sage" aria-hidden />
+    <li className="flex flex-col gap-2 py-3 border-b border-sand last:border-0">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3">
+          <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sage/20">
+            <Smartphone className="h-4 w-4 text-sage" aria-hidden />
+          </div>
+          <div className="flex flex-col gap-0.5">
+            <span className="text-sm font-medium text-brown">{label}</span>
+            {lastSeen && (
+              <span className="text-xs text-muted">Último acceso: {lastSeen}</span>
+            )}
+            {!sub.is_active && sub.deactivated_at && (
+              <span className="text-xs text-danger">
+                Revocado el{" "}
+                {new Date(sub.deactivated_at).toLocaleDateString("es-ES", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </span>
+            )}
+            {state?.error && (
+              <span className="text-xs text-danger">{state.error}</span>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-medium text-brown">{label}</span>
-          {lastSeen && (
-            <span className="text-xs text-muted">Último acceso: {lastSeen}</span>
-          )}
-          {!sub.is_active && sub.deactivated_at && (
-            <span className="text-xs text-danger">
-              Revocado el{" "}
-              {new Date(sub.deactivated_at).toLocaleDateString("es-ES", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })}
-            </span>
-          )}
-          {state?.error && (
-            <span className="text-xs text-danger">{state.error}</span>
-          )}
-        </div>
+
+        {sub.is_active && (
+          <form action={formAction}>
+            <input type="hidden" name="subscriptionId" value={sub.id} />
+            <button
+              type="submit"
+              disabled={pending}
+              aria-label={`Quitar ${label}`}
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-danger hover:bg-danger/10 disabled:opacity-50"
+            >
+              <Trash2 className="h-4 w-4" aria-hidden />
+            </button>
+          </form>
+        )}
       </div>
 
+      {/* Per-device sound / vibration toggles (active devices only) */}
       {sub.is_active && (
-        <form action={formAction}>
-          <input type="hidden" name="subscriptionId" value={sub.id} />
+        <div className="ml-11 flex gap-2">
           <button
-            type="submit"
-            disabled={pending}
-            aria-label={`Quitar ${label}`}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-danger hover:bg-danger/10 disabled:opacity-50"
+            type="button"
+            aria-pressed={sub.sound_enabled}
+            aria-label={sub.sound_enabled ? "Desactivar sonido" : "Activar sonido"}
+            onClick={() => togglePref("sound_enabled", sub.sound_enabled)}
+            className={cn(
+              "flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-medium transition active:scale-[0.97]",
+              sub.sound_enabled
+                ? "border-terracotta/30 bg-terracotta/10 text-terracotta"
+                : "border-border bg-card text-muted",
+            )}
           >
-            <Trash2 className="h-4 w-4" aria-hidden />
+            {sub.sound_enabled
+              ? <Volume2 className="h-3.5 w-3.5" aria-hidden />
+              : <VolumeX className="h-3.5 w-3.5" aria-hidden />
+            }
+            Sonido
           </button>
-        </form>
+          <button
+            type="button"
+            aria-pressed={sub.vibration_enabled}
+            aria-label={sub.vibration_enabled ? "Desactivar vibración" : "Activar vibración"}
+            onClick={() => togglePref("vibration_enabled", sub.vibration_enabled)}
+            className={cn(
+              "flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-medium transition active:scale-[0.97]",
+              sub.vibration_enabled
+                ? "border-terracotta/30 bg-terracotta/10 text-terracotta"
+                : "border-border bg-card text-muted",
+            )}
+          >
+            <Vibrate className="h-3.5 w-3.5" aria-hidden />
+            Vibración
+          </button>
+        </div>
       )}
     </li>
   );
