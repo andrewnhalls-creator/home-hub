@@ -1,3 +1,4 @@
+import { ChevronRight } from "lucide-react";
 import { format, startOfMonth, endOfMonth } from "date-fns";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -186,9 +187,9 @@ export default async function FinancePage() {
         members={members ?? []}
       />
       <details className="group mt-2 mb-6">
-        <summary className="cursor-pointer list-none rounded-xl px-3 py-2 text-xs font-medium text-muted hover:text-brown focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta">
-          <span className="group-open:hidden">▸ Archivo y papelera</span>
-          <span className="hidden group-open:inline">▾ Archivo y papelera</span>
+        <summary className="flex cursor-pointer list-none items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium text-muted hover:text-brown focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta">
+          <ChevronRight size={14} className="transition-transform group-open:rotate-90 text-muted" aria-hidden />
+          Archivo y papelera
         </summary>
         <div className="mt-2">
           <TrashSection

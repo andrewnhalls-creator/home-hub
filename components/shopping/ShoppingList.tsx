@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useToast } from "@/components/ui/Toast";
-import { Plus, ShoppingCart, ChevronDown } from "lucide-react";
+import { Plus, ShoppingCart, ChevronDown, X } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Modal } from "@/components/ui/Modal";
@@ -111,6 +111,31 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
         />
       </div>
 
+      {(categoryFilter || storeFilter) && (
+        <div className="flex flex-wrap gap-2">
+          {categoryFilter && (
+            <button
+              type="button"
+              onClick={() => setCategoryFilter("")}
+              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta/10 px-3 py-1 text-xs font-medium text-terracotta"
+            >
+              Categoría: {categoryById.get(categoryFilter)?.name ?? categoryFilter}
+              <X className="h-3 w-3" aria-hidden />
+            </button>
+          )}
+          {storeFilter && (
+            <button
+              type="button"
+              onClick={() => setStoreFilter("")}
+              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta/10 px-3 py-1 text-xs font-medium text-terracotta"
+            >
+              Tienda: {storeFilter}
+              <X className="h-3 w-3" aria-hidden />
+            </button>
+          )}
+        </div>
+      )}
+
       {activeItems.length === 0 ? (
         <EmptyState
           icon={ShoppingCart}
@@ -136,6 +161,7 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
           <button
             type="button"
             onClick={() => setShowCompleted((value) => !value)}
+            aria-expanded={showCompleted}
             className="flex items-center gap-1 text-sm font-medium text-muted"
           >
             <ChevronDown

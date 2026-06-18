@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X } from "lucide-react";
@@ -25,12 +25,29 @@ interface MoreMenuSheetProps {
 }
 
 export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
+  const sheetRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!isOpen) return;
     function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab" || !sheetRef.current) return;
+      const focusable = Array.from(
+        sheetRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus();
+      }
     }
     document.addEventListener("keydown", handleKey);
+    sheetRef.current?.querySelector<HTMLElement>("button, a[href]")?.focus();
     return () => document.removeEventListener("keydown", handleKey);
   }, [isOpen, onClose]);
 
@@ -46,9 +63,10 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
 
       {/* Sheet */}
       <div
+        ref={sheetRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Menú"
+        aria-labelledby="more-menu-title"
         onClick={(e) => e.stopPropagation()}
         className="animate-sheet-enter relative w-full rounded-t-2xl bg-card px-5 pt-3 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-modal)]"
       >
@@ -57,7 +75,7 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
 
         {/* Header */}
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-brown">Menú</h2>
+          <h2 id="more-menu-title" className="text-base font-semibold text-brown">Menú</h2>
           <button
             type="button"
             onClick={onClose}
