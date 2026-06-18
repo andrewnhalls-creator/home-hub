@@ -1,55 +1,54 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (all critique stages done — planned features next)
+Updated: 2026-06-18 (Features 1–6 complete; Feature 7 remaining)
 
 ## Current state
-All impeccable critique fixes complete (Stages 1–4). Build, lint, typecheck all pass.
-**Do not deploy again until all features in NEXT_STEPS.md are complete.**
+6 of 7 planned features complete. Build, lint, typecheck all pass.
+**Do not deploy until Feature 7 is done and the deploy checklist is complete.**
 
 ## Production URL
 https://home-hub-dun.vercel.app
 
 ## Deploy
 GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo — intentional, see KNOWN_ISSUES.md).
-Edge Function unchanged — no redeploy needed unless Edge Function code changes.
 
 ## Last known good state
-- Build, lint, typecheck all pass
-- Last commit: `2c6b7eb` (Update HANDOFF and NEXT_STEPS: Stage 4 complete)
+- Build, lint, typecheck all pass (0 errors)
+- Last commit: `3cbf729` (Feature 6: Chore history, heatmap, and streaks)
 - Pushed to origin main ✓
-- Deployed to production ✓
 
 ## Design identity (Azulejo — light-first)
 - **Palette:** warm off-white bg `oklch(0.972 0.006 86)`, near-white cards, terracotta primary `oklch(0.52 0.128 32)`
 - **Light-first:** `:root` is light; dark mode via `@media (prefers-color-scheme: dark)`
 - **Surfaces:** solid Card (no glassmorphism); `default` and `featured` variants have a subtle outer bezel ring
 - **Font:** Plus Jakarta Sans (`--font-jakarta`)
-- **Icons:** Phosphor `weight="light"` on BottomNav, TopBar, MoreMenuSheet, MetricGrid. Lucide remains on Sidebar and all other components (migrate incrementally).
+- **Icons:** Phosphor `weight="light"` on BottomNav, TopBar, MoreMenuSheet, MetricGrid. Lucide remains on Sidebar and all other components.
 
 ## Navigation structure
 ### Mobile bottom bar (5 items)
 Inicio · Calendario · Compra · Finanzas · **Más**
-- Más opens `MoreMenuSheet` (not a route)
 
-### Más sheet (9 items)
-Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Ajustes · Notificaciones · Dispositivos · Papelera
+### Más sheet (10 items)
+Menú semanal · Recordatorios · Tareas · Documentos · Deseos · **Actividad** · Ajustes · Notificaciones · Dispositivos · Papelera
 
 ### TopBar
 Logo "Home Hub" (→ /dashboard) · page title (centre, mobile) · MagnifyingGlass · Notifications
 
-## Shopping module (current)
-- Quick-add bar at top: name → submit adds instantly; slider icon opens full modal
-- Sort toggle: "Por fecha" / "Por categoría" — persisted in `localStorage`
-- Filter chips: dismissible when category or store filter active
-- Attribution: "Añadido por X" (active, 2+ members) / "Cogido por X" (completed)
-- Completion: single-tap toggle with `opacity-60` fade animation
-
-## Dashboard (current)
-- "Hoy" section: today's meals (from `meal_plans`), calendar events, overdue reminders — hidden when empty
-- MetricGrid (client component): 6 tiles; Recordatorios and Finanzas highlight when overdue items exist
-- WeekCalendarWidget, ListSections for reminders/chores/payments/subscriptions
+## Features completed this session
+1. ✅ CSV export for finance data (`components/finance/ExportButton.tsx`)
+2. ✅ Household activity feed at `/actividad` (`components/activity/ActivityFeed.tsx`)
+3. ✅ Recipe import from URL via JSON-LD (`components/meals/NewRecipeClient.tsx`)
+4. ✅ Wishlist voting / approval flow (migration 020, `components/wishlist/WishlistList.tsx`)
+5. ✅ Per-device notification preferences (migration 021, Edge Function v8, `components/settings/DevicesView.tsx`)
+6. ✅ Chore history, heatmap, and streaks (migration 022, `/tareas/[id]`)
 
 ## SQL migrations applied
-- 001–019: full schema (see previous sessions)
+- 001–019: full schema (previous sessions)
+- 020: `wishlist_items.votes jsonb`
+- 021: `push_subscriptions.sound_enabled`, `vibration_enabled`
+- 022: `chore_completions` table with RLS
+
+## Edge Function
+- `send-push` v8 — deployed; now includes per-subscription sound/vibrate in payload
 
 ## pg_cron jobs
 - jobid 1: `send-push-cron` — every minute
