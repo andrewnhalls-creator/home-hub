@@ -1,7 +1,7 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (impeccable critique run — fixes queued)
+Updated: 2026-06-18 (Stage 1 complete)
 
-## Current state: Deployed ✓ — critique complete, fixes pending
+## Current state: Deployed ✓ — Stage 1 critique fixes done
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -12,7 +12,7 @@ Edge Function unchanged — no redeploy needed unless Edge Function changes.
 
 ## Last known good state
 - Build, lint, typecheck all pass
-- Last commit: `291cbfa` (Document public repo as deliberate Vercel Hobby plan constraint)
+- Last commit: `c248bb2` (Stage 1: FAB, error toasts, MetricCard attention state)
 - Pushed to origin main ✓
 - Deployed to production ✓
 
@@ -46,9 +46,9 @@ All fixes are queued in NEXT_STEPS.md. Start each new session by picking up from
 
 | Priority | Issue | File |
 |---|---|---|
-| P0 | "Añadir" button buried below fold — needs fixed FAB | `ShoppingList.tsx` |
-| P1 | Silent failure on shopping mutations — `onError` not wired | `ShoppingList.tsx` |
-| P1 | Dashboard metric grid undifferentiated — no urgency/attention state | `MetricCard.tsx`, `dashboard/page.tsx` |
+| ~~P0~~ | ~~"Añadir" button buried below fold — needs fixed FAB~~ | ✓ done |
+| ~~P1~~ | ~~Silent failure on shopping mutations — `onError` not wired~~ | ✓ done |
+| ~~P1~~ | ~~Dashboard metric grid undifferentiated — no urgency/attention state~~ | ✓ done |
 | P2 | Active filter state invisible — no dismissible chip when filter applied | `ShoppingList.tsx` |
 | P2 | GreetingCard decorative circles — AI template pattern, remove | `GreetingCard.tsx` |
 | P3 | Trash disclosure uses raw Unicode `▸`/`▾` — replace with Lucide icons | `finanzas/page.tsx` |

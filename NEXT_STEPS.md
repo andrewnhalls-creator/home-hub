@@ -1,34 +1,8 @@
 # Next Steps
 
 ## Current state
-All v1 features complete. Azulejo palette live, audit clean, nav restructured, deployed.
-Impeccable critique run 2026-06-18: **25/40** — fixes queued below in priority order.
-
----
-
-## Stage 1 — P0/P1 UX fixes (do first, highest impact)
-
-### 1a. Shopping add button → fixed FAB (P0)
-- **File**: `components/shopping/ShoppingList.tsx`
-- **Problem**: "Añadir producto" is a static button below the list — invisible on any non-empty list.
-- **Fix**: Replace with `FloatingAddLink` (already exists) as a `fixed` element above the bottom nav.
-  - Position: `fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-4`
-  - Remove the current static button at the bottom of the list.
-
-### 1b. Wire `onError` on all shopping mutations (P1)
-- **File**: `components/shopping/ShoppingList.tsx`
-- **Problem**: `onSuccess` shows a toast; `onError` is absent — failed saves are completely silent.
-- **Fix**: Add `onError` callback to every server action call (`addShoppingItem`, `updateShoppingItem`, `deleteShoppingItem`).
-  - Toast message: "No se ha podido guardar. Inténtalo de nuevo."
-  - Keep the modal/form open on failure so the user doesn't lose their input.
-
-### 1c. MetricCard urgency/attention state (P1)
-- **File**: `components/dashboard/MetricCard.tsx`, `app/dashboard/page.tsx`
-- **Problem**: All 6 metric cards look identical regardless of whether something needs action. An overdue payment and an empty calendar have the same visual weight.
-- **Fix**: Add an `attention` boolean prop to `MetricCard`.
-  - When `attention={true}`: stronger border colour (`border-terracotta`), light tinted bg (`bg-terracotta/5`), icon in `text-terracotta`.
-  - Pass `attention={true}` from the dashboard when count > 0 for: overdue reminders, overdue payments, unread notifications.
-  - All other cards remain visually neutral.
+Stage 1 complete (2026-06-18). Fixed FAB on shopping, error toasts wired, MetricCard attention state live.
+Impeccable critique run 2026-06-18: **25/40** — Stage 1 done, Stage 2 next.
 
 ---
 
