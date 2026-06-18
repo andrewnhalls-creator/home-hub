@@ -10,6 +10,7 @@ interface MetricCardProps {
   metric: string | number;
   status?: string;
   statusColor?: string;
+  attention?: boolean;
   href?: string;
   className?: string;
 }
@@ -22,19 +23,21 @@ export function MetricCard({
   metric,
   status,
   statusColor = "text-muted",
+  attention = false,
   href,
   className,
 }: MetricCardProps) {
   const content = (
     <div
       className={cn(
-        "flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-card-hover)]",
+        "flex flex-col gap-3 rounded-2xl border bg-card p-4 shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-card-hover)]",
+        attention ? "border-terracotta bg-terracotta/5" : "border-border",
         href && "cursor-pointer",
         className,
       )}
     >
-      <div className={cn("flex h-10 w-10 items-center justify-center rounded-xl", iconBg)}>
-        <Icon className={cn("h-5 w-5", iconColor)} aria-hidden />
+      <div className={cn("flex h-10 w-10 items-center justify-center rounded-xl", attention ? "bg-terracotta/10" : iconBg)}>
+        <Icon className={cn("h-5 w-5", attention ? "text-terracotta" : iconColor)} aria-hidden />
       </div>
       <div className="flex flex-col gap-0.5">
         <span className="text-2xl font-bold text-brown leading-none tabular-nums">{metric}</span>

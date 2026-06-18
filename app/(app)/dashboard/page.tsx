@@ -94,6 +94,10 @@ export default async function DashboardPage() {
   const tasks = choresCount ?? 0;
   const activePayments = paymentsCount ?? 0;
 
+  const hasOverdueReminders = (reminders ?? []).some((r) => r.due_at && isPast(new Date(r.due_at)));
+  const dayOfMonth = today.getDate();
+  const hasOverduePayments = (payments ?? []).some((p) => p.due_day < dayOfMonth);
+
   return (
     <div className="flex flex-col gap-5">
       {/* Greeting — always full width */}
@@ -129,6 +133,7 @@ export default async function DashboardPage() {
             label="Recordatorios"
             metric={pending}
             status={pending === 0 ? "Nada pendiente" : "pendientes"}
+            attention={hasOverdueReminders}
             href="/recordatorios"
           />
           <MetricCard
@@ -154,6 +159,7 @@ export default async function DashboardPage() {
             label="Finanzas"
             metric={activePayments}
             status={activePayments === 0 ? "Sin pagos activos" : "pagos activos"}
+            attention={hasOverduePayments}
             href="/finanzas"
           />
         </div>

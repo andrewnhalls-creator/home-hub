@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useToast } from "@/components/ui/Toast";
 import { Plus, ShoppingCart, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Modal } from "@/components/ui/Modal";
@@ -161,14 +160,14 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
         </div>
       )}
 
-      <Button
+      <button
         type="button"
         onClick={() => setIsAddOpen(true)}
-        className="mt-4 w-full"
+        aria-label="Añadir producto"
+        className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-4 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-terracotta text-white shadow-lg hover:bg-coral active:scale-95 transition-transform"
       >
-        <Plus className="h-4 w-4" aria-hidden />
-        Añadir producto
-      </Button>
+        <Plus className="h-6 w-6" aria-hidden />
+      </button>
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir producto">
         <ShoppingItemForm
@@ -176,6 +175,7 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
           categories={categories}
           shoppingListId={shoppingListId}
           onSuccess={() => { setIsAddOpen(false); showToast("Producto añadido"); }}
+          onError={() => showToast("No se ha podido guardar. Inténtalo de nuevo.")}
           onCancel={() => setIsAddOpen(false)}
         />
       </Modal>
@@ -191,6 +191,7 @@ export function ShoppingList({ items, categories, householdId, shoppingListId }:
             categories={categories}
             item={editingItem}
             onSuccess={() => { setEditingItem(null); showToast("Producto actualizado"); }}
+            onError={() => showToast("No se ha podido guardar. Inténtalo de nuevo.")}
             onCancel={() => setEditingItem(null)}
           />
         )}

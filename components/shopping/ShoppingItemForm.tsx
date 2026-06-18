@@ -14,6 +14,7 @@ interface ShoppingItemFormProps {
   item?: ShoppingItem;
   shoppingListId?: string;
   onSuccess: () => void;
+  onError?: () => void;
   onCancel: () => void;
 }
 
@@ -31,6 +32,7 @@ export function ShoppingItemForm({
   item,
   shoppingListId,
   onSuccess,
+  onError,
   onCancel,
 }: ShoppingItemFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
@@ -38,6 +40,10 @@ export function ShoppingItemForm({
   useEffect(() => {
     if (state.success) onSuccess();
   }, [state.success, onSuccess]);
+
+  useEffect(() => {
+    if (state.error) onError?.();
+  }, [state.error, onError]);
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-4">
