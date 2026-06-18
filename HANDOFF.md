@@ -1,8 +1,8 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (Glassmorphism redesign complete + Feature 7 done)
+Updated: 2026-06-18 (Impeccable audit + design critique complete)
 
 ## Current state
-All planned work complete: glassmorphism redesign (Phases 1–5) + Feature 7 (PDF export).
+Full impeccable audit + critique run against codebase. All critical (P0) and high-priority (P1) issues fixed.
 Build, lint, typecheck all pass (0 errors).
 
 ## Production URL
@@ -13,24 +13,29 @@ GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: glassmorphism Phase 1 (globals.css + TypeUI setup)
+- Last commit: `22394f7` — "Audit fixes: remove universal glassmorphism, unify icons, harden quick-add, regen DESIGN.md"
 - Pushed to origin main ✓
 
-## Design identity (Glassmorphism · Deep Indigo · Dark-first)
-- **Background:** deep indigo `#0D0B1F` with subtle atmospheric gradient (mint + indigo orbs)
-- **Brand accent:** mint green `#8AFFC4` (replaces terracotta)
-- **Surfaces:** frosted glass — `rgba(255,255,255,0.07)` + `backdrop-filter: blur(20px)` + edge highlights
-- **Text:** light `#F0F6FC` headings, `#94A3B8` body
-- **Font:** Plus Jakarta Sans (Google Sans stand-in, already loaded)
-- **Glass utility:** `.glass` class in globals.css applies full backdrop-filter treatment
-- **Token strategy:** old token names kept (`cream`, `card`, `terracotta`, etc.) but remapped to glassmorphism values — components pick up the new look without code changes
+## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
+- **Background:** deep indigo `#0D0B1F` + azulejo SVG tile + depth ellipse — no floating orbs
+- **Brand accent:** saffron gold `#E8C547` (`--color-terracotta` CSS var, historical name kept)
+- **Surfaces:** opaque `rgba(255,255,255,0.07)` cards — NO backdrop-filter on content surfaces
+- **Two-tier glass rule:** blur only on nav bars (`blur(20px)`) and modals/sheets (`blur(24px)`); toasts `blur(8px)`
+- **Text:** `#F0F6FC` primary (`brown` token), `#94A3B8` secondary (`muted` token)
+- **Fonts:** Nunito (`--font-sans` body) + Fraunces (`--font-display` hero headings only)
+- **Icons:** Phosphor Icons v2 only; SSR path (`/dist/ssr`) for server components
+- **Token strategy:** CSS var names inherited from original Azulejo design — actual values documented in DESIGN.md
 
-## TypeUI design system
-- Workspace design system: "Glassmorphism Design System" (ID: 75d7e77e-5fe0-4711-a3ff-1c9159a929bc)
-- Files: `.agents/skills/typeui-design-system/` (29 files, committed)
-- `.claude/skills/typeui-design-system/` (gitignored, local only)
-- TypeUI fundamentals: installed to `.claude/skills/typeui-fundamentals/` (gitignored)
-- Local spec folder: `glassmorphism-design-system/` (source of truth for component specs)
+## Audit fixes applied (2026-06-18)
+- Removed `backdrop-filter` from all content surfaces: Card, MetricCard, Input, Select, Textarea, EmptyState, dashboard page, ResumenTab
+- Migrated Lucide → Phosphor in all touched UI components (Button, Select, Modal, Toast, ShoppingList, dashboard)
+- Fixed all `text-[11px]` violations → `text-[12px]`: BottomNav, ResumenTab (×5), MealSlot
+- Removed toast side-stripe `w-0.5` accent span (absolute ban)
+- Removed dashboard `uppercase tracking-wide` from section label (absolute ban)
+- Standardised `border-white/[0.12]` → `border-border` in MetricCard and ResumenTab
+- Wired quick-add success/error toasts in ShoppingList (was silently failing)
+- Regenerated DESIGN.md with accurate token values and two-tier glass rule
+- Critique snapshot saved: `.impeccable/critique/2026-06-18T13-33-04Z__home-hub-full-app.md` (score 23/40)
 
 ## Navigation structure
 ### Mobile bottom bar (5 items)
@@ -55,10 +60,7 @@ Logo "Home Hub" (→ /dashboard) · page title (centre, mobile) · MagnifyingGla
 - jobid 1: `send-push-cron` — every minute
 - jobid 2: `document-expiry-scan` — daily 08:00 UTC
 
-## Glassmorphism redesign phases
-- ✅ Phase 1: globals.css tokens + TypeUI setup
-- ✅ Phase 2: Core UI components (Card, Button, Input, Modal, Badge, Toast, EmptyState, Checkbox, ProgressBar)
-- ✅ Phase 3: Navigation shell (BottomNav, TopBar, Sidebar, MoreMenuSheet)
-- ✅ Phase 4: Key pages (Dashboard MetricCard, Finance KpiChip, Calendar today ring)
-- ✅ Phase 5: Module polish — all text-white→text-cream contrast fixes, OfflineBanner dark mode, SegmentedControl indicator
+## Milestones
+- ✅ Glassmorphism redesign Phases 1–5
 - ✅ Feature 7: PDF export (browser print, @media print token remap)
+- ✅ Impeccable audit + critique (2026-06-18) — P0/P1 issues resolved, DESIGN.md regenerated
