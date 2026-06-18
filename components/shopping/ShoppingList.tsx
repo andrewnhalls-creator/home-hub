@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useMemo, useState } from "react";
 import { useToast } from "@/components/ui/Toast";
-import { Plus, ShoppingCart, ChevronDown, X, ArrowUpDown, SlidersHorizontal } from "lucide-react";
+import { Plus, ShoppingCart, CaretDown, X, ArrowsDownUp, SlidersHorizontal } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Modal } from "@/components/ui/Modal";
@@ -33,12 +33,18 @@ export function ShoppingList({ items, categories, members, householdId, shopping
   const [quickName, setQuickName] = useState("");
   const [quickState, quickAction, quickPending] = useActionState(addShoppingItem, {});
 
-  // Reset quick-add input on success (derived-state pattern — React re-renders immediately with new value).
-  const [prevSuccess, setPrevSuccess] = useState(quickState.success);
-  if (prevSuccess !== quickState.success) {
-    setPrevSuccess(quickState.success);
+  // Reset input on success using derived-state pattern (avoids setState-in-effect lint).
+  const [prevQuickState, setPrevQuickState] = useState(quickState);
+  if (prevQuickState !== quickState) {
+    setPrevQuickState(quickState);
     if (quickState.success) setQuickName("");
   }
+
+  // Surface feedback toasts — showToast is an external context call, not local setState.
+  useEffect(() => {
+    if (quickState.success) showToast("Producto añadido");
+    else if (quickState.error) showToast("No se ha podido guardar. Inténtalo de nuevo.", "error");
+  }, [quickState, showToast]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -201,7 +207,7 @@ export function ShoppingList({ items, categories, members, householdId, shopping
           }}
           className="flex items-center gap-1.5 text-xs font-medium text-muted hover:text-brown"
         >
-          <ArrowUpDown className="h-3.5 w-3.5" aria-hidden />
+          <ArrowsDownUp className="h-3.5 w-3.5" aria-hidden />
           {sortMode === "fecha" ? "Por fecha" : "Por categoría"}
         </button>
       </div>
@@ -235,7 +241,7 @@ export function ShoppingList({ items, categories, members, householdId, shopping
             aria-expanded={showCompleted}
             className="flex items-center gap-1 text-sm font-medium text-muted"
           >
-            <ChevronDown
+            <CaretDown
               className={`h-4 w-4 transition-transform ${showCompleted ? "rotate-180" : ""}`}
               aria-hidden
             />

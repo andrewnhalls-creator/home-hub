@@ -1,5 +1,6 @@
 import { MetricGrid } from "@/components/dashboard/MetricGrid";
-import { UtensilsCrossed, CalendarDays, AlertCircle } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { ForkKnife, CalendarDots, WarningCircle } from "@phosphor-icons/react/dist/ssr";
 import { startOfWeek, endOfWeek, format, isPast, addDays } from "date-fns";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -121,32 +122,29 @@ export default async function DashboardPage() {
 
       {/* Hoy — only when there's something to show */}
       {hasTodayBrief && (
-        <div
-          className="rounded-[var(--radius-xl)] border border-white/[0.12] bg-white/[0.07] p-4"
-          style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
-        >
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">Hoy</p>
+        <Card>
+          <p className="mb-3 text-xs font-medium text-muted">Hoy</p>
           <ul className="flex flex-col gap-2">
             {mealItems.map((label) => (
               <li key={label} className="flex items-center gap-2 text-sm text-brown">
-                <UtensilsCrossed className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden />
+                <ForkKnife weight="light" className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden />
                 {label}
               </li>
             ))}
             {todayEvents.map((e) => (
               <li key={e.id} className="flex items-center gap-2 text-sm text-brown">
-                <CalendarDays className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden />
+                <CalendarDots weight="light" className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden />
                 {e.title}
               </li>
             ))}
             {overdueToday.map((r) => (
               <li key={r.id} className="flex items-center gap-2 text-sm font-medium text-danger">
-                <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                <WarningCircle weight="fill" className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 {r.title}
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
       )}
 
       {/* On lg+: 2-col layout (metric grid left, calendar + lists right) */}

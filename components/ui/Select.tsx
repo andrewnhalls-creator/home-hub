@@ -1,5 +1,5 @@
 import { SelectHTMLAttributes, forwardRef, useId } from "react";
-import { ChevronDown } from "lucide-react";
+import { CaretDown } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/utils";
 
 interface SelectOption {
@@ -41,7 +41,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
               error && "border-danger/60 focus:border-danger/80 focus:ring-danger/40",
               className,
             )}
-            style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", ...style }}
+            style={style}
             {...props}
           >
             {placeholder && (
@@ -55,7 +55,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
               </option>
             ))}
           </select>
-          <ChevronDown
+          <CaretDown
+            weight="bold"
             className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
             aria-hidden
           />

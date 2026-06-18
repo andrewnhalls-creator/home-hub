@@ -42,7 +42,7 @@ export function BottomNav() {
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "flex min-h-[56px] flex-col items-center justify-center gap-1 px-1 py-2 text-[11px] font-medium transition active:scale-[0.9]",
+                    "flex min-h-[56px] flex-col items-center justify-center gap-1 px-1 py-2 text-[12px] font-medium transition active:scale-[0.9]",
                     isActive ? "text-terracotta" : "text-muted",
                   )}
                 >
@@ -67,7 +67,7 @@ export function BottomNav() {
               aria-haspopup="dialog"
               aria-expanded={isMenuOpen}
               className={cn(
-                "flex min-h-[56px] w-full flex-col items-center justify-center gap-1 px-1 py-2 text-[11px] font-medium transition active:scale-[0.9]",
+                "flex min-h-[56px] w-full flex-col items-center justify-center gap-1 px-1 py-2 text-[12px] font-medium transition active:scale-[0.9]",
                 isMenuOpen ? "text-terracotta" : "text-muted",
               )}
             >

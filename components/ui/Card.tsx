@@ -18,11 +18,10 @@ const variantClasses: Record<CardVariant, string> = {
     "border-white/[0.12] shadow-[var(--shadow-card)] transition-[background,box-shadow] duration-200 hover:bg-white/[0.12] hover:shadow-[var(--shadow-card-hover)]",
 };
 
-export function Card({ className, variant = "default", children, style, ...rest }: CardProps) {
+export function Card({ className, variant = "default", children, ...rest }: CardProps) {
   return (
     <div
       className={cn(variantBase, variantClasses[variant], className)}
-      style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", ...style }}
       {...rest}
     >
       {/* Top edge light refraction */}

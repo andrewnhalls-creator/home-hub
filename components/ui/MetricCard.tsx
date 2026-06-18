@@ -30,11 +30,10 @@ export function MetricCard({
     <div
       className={cn(
         "flex flex-col gap-3 rounded-[var(--radius-xl)] border bg-card p-4 shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-card-hover)]",
-        attention ? "border-terracotta/50 bg-terracotta/[0.08]" : "border-white/[0.12]",
+        attention ? "border-terracotta/50 bg-terracotta/[0.08]" : "border-border",
         href && "cursor-pointer",
         className,
       )}
-      style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
     >
       <div className={cn("flex h-10 w-10 items-center justify-center rounded-xl", attention ? "bg-terracotta/10" : iconBg)}>
         <Icon weight="light" size={20} className={cn(attention ? "text-terracotta" : iconColor)} aria-hidden />

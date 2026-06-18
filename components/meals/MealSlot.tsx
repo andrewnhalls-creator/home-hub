@@ -101,7 +101,7 @@ export function MealSlot({ date, mealType, label, meal, recipes }: MealSlotProps
         onClick={() => setIsOpen(true)}
         className="flex min-h-[64px] w-full flex-col items-start gap-0.5 rounded-xl border border-border bg-card p-2 text-left"
       >
-        <span className="text-[11px] font-medium text-muted">{label}</span>
+        <span className="text-[12px] font-medium text-muted">{label}</span>
         {mealName ? (
           <span className="text-sm text-brown">{mealName}</span>
         ) : (

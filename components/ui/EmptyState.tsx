@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
+import type { ElementType } from "react";
 import { cn } from "@/lib/utils";
 
 interface EmptyStateProps {
-  icon?: LucideIcon;
+  icon?: ElementType;
   title: string;
   description?: string;
   action?: ReactNode;
@@ -17,7 +17,6 @@ export function EmptyState({ icon: Icon, title, description, action, className }
         "relative flex flex-col items-center gap-4 overflow-hidden rounded-[var(--radius-xl)] border border-dashed border-white/[0.15] bg-white/[0.04] px-6 py-12 text-center",
         className,
       )}
-      style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
     >
       {/* Subtle top edge */}
       <span

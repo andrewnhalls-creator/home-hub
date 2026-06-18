@@ -29,13 +29,12 @@ interface KpiChipProps {
 function KpiChip({ label, value, danger = false }: KpiChipProps) {
   return (
     <div
-      className="rounded-[var(--radius-xl)] border border-white/[0.12] bg-white/[0.07] p-3 shadow-[var(--shadow-card)]"
-      style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+      className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-3 shadow-[var(--shadow-card)]"
     >
       <p className={cn("text-lg font-bold leading-none", danger ? "text-danger" : "text-brown")}>
         {value}
       </p>
-      <p className="mt-1.5 text-[11px] leading-tight text-muted">{label}</p>
+      <p className="mt-1.5 text-[12px] leading-tight text-muted">{label}</p>
     </div>
   );
 }
@@ -83,7 +82,7 @@ function MortgageCard({ mortgage, payments, onClick }: MortgageCardProps) {
               {mortgage.lender && <p className="text-xs text-muted">{mortgage.lender}</p>}
             </div>
             {onClick && (
-              <span className="shrink-0 rounded-lg bg-terracotta/10 px-2 py-0.5 text-[11px] font-medium text-terracotta">
+              <span className="shrink-0 rounded-lg bg-terracotta/10 px-2 py-0.5 text-[12px] font-medium text-terracotta">
                 Ver hipoteca →
               </span>
             )}
@@ -91,13 +90,13 @@ function MortgageCard({ mortgage, payments, onClick }: MortgageCardProps) {
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <p className="text-[11px] text-muted">Saldo pendiente</p>
+              <p className="text-[12px] text-muted">Saldo pendiente</p>
               <p className="text-base font-bold text-brown tabular-nums">
                 {formatCurrency(mortgage.current_balance)}
               </p>
             </div>
             <div>
-              <p className="text-[11px] text-muted">Cuota mensual</p>
+              <p className="text-[12px] text-muted">Cuota mensual</p>
               <p className="text-base font-bold text-brown tabular-nums">
                 {formatCurrency(mortgage.monthly_payment)}
               </p>
@@ -106,15 +105,15 @@ function MortgageCard({ mortgage, payments, onClick }: MortgageCardProps) {
 
           {nextDate && (
             <div>
-              <p className="text-[11px] text-muted">Próximo pago</p>
+              <p className="text-[12px] text-muted">Próximo pago</p>
               <p className="text-sm font-medium text-brown">{nextDate}</p>
             </div>
           )}
 
           <div>
             <div className="mb-1 flex items-center justify-between">
-              <p className="text-[11px] text-muted">Amortizado</p>
-              <p className="text-[11px] font-semibold text-sage">{Math.round(amortisedPct)}%</p>
+              <p className="text-[12px] text-muted">Amortizado</p>
+              <p className="text-[12px] font-semibold text-sage">{Math.round(amortisedPct)}%</p>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-border">
               <div

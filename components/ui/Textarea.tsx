@@ -30,7 +30,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             error && "border-danger/60 focus:border-danger/80 focus:ring-danger/40",
             className,
           )}
-          style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", ...style }}
+          style={style}
           {...props}
         />
         {error && (
