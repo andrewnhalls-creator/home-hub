@@ -1,9 +1,8 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (Glassmorphism redesign — Phases 1–5 complete)
+Updated: 2026-06-18 (Glassmorphism redesign complete + Feature 7 done)
 
 ## Current state
-Glassmorphism redesign complete. All 5 phases shipped and pushed.
-Feature 7 (PDF export) is next — resume now that redesign is done.
+All planned work complete: glassmorphism redesign (Phases 1–5) + Feature 7 (PDF export).
 Build, lint, typecheck all pass (0 errors).
 
 ## Production URL
@@ -62,4 +61,4 @@ Logo "Home Hub" (→ /dashboard) · page title (centre, mobile) · MagnifyingGla
 - ✅ Phase 3: Navigation shell (BottomNav, TopBar, Sidebar, MoreMenuSheet)
 - ✅ Phase 4: Key pages (Dashboard MetricCard, Finance KpiChip, Calendar today ring)
 - ✅ Phase 5: Module polish — all text-white→text-cream contrast fixes, OfflineBanner dark mode, SegmentedControl indicator
-- ⬜ Feature 7: PDF export (next)
+- ✅ Feature 7: PDF export (browser print, @media print token remap)
