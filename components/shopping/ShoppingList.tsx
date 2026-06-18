@@ -27,18 +27,18 @@ export function ShoppingList({ items, categories, members, householdId, shopping
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [storeFilter, setStoreFilter] = useState("");
-  const [sortMode, setSortMode] = useState<"fecha" | "categoria">("fecha");
+  const [sortMode, setSortMode] = useState<"fecha" | "categoria">(
+    () => (typeof window !== "undefined" ? (localStorage.getItem("shopping-sort") as "fecha" | "categoria" | null) : null) ?? "fecha",
+  );
   const [quickName, setQuickName] = useState("");
   const [quickState, quickAction, quickPending] = useActionState(addShoppingItem, {});
 
-  useEffect(() => {
-    const stored = localStorage.getItem("shopping-sort") as "fecha" | "categoria" | null;
-    if (stored) setSortMode(stored);
-  }, []);
-
-  useEffect(() => {
+  // Reset quick-add input on success (derived-state pattern — React re-renders immediately with new value).
+  const [prevSuccess, setPrevSuccess] = useState(quickState.success);
+  if (prevSuccess !== quickState.success) {
+    setPrevSuccess(quickState.success);
     if (quickState.success) setQuickName("");
-  }, [quickState.success]);
+  }
 
   useEffect(() => {
     const supabase = createClient();

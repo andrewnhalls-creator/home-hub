@@ -20,6 +20,7 @@ import { ExpensesTab } from "@/components/finance/ExpensesTab";
 import { SavingsTab } from "@/components/finance/SavingsTab";
 import { SubscriptionsTab } from "@/components/finance/SubscriptionsTab";
 import { MortgageTab } from "@/components/finance/MortgageTab";
+import { ExportButton } from "@/components/finance/ExportButton";
 import type { Category, Expense, FixedPayment, Mortgage, MortgagePayment, PaymentInstance, SavingsGoal, Subscription } from "@/lib/types";
 
 interface Member {
@@ -82,8 +83,16 @@ export function FinanceTabs({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Month context */}
-      <p className="text-sm text-muted">{currentMonthLabel()}</p>
+      {/* Month context + export */}
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm text-muted">{currentMonthLabel()}</p>
+        <ExportButton
+          expenses={expenses}
+          fixedPayments={fixedPayments}
+          subscriptions={subscriptions}
+          savingsGoals={savingsGoals}
+        />
+      </div>
 
       {/* Mobile: 2-column grid of section cards */}
       <div role="tablist" aria-label="Secciones de finanzas" className="grid grid-cols-2 gap-2 md:hidden">
