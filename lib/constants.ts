@@ -34,16 +34,17 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/ajustes",      label: "Ajustes",      icon: Settings },
 ];
 
-/** Four primary routes shown in the bottom navigation bar. Home is accessed via the top logo. */
+/** Four primary routes shown in the bottom nav bar. Más button is the fifth item. */
 export const PRIMARY_NAV_ITEMS: NavItem[] = [
-  { href: "/calendario",    label: "Calendario",  icon: CalendarDays },
-  { href: "/compra",        label: "Compra",      icon: ShoppingCart },
-  { href: "/menu",          label: "Menú",        icon: UtensilsCrossed },
-  { href: "/finanzas",      label: "Finanzas",    icon: Wallet },
+  { href: "/dashboard",    label: "Inicio",      icon: Home },
+  { href: "/calendario",   label: "Calendario",  icon: CalendarDays },
+  { href: "/compra",       label: "Compra",      icon: ShoppingCart },
+  { href: "/finanzas",     label: "Finanzas",    icon: Wallet },
 ];
 
-/** Items shown in the top-bar More sheet. Excludes bottom-nav items and Inicio (handled by logo). */
+/** Items shown in the Más bottom sheet. */
 export const MENU_ITEMS: NavItem[] = [
+  { href: "/menu",                   label: "Menú semanal",    icon: UtensilsCrossed },
   { href: "/recordatorios",          label: "Recordatorios",   icon: Bell },
   { href: "/tareas",                 label: "Tareas",          icon: ListChecks },
   { href: "/documentos",             label: "Documentos",      icon: FileText },

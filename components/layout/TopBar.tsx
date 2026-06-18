@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/constants";
 import { NotificationCentre } from "@/components/notifications/NotificationCentre";
-import { MoreMenuSheet } from "@/components/layout/MoreMenuSheet";
 import type { NotificationEvent } from "@/lib/types";
 
 interface TopBarProps {
@@ -17,15 +15,13 @@ interface TopBarProps {
 
 export function TopBar({ householdName, notifications = [], unreadCount = 0 }: TopBarProps) {
   const pathname = usePathname();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const current = NAV_ITEMS.find((item) => pathname?.startsWith(item.href));
   const pageTitle = current?.label ?? "";
   const isHome = pathname?.startsWith("/dashboard");
 
   return (
-    <>
-      <header className="sticky top-0 z-30 border-b border-border bg-card px-4 py-3 md:px-6">
+    <header className="sticky top-0 z-30 border-b border-border bg-card px-4 py-3 md:px-6">
         <div className="flex items-center gap-2">
           {/* Left: Home Hub brand link — mobile only */}
           <Link
@@ -50,7 +46,7 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
           )}
           {!householdName && <div className="hidden md:block md:flex-1" />}
 
-          {/* Right: search + notifications + Menu button */}
+          {/* Right: search + notifications */}
           <div className="flex shrink-0 items-center gap-1">
             <Link
               href="/buscar"
@@ -60,24 +56,8 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
               <Search className="h-5 w-5" aria-hidden />
             </Link>
             <NotificationCentre notifications={notifications} unreadCount={unreadCount} />
-
-            {/* Menu button — mobile only */}
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen(true)}
-              aria-label="Abrir menú"
-              aria-haspopup="dialog"
-              aria-expanded={isMenuOpen}
-              className="flex h-10 min-w-[44px] items-center justify-center gap-1 rounded-xl px-2 text-muted transition hover:bg-sand active:scale-[0.93] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta md:hidden"
-            >
-              <Menu className="h-5 w-5" aria-hidden />
-              <span className="text-xs font-semibold text-brown">Más</span>
-            </button>
           </div>
         </div>
-      </header>
-
-      <MoreMenuSheet isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-    </>
+    </header>
   );
 }

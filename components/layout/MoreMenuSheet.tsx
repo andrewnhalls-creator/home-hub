@@ -8,6 +8,7 @@ import { MENU_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const ITEM_ACCENTS: Record<string, { iconColor: string; iconBg: string }> = {
+  "/menu":                   { iconColor: "text-sage",   iconBg: "bg-sage/20"   },
   "/recordatorios":          { iconColor: "text-amber",  iconBg: "bg-amber/20"  },
   "/tareas":                 { iconColor: "text-olive",  iconBg: "bg-olive/10"  },
   "/documentos":             { iconColor: "text-muted",  iconBg: "bg-sand"      },
