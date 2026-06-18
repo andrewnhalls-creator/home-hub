@@ -27,7 +27,10 @@ interface KpiChipProps {
 
 function KpiChip({ label, value, danger = false }: KpiChipProps) {
   return (
-    <div className="rounded-xl border border-border bg-card p-3 shadow-[var(--shadow-card)]">
+    <div
+      className="rounded-[var(--radius-xl)] border border-white/[0.12] bg-white/[0.07] p-3 shadow-[var(--shadow-card)]"
+      style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+    >
       <p className={cn("text-lg font-bold leading-none", danger ? "text-danger" : "text-brown")}>
         {value}
       </p>

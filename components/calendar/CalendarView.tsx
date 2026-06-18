@@ -301,7 +301,7 @@ export function CalendarView({ items }: CalendarViewProps) {
                   className={cn(
                     "flex aspect-square flex-col items-center justify-start gap-1 rounded-lg p-1 text-xs transition-colors hover:bg-sand",
                     !isSameMonth(day, cursor) && "opacity-40",
-                    isToday(day) && "ring-2 ring-terracotta ring-offset-1",
+                    isToday(day) && "ring-2 ring-terracotta ring-offset-1 ring-offset-cream",
                   )}
                 >
                   <span className={cn("font-medium", isToday(day) ? "text-terracotta" : "text-brown")}>

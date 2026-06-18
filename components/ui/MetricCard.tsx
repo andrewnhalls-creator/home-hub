@@ -29,11 +29,12 @@ export function MetricCard({
   const content = (
     <div
       className={cn(
-        "flex flex-col gap-3 rounded-2xl border bg-card p-4 shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-card-hover)]",
-        attention ? "border-terracotta bg-terracotta/5" : "border-border",
+        "flex flex-col gap-3 rounded-[var(--radius-xl)] border bg-card p-4 shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-card-hover)]",
+        attention ? "border-terracotta/50 bg-terracotta/[0.08]" : "border-white/[0.12]",
         href && "cursor-pointer",
         className,
       )}
+      style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
     >
       <div className={cn("flex h-10 w-10 items-center justify-center rounded-xl", attention ? "bg-terracotta/10" : iconBg)}>
         <Icon weight="light" size={20} className={cn(attention ? "text-terracotta" : iconColor)} aria-hidden />
@@ -50,7 +51,7 @@ export function MetricCard({
 
   if (href) {
     return (
-      <Link href={href} className="block outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream rounded-2xl transition-transform active:scale-[0.98]">
+      <Link href={href} className="block outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream rounded-[var(--radius-xl)] transition-transform active:scale-[0.98]">
         {content}
       </Link>
     );

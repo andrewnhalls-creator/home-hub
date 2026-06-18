@@ -121,7 +121,10 @@ export default async function DashboardPage() {
 
       {/* Hoy — only when there's something to show */}
       {hasTodayBrief && (
-        <div className="rounded-2xl border border-border bg-card p-4">
+        <div
+          className="rounded-[var(--radius-xl)] border border-white/[0.12] bg-white/[0.07] p-4"
+          style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+        >
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">Hoy</p>
           <ul className="flex flex-col gap-2">
             {mealItems.map((label) => (
