@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus } from "@phosphor-icons/react";
+import { Plus } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/utils";
 
 interface FloatingAddLinkProps {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SignOut, Bell, CaretRight, DeviceMobile, Tag, Shield, User, DownloadSimple } from "@phosphor-icons/react";
+import { SignOut, Bell, CaretRight, DeviceMobile, Tag, Shield, User, DownloadSimple } from "@phosphor-icons/react/dist/ssr";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { HouseholdNameForm } from "@/components/settings/HouseholdNameForm";
