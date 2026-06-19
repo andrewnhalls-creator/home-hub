@@ -24,6 +24,8 @@ interface ModalProps {
 
 export function Modal({ isOpen, onClose, title, children, className }: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  useEffect(() => { onCloseRef.current = onClose; });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -38,7 +40,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
     });
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") { onClose(); return; }
+      if (e.key === "Escape") { onCloseRef.current(); return; }
 
       if (e.key === "Tab") {
         const items = focusables();
@@ -58,7 +60,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
       document.removeEventListener("keydown", handleKeyDown);
       previousFocus?.focus();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]); // onClose accessed via ref — prevents re-running on every parent render
 
   if (!isOpen) return null;
 
