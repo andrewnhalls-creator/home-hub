@@ -1,8 +1,8 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (Doc alignment in progress — Fix 5/6 done)
+Updated: 2026-06-19 (Doc alignment sweep complete — Task 4 pending)
 
 ## Current state
-Doc alignment sweep underway before making the GitHub repo private. Fix 1 of 6 complete. Build still passes (doc-only changes). All pushed to origin main.
+All 6 doc alignment fixes done. Build still passes. All pushed to origin main. Only Task 4 (GitHub repo privacy decision) remains.
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -12,19 +12,19 @@ GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `da6a428` — "README: replace DESIGN_SYSTEM.md reference with DESIGN.md"
+- Last commit: `893c4fb` — "DESIGN.md: update form input border token border-white/[0.12] → border-border"
 - All pushed to origin main
 
-## Doc alignment fixes: status
+## Doc alignment fixes: all complete
 
-| # | File | Issue | Status |
+| # | File | Fix | Commit |
 |---|---|---|---|
-| 1 | `CLAUDE.md` | Design style section described old pastel design; icon lib was lucide-react; accessibility said "pastel backgrounds" | ✅ Done (`c6eb18f`) |
-| 2 | `DESIGN_SYSTEM.md` | Entire file is old warm/cream design — deprecated in favour of `DESIGN.md` | ✅ Done (`b62a8e5`) |
-| 3 | `KNOWN_ISSUES.md` | "Más button broken" still listed as Active — was fixed in Task 1 | ✅ Done (`67a8f6d`) |
-| 4 | `UI_REDESIGN_PLAN.md` | Status line says "UI-0 — plan defined" — all milestones are complete | ✅ Done (`423e9dc`) |
-| 5 | `README.md` | Links to `DESIGN_SYSTEM.md` as the style guide — should point to `DESIGN.md` | ✅ Done (`da6a428`) |
-| 6 | `DESIGN.md` | Form inputs section says `border-white/[0.12]` — components now use `border-border` | ⏳ Pending |
+| 1 | `CLAUDE.md` | Replaced stale pastel design section with Índigo Profundo spec; fixed icon lib and accessibility line | `c6eb18f` |
+| 2 | `DESIGN_SYSTEM.md` | Added deprecation header pointing to `DESIGN.md` | `b62a8e5` |
+| 3 | `KNOWN_ISSUES.md` | Moved "Más crash" from Active to Resolved | `67a8f6d` |
+| 4 | `UI_REDESIGN_PLAN.md` | Marked all milestones complete | `423e9dc` |
+| 5 | `README.md` | Updated style guide reference to `DESIGN.md` | `da6a428` |
+| 6 | `DESIGN.md` | Updated form input border token to `border-border` | `893c4fb` |
 
 ## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
 - **Background:** deep indigo `#0D0B1F` + azulejo SVG tile + depth ellipse
@@ -49,10 +49,12 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 ## Edge Function + pg_cron
 - `send-push` v8 deployed; `send-push-cron` (every min) + `document-expiry-scan` (08:00 UTC daily)
 
-## Completed work (all tasks)
-- ✅ Task 1: Más sheet crash fixed (`3791097`)
-- ✅ Task 2: Lucide → Phosphor migration + sub-12px + uppercase + border-border sweep
-- ✅ Task 3: Final review + build (0 errors), English text sweep, secrets check, SSR path fixes
-- ✅ Fix 1: CLAUDE.md design section updated (`c6eb18f`)
-- ⏳ Fixes 2–6: Doc alignment sweep in progress
-- ⏳ Task 4: GitHub repo privacy decision (decide after doc sweep complete)
+## Completed milestones
+- ✅ Glassmorphism redesign Phases 1–5
+- ✅ Feature 7: PDF export
+- ✅ Impeccable audit + all P0/P1 fixes
+- ✅ Task 1: Más sheet crash fixed
+- ✅ Task 2: Lucide → Phosphor migration + border/text fixes
+- ✅ Task 3: Final review + build (0 errors), secrets clean, SSR fixes
+- ✅ Doc alignment sweep (Fixes 1–6)
+- ⏳ Task 4: GitHub repo privacy decision

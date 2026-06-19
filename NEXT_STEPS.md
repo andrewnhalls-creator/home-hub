@@ -1,29 +1,20 @@
 # Next Steps
 
 ## Current state
-Doc alignment sweep in progress (Fix 5/6 done). One fix remaining, then Task 4.
+Doc alignment sweep complete. Only Task 4 remains.
 
 ---
 
-## Fix 6 — DESIGN.md: update form input border reference
+## Task 4 — Make GitHub repo private
 
-In the "Form inputs" section, change `border-white/[0.12]` → `border-border` to match the actual component code.
+The repo is currently public (required for Vercel Hobby auto-deploys). No secrets are committed — the only risk is the code being publicly readable.
 
----
+**Options — choose one:**
 
-## Task 4 — GitHub repo privacy (after doc sweep done)
-
-Options:
-- **Upgrade to Vercel Pro** (~$20/month) → keep auto-deploys, set repo private immediately
-- **Keep Hobby + stay public** → no secrets in repo; revisit later
-- **Switch to Vercel CLI deploys** → run `vercel deploy` manually; repo can be private
+| Option | Cost | Trade-off |
+|---|---|---|
+| **Upgrade to Vercel Pro** | ~$20/month | Keep GitHub auto-deploys; set repo private immediately |
+| **Stay on Hobby, keep public** | Free | Acceptable — no secrets in repo; revisit if you add sensitive logic |
+| **Vercel CLI deploys** | Free | Run `vercel deploy` manually from terminal; repo can be private; no GitHub integration |
 
 Repo settings: https://github.com/andrewnhalls-creator/home-hub/settings
-
----
-
-## Fresh session continuation prompt
-
-If starting a new session, paste this:
-
-> I'm continuing a doc alignment sweep on Home Hub (Next.js + Supabase + Tailwind). Read HANDOFF.md and NEXT_STEPS.md to get the current state. The next task is Fix 2: deprecate DESIGN_SYSTEM.md by adding a deprecation header. Then continue through Fixes 3–6 in order, stopping after each one to update HANDOFF.md and NEXT_STEPS.md and commit+push before moving to the next. After all 6 fixes, present Task 4 (GitHub repo privacy options) and wait for a decision.
