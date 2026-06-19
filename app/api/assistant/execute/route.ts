@@ -36,5 +36,11 @@ export async function POST(req: NextRequest) {
     userId: user.id,
   });
 
-  return NextResponse.json({ ok: true, executed: execResult.executed, error: execResult.error });
+  // Surface real errors (e.g. "not found") as ok:false so the frontend shows the message.
+  // executed:false with no error means "not implemented yet" → shows "próximamente".
+  if (!execResult.executed && execResult.error) {
+    return NextResponse.json({ ok: false, error: execResult.error }, { status: 422 });
+  }
+
+  return NextResponse.json({ ok: true, executed: execResult.executed });
 }
