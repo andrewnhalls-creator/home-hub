@@ -30,7 +30,7 @@ const PLAN_CONFIG = [
   {
     key: "inmobiliario",
     label: "Inmobiliario",
-    goalName: "Fondo compras casa",
+    goalName: "Inmobiliario",
     monthly: 300,
   },
   {
@@ -577,8 +577,7 @@ export function PlanAhorroTab({ goals, mortgages = [] }: PlanAhorroTabProps) {
 
   const emergenciaGoal =
     goalByName.get("Fondo de emergencia");
-  const inmobiliarioGoal =
-    goalByName.get("Inmobiliario") ?? goalByName.get("Fondo compras casa");
+  const inmobiliarioGoal = goalByName.get("Inmobiliario");
   const amortizacionGoal =
     goalByName.get("Amortización anticipada hipoteca");
 
