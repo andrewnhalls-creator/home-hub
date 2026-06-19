@@ -48,7 +48,20 @@ export function FixedPaymentForm({ action, categories, payment, onSuccess, onCan
         defaultValue={payment?.category_id ?? ""}
         options={categories.map((c) => ({ value: c.id, label: c.name }))}
       />
-      <Input label="Método de pago" name="paymentMethod" defaultValue={payment?.payment_method ?? undefined} />
+      <div className="grid grid-cols-2 gap-3">
+        <Input label="Método de pago" name="paymentMethod" defaultValue={payment?.payment_method ?? undefined} />
+        <Select
+          label="Cuenta bancaria"
+          name="bankAccount"
+          placeholder="Sin cuenta"
+          defaultValue={payment?.bank_account ?? ""}
+          options={[
+            { value: "ING", label: "ING" },
+            { value: "BBVA", label: "BBVA" },
+            { value: "Revolut", label: "Revolut" },
+          ]}
+        />
+      </div>
       <Checkbox label="Activo" name="isActive" defaultChecked={payment?.is_active ?? true} />
       <Textarea label="Notas" name="notes" defaultValue={payment?.notes ?? undefined} />
 

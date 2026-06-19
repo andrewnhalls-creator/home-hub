@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Trash, ShoppingBag } from "@phosphor-icons/react";
+import { Plus, Trash, PencilSimple, ShoppingBag } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
@@ -10,7 +10,7 @@ import { useToast } from "@/components/ui/Toast";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { ExpenseForm } from "@/components/finance/ExpenseForm";
 import { ExpenseCharts } from "@/components/finance/ExpenseCharts";
-import { createExpense, deleteExpense } from "@/app/(app)/finanzas/actions";
+import { createExpense, updateExpense, deleteExpense } from "@/app/(app)/finanzas/actions";
 import type { Category, Expense } from "@/lib/types";
 
 interface Member {
@@ -28,6 +28,7 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
   const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [deletingExpense, setDeletingExpense] = useState<Expense | null>(null);
 
   return (
@@ -50,36 +51,41 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
           {expenses.map((expense) => {
             const cat = categories.find((c) => c.id === expense.category_id);
             return (
-            <li key={expense.id}>
-              <Card className="flex items-center gap-3">
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-brown">{expense.title}</p>
-                  <p className="text-xs text-muted">
-                    {formatDate(expense.expense_date)}
-                    {cat ? ` · ${cat.name}` : ""}
-                  </p>
-                </div>
-                <p className="text-sm font-medium text-brown">{formatCurrency(expense.amount)}</p>
-                <button
-                  type="button"
-                  aria-label="Eliminar gasto"
-                  onClick={() => setDeletingExpense(expense)}
-                  className="text-muted hover:text-danger"
-                >
-                  <Trash className="h-4 w-4" aria-hidden />
-                </button>
-              </Card>
-            </li>
-          );
+              <li key={expense.id}>
+                <Card className="flex items-center gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-brown">{expense.title}</p>
+                    <p className="text-xs text-muted">
+                      {formatDate(expense.expense_date)}
+                      {cat ? ` · ${cat.name}` : ""}
+                      {expense.bank_account ? ` · ${expense.bank_account}` : ""}
+                    </p>
+                  </div>
+                  <p className="text-sm font-medium text-brown">{formatCurrency(expense.amount)}</p>
+                  <button
+                    type="button"
+                    aria-label="Editar gasto"
+                    onClick={() => setEditingExpense(expense)}
+                    className="flex min-h-[44px] min-w-[44px] items-center justify-center text-muted hover:text-brown"
+                  >
+                    <PencilSimple className="h-4 w-4" aria-hidden />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Eliminar gasto"
+                    onClick={() => setDeletingExpense(expense)}
+                    className="flex min-h-[44px] min-w-[44px] items-center justify-center text-muted hover:text-danger"
+                  >
+                    <Trash className="h-4 w-4" aria-hidden />
+                  </button>
+                </Card>
+              </li>
+            );
           })}
         </ul>
       )}
 
-      <Button
-        type="button"
-        onClick={() => setIsAddOpen(true)}
-        className="mt-4 w-full"
-      >
+      <Button type="button" onClick={() => setIsAddOpen(true)} className="mt-4 w-full">
         <Plus className="h-4 w-4" aria-hidden />
         Añadir gasto
       </Button>
@@ -92,6 +98,19 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
           onSuccess={() => { setIsAddOpen(false); showToast("Gasto añadido"); }}
           onCancel={() => setIsAddOpen(false)}
         />
+      </Modal>
+
+      <Modal isOpen={!!editingExpense} onClose={() => setEditingExpense(null)} title="Editar gasto">
+        {editingExpense && (
+          <ExpenseForm
+            action={updateExpense.bind(null, editingExpense.id)}
+            categories={categories}
+            members={members}
+            expense={editingExpense}
+            onSuccess={() => { setEditingExpense(null); showToast("Gasto actualizado"); }}
+            onCancel={() => setEditingExpense(null)}
+          />
+        )}
       </Modal>
 
       <Modal isOpen={!!deletingExpense} onClose={() => setDeletingExpense(null)} title="Eliminar gasto">

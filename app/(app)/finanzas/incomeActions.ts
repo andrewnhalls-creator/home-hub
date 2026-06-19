@@ -31,6 +31,7 @@ export async function createIncomeSource(
     frequency: formData.get("frequency") || "mensual",
     earnerName: formData.get("earnerName") || undefined,
     paymentDay: formData.get("paymentDay") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
     isActive: formData.get("isActive") === "on",
     notes: formData.get("notes") || undefined,
   });
@@ -47,6 +48,7 @@ export async function createIncomeSource(
     frequency: parsed.data.frequency,
     earner_name: parsed.data.earnerName || null,
     payment_day: parsed.data.paymentDay === "" ? null : (parsed.data.paymentDay ?? null),
+    bank_account: parsed.data.bankAccount || null,
     is_active: parsed.data.isActive,
     notes: parsed.data.notes || null,
     created_by: user.id,
@@ -69,6 +71,7 @@ export async function updateIncomeSource(
     frequency: formData.get("frequency") || "mensual",
     earnerName: formData.get("earnerName") || undefined,
     paymentDay: formData.get("paymentDay") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
     isActive: formData.get("isActive") === "on",
     notes: formData.get("notes") || undefined,
   });
@@ -86,6 +89,7 @@ export async function updateIncomeSource(
       frequency: parsed.data.frequency,
       earner_name: parsed.data.earnerName || null,
       payment_day: parsed.data.paymentDay === "" ? null : (parsed.data.paymentDay ?? null),
+      bank_account: parsed.data.bankAccount || null,
       is_active: parsed.data.isActive,
       notes: parsed.data.notes || null,
     })

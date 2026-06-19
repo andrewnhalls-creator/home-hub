@@ -1,11 +1,14 @@
 import { z } from "zod";
 
+const bankAccountSchema = z.enum(["ING", "BBVA", "Revolut"]).optional().or(z.literal(""));
+
 export const fixedPaymentSchema = z.object({
   name: z.string().min(1, "Este campo es obligatorio."),
   amount: z.coerce.number().positive("Introduce un importe válido."),
   categoryId: z.string().optional(),
   dueDay: z.coerce.number().int().min(1).max(31).optional().or(z.literal("")),
   paymentMethod: z.string().optional(),
+  bankAccount: bankAccountSchema,
   isActive: z.coerce.boolean().default(true),
   notes: z.string().optional(),
 });
@@ -16,6 +19,7 @@ export const expenseSchema = z.object({
   expenseDate: z.string().min(1, "Este campo es obligatorio."),
   categoryId: z.string().optional(),
   paidBy: z.string().optional(),
+  bankAccount: bankAccountSchema,
   notes: z.string().optional(),
 });
 
@@ -30,6 +34,7 @@ export const savingsGoalSchema = z.object({
 export const contributionSchema = z.object({
   amount: z.coerce.number().positive("Introduce un importe válido."),
   contributionDate: z.string().optional(),
+  bankAccount: bankAccountSchema,
   notes: z.string().optional(),
 });
 
@@ -39,6 +44,7 @@ export const subscriptionSchema = z.object({
   billingCycle: z.enum(["mensual", "trimestral", "anual", "otro"]).default("mensual"),
   renewalDate: z.string().optional(),
   categoryId: z.string().optional(),
+  bankAccount: bankAccountSchema,
   isActive: z.coerce.boolean().default(true),
   notes: z.string().optional(),
   billingDay: z.coerce.number().int().min(1).max(31).optional().or(z.literal("")),
@@ -53,7 +59,19 @@ export const incomeSourceSchema = z.object({
   frequency: z.enum(["mensual", "trimestral", "anual", "quincenal"]).default("mensual"),
   earnerName: z.string().optional(),
   paymentDay: z.coerce.number().int().min(1).max(31).optional().or(z.literal("")),
+  bankAccount: bankAccountSchema,
   isActive: z.coerce.boolean().default(true),
+  notes: z.string().optional(),
+});
+
+export const debtSchema = z.object({
+  name: z.string().min(1, "Este campo es obligatorio."),
+  balance: z.coerce.number().min(0, "Introduce un saldo válido."),
+  monthlyPayment: z.coerce.number().positive("Introduce un importe válido.").optional().or(z.literal("")),
+  paymentDay: z.coerce.number().int().min(1).max(31).optional().or(z.literal("")),
+  interestRate: z.coerce.number().min(0).max(100).optional().or(z.literal("")),
+  lender: z.string().optional(),
+  startDate: z.string().optional(),
   notes: z.string().optional(),
 });
 

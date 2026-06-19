@@ -1,4 +1,5 @@
 export type Priority = "baja" | "normal" | "alta";
+export type BankAccount = "ING" | "BBVA" | "Revolut";
 export type TaskStatus = "pendiente" | "hecho" | "vencido";
 export type RepeatFrequency = "ninguna" | "diaria" | "semanal" | "mensual" | "anual";
 export type ChoreFrequency = "puntual" | "diaria" | "semanal" | "quincenal" | "mensual";
@@ -217,6 +218,7 @@ export interface FixedPayment {
   category_id: string | null;
   due_day: number | null;
   payment_method: string | null;
+  bank_account: BankAccount | null;
   is_active: boolean;
   notes: string | null;
   created_by: string | null;
@@ -252,6 +254,7 @@ export interface Expense {
   category_id: string | null;
   paid_by: string | null;
   shopping_list_id: string | null;
+  bank_account: BankAccount | null;
   notes: string | null;
   created_by: string | null;
   created_at: string;
@@ -282,6 +285,7 @@ export interface SavingsContribution {
   amount: number;
   contribution_date: string;
   contributed_by: string | null;
+  bank_account: BankAccount | null;
   notes: string | null;
   created_at: string;
 }
@@ -299,6 +303,7 @@ export interface Subscription {
   start_date: string | null;
   renewal_date: string | null;
   category_id: string | null;
+  bank_account: BankAccount | null;
   is_active: boolean;
   notes: string | null;
   created_by: string | null;
@@ -386,6 +391,7 @@ export interface IncomeSource {
   frequency: IncomeFrequency;
   earner_name: string | null;
   payment_day: number | null;
+  bank_account: BankAccount | null;
   is_active: boolean;
   notes: string | null;
   created_by: string | null;
@@ -453,6 +459,25 @@ export interface MortgagePayment {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface Debt {
+  id: string;
+  household_id: string;
+  name: string;
+  balance: number;
+  monthly_payment: number | null;
+  payment_day: number | null;
+  interest_rate: number | null;
+  lender: string | null;
+  start_date: string | null;
+  notes: string | null;
+  currency: string;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  deleted_by: string | null;
 }
 
 export interface NotificationEvent {

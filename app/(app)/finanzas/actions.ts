@@ -11,6 +11,7 @@ import {
   savingsGoalSchema,
   contributionSchema,
   subscriptionSchema,
+  debtSchema,
 } from "@/lib/validations/finance";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
 import { logActivity } from "@/lib/activity";
@@ -45,6 +46,7 @@ export async function createFixedPayment(
     categoryId: formData.get("categoryId") || undefined,
     dueDay: formData.get("dueDay") || undefined,
     paymentMethod: formData.get("paymentMethod") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
     isActive: formData.get("isActive") === "on",
     notes: formData.get("notes") || undefined,
   });
@@ -61,6 +63,7 @@ export async function createFixedPayment(
     category_id: parsed.data.categoryId || null,
     due_day: parsed.data.dueDay === "" ? null : parsed.data.dueDay,
     payment_method: parsed.data.paymentMethod || null,
+    bank_account: parsed.data.bankAccount || null,
     is_active: parsed.data.isActive,
     notes: parsed.data.notes || null,
     created_by: user.id,
@@ -86,6 +89,7 @@ export async function updateFixedPayment(
     categoryId: formData.get("categoryId") || undefined,
     dueDay: formData.get("dueDay") || undefined,
     paymentMethod: formData.get("paymentMethod") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
     isActive: formData.get("isActive") === "on",
     notes: formData.get("notes") || undefined,
   });
@@ -103,6 +107,7 @@ export async function updateFixedPayment(
       category_id: parsed.data.categoryId || null,
       due_day: parsed.data.dueDay === "" ? null : parsed.data.dueDay,
       payment_method: parsed.data.paymentMethod || null,
+      bank_account: parsed.data.bankAccount || null,
       is_active: parsed.data.isActive,
       notes: parsed.data.notes || null,
     })
@@ -285,6 +290,7 @@ export async function createExpense(
     expenseDate: formData.get("expenseDate"),
     categoryId: formData.get("categoryId") || undefined,
     paidBy: formData.get("paidBy") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
     notes: formData.get("notes") || undefined,
   });
 
@@ -300,6 +306,7 @@ export async function createExpense(
     expense_date: parsed.data.expenseDate,
     category_id: parsed.data.categoryId || null,
     paid_by: parsed.data.paidBy || null,
+    bank_account: parsed.data.bankAccount || null,
     notes: parsed.data.notes || null,
     created_by: user.id,
   });
@@ -307,6 +314,46 @@ export async function createExpense(
   if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
 
   void logActivity({ householdId, actorId: user.id, entityType: "expense", action: "created", summary: `Añadió un gasto: ${parsed.data.title}` });
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function updateExpense(
+  expenseId: string,
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = expenseSchema.safeParse({
+    title: formData.get("title"),
+    amount: formData.get("amount"),
+    expenseDate: formData.get("expenseDate"),
+    categoryId: formData.get("categoryId") || undefined,
+    paidBy: formData.get("paidBy") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("expenses")
+    .update({
+      title: parsed.data.title,
+      amount: parsed.data.amount,
+      expense_date: parsed.data.expenseDate,
+      category_id: parsed.data.categoryId || null,
+      paid_by: parsed.data.paidBy || null,
+      bank_account: parsed.data.bankAccount || null,
+      notes: parsed.data.notes || null,
+    })
+    .eq("id", expenseId)
+    .eq("household_id", householdId);
+
+  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
 
   revalidatePath("/finanzas");
   return { success: true };
@@ -419,6 +466,7 @@ export async function addContribution(
   const parsed = contributionSchema.safeParse({
     amount: formData.get("amount"),
     contributionDate: formData.get("contributionDate") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
     notes: formData.get("notes") || undefined,
   });
 
@@ -441,6 +489,7 @@ export async function addContribution(
     amount: parsed.data.amount,
     contribution_date: parsed.data.contributionDate || undefined,
     contributed_by: user.id,
+    bank_account: parsed.data.bankAccount || null,
     notes: parsed.data.notes || null,
   });
 
@@ -451,6 +500,42 @@ export async function addContribution(
     .update({ current_amount: Number(goal.current_amount) + parsed.data.amount })
     .eq("id", goalId)
     .eq("household_id", householdId);
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function updateSavingsGoal(
+  goalId: string,
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = savingsGoalSchema.safeParse({
+    name: formData.get("name"),
+    targetAmount: formData.get("targetAmount"),
+    targetDate: formData.get("targetDate") || undefined,
+    priority: formData.get("priority") || "normal",
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("savings_goals")
+    .update({
+      name: parsed.data.name,
+      target_amount: parsed.data.targetAmount,
+      target_date: parsed.data.targetDate || null,
+      priority: parsed.data.priority,
+      notes: parsed.data.notes || null,
+    })
+    .eq("id", goalId)
+    .eq("household_id", householdId);
+
+  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
 
   revalidatePath("/finanzas");
   return { success: true };
@@ -470,6 +555,7 @@ export async function createSubscription(
     billingCycle: formData.get("billingCycle") || "mensual",
     renewalDate: formData.get("renewalDate") || undefined,
     categoryId: formData.get("categoryId") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
     isActive: formData.get("isActive") === "on",
     notes: formData.get("notes") || undefined,
     billingDay: formData.get("billingDay") || undefined,
@@ -496,6 +582,7 @@ export async function createSubscription(
       start_date: parsed.data.startDate || null,
       renewal_date: parsed.data.renewalDate || null,
       category_id: parsed.data.categoryId || null,
+      bank_account: parsed.data.bankAccount || null,
       is_active: parsed.data.isActive,
       notes: parsed.data.notes || null,
       created_by: user.id,
@@ -569,6 +656,7 @@ export async function updateSubscription(
     billingCycle: formData.get("billingCycle") || "mensual",
     renewalDate: formData.get("renewalDate") || undefined,
     categoryId: formData.get("categoryId") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
     isActive: formData.get("isActive") === "on",
     notes: formData.get("notes") || undefined,
     billingDay: formData.get("billingDay") || undefined,
@@ -594,6 +682,7 @@ export async function updateSubscription(
       start_date: parsed.data.startDate || null,
       renewal_date: parsed.data.renewalDate || null,
       category_id: parsed.data.categoryId || null,
+      bank_account: parsed.data.bankAccount || null,
       is_active: parsed.data.isActive,
       notes: parsed.data.notes || null,
     })
@@ -620,6 +709,104 @@ export async function updateSubscription(
   revalidatePath("/finanzas");
   revalidatePath("/dashboard");
   return { success: true };
+}
+
+// ---------------------------------------------------------------------------
+// Debts
+// ---------------------------------------------------------------------------
+
+export async function createDebt(
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = debtSchema.safeParse({
+    name: formData.get("name"),
+    balance: formData.get("balance"),
+    monthlyPayment: formData.get("monthlyPayment") || undefined,
+    paymentDay: formData.get("paymentDay") || undefined,
+    interestRate: formData.get("interestRate") || undefined,
+    lender: formData.get("lender") || undefined,
+    startDate: formData.get("startDate") || undefined,
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("debts").insert({
+    household_id: householdId,
+    name: parsed.data.name,
+    balance: parsed.data.balance,
+    monthly_payment: parsed.data.monthlyPayment === "" ? null : (parsed.data.monthlyPayment ?? null),
+    payment_day: parsed.data.paymentDay === "" ? null : (parsed.data.paymentDay ?? null),
+    interest_rate: parsed.data.interestRate === "" ? null : (parsed.data.interestRate ?? null),
+    lender: parsed.data.lender || null,
+    start_date: parsed.data.startDate || null,
+    notes: parsed.data.notes || null,
+    created_by: user.id,
+  });
+
+  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function updateDebt(
+  debtId: string,
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = debtSchema.safeParse({
+    name: formData.get("name"),
+    balance: formData.get("balance"),
+    monthlyPayment: formData.get("monthlyPayment") || undefined,
+    paymentDay: formData.get("paymentDay") || undefined,
+    interestRate: formData.get("interestRate") || undefined,
+    lender: formData.get("lender") || undefined,
+    startDate: formData.get("startDate") || undefined,
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("debts")
+    .update({
+      name: parsed.data.name,
+      balance: parsed.data.balance,
+      monthly_payment: parsed.data.monthlyPayment === "" ? null : (parsed.data.monthlyPayment ?? null),
+      payment_day: parsed.data.paymentDay === "" ? null : (parsed.data.paymentDay ?? null),
+      interest_rate: parsed.data.interestRate === "" ? null : (parsed.data.interestRate ?? null),
+      lender: parsed.data.lender || null,
+      start_date: parsed.data.startDate || null,
+      notes: parsed.data.notes || null,
+    })
+    .eq("id", debtId)
+    .eq("household_id", householdId);
+
+  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function deleteDebt(debtId: string) {
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  await supabase
+    .from("debts")
+    .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
+    .eq("id", debtId)
+    .eq("household_id", householdId);
+
+  revalidatePath("/finanzas");
 }
 
 export async function updateHouseholdBalance(

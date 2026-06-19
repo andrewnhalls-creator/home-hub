@@ -6,7 +6,13 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import type { FinanceFormState } from "@/app/(app)/finanzas/actions";
-import type { Category } from "@/lib/types";
+import type { Category, Expense } from "@/lib/types";
+
+const BANK_ACCOUNT_OPTIONS = [
+  { value: "ING", label: "ING" },
+  { value: "BBVA", label: "BBVA" },
+  { value: "Revolut", label: "Revolut" },
+];
 
 interface Member {
   user_id: string;
@@ -17,13 +23,14 @@ interface ExpenseFormProps {
   action: (prevState: FinanceFormState, formData: FormData) => Promise<FinanceFormState>;
   categories: Category[];
   members: Member[];
+  expense?: Expense;
   onSuccess: () => void;
   onCancel: () => void;
 }
 
 const initialState: FinanceFormState = {};
 
-export function ExpenseForm({ action, categories, members, onSuccess, onCancel }: ExpenseFormProps) {
+export function ExpenseForm({ action, categories, members, expense, onSuccess, onCancel }: ExpenseFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
 
   useEffect(() => {
@@ -32,7 +39,7 @@ export function ExpenseForm({ action, categories, members, onSuccess, onCancel }
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-4">
-      <Input label="Título" name="title" required error={state.fieldErrors?.title} />
+      <Input label="Título" name="title" required defaultValue={expense?.title} error={state.fieldErrors?.title} />
       <div className="grid grid-cols-2 gap-3">
         <Input
           label="Importe (€)"
@@ -40,6 +47,7 @@ export function ExpenseForm({ action, categories, members, onSuccess, onCancel }
           type="number"
           step="0.01"
           required
+          defaultValue={expense?.amount}
           error={state.fieldErrors?.amount}
         />
         <Input
@@ -47,23 +55,34 @@ export function ExpenseForm({ action, categories, members, onSuccess, onCancel }
           name="expenseDate"
           type="date"
           required
-          defaultValue={new Date().toISOString().slice(0, 10)}
+          defaultValue={expense?.expense_date ?? new Date().toISOString().slice(0, 10)}
           error={state.fieldErrors?.expenseDate}
         />
       </div>
-      <Select
-        label="Categoría"
-        name="categoryId"
-        placeholder="Sin categoría"
-        options={categories.map((c) => ({ value: c.id, label: c.name }))}
-      />
+      <div className="grid grid-cols-2 gap-3">
+        <Select
+          label="Categoría"
+          name="categoryId"
+          placeholder="Sin categoría"
+          defaultValue={expense?.category_id ?? ""}
+          options={categories.map((c) => ({ value: c.id, label: c.name }))}
+        />
+        <Select
+          label="Cuenta bancaria"
+          name="bankAccount"
+          placeholder="Sin cuenta"
+          defaultValue={expense?.bank_account ?? ""}
+          options={BANK_ACCOUNT_OPTIONS}
+        />
+      </div>
       <Select
         label="Pagado por"
         name="paidBy"
         placeholder="Sin especificar"
+        defaultValue={expense?.paid_by ?? ""}
         options={members.map((m) => ({ value: m.user_id, label: m.display_name ?? "Miembro" }))}
       />
-      <Textarea label="Notas" name="notes" />
+      <Textarea label="Notas" name="notes" defaultValue={expense?.notes ?? undefined} />
 
       {state.error && <p className="text-sm text-danger">{state.error}</p>}
 

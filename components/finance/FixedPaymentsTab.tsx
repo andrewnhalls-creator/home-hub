@@ -60,6 +60,7 @@ function PaymentRow({ payment, instance, onEdit, onDelete, onMarkPaid, onSkip, i
             <p className="text-xs text-muted">
               {formatCurrency(payment.amount)}
               {payment.due_day ? ` · Día ${payment.due_day}` : ""}
+              {payment.bank_account ? ` · ${payment.bank_account}` : ""}
               {!payment.is_active ? " · Inactivo" : ""}
             </p>
           </div>

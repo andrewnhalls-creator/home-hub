@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState, useTransition } from "react";
-import { Plus, Trash, PiggyBank } from "@phosphor-icons/react";
+import { Plus, Trash, PencilSimple, PiggyBank } from "@phosphor-icons/react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
@@ -12,7 +12,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
 import { formatCurrency } from "@/lib/format";
-import { createSavingsGoal, deleteSavingsGoal, addContribution, type FinanceFormState } from "@/app/(app)/finanzas/actions";
+import { createSavingsGoal, updateSavingsGoal, deleteSavingsGoal, addContribution, type FinanceFormState } from "@/app/(app)/finanzas/actions";
 import type { SavingsGoal } from "@/lib/types";
 
 interface SavingsTabProps {
@@ -61,6 +61,12 @@ function AddGoalForm({ onSuccess, onCancel }: { onSuccess: () => void; onCancel:
   );
 }
 
+const BANK_ACCOUNT_OPTIONS = [
+  { value: "ING", label: "ING" },
+  { value: "BBVA", label: "BBVA" },
+  { value: "Revolut", label: "Revolut" },
+];
+
 function ContributionForm({ goalId, onSuccess, onCancel }: { goalId: string; onSuccess: () => void; onCancel: () => void }) {
   const boundAction = addContribution.bind(null, goalId);
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
@@ -71,16 +77,60 @@ function ContributionForm({ goalId, onSuccess, onCancel }: { goalId: string; onS
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-4">
+      <div className="grid grid-cols-2 gap-3">
+        <Input
+          label="Importe (€)"
+          name="amount"
+          type="number"
+          step="0.01"
+          required
+          error={state.fieldErrors?.amount}
+        />
+        <Select
+          label="Cuenta bancaria"
+          name="bankAccount"
+          placeholder="Sin cuenta"
+          options={BANK_ACCOUNT_OPTIONS}
+        />
+      </div>
+      <Input label="Fecha" name="contributionDate" type="date" defaultValue={new Date().toISOString().slice(0, 10)} />
+      <Textarea label="Notas" name="notes" />
+      {state.error && <p className="text-sm text-danger">{state.error}</p>}
+      <div className="mt-2 flex gap-3">
+        <Button type="button" variant="secondary" className="flex-1" onClick={onCancel}>
+          Cancelar
+        </Button>
+        <Button type="submit" className="flex-1" isLoading={isPending}>
+          Guardar
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+function EditGoalForm({ goal, onSuccess, onCancel }: { goal: SavingsGoal; onSuccess: () => void; onCancel: () => void }) {
+  const boundAction = updateSavingsGoal.bind(null, goal.id);
+  const [state, formAction, isPending] = useActionState(boundAction, initialState);
+
+  useEffect(() => {
+    if (state.success) onSuccess();
+  }, [state.success, onSuccess]);
+
+  return (
+    <form action={formAction} noValidate className="flex flex-col gap-4">
+      <Input label="Nombre del objetivo" name="name" required defaultValue={goal.name} error={state.fieldErrors?.name} />
       <Input
-        label="Importe (€)"
-        name="amount"
+        label="Importe objetivo (€)"
+        name="targetAmount"
         type="number"
         step="0.01"
         required
-        error={state.fieldErrors?.amount}
+        defaultValue={goal.target_amount}
+        error={state.fieldErrors?.targetAmount}
       />
-      <Input label="Fecha" name="contributionDate" type="date" defaultValue={new Date().toISOString().slice(0, 10)} />
-      <Textarea label="Notas" name="notes" />
+      <Input label="Fecha objetivo" name="targetDate" type="date" defaultValue={goal.target_date ?? undefined} />
+      <Select label="Prioridad" name="priority" defaultValue={goal.priority} options={PRIORITY_OPTIONS} />
+      <Textarea label="Notas" name="notes" defaultValue={goal.notes ?? undefined} />
       {state.error && <p className="text-sm text-danger">{state.error}</p>}
       <div className="mt-2 flex gap-3">
         <Button type="button" variant="secondary" className="flex-1" onClick={onCancel}>
@@ -98,6 +148,7 @@ export function SavingsTab({ goals }: SavingsTabProps) {
   const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editingGoal, setEditingGoal] = useState<SavingsGoal | null>(null);
   const [contributingGoal, setContributingGoal] = useState<SavingsGoal | null>(null);
   const [deletingGoal, setDeletingGoal] = useState<SavingsGoal | null>(null);
 
@@ -122,14 +173,24 @@ export function SavingsTab({ goals }: SavingsTabProps) {
               <Card>
                 <div className="flex items-start justify-between gap-2">
                   <CardTitle>{goal.name}</CardTitle>
-                  <button
-                    type="button"
-                    aria-label="Eliminar objetivo"
-                    onClick={() => setDeletingGoal(goal)}
-                    className="text-muted hover:text-danger"
-                  >
-                    <Trash className="h-4 w-4" aria-hidden />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      aria-label="Editar objetivo"
+                      onClick={() => setEditingGoal(goal)}
+                      className="flex min-h-[44px] min-w-[44px] items-center justify-center text-muted hover:text-brown"
+                    >
+                      <PencilSimple className="h-4 w-4" aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Eliminar objetivo"
+                      onClick={() => setDeletingGoal(goal)}
+                      className="flex min-h-[44px] min-w-[44px] items-center justify-center text-muted hover:text-danger"
+                    >
+                      <Trash className="h-4 w-4" aria-hidden />
+                    </button>
+                  </div>
                 </div>
                 <p className="mt-1 text-sm text-muted">
                   {formatCurrency(goal.current_amount)} / {formatCurrency(goal.target_amount)}
@@ -155,6 +216,16 @@ export function SavingsTab({ goals }: SavingsTabProps) {
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Crear objetivo de ahorro">
         <AddGoalForm onSuccess={() => { setIsAddOpen(false); showToast("Objetivo creado"); }} onCancel={() => setIsAddOpen(false)} />
+      </Modal>
+
+      <Modal isOpen={!!editingGoal} onClose={() => setEditingGoal(null)} title="Editar objetivo">
+        {editingGoal && (
+          <EditGoalForm
+            goal={editingGoal}
+            onSuccess={() => { setEditingGoal(null); showToast("Objetivo actualizado"); }}
+            onCancel={() => setEditingGoal(null)}
+          />
+        )}
       </Modal>
 
       <Modal isOpen={!!contributingGoal} onClose={() => setContributingGoal(null)} title="Añadir aportación">

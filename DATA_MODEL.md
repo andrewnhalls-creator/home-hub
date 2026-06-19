@@ -601,6 +601,43 @@ Seeded per household on creation (or globally as `is_default = true` rows the UI
 
 **Chores (`module = 'chores'`):** Limpieza, Cocina, Ropa, Mantenimiento, Plantas, Basura, Otros.
 
+## Migrations 030–031 (2026-06-19)
+
+### `bank_account` column (migration 030)
+Added `bank_account text check (bank_account in ('ING', 'BBVA', 'Revolut'))` nullable column to:
+- `income_sources`
+- `fixed_payments`
+- `expenses`
+- `subscriptions`
+- `savings_contributions`
+
+Allows users to tag each finance record with the bank account it relates to, for reconciliation purposes.
+
+### `debts`
+
+Tracks household debts (loans, credit cards, etc.) with optional amortisation fields.
+
+| column | type | notes |
+|---|---|---|
+| `id` | `uuid primary key` | |
+| `household_id` | `uuid references households(id) on delete cascade` | RLS-scoped |
+| `name` | `text not null` | e.g. "Préstamo coche" |
+| `balance` | `numeric(12,2) not null default 0` | current outstanding balance |
+| `monthly_payment` | `numeric(12,2)` | monthly instalment amount |
+| `payment_day` | `integer check (payment_day between 1 and 31)` | day of month payment is due |
+| `interest_rate` | `numeric(6,4)` | annual interest rate (%) |
+| `lender` | `text` | name of lender/institution |
+| `start_date` | `date` | when the debt started |
+| `notes` | `text` | freeform notes |
+| `currency` | `text default 'EUR'` | |
+| `created_by` | `uuid references auth.users(id)` | |
+| `created_at` | `timestamptz default now()` | |
+| `updated_at` | `timestamptz default now()` | trigger-maintained |
+| `deleted_at` | `timestamptz` | soft delete |
+| `deleted_by` | `uuid references auth.users(id)` | |
+
+RLS: select/insert/update/delete restricted to household members via `is_household_member(household_id)`.
+
 ## Explicitly out of scope for the schema (MVP)
 
 - No `transactions`/bank-sync tables of any kind.

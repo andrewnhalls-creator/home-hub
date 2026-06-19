@@ -99,16 +99,29 @@ function IncomeForm({
           options={FREQUENCY_OPTIONS}
         />
       </div>
-      <Input
-        label="Día de cobro (opcional)"
-        name="paymentDay"
-        type="number"
-        inputMode="numeric"
-        min="1"
-        max="31"
-        defaultValue={source?.payment_day ?? undefined}
-        placeholder="Ej. 25"
-      />
+      <div className="grid grid-cols-2 gap-3">
+        <Input
+          label="Día de cobro (opcional)"
+          name="paymentDay"
+          type="number"
+          inputMode="numeric"
+          min="1"
+          max="31"
+          defaultValue={source?.payment_day ?? undefined}
+          placeholder="Ej. 25"
+        />
+        <Select
+          label="Cuenta bancaria"
+          name="bankAccount"
+          placeholder="Sin cuenta"
+          defaultValue={source?.bank_account ?? ""}
+          options={[
+            { value: "ING", label: "ING" },
+            { value: "BBVA", label: "BBVA" },
+            { value: "Revolut", label: "Revolut" },
+          ]}
+        />
+      </div>
       <Checkbox label="Activo" name="isActive" defaultChecked={source ? source.is_active : true} />
       {state.error && <p className="text-sm text-danger">{state.error}</p>}
       <div className="mt-2 flex gap-3">
@@ -194,6 +207,9 @@ export function IngresoTab({ sources }: IngresoTabProps) {
                             )}
                             {source.payment_day && source.frequency !== "quincenal" && (
                               <span className="ml-1 text-muted/70">· día {source.payment_day}</span>
+                            )}
+                            {source.bank_account && (
+                              <span className="ml-1 text-muted/70">· {source.bank_account}</span>
                             )}
                           </p>
                         </div>

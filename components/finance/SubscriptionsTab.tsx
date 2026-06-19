@@ -49,7 +49,19 @@ function AddSubscriptionForm({
   return (
     <form action={formAction} noValidate className="flex flex-col gap-4">
       <Input label="Nombre" name="name" required error={state.fieldErrors?.name} />
-      <Input label="Importe (€)" name="amount" type="number" step="0.01" required error={state.fieldErrors?.amount} />
+      <div className="grid grid-cols-2 gap-3">
+        <Input label="Importe (€)" name="amount" type="number" step="0.01" required error={state.fieldErrors?.amount} />
+        <Select
+          label="Cuenta bancaria"
+          name="bankAccount"
+          placeholder="Sin cuenta"
+          options={[
+            { value: "ING", label: "ING" },
+            { value: "BBVA", label: "BBVA" },
+            { value: "Revolut", label: "Revolut" },
+          ]}
+        />
+      </div>
       <Select label="Ciclo de facturación" name="billingCycle" defaultValue="mensual" options={BILLING_OPTIONS} />
       <Input label="Fecha de renovación" name="renewalDate" type="date" />
       <Select
@@ -93,7 +105,20 @@ function EditSubscriptionForm({
   return (
     <form action={formAction} noValidate className="flex flex-col gap-4">
       <Input label="Nombre" name="name" required defaultValue={subscription.name} error={state.fieldErrors?.name} />
-      <Input label="Importe (€)" name="amount" type="number" step="0.01" required defaultValue={String(subscription.amount)} error={state.fieldErrors?.amount} />
+      <div className="grid grid-cols-2 gap-3">
+        <Input label="Importe (€)" name="amount" type="number" step="0.01" required defaultValue={String(subscription.amount)} error={state.fieldErrors?.amount} />
+        <Select
+          label="Cuenta bancaria"
+          name="bankAccount"
+          placeholder="Sin cuenta"
+          defaultValue={subscription.bank_account ?? ""}
+          options={[
+            { value: "ING", label: "ING" },
+            { value: "BBVA", label: "BBVA" },
+            { value: "Revolut", label: "Revolut" },
+          ]}
+        />
+      </div>
       <Select label="Ciclo de facturación" name="billingCycle" defaultValue={subscription.billing_cycle} options={BILLING_OPTIONS} />
       <Input label="Día de cobro" name="billingDay" type="number" min="1" max="31" defaultValue={subscription.billing_day != null ? String(subscription.billing_day) : ""} />
       <Input label="Fecha de renovación" name="renewalDate" type="date" defaultValue={subscription.renewal_date ?? ""} />
@@ -176,6 +201,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
                 : subscription.renewal_date && !hasFutureStart && subscription.billing_cycle !== "mensual"
                 ? ` · ${formatDate(subscription.renewal_date)}`
                 : ""}
+              {subscription.bank_account ? ` · ${subscription.bank_account}` : ""}
             </p>
           </div>
           {futureStartLabel && <Badge variant="neutral">{futureStartLabel}</Badge>}
