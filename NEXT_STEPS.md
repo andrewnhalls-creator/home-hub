@@ -23,6 +23,8 @@ Already confirmed ✅: FAB visible, modal opens with greeting, no API key leak.
 | 10 | Security | Open DevTools → Network → `/api/ai` response body | Key must NOT appear |
 | 11 | Spanish | Check that all AI responses are in Spanish | Even for English prompts |
 
+**Important:** ~30 failed calls today may have partially consumed the free-tier daily quota (~1,000 RPD). If you hit 429 errors, wait until UTC midnight for the quota to reset before continuing.
+
 Also fix locally: open `.env.local`, remove the `❯ ` prefix from the `GEMINI_API_KEY=` line.
 
 ---

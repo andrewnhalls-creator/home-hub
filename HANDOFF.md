@@ -25,6 +25,15 @@ Already verified:
 - ✅ Test 2: Modal opens with correct title + greeting
 - ✅ Test 10: No API key leak in /api/ai responses (automated check passed)
 
+## Gemini API quota status (important for next session)
+Per the Google AI Studio dashboard (checked 2026-06-19):
+- ~23 requests returned 404 (deprecated `gemini-1.5-flash` — now fixed)
+- ~7 requests returned 429 (rate limit from bulk test runs)
+- 0 successful calls so far — the key is on the free tier
+- Free tier limits: 15 RPM, ~1,000 RPD (requests per day)
+- The ~30 failed requests today may have partially consumed the daily quota
+- **If you see 429s in the next session, wait until tomorrow (UTC midnight) for the daily quota to reset**, then test one scenario at a time with 30+ seconds between each
+
 ## Known local issue
 `.env.local` has a corrupt `❯ ` prefix on the `GEMINI_API_KEY=` line (zsh prompt got embedded). Fix manually: open `.env.local`, remove the `❯ ` at the start of the GEMINI_API_KEY line. This does not affect Vercel — only local dev.
 
