@@ -6,17 +6,18 @@ import { es } from "date-fns/locale";
 import {
   ChartBar,
   ChartPie,
-  Coins,
   CreditCard,
   ShoppingBag,
   PiggyBank,
   ArrowsClockwise,
-  Bank,
   TrendUp,
+  Scales,
+  ArrowLeft,
+  SquaresFour,
   type Icon,
 } from "@phosphor-icons/react";
+
 import { cn } from "@/lib/utils";
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { ResumenTab } from "@/components/finance/ResumenTab";
 import { IngresoTab } from "@/components/finance/IngresoTab";
 import { FixedPaymentsTab } from "@/components/finance/FixedPaymentsTab";
@@ -26,8 +27,21 @@ import { SubscriptionsTab } from "@/components/finance/SubscriptionsTab";
 import { MortgageTab } from "@/components/finance/MortgageTab";
 import { PresupuestosTab } from "@/components/finance/PresupuestosTab";
 import { PlanAhorroTab } from "@/components/finance/PlanAhorroTab";
+import { DeudaTab } from "@/components/finance/DeudaTab";
 import { ExportButton } from "@/components/finance/ExportButton";
-import type { Category, CategoryBudget, Expense, FixedPayment, IncomeSource, Mortgage, MortgagePayment, PaymentInstance, SavingsGoal, Subscription } from "@/lib/types";
+import type {
+  Category,
+  CategoryBudget,
+  Debt,
+  Expense,
+  FixedPayment,
+  IncomeSource,
+  Mortgage,
+  MortgagePayment,
+  PaymentInstance,
+  SavingsGoal,
+  Subscription,
+} from "@/lib/types";
 
 interface Member {
   user_id: string;
@@ -62,23 +76,33 @@ interface FinanceTabsProps {
   members: Member[];
   incomeSources: IncomeSource[];
   categoryBudgets: CategoryBudget[];
+  debts: Debt[];
   cycleLabel?: string;
   cycleStart?: string;
   cycleEnd?: string;
 }
 
-type Tab = "resumen" | "ingresos" | "gastos-fijos" | "gastos" | "presupuestos" | "suscripciones" | "ahorro" | "ahorro-plan" | "hipoteca";
+type Tab = "resumen" | "ingresos" | "gastos-fijos" | "suscripciones" | "gastos-variables" | "gastos" | "plan-ahorro" | "deuda";
 
-const TABS: { value: Tab; label: string; icon: Icon }[] = [
-  { value: "resumen",        label: "Resumen",        icon: ChartBar        },
-  { value: "ingresos",       label: "Ingresos",       icon: TrendUp         },
-  { value: "gastos-fijos",   label: "Gastos Fijos",   icon: CreditCard      },
-  { value: "gastos",         label: "Gastos",         icon: ShoppingBag     },
-  { value: "presupuestos",   label: "Presupuestos",   icon: ChartPie        },
-  { value: "suscripciones",  label: "Suscripciones",  icon: ArrowsClockwise },
-  { value: "ahorro",         label: "Ahorro",         icon: PiggyBank       },
-  { value: "ahorro-plan",    label: "Plan de ahorro", icon: Coins           },
-  { value: "hipoteca",       label: "Hipoteca",       icon: Bank            },
+interface SubPage {
+  value: Exclude<Tab, "resumen">;
+  label: string;
+  icon: Icon;
+}
+
+const SUB_PAGES: SubPage[] = [
+  { value: "ingresos",         label: "Ingresos",                   icon: TrendUp         },
+  { value: "gastos-fijos",     label: "Gastos fijos",               icon: CreditCard      },
+  { value: "suscripciones",    label: "Suscripciones",              icon: ArrowsClockwise },
+  { value: "gastos-variables", label: "Gastos variables",           icon: ChartPie        },
+  { value: "gastos",           label: "Gastos",                     icon: ShoppingBag     },
+  { value: "plan-ahorro",      label: "Plan de ahorro y hipoteca",  icon: PiggyBank       },
+  { value: "deuda",            label: "Deuda",                      icon: Scales          },
+];
+
+const ALL_SIDEBAR_TABS: { value: Tab; label: string; icon: Icon }[] = [
+  { value: "resumen", label: "Resumen", icon: ChartBar },
+  ...SUB_PAGES,
 ];
 
 function currentMonthLabel(): string {
@@ -99,15 +123,70 @@ export function FinanceTabs({
   members,
   incomeSources,
   categoryBudgets,
+  debts,
   cycleLabel,
   cycleStart,
   cycleEnd,
 }: FinanceTabsProps) {
   const [tab, setTab] = useState<Tab>("resumen");
+  const [showMenu, setShowMenu] = useState(false);
+
+  const currentSubPage = SUB_PAGES.find((p) => p.value === tab);
+
+  function goTo(t: Tab) {
+    setTab(t);
+    setShowMenu(false);
+  }
+
+  function renderContent() {
+    switch (tab) {
+      case "resumen":
+        return (
+          <ResumenTab
+            {...resumen}
+            mortgages={mortgages}
+            mortgagePayments={mortgagePayments}
+            onGoToMortgage={() => goTo("plan-ahorro")}
+            onGoToIngresos={() => goTo("ingresos")}
+            onGoToGastosFijos={() => goTo("gastos-fijos")}
+            onGoToSuscripciones={() => goTo("suscripciones")}
+            onGoToGastos={() => goTo("gastos")}
+          />
+        );
+      case "ingresos":
+        return <IngresoTab sources={incomeSources} />;
+      case "gastos-fijos":
+        return <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />;
+      case "suscripciones":
+        return <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />;
+      case "gastos-variables":
+        return (
+          <PresupuestosTab
+            categoryBudgets={categoryBudgets}
+            expenses={expenses}
+            categories={financeCategories}
+            cycleStart={cycleStart ?? ""}
+            cycleEnd={cycleEnd ?? ""}
+          />
+        );
+      case "gastos":
+        return <ExpensesTab expenses={expenses} categories={financeCategories} members={members} />;
+      case "plan-ahorro":
+        return (
+          <div className="flex flex-col gap-6">
+            <SavingsTab goals={savingsGoals} />
+            <PlanAhorroTab goals={savingsGoals} mortgages={mortgages} />
+            <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
+          </div>
+        );
+      case "deuda":
+        return <DeudaTab debts={debts} />;
+    }
+  }
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Cycle label + export */}
+      {/* Header row: cycle label + export */}
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-muted">{cycleLabel ?? currentMonthLabel()}</p>
         <ExportButton
@@ -118,49 +197,123 @@ export function FinanceTabs({
         />
       </div>
 
-      {/* Mobile: 2-column grid of section cards */}
-      <div role="tablist" aria-label="Secciones de finanzas" className="grid grid-cols-2 gap-2 md:hidden">
-        {TABS.map(({ value, label, icon: Icon }) => {
-          const active = tab === value;
-          return (
-            <button
-              key={value}
-              role="tab"
-              type="button"
-              aria-selected={active}
-              onClick={() => setTab(value)}
-              className={cn(
-                "flex items-center gap-2.5 rounded-xl border px-3 py-3 text-left text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]",
-                active
-                  ? "border-terracotta/30 bg-terracotta text-cream shadow-[var(--shadow-card)]"
-                  : "border-white/[0.10] bg-white/[0.05] text-brown hover:bg-white/[0.10]",
-              )}
+      {/* ── MOBILE (< lg) ── */}
+      <div className="lg:hidden">
+        {showMenu ? (
+          /* Section picker */
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-brown">Secciones</p>
+              <button
+                type="button"
+                aria-label="Cerrar menú"
+                onClick={() => setShowMenu(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+              >
+                <ArrowLeft className="h-4 w-4" aria-hidden />
+              </button>
+            </div>
+            <div role="list" className="grid grid-cols-2 gap-2">
+              {SUB_PAGES.map(({ value, label, icon: PageIcon }) => (
+                <button
+                  key={value}
+                  role="listitem"
+                  type="button"
+                  onClick={() => goTo(value)}
+                  className="flex items-center gap-2.5 rounded-xl border border-white/[0.10] bg-white/[0.05] px-3 py-3 text-left text-sm font-medium text-brown transition hover:bg-white/[0.10] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                >
+                  <PageIcon className="h-4 w-4 shrink-0 text-muted" aria-hidden />
+                  <span className="truncate">{label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : tab === "resumen" ? (
+          /* Resumen landing */
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-brown">Resumen</p>
+              <button
+                type="button"
+                aria-label="Ver secciones"
+                onClick={() => setShowMenu(true)}
+                className="flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+              >
+                <SquaresFour className="h-5 w-5" aria-hidden />
+              </button>
+            </div>
+            <div key="resumen" className="animate-tab-enter">
+              {renderContent()}
+            </div>
+          </div>
+        ) : (
+          /* Sub-page view */
+          <div className="flex flex-col gap-3">
+            {/* Sub-page header */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                aria-label="Volver al resumen"
+                onClick={() => goTo("resumen")}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+              >
+                <ArrowLeft className="h-4 w-4" aria-hidden />
+              </button>
+              <p className="min-w-0 flex-1 truncate text-sm font-semibold text-brown">
+                {currentSubPage?.label}
+              </p>
+              <button
+                type="button"
+                aria-label="Ver secciones"
+                onClick={() => setShowMenu(true)}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+              >
+                <SquaresFour className="h-5 w-5" aria-hidden />
+              </button>
+            </div>
+
+            {/* Horizontal page-slider strip */}
+            <div
+              role="tablist"
+              aria-label="Secciones de finanzas"
+              className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
-              <Icon
-                className={cn("h-4 w-4 shrink-0", active ? "text-cream" : "text-muted")}
-                aria-hidden
-              />
-              <span className="truncate">{label}</span>
-            </button>
-          );
-        })}
+              <div className="flex gap-2" style={{ width: "max-content" }}>
+                {SUB_PAGES.map(({ value, label }) => {
+                  const active = tab === value;
+                  return (
+                    <button
+                      key={value}
+                      role="tab"
+                      type="button"
+                      aria-selected={active}
+                      onClick={() => goTo(value)}
+                      className={cn(
+                        "h-9 whitespace-nowrap rounded-full px-4 text-[13px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.96]",
+                        active
+                          ? "bg-terracotta text-cream"
+                          : "bg-white/[0.07] text-muted hover:bg-white/[0.12]",
+                      )}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Sub-page content */}
+            <div key={tab} className="animate-tab-enter">
+              {renderContent()}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Tablet (md–lg): horizontal scrollable strip */}
-      <div className="hidden md:block lg:hidden">
-        <SegmentedControl
-          options={TABS.map(({ value, label }) => ({ value, label }))}
-          value={tab}
-          onChange={setTab}
-          scrollable
-          aria-label="Secciones de finanzas"
-        />
-      </div>
-
-      {/* Desktop (lg+): sidebar nav + content side by side */}
-      <div className="lg:grid lg:grid-cols-[192px_1fr] lg:items-start lg:gap-6">
-        <nav role="tablist" aria-label="Secciones de finanzas" className="hidden lg:flex lg:flex-col lg:gap-0.5">
-          {TABS.map(({ value, label, icon: Icon }) => {
+      {/* ── DESKTOP (lg+) ── sidebar nav + content */}
+      <div className="hidden lg:grid lg:grid-cols-[200px_1fr] lg:items-start lg:gap-6">
+        <nav role="tablist" aria-label="Secciones de finanzas" className="flex flex-col gap-0.5">
+          {ALL_SIDEBAR_TABS.map(({ value, label, icon: NavIcon }) => {
             const active = tab === value;
             return (
               <button
@@ -168,59 +321,24 @@ export function FinanceTabs({
                 role="tab"
                 type="button"
                 aria-selected={active}
-                onClick={() => setTab(value)}
+                onClick={() => goTo(value)}
                 className={cn(
                   "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]",
-                  active
-                    ? "bg-terracotta text-cream"
-                    : "text-brown hover:bg-white/[0.07]",
+                  active ? "bg-terracotta text-cream" : "text-brown hover:bg-white/[0.07]",
                 )}
               >
-                <Icon
+                <NavIcon
                   className={cn("h-4 w-4 shrink-0", active ? "text-cream" : "text-muted")}
                   aria-hidden
                 />
-                <span>{label}</span>
+                <span className="leading-tight">{label}</span>
               </button>
             );
           })}
         </nav>
 
         <div key={tab} className="animate-tab-enter">
-          {tab === "resumen" && (
-            <ResumenTab
-              {...resumen}
-              mortgages={mortgages}
-              mortgagePayments={mortgagePayments}
-              onGoToMortgage={() => setTab("hipoteca")}
-              onGoToIngresos={() => setTab("ingresos")}
-              onGoToGastosFijos={() => setTab("gastos-fijos")}
-              onGoToSuscripciones={() => setTab("suscripciones")}
-              onGoToGastos={() => setTab("gastos")}
-            />
-          )}
-          {tab === "ingresos" && <IngresoTab sources={incomeSources} />}
-          {tab === "gastos-fijos" && (
-            <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />
-          )}
-          {tab === "gastos" && <ExpensesTab expenses={expenses} categories={financeCategories} members={members} />}
-          {tab === "presupuestos" && (
-            <PresupuestosTab
-              categoryBudgets={categoryBudgets}
-              expenses={expenses}
-              categories={financeCategories}
-              cycleStart={cycleStart ?? ""}
-              cycleEnd={cycleEnd ?? ""}
-            />
-          )}
-          {tab === "suscripciones" && (
-            <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
-          )}
-          {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
-          {tab === "ahorro-plan" && <PlanAhorroTab goals={savingsGoals} mortgages={mortgages} />}
-          {tab === "hipoteca" && (
-            <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
-          )}
+          {renderContent()}
         </div>
       </div>
     </div>

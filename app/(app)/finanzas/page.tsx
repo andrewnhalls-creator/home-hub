@@ -30,6 +30,7 @@ export default async function FinancePage() {
     { data: householdRow },
     { data: incomeSources },
     { data: categoryBudgets },
+    { data: debts },
   ] = await Promise.all([
     supabase
       .from("fixed_payments")
@@ -85,6 +86,12 @@ export default async function FinancePage() {
       .from("category_budgets")
       .select("*")
       .eq("household_id", householdId),
+    supabase
+      .from("debts")
+      .select("*")
+      .eq("household_id", householdId)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true }),
   ]);
 
   const allInstances = paymentInstances ?? [];
@@ -201,6 +208,7 @@ export default async function FinancePage() {
       members={members ?? []}
       incomeSources={incomeSources ?? []}
       categoryBudgets={categoryBudgets ?? []}
+      debts={debts ?? []}
       cycleLabel={cycleLabel}
       cycleStart={cycleStart}
       cycleEnd={cycleEnd}
