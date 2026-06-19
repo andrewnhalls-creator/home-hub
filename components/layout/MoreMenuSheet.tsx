@@ -90,7 +90,7 @@ export function MoreMenuSheet({ isOpen, onClose }: MoreMenuSheetProps) {
         aria-modal="true"
         aria-labelledby="more-menu-title"
         onClick={(e) => e.stopPropagation()}
-        className="animate-sheet-enter relative w-full rounded-t-[var(--radius-xl)] border-t border-white/[0.12] px-5 pt-3 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-modal)]"
+        className="animate-sheet-enter relative w-full rounded-t-[var(--radius-xl)] border-t border-border px-5 pt-3 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-modal)]"
         style={{ background: "rgba(13,11,31,0.92)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)" }}
       >
         {/* Top edge highlight */}

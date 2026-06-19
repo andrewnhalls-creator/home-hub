@@ -11,11 +11,11 @@ const variantBase =
   "relative overflow-hidden rounded-[var(--radius-xl)] border bg-white/[0.07] p-4";
 
 const variantClasses: Record<CardVariant, string> = {
-  default:  "border-white/[0.12] shadow-[var(--shadow-card)]",
+  default:  "border-border shadow-[var(--shadow-card)]",
   featured: "border-terracotta/40 shadow-[0_0_0_1px_var(--color-terracotta),var(--shadow-card)]",
   subtle:   "border-white/[0.06] bg-white/[0.04]",
   metric:
-    "border-white/[0.12] shadow-[var(--shadow-card)] transition-[background,box-shadow] duration-200 hover:bg-white/[0.12] hover:shadow-[var(--shadow-card-hover)]",
+    "border-border shadow-[var(--shadow-card)] transition-[background,box-shadow] duration-200 hover:bg-white/[0.12] hover:shadow-[var(--shadow-card-hover)]",
 };
 
 export function Card({ className, variant = "default", children, ...rest }: CardProps) {

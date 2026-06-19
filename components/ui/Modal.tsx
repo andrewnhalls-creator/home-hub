@@ -71,7 +71,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
       {/* Glass panel — outer shell handles visuals; inner div handles scroll */}
       <div
         className={cn(
-          "animate-modal-enter relative w-full border border-white/[0.12] shadow-[var(--shadow-modal)] sm:max-w-md",
+          "animate-modal-enter relative w-full border border-border shadow-[var(--shadow-modal)] sm:max-w-md",
           "rounded-t-[var(--radius-xl)] sm:rounded-[var(--radius-xl)]",
           className,
         )}
