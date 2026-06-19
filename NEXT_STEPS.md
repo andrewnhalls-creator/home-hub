@@ -1,16 +1,7 @@
 # Next Steps
 
 ## Current state
-Doc alignment sweep in progress (Fix 3/6 done). Stop after each fix, update HANDOFF + NEXT_STEPS, commit, push. Then task 4 (repo privacy).
-
----
-
-## Fix 4 — UI_REDESIGN_PLAN.md: mark as complete
-
-Change the status line at the top from:
-`## Status: Milestone UI-0 — Audit complete, plan defined`
-to:
-`## Status: COMPLETE — All milestones UI-0 through UI-8 shipped as of 2026-06-18`
+Doc alignment sweep in progress (Fix 4/6 done). Stop after each fix, update HANDOFF + NEXT_STEPS, commit, push. Then task 4 (repo privacy).
 
 ---
 

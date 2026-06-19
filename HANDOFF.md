@@ -1,5 +1,5 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (Doc alignment in progress — Fix 3/6 done)
+Updated: 2026-06-19 (Doc alignment in progress — Fix 4/6 done)
 
 ## Current state
 Doc alignment sweep underway before making the GitHub repo private. Fix 1 of 6 complete. Build still passes (doc-only changes). All pushed to origin main.
@@ -12,7 +12,7 @@ GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `67a8f6d` — "KNOWN_ISSUES: move Más crash to Resolved (fixed in 3791097)"
+- Last commit: `423e9dc` — "UI_REDESIGN_PLAN: mark all milestones complete"
 - All pushed to origin main
 
 ## Doc alignment fixes: status
@@ -22,7 +22,7 @@ GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo
 | 1 | `CLAUDE.md` | Design style section described old pastel design; icon lib was lucide-react; accessibility said "pastel backgrounds" | ✅ Done (`c6eb18f`) |
 | 2 | `DESIGN_SYSTEM.md` | Entire file is old warm/cream design — deprecated in favour of `DESIGN.md` | ✅ Done (`b62a8e5`) |
 | 3 | `KNOWN_ISSUES.md` | "Más button broken" still listed as Active — was fixed in Task 1 | ✅ Done (`67a8f6d`) |
-| 4 | `UI_REDESIGN_PLAN.md` | Status line says "UI-0 — plan defined" — all milestones are complete | ⏳ Pending |
+| 4 | `UI_REDESIGN_PLAN.md` | Status line says "UI-0 — plan defined" — all milestones are complete | ✅ Done (`423e9dc`) |
 | 5 | `README.md` | Links to `DESIGN_SYSTEM.md` as the style guide — should point to `DESIGN.md` | ⏳ Pending |
 | 6 | `DESIGN.md` | Form inputs section says `border-white/[0.12]` — components now use `border-border` | ⏳ Pending |
 
