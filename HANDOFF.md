@@ -44,4 +44,4 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ Task 3: Final review + build (0 errors), secrets clean, SSR fixes
 - ✅ Doc alignment sweep (Fixes 1–6)
 - ✅ Task 4: Stay on Vercel Hobby, repo stays public (intentional decision)
-- ⏳ iPad Pro layout — AppShell container widened (max-w-3xl lg:max-w-5xl) ✅; module two-column grids pending
+- ✅ iPad Pro layout — complete (AppShell lg:max-w-5xl; finanzas sidebar nav; ResumenTab lg:grid-cols-6; menu lg:grid-cols-2; calendario max-w fix)

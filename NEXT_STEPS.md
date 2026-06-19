@@ -5,7 +5,7 @@ All previous tasks complete. Starting iPad Pro layout milestone.
 
 ---
 
-## iPad Pro layout milestone
+## iPad Pro layout milestone — COMPLETE ✅
 
 ### Goal
 The app already has a sidebar + hidden BottomNav on `md:` (768px+). The gaps are:
