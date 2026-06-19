@@ -3,17 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 import { requireHousehold } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
-type ActionType =
-  | "add_shopping_item"
-  | "create_reminder"
-  | "create_chore"
-  | "create_expense"
-  | "create_subscription"
-  | "create_fixed_payment"
-  | "suggest_recipe"
-  | "suggest_meal_plan"
-  | "organise_shopping_list";
-
 interface AddShoppingItemAction {
   type: "add_shopping_item";
   name: string;
@@ -151,7 +140,6 @@ async function fetchHouseholdContext(supabase: Awaited<ReturnType<typeof createC
       .select("name, quantity, unit, store, priority, is_completed")
       .eq("household_id", householdId)
       .eq("is_completed", false)
-      .is("deleted_at", null)
       .limit(50),
     supabase
       .from("meal_plans")
