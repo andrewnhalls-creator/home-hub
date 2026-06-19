@@ -151,7 +151,7 @@ export function ResumenTab({
       </div>
       <BudgetCard monthlyBudget={monthlyBudget} spent={expensesThisMonthTotal} />
       {/* 6-chip KPI grid — numbers only, colour reserved for problems */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2 lg:grid-cols-6">
         <KpiChip label="Próximos" value={String(upcomingCount)} />
         <KpiChip label="Vencidos" value={String(overdueCount)} danger={overdueCount > 0} />
         <KpiChip

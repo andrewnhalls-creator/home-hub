@@ -96,7 +96,7 @@ export default async function MenuPage({
         />
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2 lg:gap-4">
         {days.map((day) => {
           const dayStr = format(day, "yyyy-MM-dd");
           const dayLabel = format(day, "EEEE dd/MM", { locale: es });

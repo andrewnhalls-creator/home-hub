@@ -88,7 +88,7 @@ export default async function CalendarPage() {
   return (
     <>
       <CalendarView items={items} />
-      <div className="px-4 pb-6 max-w-2xl mx-auto">
+      <div className="pb-6">
         <TrashSection
           title="Papelera del calendario"
           items={trashItems}

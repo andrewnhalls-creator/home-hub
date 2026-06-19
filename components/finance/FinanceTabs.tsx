@@ -122,8 +122,8 @@ export function FinanceTabs({
         })}
       </div>
 
-      {/* Tablet+: horizontal scrollable strip */}
-      <div className="hidden md:block">
+      {/* Tablet (md–lg): horizontal scrollable strip */}
+      <div className="hidden md:block lg:hidden">
         <SegmentedControl
           options={TABS.map(({ value, label }) => ({ value, label }))}
           value={tab}
@@ -132,6 +132,35 @@ export function FinanceTabs({
           aria-label="Secciones de finanzas"
         />
       </div>
+
+      {/* Desktop (lg+): sidebar nav + content side by side */}
+      <div className="lg:grid lg:grid-cols-[192px_1fr] lg:items-start lg:gap-6">
+        <nav role="tablist" aria-label="Secciones de finanzas" className="hidden lg:flex lg:flex-col lg:gap-0.5">
+          {TABS.map(({ value, label, icon: Icon }) => {
+            const active = tab === value;
+            return (
+              <button
+                key={value}
+                role="tab"
+                type="button"
+                aria-selected={active}
+                onClick={() => setTab(value)}
+                className={cn(
+                  "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]",
+                  active
+                    ? "bg-terracotta text-cream"
+                    : "text-brown hover:bg-white/[0.07]",
+                )}
+              >
+                <Icon
+                  className={cn("h-4 w-4 shrink-0", active ? "text-cream" : "text-muted")}
+                  aria-hidden
+                />
+                <span>{label}</span>
+              </button>
+            );
+          })}
+        </nav>
 
       <div key={tab} className="animate-tab-enter">
         {tab === "resumen" && (
@@ -154,6 +183,7 @@ export function FinanceTabs({
           <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
         )}
       </div>
+      </div>{/* end lg:grid wrapper */}
     </div>
   );
 }
