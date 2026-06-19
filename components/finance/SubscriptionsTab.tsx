@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState, useTransition } from "react";
-import { isBefore, addDays } from "date-fns";
+import { isBefore, addDays, parseISO, format } from "date-fns";
 import { Plus, Trash, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
 import { formatCurrency, formatDate } from "@/lib/format";
+import { getSubscriptionCycleStatus } from "@/lib/cycle";
 import { createSubscription, deleteSubscription, type FinanceFormState } from "@/app/(app)/finanzas/actions";
 import type { Category, Subscription } from "@/lib/types";
 
@@ -27,6 +28,7 @@ const BILLING_OPTIONS = [
   { value: "mensual", label: "Mensual" },
   { value: "trimestral", label: "Trimestral" },
   { value: "anual", label: "Anual" },
+  { value: "otro", label: "Otro (personalizado)" },
 ];
 
 function AddSubscriptionForm({
@@ -80,7 +82,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
 
   const monthly = subscriptions.filter((s) => s.billing_cycle === "mensual");
   const annual = subscriptions.filter((s) => s.billing_cycle === "anual");
-  const other = subscriptions.filter((s) => s.billing_cycle === "trimestral");
+  const other = subscriptions.filter((s) => s.billing_cycle === "trimestral" || s.billing_cycle === "otro");
 
   const monthlyTotal = monthly.filter((s) => s.is_active).reduce((sum, s) => sum + Number(s.amount), 0);
   const annualTotal = annual.filter((s) => s.is_active).reduce((sum, s) => sum + Number(s.amount), 0);
@@ -88,6 +90,33 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
   function SubscriptionItem({ subscription }: { subscription: Subscription }) {
     const renewsSoon =
       subscription.renewal_date && isBefore(new Date(subscription.renewal_date), soonThreshold);
+
+    // Future-start badge (e.g. Google One not active yet)
+    const hasFutureStart =
+      !subscription.is_active &&
+      subscription.start_date &&
+      new Date(subscription.start_date) > new Date();
+    const futureStartLabel = hasFutureStart && subscription.start_date
+      ? `Disponible desde ${format(parseISO(subscription.start_date), "MMM yyyy")}`
+      : null;
+
+    // Paid/pending chip for monthly subs with a known billing_day
+    let cycleChip: "pagado" | "pendiente" | null = null;
+    if (
+      subscription.billing_cycle === "mensual" &&
+      subscription.is_active &&
+      !hasFutureStart &&
+      subscription.billing_day != null
+    ) {
+      cycleChip = getSubscriptionCycleStatus(subscription.billing_day);
+    }
+
+    // Renewal info for custom-interval subs
+    const renewalLabel =
+      subscription.billing_cycle === "otro" && subscription.renewal_date
+        ? `Próxima renovación: ${formatDate(subscription.renewal_date)}`
+        : null;
+
     return (
       <li>
         <Card className="flex items-center gap-3">
@@ -95,10 +124,17 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
             <p className="text-sm font-medium text-brown">{subscription.name}</p>
             <p className="text-xs text-muted">
               {formatCurrency(subscription.amount)}
-              {subscription.renewal_date ? ` · ${formatDate(subscription.renewal_date)}` : ""}
+              {renewalLabel
+                ? ` · ${renewalLabel}`
+                : subscription.renewal_date && !hasFutureStart && subscription.billing_cycle !== "mensual"
+                ? ` · ${formatDate(subscription.renewal_date)}`
+                : ""}
             </p>
           </div>
-          {renewsSoon && <Badge variant="warning">Se renueva pronto</Badge>}
+          {futureStartLabel && <Badge variant="neutral">{futureStartLabel}</Badge>}
+          {cycleChip === "pagado" && <Badge variant="success">Pagado</Badge>}
+          {cycleChip === "pendiente" && <Badge variant="warning">Pendiente</Badge>}
+          {!cycleChip && !futureStartLabel && renewsSoon && <Badge variant="warning">Se renueva pronto</Badge>}
           <button
             type="button"
             aria-label="Eliminar suscripción"

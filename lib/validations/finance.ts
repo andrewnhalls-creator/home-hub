@@ -36,18 +36,23 @@ export const contributionSchema = z.object({
 export const subscriptionSchema = z.object({
   name: z.string().min(1, "Este campo es obligatorio."),
   amount: z.coerce.number().positive("Introduce un importe válido."),
-  billingCycle: z.enum(["mensual", "trimestral", "anual"]).default("mensual"),
+  billingCycle: z.enum(["mensual", "trimestral", "anual", "otro"]).default("mensual"),
   renewalDate: z.string().optional(),
   categoryId: z.string().optional(),
   isActive: z.coerce.boolean().default(true),
   notes: z.string().optional(),
+  billingDay: z.coerce.number().int().min(1).max(31).optional().or(z.literal("")),
+  billingIntervalDays: z.coerce.number().int().min(1).optional().or(z.literal("")),
+  lastPaymentDate: z.string().optional(),
+  startDate: z.string().optional(),
 });
 
 export const incomeSourceSchema = z.object({
   name: z.string().min(1, "Este campo es obligatorio."),
   amount: z.coerce.number().positive("Introduce un importe válido."),
-  frequency: z.enum(["mensual", "trimestral", "anual"]).default("mensual"),
+  frequency: z.enum(["mensual", "trimestral", "anual", "quincenal"]).default("mensual"),
   earnerName: z.string().optional(),
+  paymentDay: z.coerce.number().int().min(1).max(31).optional().or(z.literal("")),
   isActive: z.coerce.boolean().default(true),
   notes: z.string().optional(),
 });
@@ -65,6 +70,12 @@ export const mortgageSchema = z.object({
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   paymentDay: z.coerce.number().int().min(1).max(31).optional().or(z.literal("")),
+  notes: z.string().optional(),
+});
+
+export const categoryBudgetSchema = z.object({
+  categoryId: z.string().uuid("Selecciona una categoría."),
+  monthlyAmount: z.coerce.number().positive("Introduce un importe válido."),
   notes: z.string().optional(),
 });
 

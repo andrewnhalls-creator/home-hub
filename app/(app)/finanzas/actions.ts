@@ -463,6 +463,10 @@ export async function createSubscription(
     categoryId: formData.get("categoryId") || undefined,
     isActive: formData.get("isActive") === "on",
     notes: formData.get("notes") || undefined,
+    billingDay: formData.get("billingDay") || undefined,
+    billingIntervalDays: formData.get("billingIntervalDays") || undefined,
+    lastPaymentDate: formData.get("lastPaymentDate") || undefined,
+    startDate: formData.get("startDate") || undefined,
   });
 
   if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
@@ -477,6 +481,10 @@ export async function createSubscription(
       name: parsed.data.name,
       amount: parsed.data.amount,
       billing_cycle: parsed.data.billingCycle,
+      billing_day: parsed.data.billingDay === "" ? null : (parsed.data.billingDay ?? null),
+      billing_interval_days: parsed.data.billingIntervalDays === "" ? null : (parsed.data.billingIntervalDays ?? null),
+      last_payment_date: parsed.data.lastPaymentDate || null,
+      start_date: parsed.data.startDate || null,
       renewal_date: parsed.data.renewalDate || null,
       category_id: parsed.data.categoryId || null,
       is_active: parsed.data.isActive,

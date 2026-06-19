@@ -4,7 +4,7 @@ export type RepeatFrequency = "ninguna" | "diaria" | "semanal" | "mensual" | "an
 export type ChoreFrequency = "puntual" | "diaria" | "semanal" | "quincenal" | "mensual";
 export type MealType = "desayuno" | "comida" | "cena" | "snack";
 export type Difficulty = "fácil" | "media" | "difícil";
-export type BillingCycle = "mensual" | "trimestral" | "anual";
+export type BillingCycle = "mensual" | "trimestral" | "anual" | "otro";
 export type WishlistStatus = "idea" | "aprobado" | "comprado" | "descartado";
 export type CategoryModule =
   | "shopping"
@@ -292,6 +292,10 @@ export interface Subscription {
   amount: number;
   currency: string;
   billing_cycle: BillingCycle;
+  billing_day: number | null;
+  billing_interval_days: number | null;
+  last_payment_date: string | null;
+  start_date: string | null;
   renewal_date: string | null;
   category_id: string | null;
   is_active: boolean;
@@ -371,7 +375,7 @@ export interface ActivityLogEntry {
   created_at: string;
 }
 
-export type IncomeFrequency = "mensual" | "trimestral" | "anual";
+export type IncomeFrequency = "mensual" | "trimestral" | "anual" | "quincenal";
 
 export interface IncomeSource {
   id: string;
@@ -380,6 +384,7 @@ export interface IncomeSource {
   amount: number;
   frequency: IncomeFrequency;
   earner_name: string | null;
+  payment_day: number | null;
   is_active: boolean;
   notes: string | null;
   created_by: string | null;
@@ -387,6 +392,17 @@ export interface IncomeSource {
   updated_at: string;
   deleted_at: string | null;
   deleted_by: string | null;
+}
+
+export interface CategoryBudget {
+  id: string;
+  household_id: string;
+  category_id: string;
+  monthly_amount: number;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export type MortgageStatus = "activa" | "pagada" | "cancelada";

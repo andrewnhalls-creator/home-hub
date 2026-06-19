@@ -25,12 +25,14 @@ interface IngresoTabProps {
 
 const FREQUENCY_OPTIONS = [
   { value: "mensual", label: "Mensual" },
+  { value: "quincenal", label: "Quincenal (cada 2 semanas)" },
   { value: "trimestral", label: "Trimestral" },
   { value: "anual", label: "Anual" },
 ];
 
 const FREQUENCY_LABEL: Record<string, string> = {
   mensual: "mensual",
+  quincenal: "quincenal",
   trimestral: "trimestral",
   anual: "anual",
 };
@@ -38,6 +40,7 @@ const FREQUENCY_LABEL: Record<string, string> = {
 function toMonthly(amount: number, frequency: string): number {
   if (frequency === "anual") return amount / 12;
   if (frequency === "trimestral") return amount / 3;
+  if (frequency === "quincenal") return amount * 2;
   return amount;
 }
 
@@ -96,6 +99,16 @@ function IncomeForm({
           options={FREQUENCY_OPTIONS}
         />
       </div>
+      <Input
+        label="Día de cobro (opcional)"
+        name="paymentDay"
+        type="number"
+        inputMode="numeric"
+        min="1"
+        max="31"
+        defaultValue={source?.payment_day ?? undefined}
+        placeholder="Ej. 25"
+      />
       <Checkbox label="Activo" name="isActive" defaultChecked={source ? source.is_active : true} />
       {state.error && <p className="text-sm text-danger">{state.error}</p>}
       <div className="mt-2 flex gap-3">
@@ -178,6 +191,9 @@ export function IngresoTab({ sources }: IngresoTabProps) {
                               <span className="ml-1 text-muted/70">
                                 (≈ {formatCurrency(toMonthly(Number(source.amount), source.frequency))}/mes)
                               </span>
+                            )}
+                            {source.payment_day && source.frequency !== "quincenal" && (
+                              <span className="ml-1 text-muted/70">· día {source.payment_day}</span>
                             )}
                           </p>
                         </div>

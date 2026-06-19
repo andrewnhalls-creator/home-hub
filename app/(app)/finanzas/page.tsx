@@ -1,8 +1,9 @@
-import { format, startOfMonth, endOfMonth } from "date-fns";
+import { format } from "date-fns";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { ensureCurrentMonthPaymentInstances } from "@/app/(app)/finanzas/actions";
 import { FinanceTabs } from "@/components/finance/FinanceTabs";
+import { getCurrentCycleDates, getCycleLabel } from "@/lib/cycle";
 
 export default async function FinancePage() {
   const { householdId } = await requireHousehold();
@@ -11,8 +12,10 @@ export default async function FinancePage() {
 
   const supabase = await createClient();
   const now = new Date();
-  const monthStart = format(startOfMonth(now), "yyyy-MM-dd");
-  const monthEnd = format(endOfMonth(now), "yyyy-MM-dd");
+  const { start: cycleStartDate, end: cycleEndDate } = getCurrentCycleDates();
+  const cycleStart = format(cycleStartDate, "yyyy-MM-dd");
+  const cycleEnd = format(cycleEndDate, "yyyy-MM-dd");
+  const cycleLabel = getCycleLabel();
   const todayStr = format(now, "yyyy-MM-dd");
 
   const [
@@ -27,6 +30,7 @@ export default async function FinancePage() {
     { data: members },
     { data: householdRow },
     { data: incomeSources },
+    { data: categoryBudgets },
   ] = await Promise.all([
     supabase
       .from("fixed_payments")
@@ -78,23 +82,27 @@ export default async function FinancePage() {
       .eq("household_id", householdId)
       .is("deleted_at", null)
       .order("earner_name", { ascending: true }),
+    supabase
+      .from("category_budgets")
+      .select("*")
+      .eq("household_id", householdId),
   ]);
 
   const allInstances = paymentInstances ?? [];
-  const thisMonthInstances = allInstances.filter((i) => i.due_date >= monthStart && i.due_date <= monthEnd);
+  const thisCycleInstances = allInstances.filter((i) => i.due_date >= cycleStart && i.due_date <= cycleEnd);
 
   const upcomingCount = allInstances.filter((i) => i.status === "pendiente" && i.due_date >= todayStr).length;
   const overdueCount = allInstances.filter((i) => i.status === "pendiente" && i.due_date < todayStr).length;
-  const paidThisMonthTotal = thisMonthInstances
+  const paidThisMonthTotal = thisCycleInstances
     .filter((i) => i.status === "pagado")
     .reduce((sum, i) => sum + Number(i.amount), 0);
-  const pendingThisMonthTotal = thisMonthInstances
+  const pendingThisMonthTotal = thisCycleInstances
     .filter((i) => i.status === "pendiente")
     .reduce((sum, i) => sum + Number(i.amount), 0);
-  const totalFixedThisMonth = thisMonthInstances.reduce((sum, i) => sum + Number(i.amount), 0);
+  const totalFixedThisMonth = thisCycleInstances.reduce((sum, i) => sum + Number(i.amount), 0);
 
   const expensesThisMonthTotal = (expenses ?? [])
-    .filter((e) => e.expense_date >= monthStart && e.expense_date <= monthEnd)
+    .filter((e) => e.expense_date >= cycleStart && e.expense_date <= cycleEnd)
     .reduce((sum, e) => sum + Number(e.amount), 0);
 
   const activeSubs = (subscriptions ?? []).filter((s) => s.is_active);
@@ -138,7 +146,7 @@ export default async function FinancePage() {
         totalMonthlyIncome,
       }}
       fixedPayments={fixedPayments ?? []}
-      paymentInstances={thisMonthInstances}
+      paymentInstances={thisCycleInstances}
       expenses={expenses ?? []}
       savingsGoals={savingsGoals ?? []}
       subscriptions={subscriptions ?? []}
@@ -147,6 +155,10 @@ export default async function FinancePage() {
       financeCategories={financeCategories ?? []}
       members={members ?? []}
       incomeSources={incomeSources ?? []}
+      categoryBudgets={categoryBudgets ?? []}
+      cycleLabel={cycleLabel}
+      cycleStart={cycleStart}
+      cycleEnd={cycleEnd}
     />
   );
 }
