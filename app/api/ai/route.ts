@@ -393,6 +393,12 @@ export async function POST(req: NextRequest) {
   if (!geminiRes.ok) {
     const err = await geminiRes.text();
     console.error("Gemini error:", geminiRes.status, err.slice(0, 200));
+    if (geminiRes.status === 429) {
+      return NextResponse.json(
+        { error: "El asistente ha alcanzado el límite de uso diario. Vuelve a intentarlo mañana." },
+        { status: 429 },
+      );
+    }
     return NextResponse.json({ error: "Error al contactar el asistente" }, { status: 502 });
   }
 

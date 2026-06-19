@@ -32,7 +32,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setToasts((current) => [...current, { id, message, variant }]);
     setTimeout(() => {
       setToasts((current) => current.filter((toast) => toast.id !== id));
-    }, 4000);
+    }, variant === "error" ? 7000 : 4000);
   }, []);
 
   const dismiss = useCallback((id: string) => {
