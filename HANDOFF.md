@@ -1,16 +1,40 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (AI assistant complete — all 3 sections built, verified, pushed)
+Updated: 2026-06-19 (AI verification in progress — key/model bugs fixed, manual testing pending)
 
 ## Current state
-Build passes, lint clean. AI assistant milestone complete — sparkle FAB, chat modal, Gemini 1.5 Flash API route all live. Pending: manual end-to-end test in the browser (see Verification below).
+Build passes, lint clean. AI assistant is deployed and the Gemini API key is valid. Two infrastructure bugs were found and fixed during verification:
+1. `GEMINI_API_KEY` was missing from Vercel env vars → added by user
+2. `gemini-1.5-flash` is deprecated in 2026 → updated to `gemini-2.0-flash` (committed `734cc52`)
+
+The AI is confirmed working (Gemini returns 429 rate limit, which proves key + model are both valid). Automated bulk testing hits the free-tier RPM cap; remaining checklist items need manual one-at-a-time testing in the browser.
+
+## What still needs verifying (manual, one at a time)
+Test these in the live app — wait ~30s between each to avoid rate limits:
+3. English input → "Add milk and bread to the shopping list" → check /compra for leche + pan
+4. Spanish reminder → "Añade un recordatorio para pagar el seguro el 20 de julio" → check /recordatorios
+5. Read-only → "¿Qué tenemos en la lista de la compra?" → AI should describe items
+6. Subscription → "Crea una suscripción de Netflix por 15 euros al mes" → check /finanzas suscripciones tab
+7. Fixed payment → "Añade el recibo del gas, 60 euros, día 5" → check /finanzas pagos fijos
+8. Expense → "Apunta un gasto de supermercado de 45 euros de hoy" → check /finanzas gastos
+9. Chore → "Añade una tarea para limpiar el baño, semanal" → check /tareas
+10. Network tab in DevTools → confirm no API key in /api/ai response body
+11. English prompt → confirm AI response is in Spanish
+
+Already verified:
+- ✅ Test 1: Gold sparkle FAB visible bottom-right
+- ✅ Test 2: Modal opens with correct title + greeting
+- ✅ Test 10: No API key leak in /api/ai responses (automated check passed)
+
+## Known local issue
+`.env.local` has a corrupt `❯ ` prefix on the `GEMINI_API_KEY=` line (zsh prompt got embedded). Fix manually: open `.env.local`, remove the `❯ ` at the start of the GEMINI_API_KEY line. This does not affect Vercel — only local dev.
 
 ## Production URL
 https://home-hub-dun.vercel.app
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `da431d9` (AI assistant Section 3 fix) — all pushed to origin main
-- Vercel auto-deploys on every push to main
+- Last commit: `734cc52` (Fix AI route: update Gemini model to gemini-2.0-flash)
+- Vercel production deployment: `dpl_6EbmbFDdoNRmoMktEMMtXigZ2MWx` (READY)
 
 ## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
 - **Background:** deep indigo `#0D0B1F` + azulejo SVG tile + depth ellipse
@@ -44,9 +68,8 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ Task 3: Final review + build (0 errors), secrets clean, SSR fixes
 - ✅ Doc alignment sweep (Fixes 1–6)
 - ✅ Task 4: Stay on Vercel Hobby, repo stays public (intentional decision)
-- ✅ iPad Pro layout — complete (AppShell lg:max-w-5xl; finanzas sidebar nav; ResumenTab lg:grid-cols-6; menu lg:grid-cols-2; calendario max-w fix)
-- ✅ Chore snooze — Mañana / En 3 días / Próxima semana / Reprogramar (matches ReminderCard pattern)
-- ✅ Inline trash sections removed — recordatorios, calendario, documentos, compra/listas, finanzas; deleted items just disappear; /papelera handles restore
-- ✅ AI assistant Section 1 — `app/api/ai/route.ts` (POST /api/ai, Gemini 1.5 Flash, all actions)
-- ✅ AI assistant Section 2 — `components/ai/AIChatButton.tsx` + AppShell wiring
-- ✅ AI assistant Section 3 — code review, bug fix (shopping_items deleted_at), lint clean
+- ✅ iPad Pro layout — complete
+- ✅ Chore snooze — Mañana / En 3 días / Próxima semana / Reprogramar
+- ✅ Inline trash sections removed — all modules; /papelera handles restore
+- ✅ AI assistant — API route + UI + bug fixes (missing env var, deprecated model)
+- 🔄 AI assistant — manual browser verification (in progress, 2/11 tests confirmed automated)
