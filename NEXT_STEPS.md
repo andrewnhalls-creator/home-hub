@@ -1,31 +1,26 @@
 # Next Steps
 
 ## Current state
-AI assistant is live and confirmed working (key valid, model `gemini-2.0-flash` responds). Two bugs fixed this session. Manual verification of each AI action scenario is the only remaining task before the milestone is complete.
+AI assistant is live. Three bugs fixed this session (modal focus, Gemini model deprecation, missing env var). Manual verification is the only remaining task before the AI milestone is complete — blocked on Gemini free-tier daily quota until UTC midnight (≈2am Spain time).
 
 ---
 
-## AI assistant — remaining manual verification (next session priority)
+## Next session: complete AI verification
 
-Open https://home-hub-dun.vercel.app in your browser. Log in, then test each prompt below. **Wait ~30 seconds between each** to stay under the Gemini free-tier rate limit.
+**Wait until the day after 2026-06-19** for the Gemini quota to reset, then open https://home-hub-dun.vercel.app and test each prompt below. Wait ~30 seconds between each.
 
-Already confirmed ✅: FAB visible, modal opens with greeting, no API key leak.
+| # | Prompt | Where to check |
+|---|--------|---------------|
+| 3 | `Add milk and bread to the shopping list` | /compra → leche + pan appear |
+| 4 | `Añade un recordatorio para pagar el seguro el 20 de julio` | /recordatorios → seguro appears |
+| 5 | `¿Qué tenemos en la lista de la compra?` | AI describes items, no DB changes |
+| 6 | `Crea una suscripción de Netflix por 15 euros al mes` | /finanzas → Suscripciones tab |
+| 7 | `Añade el recibo del gas, 60 euros, día 5` | /finanzas → Pagos fijos tab |
+| 8 | `Apunta un gasto de supermercado de 45 euros de hoy` | /finanzas → Gastos tab |
+| 9 | `Añade una tarea para limpiar el baño, semanal` | /tareas → baño appears |
+| 11 | Any English prompt | AI response must be in Spanish |
 
-| # | Action | Prompt to send | Where to verify |
-|---|--------|---------------|----------------|
-| 3 | Shopping (English) | `Add milk and bread to the shopping list` | /compra → "leche" + "pan" appear |
-| 4 | Reminder | `Añade un recordatorio para pagar el seguro el 20 de julio` | /recordatorios → "seguro" appears |
-| 5 | Read-only | `¿Qué tenemos en la lista de la compra?` | AI describes list items, no DB changes |
-| 6 | Subscription | `Crea una suscripción de Netflix por 15 euros al mes` | /finanzas → Suscripciones tab |
-| 7 | Fixed payment | `Añade el recibo del gas, 60 euros, día 5` | /finanzas → Pagos fijos tab |
-| 8 | Expense | `Apunta un gasto de supermercado de 45 euros de hoy` | /finanzas → Gastos tab |
-| 9 | Chore | `Añade una tarea para limpiar el baño, semanal` | /tareas → "baño" appears |
-| 10 | Security | Open DevTools → Network → `/api/ai` response body | Key must NOT appear |
-| 11 | Spanish | Check that all AI responses are in Spanish | Even for English prompts |
-
-**Important:** ~30 failed calls today may have partially consumed the free-tier daily quota (~1,000 RPD). If you hit 429 errors, wait until UTC midnight for the quota to reset before continuing.
-
-Also fix locally: open `.env.local`, remove the `❯ ` prefix from the `GEMINI_API_KEY=` line.
+If you see 429 again, the quota hasn't reset yet — wait longer and retry.
 
 ---
 

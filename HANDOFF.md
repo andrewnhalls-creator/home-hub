@@ -1,49 +1,48 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (AI verification in progress — key/model bugs fixed, manual testing pending)
+Updated: 2026-06-19 (AI verification blocked on Gemini quota — resume next day)
 
 ## Current state
-Build passes, lint clean. AI assistant is deployed and the Gemini API key is valid. Two infrastructure bugs were found and fixed during verification:
+Build passes, lint clean. AI assistant is deployed. Three bugs found and fixed this session:
 1. `GEMINI_API_KEY` was missing from Vercel env vars → added by user
-2. `gemini-1.5-flash` is deprecated in 2026 → updated to `gemini-2.0-flash` (committed `734cc52`)
+2. `gemini-1.5-flash` is deprecated in 2026 → updated to `gemini-2.0-flash` (`734cc52`)
+3. Modal focus trap re-ran on every keystroke (onClose was a new ref each render) → fixed with useRef pattern (`1b3405b`)
 
-The AI is confirmed working (Gemini returns 429 rate limit, which proves key + model are both valid). Automated bulk testing hits the free-tier RPM cap; remaining checklist items need manual one-at-a-time testing in the browser.
+Two UX improvements also shipped (`3dd857b`):
+- 429 from Gemini now returns a readable Spanish message instead of generic error
+- Error toasts stay on screen 7s (up from 4s) so they can be read
+
+The Gemini free-tier daily quota is exhausted from test runs on 2026-06-19. Quota resets at UTC midnight (≈2am Spain time). Resume verification the following day.
 
 ## What still needs verifying (manual, one at a time)
-Test these in the live app — wait ~30s between each to avoid rate limits:
-3. English input → "Add milk and bread to the shopping list" → check /compra for leche + pan
-4. Spanish reminder → "Añade un recordatorio para pagar el seguro el 20 de julio" → check /recordatorios
-5. Read-only → "¿Qué tenemos en la lista de la compra?" → AI should describe items
-6. Subscription → "Crea una suscripción de Netflix por 15 euros al mes" → check /finanzas suscripciones tab
-7. Fixed payment → "Añade el recibo del gas, 60 euros, día 5" → check /finanzas pagos fijos
-8. Expense → "Apunta un gasto de supermercado de 45 euros de hoy" → check /finanzas gastos
-9. Chore → "Añade una tarea para limpiar el baño, semanal" → check /tareas
-10. Network tab in DevTools → confirm no API key in /api/ai response body
-11. English prompt → confirm AI response is in Spanish
+Open https://home-hub-dun.vercel.app. Wait ~30s between each prompt.
+
+| # | Prompt | Where to check |
+|---|--------|---------------|
+| 3 | `Add milk and bread to the shopping list` | /compra → leche + pan appear |
+| 4 | `Añade un recordatorio para pagar el seguro el 20 de julio` | /recordatorios → seguro appears |
+| 5 | `¿Qué tenemos en la lista de la compra?` | AI describes items, no DB changes |
+| 6 | `Crea una suscripción de Netflix por 15 euros al mes` | /finanzas → Suscripciones tab |
+| 7 | `Añade el recibo del gas, 60 euros, día 5` | /finanzas → Pagos fijos tab |
+| 8 | `Apunta un gasto de supermercado de 45 euros de hoy` | /finanzas → Gastos tab |
+| 9 | `Añade una tarea para limpiar el baño, semanal` | /tareas → baño appears |
+| 11 | Send an English prompt | AI response must be in Spanish |
 
 Already verified:
 - ✅ Test 1: Gold sparkle FAB visible bottom-right
 - ✅ Test 2: Modal opens with correct title + greeting
-- ✅ Test 10: No API key leak in /api/ai responses (automated check passed)
-
-## Gemini API quota status (important for next session)
-Per the Google AI Studio dashboard (checked 2026-06-19):
-- ~23 requests returned 404 (deprecated `gemini-1.5-flash` — now fixed)
-- ~7 requests returned 429 (rate limit from bulk test runs)
-- 0 successful calls so far — the key is on the free tier
-- Free tier limits: 15 RPM, ~1,000 RPD (requests per day)
-- The ~30 failed requests today may have partially consumed the daily quota
-- **If you see 429s in the next session, wait until tomorrow (UTC midnight) for the daily quota to reset**, then test one scenario at a time with 30+ seconds between each
+- ✅ Test 10: No API key leak in /api/ai responses
+- ✅ Typing in the AI input works correctly (modal focus bug fixed)
 
 ## Known local issue
-`.env.local` has a corrupt `❯ ` prefix on the `GEMINI_API_KEY=` line (zsh prompt got embedded). Fix manually: open `.env.local`, remove the `❯ ` at the start of the GEMINI_API_KEY line. This does not affect Vercel — only local dev.
+`.env.local` has a corrupt `❯ ` prefix on the `GEMINI_API_KEY=` line. Fix manually: remove the `❯ ` at the start of that line. Does not affect Vercel.
 
 ## Production URL
 https://home-hub-dun.vercel.app
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `734cc52` (Fix AI route: update Gemini model to gemini-2.0-flash)
-- Vercel production deployment: `dpl_6EbmbFDdoNRmoMktEMMtXigZ2MWx` (READY)
+- Last commit: `3dd857b` (Improve AI error UX: specific 429 message, error toasts stay 7s)
+- All changes pushed to origin main
 
 ## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
 - **Background:** deep indigo `#0D0B1F` + azulejo SVG tile + depth ellipse
@@ -80,5 +79,5 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ iPad Pro layout — complete
 - ✅ Chore snooze — Mañana / En 3 días / Próxima semana / Reprogramar
 - ✅ Inline trash sections removed — all modules; /papelera handles restore
-- ✅ AI assistant — API route + UI + bug fixes (missing env var, deprecated model)
-- 🔄 AI assistant — manual browser verification (in progress, 2/11 tests confirmed automated)
+- ✅ AI assistant — API route + UI + bug fixes (env var, deprecated model, modal focus)
+- 🔄 AI assistant — manual browser verification (blocked on Gemini quota, resume tomorrow)
