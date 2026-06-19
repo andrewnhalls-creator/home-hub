@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { isPast } from "date-fns";
-import { Circle, CheckCircle, PencilSimple, Trash } from "@phosphor-icons/react";
+import { Circle, CheckCircle, PencilSimple, Trash, Clock } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -12,7 +12,7 @@ import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/format";
 import type { Chore } from "@/lib/types";
-import { completeChore, deleteChore } from "@/app/(app)/tareas/actions";
+import { completeChore, deleteChore, snoozeChore } from "@/app/(app)/tareas/actions";
 
 interface ChoreCardProps {
   chore: Chore;
@@ -24,6 +24,7 @@ export function ChoreCard({ chore, assignedName, onEdit }: ChoreCardProps) {
   const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [isSnoozeOpen, setIsSnoozeOpen] = useState(false);
 
   const isDone = chore.status === "hecho";
   const isOverdue = !isDone && chore.next_due_date && isPast(new Date(`${chore.next_due_date}T23:59:59`));
@@ -62,6 +63,16 @@ export function ChoreCard({ chore, assignedName, onEdit }: ChoreCardProps) {
         {!isDone && <Badge variant={isOverdue ? "danger" : "neutral"}>{isOverdue ? "Vencido" : "Pendiente"}</Badge>}
 
         <div className="flex shrink-0 gap-1">
+          {!isDone && (
+            <button
+              type="button"
+              aria-label="Posponer"
+              onClick={() => setIsSnoozeOpen(true)}
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+            >
+              <Clock className="h-4 w-4" aria-hidden />
+            </button>
+          )}
           <button
             type="button"
             aria-label="Editar tarea"
@@ -80,6 +91,57 @@ export function ChoreCard({ chore, assignedName, onEdit }: ChoreCardProps) {
           </button>
         </div>
       </Card>
+
+      <Modal isOpen={isSnoozeOpen} onClose={() => setIsSnoozeOpen(false)} title="Posponer tarea">
+        <div className="flex flex-col gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() =>
+              startTransition(async () => {
+                await snoozeChore(chore.id, 1);
+                setIsSnoozeOpen(false);
+              })
+            }
+          >
+            Mañana
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() =>
+              startTransition(async () => {
+                await snoozeChore(chore.id, 3);
+                setIsSnoozeOpen(false);
+              })
+            }
+          >
+            En 3 días
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() =>
+              startTransition(async () => {
+                await snoozeChore(chore.id, 7);
+                setIsSnoozeOpen(false);
+              })
+            }
+          >
+            Próxima semana
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => {
+              setIsSnoozeOpen(false);
+              onEdit();
+            }}
+          >
+            Reprogramar
+          </Button>
+        </div>
+      </Modal>
 
       <Modal isOpen={isConfirmingDelete} onClose={() => setIsConfirmingDelete(false)} title="Eliminar tarea">
         <p className="text-sm text-brown">¿Seguro que quieres eliminarlo?</p>

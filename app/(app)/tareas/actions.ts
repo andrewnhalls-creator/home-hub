@@ -199,6 +199,33 @@ export async function completeChore(choreId: string) {
   revalidatePath("/tareas");
 }
 
+export async function snoozeChore(choreId: string, days: number) {
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { data: chore } = await supabase
+    .from("chores")
+    .select("title, next_due_date, assigned_to")
+    .eq("id", choreId)
+    .single();
+
+  if (!chore) return;
+
+  const base = chore.next_due_date ? new Date(`${chore.next_due_date}T00:00:00`) : new Date();
+  base.setDate(base.getDate() + days);
+  const newDueDate = base.toISOString().slice(0, 10);
+
+  await supabase
+    .from("chores")
+    .update({ next_due_date: newDueDate, status: "pendiente" })
+    .eq("id", choreId)
+    .eq("household_id", householdId);
+
+  await scheduleChoreNotification(choreId, householdId, chore.assigned_to, chore.title, newDueDate);
+
+  revalidatePath("/tareas");
+}
+
 export async function deleteChore(choreId: string) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
