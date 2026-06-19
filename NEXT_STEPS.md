@@ -1,13 +1,7 @@
 # Next Steps
 
 ## Current state
-Doc alignment sweep in progress (Fix 4/6 done). Stop after each fix, update HANDOFF + NEXT_STEPS, commit, push. Then task 4 (repo privacy).
-
----
-
-## Fix 5 — README.md: update style guide reference
-
-Change `DESIGN_SYSTEM.md` reference to `DESIGN.md` in the opening paragraph.
+Doc alignment sweep in progress (Fix 5/6 done). One fix remaining, then Task 4.
 
 ---
 
