@@ -174,7 +174,7 @@ Fraunces is a display serif reserved for hero headings and GreetingCard. Do not 
 ### Form inputs (Input, Select, Textarea)
 
 - Background: `bg-white/[0.06]`.
-- Border: `border-white/[0.12]` at rest; `border-terracotta/70` on focus.
+- Border: `border-border` at rest; `border-terracotta/70` on focus.
 - Focus ring: `ring-1 ring-terracotta/50`.
 - Radius: `rounded-[var(--radius-xl)]`.
 - No `backdrop-filter` on inputs.
