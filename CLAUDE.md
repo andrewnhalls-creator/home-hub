@@ -20,11 +20,12 @@ These rules apply to every Claude Code session working in this repository. Read 
 
 ## Design style
 
-- Warm, soft, friendly, modern. Pastel palette. Light warm background (cream/sand), never pure white (`#FFFFFF`) as a primary background.
-- Primary action colour: terracotta/warm coral. Secondary accents: sage green, soft amber, muted rose.
-- Avoid cold corporate blue as a dominant colour. Avoid harsh pure black/white contrast except where required for accessibility (e.g. body text colour).
-- Mobile-first. Rounded corners, soft shadows, generous spacing, large tap targets (min 44×44px).
-- See `DESIGN_SYSTEM.md` for the full palette, type scale, and component rules. Use the Tailwind theme tokens defined there — do not invent new ad hoc colours in components.
+- **Palette: Índigo Profundo — dark-first glassmorphism.** Page background is deep indigo `#0D0B1F` (token `cream`), not light or pastel. Never use a light background.
+- **Primary action colour: saffron gold `#E8C547`** (CSS var `--color-terracotta` — historical name kept to avoid mass-renaming). Secondary accents: teal (`sage`), indigo-purple (`olive`), amber, rose.
+- Two-tier glass rule: blur only on nav bars (`blur(20px)`) and modals/sheets (`blur(24px)`). Never add `backdrop-filter` to content cards, inputs, or list items.
+- Mobile-first. Rounded corners (`--radius-xl` = 20px for cards/modals), dark shadows, generous spacing, large tap targets (min 44×44px).
+- **Icons: Phosphor Icons v2 only** (`@phosphor-icons/react`). Use `/dist/ssr` path for server components. Never import from `lucide-react`.
+- See `DESIGN.md` for the full palette, token table, surface hierarchy, typography, and component patterns. `DESIGN_SYSTEM.md` is deprecated (old warm/pastel design) — ignore it.
 
 ## Tech stack
 
@@ -32,7 +33,7 @@ These rules apply to every Claude Code session working in this repository. Read 
 - Tailwind CSS for styling.
 - Supabase (Postgres + Auth + RLS) as the only backend. `@supabase/supabase-js` + `@supabase/ssr`.
 - Zod for validation, `react-hook-form` + `@hookform/resolvers` for forms.
-- `date-fns` (with `es` locale) for date handling. `lucide-react` for icons. `clsx` + `tailwind-merge` for class composition.
+- `date-fns` (with `es` locale) for date handling. `@phosphor-icons/react` v2 for icons (SSR path for server components). `clsx` + `tailwind-merge` for class composition.
 - Deployed on Vercel (hosting only). **Supabase Edge Functions + Supabase Cron (pg_cron) own all scheduled/background processing** — reminder/notification due-date scanning, recurring occurrence generation, and Web Push delivery. Never rely on Vercel Hobby cron for anything time-sensitive (it is not reliable enough for reminder timing).
 - Web Push (service worker + VAPID) is a **core v1 feature**, not optional. See `PRODUCT_REQUIREMENTS.md` notification section and `SECURITY_AND_PRIVACY.md` for content rules.
 - PWA-installable (manifest + icons + install-guidance screen). Push notifications on iOS require the PWA installed to the home screen (iOS 16.4+) — this is a real platform constraint to surface in the UI, not a bug.
@@ -106,7 +107,7 @@ These rules apply to every Claude Code session working in this repository. Read 
 
 ## Accessibility expectations
 
-- Sufficient colour contrast for text on pastel backgrounds (verify against WCAG AA, adjust palette shades if a pastel fails).
+- Sufficient colour contrast for text on dark backgrounds (verify against WCAG AA — primary text `#F0F6FC` on `#0D0B1F` passes comfortably; check any coloured surface like gold/teal buttons against the dark text used on them).
 - All interactive elements reachable and operable via keyboard, with visible focus states.
 - Form inputs have associated labels; errors are announced via `aria-describedby`/`aria-invalid` where relevant.
 - Tap targets at least 44×44px on mobile. Icons used as buttons have `aria-label`s in Spanish.
