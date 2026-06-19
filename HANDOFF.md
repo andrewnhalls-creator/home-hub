@@ -1,5 +1,5 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (All tasks complete)
+Updated: 2026-06-19 (iPad Pro layout milestone queued)
 
 ## Current state
 Everything done. Build passes, all docs aligned with the deployed design, repo public by choice (Vercel Hobby). No outstanding tasks.
@@ -44,3 +44,4 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ Task 3: Final review + build (0 errors), secrets clean, SSR fixes
 - ✅ Doc alignment sweep (Fixes 1–6)
 - ✅ Task 4: Stay on Vercel Hobby, repo stays public (intentional decision)
+- ⏳ iPad Pro layout — see NEXT_STEPS.md
