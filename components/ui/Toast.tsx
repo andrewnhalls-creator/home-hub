@@ -53,7 +53,6 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 ? "border-success/30 bg-success/[0.08] text-brown"
                 : "border-danger/30 bg-danger/[0.08] text-brown",
             )}
-            style={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
           >
             {toast.variant === "success" ? (
               <CheckCircle weight="fill" className="h-5 w-5 shrink-0 text-success" aria-hidden />

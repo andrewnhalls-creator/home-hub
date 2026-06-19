@@ -71,6 +71,7 @@ export async function createFixedPayment(
   void logActivity({ householdId, actorId: user.id, entityType: "fixed_payment", action: "created", summary: `Añadió el pago fijo: ${parsed.data.name}` });
 
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
   return { success: true };
 }
 
@@ -111,6 +112,7 @@ export async function updateFixedPayment(
   if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
 
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
   return { success: true };
 }
 
@@ -129,6 +131,7 @@ export async function deleteFixedPayment(paymentId: string) {
   void logActivity({ householdId, actorId: user.id, entityType: "fixed_payment", entityId: paymentId, action: "deleted", summary: `Eliminó el pago fijo: ${payment?.name ?? paymentId}` });
 
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
 }
 
 export async function restoreFixedPayment(
@@ -141,6 +144,7 @@ export async function restoreFixedPayment(
   const { error } = await supabase.from("fixed_payments").update({ deleted_at: null, deleted_by: null }).eq("id", paymentId).eq("household_id", householdId);
   if (error) return { error: "No se ha podido restaurar." };
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
   return {};
 }
 
@@ -217,6 +221,7 @@ export async function markPaymentInstancePaid(instanceId: string) {
   await cancelScheduledNotifications("payment_instance", instanceId);
 
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
 }
 
 export async function skipPaymentInstance(instanceId: string) {
@@ -232,6 +237,7 @@ export async function skipPaymentInstance(instanceId: string) {
   await cancelScheduledNotifications("payment_instance", instanceId);
 
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
 }
 
 export async function overridePaymentInstanceAmount(instanceId: string, amount: number) {
@@ -515,6 +521,7 @@ export async function createSubscription(
   void logActivity({ householdId, actorId: user.id, entityType: "subscription", entityId: data.id, action: "created", summary: `Añadió la suscripción: ${parsed.data.name}` });
 
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
   return { success: true };
 }
 
@@ -534,6 +541,7 @@ export async function deleteSubscription(subscriptionId: string) {
   void logActivity({ householdId, actorId: user.id, entityType: "subscription", entityId: subscriptionId, action: "deleted", summary: `Eliminó la suscripción: ${sub?.name ?? subscriptionId}` });
 
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
 }
 
 export async function restoreSubscription(
@@ -546,6 +554,7 @@ export async function restoreSubscription(
   const { error } = await supabase.from("subscriptions").update({ deleted_at: null, deleted_by: null }).eq("id", subscriptionId).eq("household_id", householdId);
   if (error) return { error: "No se ha podido restaurar." };
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
   return {};
 }
 
@@ -609,6 +618,7 @@ export async function updateSubscription(
   void logActivity({ householdId, actorId: user.id, entityType: "subscription", entityId: subscriptionId, action: "updated", summary: `Editó la suscripción: ${parsed.data.name}` });
 
   revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
   return { success: true };
 }
 

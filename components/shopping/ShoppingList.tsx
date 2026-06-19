@@ -40,6 +40,14 @@ export function ShoppingList({ items, categories, members, householdId, shopping
     if (quickState.success) setQuickName("");
   }
 
+  // Keep localItems in sync when server data changes (router.refresh or navigation).
+  // The realtime handler below still provides immediate in-place updates.
+  const [prevItems, setPrevItems] = useState(items);
+  if (prevItems !== items) {
+    setPrevItems(items);
+    setLocalItems(items);
+  }
+
   // Surface feedback toasts — showToast is an external context call, not local setState.
   useEffect(() => {
     if (quickState.success) showToast("Producto añadido");
