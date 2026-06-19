@@ -1,61 +1,40 @@
 # Next Steps
 
-## IMMEDIATE: Commit the uncommitted work
+## Immediate: browser validation (Part A)
 
-All code changes from the last session are staged but not committed. Start the next session by running:
+Deploy to Vercel and verify at https://home-hub-dun.vercel.app:
 
-```bash
-git add lib/cycle.ts app/(app)/finanzas/actions.ts app/(app)/finanzas/page.tsx \
-  components/finance/FixedPaymentsTab.tsx components/finance/FinanceTabs.tsx \
-  components/finance/ResumenTab.tsx components/finance/SubscriptionsTab.tsx \
-  components/finance/PlanAhorroTab.tsx components/finance/ExpensesTab.tsx \
-  sql/028_households_current_balance_and_pago_extraordinario.sql
-git commit -m "Fix cycle-aware paid/pending logic, data bugs, rename Gastos Fijos, rework Resumen"
-git push
-```
-
-Then deploy to Vercel and verify:
-
-**Gastos Fijos tab**
-- [ ] Coche (día 1) → ✅ Pagado
-- [ ] DIGI (día 28) → ✅ Pagado
-- [ ] Gasolina (día 1) → ✅ Pagado
-- [ ] Luz (día 3) → ✅ Pagado
-- [ ] Movistar (día 29, 4,99 €) → ✅ Pagado
-- [ ] Alquiler julio (925 €) → ⏳ Pendiente (under "Pago extraordinario")
-- [ ] Tasa de basuras (53,20 €) → ⏳ Pendiente (under "Pago extraordinario")
-- [ ] "Pagado este ciclo" + "Pendiente" summary card shows correct totals
-
-**Resumen tab**
+**Resumen tab (Finanzas)**
 - [ ] Saldo en cuenta: 4.386,48 € shown
-- [ ] Disponible this cycle calculated correctly
+- [ ] Disponible shows 4.386,48 − pending (≈ 4.364,49 € if only ChatGPT 21,99 € pending)
+- [ ] Subtitle reads "Saldo − pendientes"
 - [ ] KPI chips tappable → navigate to correct sub-tabs
-- [ ] Gastos fijos split row: ~498 € pagado, ~978 € pendiente (Alquiler + Tasa)
-- [ ] "Vencidos": 0
-- [ ] "Próximos": includes ChatGPT (día 21, 2 days away)
-
-**Suscripciones tab**
-- [ ] Seguro de hogar renewal: 01/07/2026
-- [ ] IBI: 159,15 €/año
-- [ ] Annual total: 663,98 €
-- [ ] "Otros ciclos" section header (not "Trimestrales")
-- [ ] ChatGPT → ⏳ Pendiente (día 21)
-
-**Hipoteca card on Resumen**
-- [ ] "Próximo pago" shows 01/08/2026
 
 **Plan de ahorro tab**
-- [ ] Savings simulator visible at bottom
-- [ ] Entering a monthly contribution → shows months/date to reach target
-- [ ] Entering a target date → shows required monthly amount
-- [ ] Mortgage reference table (collapsible) shows correctly
+- [ ] "Amortizar hipoteca — calculadora" section visible
+- [ ] Inputs pre-filled from mortgage (saldo, tipo, cuota)
+- [ ] Enter an amount → shows tiempo ahorrado + interés ahorrado
+- [ ] Existing savings simulator and reference table still work
+
+**Dashboard (Inicio)**
+- [ ] Finanzas tile count shows pending payments only (not "7")
+- [ ] "Próximos pagos" list shows only unfulfilled payments
+- [ ] Status text reads "próximos pagos" / "Sin próximos pagos"
 
 ---
 
-## Possible next sessions (in priority order)
+## Part B — Shopping ⇄ Meal-planner toggle (separate session)
 
-1. **Browser validation** — open https://home-hub-dun.vercel.app/finanzas and verify all items above
-2. **Log test expense** — log 1 expense with "Alimentación" category → verify Presupuestos shows spend > 0
-3. **Push notification infrastructure** — Supabase Edge Function + pg_cron for due-date scanning and Web Push delivery (core v1 feature)
-4. **Subscription edit flow** — currently only add + delete; add edit modal so billing_day etc. can be updated without SQL
-5. **Account balance edit UI** — add a way to update `households.current_balance` from the Resumen tab without SQL
+When ready, paste the Part B section from `Current Prompt.md` in a fresh session.
+
+Scope:
+1. Shared `SegmentedToggle` UI primitive (components/ui/)
+2. Toggle at top of Compra and Menú surfaces
+3. "Generar lista" promoted to primary gold button on Menu page
+4. Reverse link: list → week (with or without schema change — see Current Prompt.md)
+
+---
+
+## Other pending (lower priority)
+- Log a test expense → verify Presupuestos category spend shows correctly
+- Push notification infrastructure (Supabase Edge Function + pg_cron for due-date scanning)
