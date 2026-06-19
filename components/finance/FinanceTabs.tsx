@@ -36,7 +36,8 @@ interface FinanceTabsProps {
     pendingThisMonthTotal: number;
     totalFixedThisMonth: number;
     expensesThisMonthTotal: number;
-    activeSubscriptionsTotal: number;
+    monthlySubscriptionsTotal: number;
+    annualSubscriptionsTotal: number;
     savingsProgressPct: number | null;
     monthlyBudget: number | null;
   };

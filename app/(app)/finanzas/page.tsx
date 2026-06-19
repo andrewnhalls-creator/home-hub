@@ -90,8 +90,12 @@ export default async function FinancePage() {
     .filter((e) => e.expense_date >= monthStart && e.expense_date <= monthEnd)
     .reduce((sum, e) => sum + Number(e.amount), 0);
 
-  const activeSubscriptionsTotal = (subscriptions ?? [])
-    .filter((s) => s.is_active)
+  const activeSubs = (subscriptions ?? []).filter((s) => s.is_active);
+  const monthlySubscriptionsTotal = activeSubs
+    .filter((s) => s.billing_cycle === "mensual")
+    .reduce((sum, s) => sum + Number(s.amount), 0);
+  const annualSubscriptionsTotal = activeSubs
+    .filter((s) => s.billing_cycle === "anual")
     .reduce((sum, s) => sum + Number(s.amount), 0);
 
   const goalsWithTarget = (savingsGoals ?? []).filter((g) => Number(g.target_amount) > 0);
@@ -111,7 +115,8 @@ export default async function FinancePage() {
         pendingThisMonthTotal,
         totalFixedThisMonth,
         expensesThisMonthTotal,
-        activeSubscriptionsTotal,
+        monthlySubscriptionsTotal,
+        annualSubscriptionsTotal,
         savingsProgressPct,
         monthlyBudget: householdRow?.monthly_budget ?? null,
       }}

@@ -12,7 +12,8 @@ interface ResumenTabProps {
   pendingThisMonthTotal: number;
   totalFixedThisMonth: number;
   expensesThisMonthTotal: number;
-  activeSubscriptionsTotal: number;
+  monthlySubscriptionsTotal: number;
+  annualSubscriptionsTotal: number;
   savingsProgressPct: number | null;
   monthlyBudget: number | null;
   mortgages?: Mortgage[];
@@ -135,7 +136,8 @@ export function ResumenTab({
   pendingThisMonthTotal,
   totalFixedThisMonth,
   expensesThisMonthTotal,
-  activeSubscriptionsTotal,
+  monthlySubscriptionsTotal,
+  annualSubscriptionsTotal,
   savingsProgressPct,
   monthlyBudget,
   mortgages = [],
@@ -174,11 +176,22 @@ export function ResumenTab({
           </div>
           <div className="h-px bg-border" />
           <div className="flex items-center justify-between gap-4">
-            <span className="text-sm text-muted">Suscripciones activas</span>
+            <span className="text-sm text-muted">Suscripciones mensuales</span>
             <span className="text-sm font-semibold text-brown tabular-nums">
-              {formatCurrency(activeSubscriptionsTotal)}/mes
+              {formatCurrency(monthlySubscriptionsTotal)}/mes
             </span>
           </div>
+          {annualSubscriptionsTotal > 0 && (
+            <>
+              <div className="h-px bg-border" />
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-sm text-muted">Suscripciones anuales</span>
+                <span className="text-sm font-semibold text-brown tabular-nums">
+                  {formatCurrency(annualSubscriptionsTotal)}/año
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </Card>
 

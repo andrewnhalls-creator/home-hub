@@ -78,6 +78,40 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
 
   const soonThreshold = addDays(new Date(), 14);
 
+  const monthly = subscriptions.filter((s) => s.billing_cycle === "mensual");
+  const annual = subscriptions.filter((s) => s.billing_cycle === "anual");
+  const other = subscriptions.filter((s) => s.billing_cycle === "trimestral");
+
+  const monthlyTotal = monthly.filter((s) => s.is_active).reduce((sum, s) => sum + Number(s.amount), 0);
+  const annualTotal = annual.filter((s) => s.is_active).reduce((sum, s) => sum + Number(s.amount), 0);
+
+  function SubscriptionItem({ subscription }: { subscription: Subscription }) {
+    const renewsSoon =
+      subscription.renewal_date && isBefore(new Date(subscription.renewal_date), soonThreshold);
+    return (
+      <li>
+        <Card className="flex items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-brown">{subscription.name}</p>
+            <p className="text-xs text-muted">
+              {formatCurrency(subscription.amount)}
+              {subscription.renewal_date ? ` · ${formatDate(subscription.renewal_date)}` : ""}
+            </p>
+          </div>
+          {renewsSoon && <Badge variant="warning">Se renueva pronto</Badge>}
+          <button
+            type="button"
+            aria-label="Eliminar suscripción"
+            onClick={() => setDeleting(subscription)}
+            className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:text-danger active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+          >
+            <Trash className="h-4 w-4" aria-hidden />
+          </button>
+        </Card>
+      </li>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-3">
       {subscriptions.length === 0 ? (
@@ -93,34 +127,38 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
           }
         />
       ) : (
-        <ul className="flex flex-col gap-3">
-          {subscriptions.map((subscription) => {
-            const renewsSoon =
-              subscription.renewal_date && isBefore(new Date(subscription.renewal_date), soonThreshold);
-            return (
-              <li key={subscription.id}>
-                <Card className="flex items-center gap-3">
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-brown">{subscription.name}</p>
-                    <p className="text-xs text-muted">
-                      {formatCurrency(subscription.amount)} · {subscription.billing_cycle}
-                      {subscription.renewal_date ? ` · ${formatDate(subscription.renewal_date)}` : ""}
-                    </p>
-                  </div>
-                  {renewsSoon && <Badge variant="warning">Se renueva pronto</Badge>}
-                  <button
-                    type="button"
-                    aria-label="Eliminar suscripción"
-                    onClick={() => setDeleting(subscription)}
-                    className="text-muted hover:text-danger"
-                  >
-                    <Trash className="h-4 w-4" aria-hidden />
-                  </button>
-                </Card>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="flex flex-col gap-5">
+          {monthly.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-baseline justify-between gap-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted">Mensuales</p>
+                <p className="text-xs text-muted tabular-nums">{formatCurrency(monthlyTotal)}/mes</p>
+              </div>
+              <ul className="flex flex-col gap-2">
+                {monthly.map((s) => <SubscriptionItem key={s.id} subscription={s} />)}
+              </ul>
+            </div>
+          )}
+          {annual.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-baseline justify-between gap-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted">Anuales</p>
+                <p className="text-xs text-muted tabular-nums">{formatCurrency(annualTotal)}/año</p>
+              </div>
+              <ul className="flex flex-col gap-2">
+                {annual.map((s) => <SubscriptionItem key={s.id} subscription={s} />)}
+              </ul>
+            </div>
+          )}
+          {other.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">Trimestrales</p>
+              <ul className="flex flex-col gap-2">
+                {other.map((s) => <SubscriptionItem key={s.id} subscription={s} />)}
+              </ul>
+            </div>
+          )}
+        </div>
       )}
 
       <Button
