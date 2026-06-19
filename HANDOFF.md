@@ -1,8 +1,8 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (iPad Pro layout milestone queued)
+Updated: 2026-06-19 (AI assistant milestone planned — ready to build)
 
 ## Current state
-Everything done. Build passes, all docs aligned with the deployed design, repo public by choice (Vercel Hobby). No outstanding tasks.
+Build passes, all modules complete. AI assistant feature planned and ready to implement — see NEXT_STEPS.md for full scope and build order. Requires a free Gemini API key from Google AI Studio before starting.
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -46,4 +46,5 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ Task 4: Stay on Vercel Hobby, repo stays public (intentional decision)
 - ✅ iPad Pro layout — complete (AppShell lg:max-w-5xl; finanzas sidebar nav; ResumenTab lg:grid-cols-6; menu lg:grid-cols-2; calendario max-w fix)
 - ✅ Chore snooze — Mañana / En 3 días / Próxima semana / Reprogramar (matches ReminderCard pattern)
-- ✅ Inline trash sections removed — recordatorios, calendario, documentos, compra/listas; deleted items just disappear; /papelera handles restore
+- ✅ Inline trash sections removed — recordatorios, calendario, documentos, compra/listas, finanzas; deleted items just disappear; /papelera handles restore
+- ⏳ AI assistant (Gemini 1.5 Flash) — planned, not yet built — see NEXT_STEPS.md
