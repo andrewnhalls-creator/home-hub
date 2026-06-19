@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState, useTransition } from "react";
 import { isBefore, addDays, parseISO, format } from "date-fns";
-import { Plus, Trash, ArrowCounterClockwise } from "@phosphor-icons/react";
+import { Plus, Trash, ArrowCounterClockwise, PencilSimple } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -14,7 +14,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { getSubscriptionCycleStatus } from "@/lib/cycle";
-import { createSubscription, deleteSubscription, type FinanceFormState } from "@/app/(app)/finanzas/actions";
+import { createSubscription, deleteSubscription, updateSubscription, type FinanceFormState } from "@/app/(app)/finanzas/actions";
 import type { Category, Subscription } from "@/lib/types";
 
 interface SubscriptionsTabProps {
@@ -72,10 +72,57 @@ function AddSubscriptionForm({
   );
 }
 
+function EditSubscriptionForm({
+  subscription,
+  categories,
+  onSuccess,
+  onCancel,
+}: {
+  subscription: Subscription;
+  categories: Category[];
+  onSuccess: () => void;
+  onCancel: () => void;
+}) {
+  const action = updateSubscription.bind(null, subscription.id);
+  const [state, formAction, isPending] = useActionState(action, initialState);
+
+  useEffect(() => {
+    if (state.success) onSuccess();
+  }, [state.success, onSuccess]);
+
+  return (
+    <form action={formAction} noValidate className="flex flex-col gap-4">
+      <Input label="Nombre" name="name" required defaultValue={subscription.name} error={state.fieldErrors?.name} />
+      <Input label="Importe (€)" name="amount" type="number" step="0.01" required defaultValue={String(subscription.amount)} error={state.fieldErrors?.amount} />
+      <Select label="Ciclo de facturación" name="billingCycle" defaultValue={subscription.billing_cycle} options={BILLING_OPTIONS} />
+      <Input label="Día de cobro" name="billingDay" type="number" min="1" max="31" defaultValue={subscription.billing_day != null ? String(subscription.billing_day) : ""} />
+      <Input label="Fecha de renovación" name="renewalDate" type="date" defaultValue={subscription.renewal_date ?? ""} />
+      <Select
+        label="Categoría"
+        name="categoryId"
+        placeholder="Sin categoría"
+        defaultValue={subscription.category_id ?? ""}
+        options={categories.map((c) => ({ value: c.id, label: c.name }))}
+      />
+      <Checkbox label="Activa" name="isActive" defaultChecked={subscription.is_active} />
+      {state.error && <p className="text-sm text-danger">{state.error}</p>}
+      <div className="mt-2 flex gap-3">
+        <Button type="button" variant="secondary" className="flex-1" onClick={onCancel}>
+          Cancelar
+        </Button>
+        <Button type="submit" className="flex-1" isLoading={isPending}>
+          Guardar
+        </Button>
+      </div>
+    </form>
+  );
+}
+
 export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTabProps) {
   const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editing, setEditing] = useState<Subscription | null>(null);
   const [deleting, setDeleting] = useState<Subscription | null>(null);
 
   const soonThreshold = addDays(new Date(), 14);
@@ -135,6 +182,14 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
           {cycleChip === "pagado" && <Badge variant="success">Pagado</Badge>}
           {cycleChip === "pendiente" && <Badge variant="warning">Pendiente</Badge>}
           {!cycleChip && !futureStartLabel && renewsSoon && <Badge variant="warning">Se renueva pronto</Badge>}
+          <button
+            type="button"
+            aria-label="Editar suscripción"
+            onClick={() => setEditing(subscription)}
+            className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:text-brown active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+          >
+            <PencilSimple className="h-4 w-4" aria-hidden />
+          </button>
           <button
             type="button"
             aria-label="Eliminar suscripción"
@@ -208,6 +263,17 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir suscripción">
         <AddSubscriptionForm categories={categories} onSuccess={() => { setIsAddOpen(false); showToast("Suscripción añadida"); }} onCancel={() => setIsAddOpen(false)} />
+      </Modal>
+
+      <Modal isOpen={!!editing} onClose={() => setEditing(null)} title="Editar suscripción">
+        {editing && (
+          <EditSubscriptionForm
+            subscription={editing}
+            categories={categories}
+            onSuccess={() => { setEditing(null); showToast("Suscripción actualizada"); }}
+            onCancel={() => setEditing(null)}
+          />
+        )}
       </Modal>
 
       <Modal isOpen={!!deleting} onClose={() => setDeleting(null)} title="Eliminar suscripción">

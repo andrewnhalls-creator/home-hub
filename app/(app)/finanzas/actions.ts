@@ -549,6 +549,87 @@ export async function restoreSubscription(
   return {};
 }
 
+export async function updateSubscription(
+  subscriptionId: string,
+  _prevState: FinanceFormState,
+  formData: FormData,
+): Promise<FinanceFormState> {
+  const parsed = subscriptionSchema.safeParse({
+    name: formData.get("name"),
+    amount: formData.get("amount"),
+    billingCycle: formData.get("billingCycle") || "mensual",
+    renewalDate: formData.get("renewalDate") || undefined,
+    categoryId: formData.get("categoryId") || undefined,
+    isActive: formData.get("isActive") === "on",
+    notes: formData.get("notes") || undefined,
+    billingDay: formData.get("billingDay") || undefined,
+    billingIntervalDays: formData.get("billingIntervalDays") || undefined,
+    lastPaymentDate: formData.get("lastPaymentDate") || undefined,
+    startDate: formData.get("startDate") || undefined,
+  });
+
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("subscriptions")
+    .update({
+      name: parsed.data.name,
+      amount: parsed.data.amount,
+      billing_cycle: parsed.data.billingCycle,
+      billing_day: parsed.data.billingDay === "" ? null : (parsed.data.billingDay ?? null),
+      billing_interval_days: parsed.data.billingIntervalDays === "" ? null : (parsed.data.billingIntervalDays ?? null),
+      last_payment_date: parsed.data.lastPaymentDate || null,
+      start_date: parsed.data.startDate || null,
+      renewal_date: parsed.data.renewalDate || null,
+      category_id: parsed.data.categoryId || null,
+      is_active: parsed.data.isActive,
+      notes: parsed.data.notes || null,
+    })
+    .eq("id", subscriptionId)
+    .eq("household_id", householdId);
+
+  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+
+  if (parsed.data.renewalDate) {
+    await upsertScheduledNotification({
+      householdId,
+      userId: null,
+      category: "suscripciones",
+      entityType: "subscription",
+      entityId: subscriptionId,
+      scheduledFor: new Date(`${parsed.data.renewalDate}T09:00:00`).toISOString(),
+      title: "Tienes una suscripción próxima a renovar",
+      body: parsed.data.name,
+    });
+  }
+
+  void logActivity({ householdId, actorId: user.id, entityType: "subscription", entityId: subscriptionId, action: "updated", summary: `Editó la suscripción: ${parsed.data.name}` });
+
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
+export async function updateHouseholdBalance(
+  _prevState: { error?: string; success?: boolean },
+  formData: FormData,
+): Promise<{ error?: string; success?: boolean }> {
+  const raw = String(formData.get("balance") ?? "").replace(",", ".");
+  const balance = parseFloat(raw);
+  if (isNaN(balance) || balance < 0) return { error: "Introduce un saldo válido." };
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("households")
+    .update({ current_balance: balance })
+    .eq("id", householdId);
+  if (error) return { error: "No se ha podido guardar el saldo." };
+  revalidatePath("/finanzas");
+  return { success: true };
+}
+
 export async function updateMonthlyBudget(amount: number | null): Promise<{ error?: string }> {
   const { householdId } = await requireHousehold();
   const supabase = await createClient();

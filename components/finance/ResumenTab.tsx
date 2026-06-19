@@ -1,8 +1,17 @@
+"use client";
+
+import { useActionState, useEffect, useState } from "react";
+import { PencilSimple } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
 import { PrintButton } from "@/components/ui/PrintButton";
+import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { useToast } from "@/components/ui/Toast";
 import { formatCurrency } from "@/lib/format";
 import { BudgetCard } from "@/components/finance/BudgetCard";
+import { updateHouseholdBalance } from "@/app/(app)/finanzas/actions";
 import type { Mortgage, MortgagePayment } from "@/lib/types";
 
 interface ResumenTabProps {
@@ -222,6 +231,45 @@ function MortgageCard({
   );
 }
 
+function BalanceEditForm({
+  currentBalance,
+  onSuccess,
+  onCancel,
+}: {
+  currentBalance: number | null;
+  onSuccess: () => void;
+  onCancel: () => void;
+}) {
+  const [state, formAction, isPending] = useActionState(updateHouseholdBalance, {});
+
+  useEffect(() => {
+    if (state.success) onSuccess();
+  }, [state.success, onSuccess]);
+
+  return (
+    <form action={formAction} noValidate className="flex flex-col gap-4">
+      <Input
+        label="Saldo actual (€)"
+        name="balance"
+        type="number"
+        step="0.01"
+        min="0"
+        required
+        defaultValue={currentBalance != null ? String(currentBalance) : ""}
+      />
+      {state.error && <p className="text-sm text-danger">{state.error}</p>}
+      <div className="mt-2 flex gap-3">
+        <Button type="button" variant="secondary" className="flex-1" onClick={onCancel}>
+          Cancelar
+        </Button>
+        <Button type="submit" className="flex-1" isLoading={isPending}>
+          Guardar
+        </Button>
+      </div>
+    </form>
+  );
+}
+
 export function ResumenTab({
   upcomingCount,
   overdueCount,
@@ -245,6 +293,9 @@ export function ResumenTab({
   onGoToSuscripciones,
   onGoToGastos,
 }: ResumenTabProps) {
+  const { showToast } = useToast();
+  const [isBalanceOpen, setIsBalanceOpen] = useState(false);
+
   const activeMortgages = mortgages.filter((m) => m.status === "activa" && !m.deleted_at);
 
   const annualMonthlyEquiv = annualSubscriptionsTotal / 12;
@@ -262,7 +313,7 @@ export function ResumenTab({
 
       {/* Hero: account balance + disponible */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
+        <div className="relative rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
           <p className="text-[11px] font-medium uppercase tracking-wider text-muted">Saldo en cuenta</p>
           {accountBalance != null ? (
             <p className="mt-1 text-xl font-bold tabular-nums text-brown">
@@ -272,6 +323,14 @@ export function ResumenTab({
             <p className="mt-1 text-sm text-muted">No configurado</p>
           )}
           <p className="mt-1 text-[10px] text-muted/60">Saldo actual</p>
+          <button
+            type="button"
+            aria-label="Actualizar saldo"
+            onClick={() => setIsBalanceOpen(true)}
+            className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full text-muted transition hover:text-brown active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+          >
+            <PencilSimple className="h-3.5 w-3.5" aria-hidden />
+          </button>
         </div>
 
         <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
@@ -398,6 +457,14 @@ export function ResumenTab({
           onClick={onGoToMortgage}
         />
       ))}
+
+      <Modal isOpen={isBalanceOpen} onClose={() => setIsBalanceOpen(false)} title="Actualizar saldo en cuenta">
+        <BalanceEditForm
+          currentBalance={accountBalance}
+          onSuccess={() => { setIsBalanceOpen(false); showToast("Saldo actualizado"); }}
+          onCancel={() => setIsBalanceOpen(false)}
+        />
+      </Modal>
     </div>
   );
 }
