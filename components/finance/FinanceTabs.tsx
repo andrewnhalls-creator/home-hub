@@ -5,6 +5,8 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import {
   ChartBar,
+  ChartPie,
+  Coins,
   CreditCard,
   ShoppingBag,
   PiggyBank,
@@ -22,8 +24,10 @@ import { ExpensesTab } from "@/components/finance/ExpensesTab";
 import { SavingsTab } from "@/components/finance/SavingsTab";
 import { SubscriptionsTab } from "@/components/finance/SubscriptionsTab";
 import { MortgageTab } from "@/components/finance/MortgageTab";
+import { PresupuestosTab } from "@/components/finance/PresupuestosTab";
+import { PlanAhorroTab } from "@/components/finance/PlanAhorroTab";
 import { ExportButton } from "@/components/finance/ExportButton";
-import type { Category, Expense, FixedPayment, IncomeSource, Mortgage, MortgagePayment, PaymentInstance, SavingsGoal, Subscription } from "@/lib/types";
+import type { Category, CategoryBudget, Expense, FixedPayment, IncomeSource, Mortgage, MortgagePayment, PaymentInstance, SavingsGoal, Subscription } from "@/lib/types";
 
 interface Member {
   user_id: string;
@@ -54,18 +58,24 @@ interface FinanceTabsProps {
   financeCategories: Category[];
   members: Member[];
   incomeSources: IncomeSource[];
+  categoryBudgets: CategoryBudget[];
+  cycleLabel?: string;
+  cycleStart?: string;
+  cycleEnd?: string;
 }
 
-type Tab = "resumen" | "ingresos" | "pagos" | "gastos" | "ahorro" | "suscripciones" | "hipoteca";
+type Tab = "resumen" | "ingresos" | "pagos" | "gastos" | "presupuestos" | "suscripciones" | "ahorro" | "ahorro-plan" | "hipoteca";
 
 const TABS: { value: Tab; label: string; icon: Icon }[] = [
-  { value: "resumen",       label: "Resumen",       icon: ChartBar        },
-  { value: "ingresos",      label: "Ingresos",      icon: TrendUp         },
-  { value: "pagos",         label: "Pagos",         icon: CreditCard      },
-  { value: "gastos",        label: "Gastos",        icon: ShoppingBag     },
-  { value: "suscripciones", label: "Suscripciones", icon: ArrowsClockwise },
-  { value: "ahorro",        label: "Ahorro",        icon: PiggyBank       },
-  { value: "hipoteca",      label: "Hipoteca",      icon: Bank            },
+  { value: "resumen",       label: "Resumen",        icon: ChartBar        },
+  { value: "ingresos",      label: "Ingresos",       icon: TrendUp         },
+  { value: "pagos",         label: "Pagos",          icon: CreditCard      },
+  { value: "gastos",        label: "Gastos",         icon: ShoppingBag     },
+  { value: "presupuestos",  label: "Presupuestos",   icon: ChartPie        },
+  { value: "suscripciones", label: "Suscripciones",  icon: ArrowsClockwise },
+  { value: "ahorro",        label: "Ahorro",         icon: PiggyBank       },
+  { value: "ahorro-plan",   label: "Plan de ahorro", icon: Coins           },
+  { value: "hipoteca",      label: "Hipoteca",       icon: Bank            },
 ];
 
 function currentMonthLabel(): string {
@@ -85,6 +95,10 @@ export function FinanceTabs({
   financeCategories,
   members,
   incomeSources,
+  categoryBudgets,
+  cycleLabel,
+  cycleStart,
+  cycleEnd,
 }: FinanceTabsProps) {
   const [tab, setTab] = useState<Tab>("resumen");
 
@@ -92,7 +106,7 @@ export function FinanceTabs({
     <div className="flex flex-col gap-4">
       {/* Month context + export */}
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm text-muted">{currentMonthLabel()}</p>
+        <p className="text-sm text-muted">{cycleLabel ?? currentMonthLabel()}</p>
         <ExportButton
           expenses={expenses}
           fixedPayments={fixedPayments}
@@ -184,10 +198,20 @@ export function FinanceTabs({
           <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />
         )}
         {tab === "gastos" && <ExpensesTab expenses={expenses} categories={financeCategories} members={members} />}
+        {tab === "presupuestos" && (
+          <PresupuestosTab
+            categoryBudgets={categoryBudgets}
+            expenses={expenses}
+            categories={financeCategories}
+            cycleStart={cycleStart ?? ""}
+            cycleEnd={cycleEnd ?? ""}
+          />
+        )}
         {tab === "suscripciones" && (
           <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
         )}
         {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
+        {tab === "ahorro-plan" && <PlanAhorroTab goals={savingsGoals} />}
         {tab === "hipoteca" && (
           <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
         )}
