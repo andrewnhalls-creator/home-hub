@@ -1,9 +1,10 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (Stage 4 Plan de ahorro y hipoteca rework — committed and pushed)
+Updated: 2026-06-19 (Confirmed Compra ⇄ Menú toggle complete)
 
 ## Current state
 Build passes, lint clean (0 errors, warnings only), typecheck clean. All changes committed and pushed.
 All 4 stages of the finance overhaul are complete.
+Compra ⇄ Menú toggle (SHOPA_COMPARISON.md) is also complete — was committed in 5d95428 prior to Stage 1–4, confirmed fully wired: SegmentedToggle on both /compra and /menu, primary-gold GenerateListButton, "Ver semana →" reverse link in ShoppingListDetail, migration 029 applied (source_menu_week_start column live in DB).
 
 ## What changed (Stages 1–4)
 
