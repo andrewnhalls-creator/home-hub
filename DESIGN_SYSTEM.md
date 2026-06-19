@@ -1,4 +1,11 @@
-# DESIGN_SYSTEM.md — Home Hub
+# ~~DESIGN_SYSTEM.md~~ — DEPRECATED
+
+> **This file describes the original warm/pastel Azulejo design and is no longer accurate.**
+> The current deployed design is **Índigo Profundo** (dark glassmorphism, saffron gold accent).
+> See [`DESIGN.md`](DESIGN.md) for the canonical design reference.
+> Kept for git history only — do not use for new work.
+
+---
 
 ## Brand personality
 
