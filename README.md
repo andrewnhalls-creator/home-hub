@@ -2,7 +2,7 @@
 
 Organizador privado del hogar para dos personas: lista de la compra, menú semanal, recordatorios, tareas, finanzas, documentos y deseos compartidos.
 
-Ver `CLAUDE.md` para las reglas del proyecto, `PRODUCT_REQUIREMENTS.md` para el alcance funcional, `DATA_MODEL.md` para el esquema de base de datos, `BUILD_PLAN.md` para los hitos de construcción, `DESIGN_SYSTEM.md` para la guía de estilo, `SECURITY_AND_PRIVACY.md` para las garantías de seguridad, `TEST_PLAN.md` para las pruebas manuales y `DEPLOYMENT_PLAN.md` para el despliegue.
+Ver `CLAUDE.md` para las reglas del proyecto, `PRODUCT_REQUIREMENTS.md` para el alcance funcional, `DATA_MODEL.md` para el esquema de base de datos, `BUILD_PLAN.md` para los hitos de construcción, `DESIGN.md` para la guía de estilo (diseño actual: Índigo Profundo, glassmorphism oscuro), `SECURITY_AND_PRIVACY.md` para las garantías de seguridad, `TEST_PLAN.md` para las pruebas manuales y `DEPLOYMENT_PLAN.md` para el despliegue.
 
 ## Desarrollo local
 
