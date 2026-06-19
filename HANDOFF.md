@@ -1,30 +1,16 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (Doc alignment sweep complete — Task 4 pending)
+Updated: 2026-06-19 (All tasks complete)
 
 ## Current state
-All 6 doc alignment fixes done. Build still passes. All pushed to origin main. Only Task 4 (GitHub repo privacy decision) remains.
+Everything done. Build passes, all docs aligned with the deployed design, repo public by choice (Vercel Hobby). No outstanding tasks.
 
 ## Production URL
 https://home-hub-dun.vercel.app
 
-## Deploy
-GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo — see Task 4).
-
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `893c4fb` — "DESIGN.md: update form input border token border-white/[0.12] → border-border"
-- All pushed to origin main
-
-## Doc alignment fixes: all complete
-
-| # | File | Fix | Commit |
-|---|---|---|---|
-| 1 | `CLAUDE.md` | Replaced stale pastel design section with Índigo Profundo spec; fixed icon lib and accessibility line | `c6eb18f` |
-| 2 | `DESIGN_SYSTEM.md` | Added deprecation header pointing to `DESIGN.md` | `b62a8e5` |
-| 3 | `KNOWN_ISSUES.md` | Moved "Más crash" from Active to Resolved | `67a8f6d` |
-| 4 | `UI_REDESIGN_PLAN.md` | Marked all milestones complete | `423e9dc` |
-| 5 | `README.md` | Updated style guide reference to `DESIGN.md` | `da6a428` |
-| 6 | `DESIGN.md` | Updated form input border token to `border-border` | `893c4fb` |
+- Last commit: `1e238ff` (handoff update) — all pushed to origin main
+- Vercel auto-deploys on every push to main
 
 ## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
 - **Background:** deep indigo `#0D0B1F` + azulejo SVG tile + depth ellipse
@@ -57,4 +43,4 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ Task 2: Lucide → Phosphor migration + border/text fixes
 - ✅ Task 3: Final review + build (0 errors), secrets clean, SSR fixes
 - ✅ Doc alignment sweep (Fixes 1–6)
-- ⏳ Task 4: GitHub repo privacy decision
+- ✅ Task 4: Stay on Vercel Hobby, repo stays public (intentional decision)

@@ -2,10 +2,10 @@
 
 ## Active
 
-### GitHub repo is temporarily public
-- **Reason**: Vercel Hobby plan requires a public GitHub repo for CLI/GitHub-triggered deploys. Making it private would block deployments without upgrading.
-- **Resolution**: Set repo to private on GitHub once the project is finished and no further deploys are needed (or on upgrade to Vercel Pro).
-- **Risk**: Code is readable publicly. No secrets are committed (`.env.local` is gitignored). Service-role key and VAPID private key are only in Supabase/Vercel dashboard, never in the repo.
+### GitHub repo is public (intentional, Hobby plan)
+- **Decision 2026-06-19**: Staying on Vercel Hobby. Public repo is required for GitHub-triggered auto-deploys on Hobby.
+- **Risk**: Code is publicly readable. Acceptable — no secrets are committed (`.env.local` gitignored; service-role key and VAPID private key are only in Supabase/Vercel dashboards, never in the repo).
+- **Revisit**: If sensitive logic is ever added, upgrade to Vercel Pro (~$20/month) to enable private-repo deploys.
 
 ## Resolved
 
