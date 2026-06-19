@@ -10,7 +10,7 @@ function SubmitBtn() {
     <button
       type="submit"
       disabled={pending}
-      className="flex w-full items-center justify-center gap-2 rounded-xl border border-sage bg-sage/10 px-4 py-3 text-sm font-medium text-sage transition-colors hover:bg-sage/20 disabled:opacity-50"
+      className="flex w-full items-center justify-center gap-2 rounded-xl bg-terracotta px-4 py-3 text-sm font-medium text-cream transition-colors hover:bg-terracotta/90 disabled:opacity-50"
     >
       <ShoppingCart className="h-4 w-4 shrink-0" aria-hidden />
       {pending ? "Generando lista…" : "Generar lista de la compra"}

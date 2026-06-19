@@ -6,6 +6,7 @@ import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { MealSlot } from "@/components/meals/MealSlot";
 import { GenerateListButton } from "@/components/meals/GenerateListButton";
+import { SegmentedToggle } from "@/components/ui/SegmentedToggle";
 import type { MealType } from "@/lib/types";
 
 const MEAL_TYPES: { type: MealType; label: string }[] = [
@@ -61,6 +62,7 @@ export default async function MenuPage({
 
   return (
     <div className="flex flex-col gap-4">
+      <SegmentedToggle />
       <div className="flex items-center justify-between">
         <Link
           href={`/menu?start=${prevWeekStr}`}

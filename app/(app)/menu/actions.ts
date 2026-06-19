@@ -124,6 +124,7 @@ export async function generateShoppingListFromMealPlan(formData: FormData) {
       name: `Menú ${weekLabel}`,
       week_start_date: weekStartDate,
       week_end_date: weekEndDate,
+      source_menu_week_start: weekStartDate,
       status: "activa",
       created_by: user.id,
     })

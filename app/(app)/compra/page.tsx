@@ -3,6 +3,7 @@ import { Receipt, X } from "@phosphor-icons/react/dist/ssr";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { ShoppingList } from "@/components/shopping/ShoppingList";
+import { SegmentedToggle } from "@/components/ui/SegmentedToggle";
 
 export default async function ShoppingPage({
   searchParams,
@@ -42,6 +43,7 @@ export default async function ShoppingPage({
 
   return (
     <div className="flex flex-col gap-4">
+      <SegmentedToggle />
       {shoppingListId && listResult.data ? (
         <div className="flex items-center justify-between rounded-xl border border-terracotta bg-card px-4 py-3">
           <p className="text-sm font-medium text-brown">Lista: {listResult.data.name}</p>

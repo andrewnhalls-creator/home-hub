@@ -119,6 +119,7 @@ export interface ShoppingList {
   updated_at: string;
   archived_at: string | null;
   archived_by: string | null;
+  source_menu_week_start: string | null;
   deleted_at: string | null;
   deleted_by: string | null;
 }

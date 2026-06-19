@@ -118,9 +118,19 @@ export function ShoppingListDetail({ list, trips, itemsCount }: ShoppingListDeta
 
   return (
     <div className="flex flex-col gap-4">
-      <Link href="/compra/listas" className="text-sm font-medium text-terracotta">
-        ← Volver al historial
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link href="/compra/listas" className="text-sm font-medium text-terracotta">
+          ← Volver al historial
+        </Link>
+        {list.source_menu_week_start && (
+          <Link
+            href={`/menu?start=${list.source_menu_week_start}`}
+            className="text-sm font-medium text-sage"
+          >
+            Ver semana →
+          </Link>
+        )}
+      </div>
 
       <Card>
         <div className="flex items-start justify-between gap-2">
