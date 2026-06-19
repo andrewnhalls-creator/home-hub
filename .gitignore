@@ -34,3 +34,13 @@ pnpm-debug.log*
 
 # Key/secret files that must never be committed
 *.rtf
+
+# Local AI/tooling files
+.codex/
+.impeccable/
+
+# Generated design-system preview
+ds-preview/
+
+# Supabase local temp files
+supabase/.temp/
