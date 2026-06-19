@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useMemo, useState } from "react";
 import { useToast } from "@/components/ui/Toast";
-import { Plus, ShoppingCart, CaretDown, X, ArrowsDownUp, SlidersHorizontal } from "@phosphor-icons/react";
+import { Plus, ShoppingCart, CaretDown, X, ArrowsDownUp } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Modal } from "@/components/ui/Modal";
@@ -126,19 +126,17 @@ export function ShoppingList({ items, categories, members, householdId, shopping
         />
         <button
           type="submit"
-          disabled={quickPending || !quickName.trim()}
+          disabled={quickPending}
           aria-label="Añadir"
+          onClick={(e) => {
+            if (!quickName.trim()) {
+              e.preventDefault();
+              setIsAddOpen(true);
+            }
+          }}
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-terracotta text-cream transition-transform active:scale-95 disabled:opacity-40"
         >
           <Plus className="h-5 w-5" aria-hidden />
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsAddOpen(true)}
-          aria-label="Añadir con más detalles"
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-muted hover:text-brown"
-        >
-          <SlidersHorizontal className="h-4 w-4" aria-hidden />
         </button>
       </form>
 
