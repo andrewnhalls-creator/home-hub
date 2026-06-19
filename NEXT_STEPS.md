@@ -1,33 +1,32 @@
 # Next Steps
 
 ## Current state
-App is feature-complete for v1. Only remaining task is completing the AI assistant manual verification checklist, which is blocked on Gemini free-tier daily quota until UTC midnight (≈2am Spain time on 2026-06-20).
+Finance module major update complete (migrations 025–027, data seeded, all tabs shipped). Build green, pushed to origin main.
 
 ---
 
-## Next session: complete AI verification
+## Validation checklist (manual, as of 19 June 2026)
 
-**Wait until 2026-06-20** for the Gemini quota to reset, then open https://home-hub-dun.vercel.app and test each prompt below. Wait ~30 seconds between each.
+Open https://home-hub-dun.vercel.app → Finanzas
 
-| # | Prompt | Where to check |
-|---|--------|---------------|
-| 3 | `Add milk and bread to the shopping list` | /compra → leche + pan appear |
-| 4 | `Añade un recordatorio para pagar el seguro el 20 de julio` | /recordatorios → seguro appears |
-| 5 | `¿Qué tenemos en la lista de la compra?` | AI describes items, no DB changes |
-| 6 | `Crea una suscripción de Netflix por 15 euros al mes` | /finanzas → Suscripciones tab |
-| 7 | `Añade el recibo del gas, 60 euros, día 5` | /finanzas → Pagos fijos tab |
-| 8 | `Apunta un gasto de supermercado de 45 euros de hoy` | /finanzas → Gastos tab |
-| 9 | `Añade una tarea para limpiar el baño, semanal` | /tareas → baño appears |
-| 11 | Any English prompt | AI response must be in Spanish |
-
-If you see a 429 error ("El asistente ha alcanzado el límite de uso diario"), the quota hasn't reset yet — wait longer and retry.
+- [ ] **Cycle label** shows "25 may – 25 jun" in the tab header (not "Junio 2026")
+- [ ] **Ingresos tab**: Andrew — Nómina 1.600 € día 25, Pensión 1.033 € día 25, Pensión quincenal 145 € (≈290 €/mes). Jose — 1.300 € día 28. Total ≈ 4.223 €/mes
+- [ ] **Suscripciones tab** — mensuales show chips: Podimo ✓ Pagado, Apple ✓ Pagado, Movistar ✓ Pagado (4,99 €), DIGI ✓ Pagado, ChatGPT ✗ Pendiente, Claude ✓ Pagado, HBO ✓ Pagado, Netflix ✓ Pagado, Outlook ✓ Pagado
+- [ ] Google One shows "Disponible desde oct 2026" badge (inactive)
+- [ ] Real Debrid shows "Próxima renovación: 08/11/2026" (no paid/pending chip)
+- [ ] APP Carrefour does not appear
+- [ ] **Presupuestos tab** shows 6 categories: Alimentación 500 €, Ocio 200 €, Veterinario 100 €, Perros 100 €, Cuidado personal 50 €, Farmacia 20 €
+- [ ] **Plan de ahorro tab** shows Fase 1 active (ago–dic 2026): Emergencia 600 €, Compras 300 €, Amortización 500 €
+- [ ] Emergency fund progress bar has 3M milestone marker
+- [ ] Mortgage guidance collapsible block opens/closes correctly
+- [ ] **Resumen balance card** shows income ≈ 4.223 €
 
 ---
 
-## After verification is complete
+## Possible next sessions (in priority order)
 
-No planned milestones. Possible future work:
-- AI: update existing records (requires item ID matching)
-- AI: create meal plan entries directly
-- Calendar module enhancements
-- Offline sync improvements
+1. **AI assistant verification** — Gemini quota may have reset. Run the browser test checklist from HANDOFF.md (tests 3–9 + 11).
+2. **Push notification infrastructure** — Supabase Edge Function + pg_cron for due-date scanning and Web Push delivery (core v1 feature).
+3. **Subscription edit flow** — currently only add + delete; add an edit modal (same as IncomeSource pattern) so billing_day etc. can be updated from the UI without SQL.
+4. **Mortgage tab data** — fill in the real mortgage details via the UI (lender, start date, end date, payment day).
+5. **Mobile UX polish** — responsive check on all new tabs at 375px width.

@@ -1,8 +1,19 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (AI verification blocked on Gemini quota — resume next day)
+Updated: 2026-06-19 (finance module major update complete)
 
 ## Current state
 Build passes, lint clean, typecheck clean. All changes pushed to origin main.
+
+### Finance module major update (completed this session)
+Migrations 025–027 applied and SQL files created in `sql/`. Data fully seeded for Villa Gay household.
+
+**What shipped:**
+- **25-to-25 budget cycle** — `lib/cycle.ts` with `getCurrentCycleDates`, `getCycleLabel`, `getSubscriptionCycleStatus`. All "this month" filtering in `/finanzas` now uses 25th→25th cycle, not calendar month.
+- **Income module** — `quincenal` frequency, `payment_day` field shown on each income source and in the form.
+- **Subscriptions** — paid/pending chips per billing_day, future-start badge (Google One), renewal label for "otro" cycle (Real Debrid), "Otro (personalizado)" billing option.
+- **Presupuestos tab** — category budgets with cycle-scoped spend tracking, progress bars (green/amber/red), add/delete.
+- **Plan de Ahorro tab** — 3-phase savings plan auto-selects active phase, per-fund progress bars (emergency fund has 3M/6M milestones), next-phase preview, collapsible mortgage prepayment guidance.
+- **Data updates**: Jose income → 1.300 € (día 28), Andrew Pensión quincenal 145 €/15 days, Extra soft-deleted. 9 subscription billing_days set, Carrefour soft-deleted, Google One + Real Debrid added. Luz due_day=3, Coche due_day=1. July expenses added (Alquiler 925 €, Tasa basuras 53,20 €). 3 savings goals seeded. 6 category budgets seeded.
 
 ### Bugs fixed this session
 1. `GEMINI_API_KEY` missing from Vercel env vars → added by user
@@ -45,7 +56,7 @@ https://home-hub-dun.vercel.app
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `bdc5f43` (Add page-shaped skeleton loaders for dashboard, compra, and finanzas)
+- Last commit: `a3d9138` (Add Plan de Ahorro tab with phase allocation and mortgage guidance)
 - All changes pushed to origin main
 
 ## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
