@@ -7,12 +7,10 @@
 - **Resolution**: Set repo to private on GitHub once the project is finished and no further deploys are needed (or on upgrade to Vercel Pro).
 - **Risk**: Code is readable publicly. No secrets are committed (`.env.local` is gitignored). Service-role key and VAPID private key are only in Supabase/Vercel dashboard, never in the repo.
 
-### "Más" button broken — takes to a non-working page
-- **Reported**: 2026-06-18
-- **Impact**: The "Más" nav item in BottomNav navigates to a page that doesn't work. Blocks access to Menú, Recordatorios, Tareas, Documentos, Deseos, Actividad, Ajustes (all the modules behind the sheet).
-- **Resolution**: Investigate `MoreMenuSheet` / the Más route — likely a missing page, a broken sheet component, or a nav wiring issue. Fix before final review.
-
 ## Resolved
+
+### "Más" button crash fixed ✅
+- **Resolved 2026-06-18** (`3791097`): `ClockClockwise` icon was missing from `PHOSPHOR_MENU_ICONS` in `MoreMenuSheet.tsx`, causing the sheet to crash on open. Added the `/actividad` entry and its accent.
 
 ### Push notification end-to-end device test ✅
 - **Resolved 2026-06-18**: Real-device test confirmed — push notifications deliver end-to-end.
