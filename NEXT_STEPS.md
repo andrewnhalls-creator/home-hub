@@ -1,13 +1,7 @@
 # Next Steps
 
 ## Current state
-Doc alignment sweep in progress (Fix 2/6 done). Stop after each fix, update HANDOFF + NEXT_STEPS, commit, push. Then task 4 (repo privacy).
-
----
-
-## Fix 3 — KNOWN_ISSUES.md: move "Más button broken" to Resolved
-
-The "Más button broken" issue was fixed in Task 1 (commit `3791097`). Move it from Active to Resolved with that note.
+Doc alignment sweep in progress (Fix 3/6 done). Stop after each fix, update HANDOFF + NEXT_STEPS, commit, push. Then task 4 (repo privacy).
 
 ---
 
