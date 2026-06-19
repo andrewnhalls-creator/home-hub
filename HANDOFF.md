@@ -1,8 +1,8 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (AI assistant Section 1 complete — API route built and pushed)
+Updated: 2026-06-19 (AI assistant Sections 1 + 2 complete — API route + chat UI built and pushed)
 
 ## Current state
-Build passes. AI assistant Section 1 complete. `POST /api/ai` route built and live. Sections 2 (chat UI) and 3 (full action verification) remain.
+Build passes. AI assistant Sections 1 + 2 complete. Sparkle FAB + chat modal live. Section 3 (end-to-end verification) remains.
 
 ## Production URL
 https://home-hub-dun.vercel.app
@@ -48,5 +48,5 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ Chore snooze — Mañana / En 3 días / Próxima semana / Reprogramar (matches ReminderCard pattern)
 - ✅ Inline trash sections removed — recordatorios, calendario, documentos, compra/listas, finanzas; deleted items just disappear; /papelera handles restore
 - ✅ AI assistant Section 1 — `app/api/ai/route.ts` (POST /api/ai, Gemini 1.5 Flash, all actions)
-- ⏳ AI assistant Section 2 — chat UI (AIChatButton FAB + modal)
-- ⏳ AI assistant Section 3 — end-to-end verification
+- ✅ AI assistant Section 2 — `components/ai/AIChatButton.tsx` + AppShell wiring
+- ⏳ AI assistant Section 3 — end-to-end verification (manual test checklist)

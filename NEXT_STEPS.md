@@ -1,7 +1,7 @@
 # Next Steps
 
 ## Current state
-AI assistant Section 1 complete (API route). Section 2 (chat UI) is next.
+AI assistant Sections 1 + 2 complete. Section 3 (end-to-end verification) is next.
 
 ---
 
@@ -33,9 +33,8 @@ Get a **free Gemini API key** from https://aistudio.google.com (sign in with Goo
 
 **Also:** add `GEMINI_API_KEY=` (empty) to `.env.example`
 
-#### Section 2 — Chat UI
-**File to create:** `components/ai/AIChatButton.tsx`
-**File to modify:** `components/layout/AppShell.tsx`
+#### ✅ Section 2 — Chat UI (DONE — commit be5c89a)
+**Files created/modified:** `components/ai/AIChatButton.tsx`, `components/layout/AppShell.tsx`
 
 - Fixed-position FAB: `bottom-20 right-4` mobile, `bottom-8 right-6` desktop
 - Icon: `Sparkle` (fill) from `@phosphor-icons/react`, terracotta circle 52×52px
