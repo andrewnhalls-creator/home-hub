@@ -45,3 +45,5 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ Doc alignment sweep (Fixes 1–6)
 - ✅ Task 4: Stay on Vercel Hobby, repo stays public (intentional decision)
 - ✅ iPad Pro layout — complete (AppShell lg:max-w-5xl; finanzas sidebar nav; ResumenTab lg:grid-cols-6; menu lg:grid-cols-2; calendario max-w fix)
+- ✅ Chore snooze — Mañana / En 3 días / Próxima semana / Reprogramar (matches ReminderCard pattern)
+- ✅ Inline trash sections removed — recordatorios, calendario, documentos, compra/listas; deleted items just disappear; /papelera handles restore
