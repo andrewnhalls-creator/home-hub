@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { CaretDown, CaretUp, Calculator } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { formatCurrency } from "@/lib/format";
-import type { SavingsGoal } from "@/lib/types";
+import type { Mortgage, SavingsGoal } from "@/lib/types";
 
 interface PlanAhorroTabProps {
   goals: SavingsGoal[];
+  mortgages?: Mortgage[];
 }
 
 const PHASE_DATA = [
@@ -116,7 +117,7 @@ function GoalCard({
   target: number | null;
   monthlyAllocation: number;
   notes?: string | null;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }) {
   const hasTarget = target !== null && target > 0;
   const pct = hasTarget ? Math.min((current / target!) * 100, 100) : null;
@@ -199,7 +200,7 @@ function SavingsSimulator({
   const target = fund === "emergencia" ? EMERGENCY_TARGET_6M : COMPRAS_TARGET;
   const remaining = Math.max(0, target - current);
 
-  let result: React.ReactNode = null;
+  let result: ReactNode = null;
 
   if (mode === "monthly") {
     const monthly = parseFloat(monthlyInput.replace(",", "."));
@@ -337,6 +338,114 @@ function SavingsSimulator({
   );
 }
 
+// ---- Mortgage overpayment interactive calculator ----
+
+function MortgageOverpaymentCalculator({ mortgage }: { mortgage: Mortgage | null }) {
+  const [balance, setBalance] = useState(mortgage ? String(Math.round(mortgage.current_balance)) : "");
+  const [rate, setRate] = useState(mortgage?.interest_rate != null ? String(mortgage.interest_rate) : "");
+  const [monthly, setMonthly] = useState(mortgage ? String(mortgage.monthly_payment) : "");
+  const [lump, setLump] = useState("");
+
+  const P = parseFloat(balance.replace(",", "."));
+  const annualRate = parseFloat(rate.replace(",", "."));
+  const M = parseFloat(monthly.replace(",", "."));
+  const L = parseFloat(lump.replace(",", "."));
+
+  let result: ReactNode = null;
+
+  if (!isNaN(P) && P > 0 && !isNaN(annualRate) && annualRate > 0 && !isNaN(M) && M > 0 && !isNaN(L) && L > 0 && L < P && M > (annualRate / 12 / 100) * P) {
+    const r = annualRate / 12 / 100;
+    const Nf = -Math.log(1 - (r * P) / M) / Math.log(1 + r);
+    const newP = P - L;
+    const Nf_new = newP > 0 ? -Math.log(1 - (r * newP) / M) / Math.log(1 + r) : 0;
+    const monthsSaved = Math.round(Nf - Nf_new);
+    const interestSaved = M * (Nf - Nf_new) - L;
+
+    if (monthsSaved > 0 && interestSaved >= 0) {
+      result = (
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs text-muted">Tiempo ahorrado</p>
+            <p className="text-sm font-bold text-sage tabular-nums">{formatMonths(monthsSaved)}</p>
+          </div>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs text-muted">Interés ahorrado</p>
+            <p className="text-sm font-bold text-terracotta tabular-nums">{formatCurrency(interestSaved)}</p>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  return (
+    <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.04] p-4">
+      <div className="flex items-center gap-2">
+        <Calculator className="h-4 w-4 shrink-0 text-terracotta" aria-hidden />
+        <p className="text-sm font-semibold text-brown">Amortizar hipoteca — calculadora</p>
+      </div>
+      <p className="mt-1 text-[11px] text-muted">
+        Calcula el tiempo e interés que ahorras con un pago extraordinario
+      </p>
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <Input
+          label="Saldo pendiente (€)"
+          name="calc-balance"
+          type="number"
+          inputMode="decimal"
+          step="1000"
+          min="0"
+          value={balance}
+          onChange={(e) => setBalance(e.target.value)}
+        />
+        <Input
+          label="Tipo de interés (%)"
+          name="calc-rate"
+          type="number"
+          inputMode="decimal"
+          step="0.01"
+          min="0"
+          placeholder="2.90"
+          value={rate}
+          onChange={(e) => setRate(e.target.value)}
+        />
+        <Input
+          label="Cuota mensual (€)"
+          name="calc-monthly"
+          type="number"
+          inputMode="decimal"
+          step="1"
+          min="0"
+          value={monthly}
+          onChange={(e) => setMonthly(e.target.value)}
+        />
+        <Input
+          label="Amortizar ahora (€)"
+          name="calc-lump"
+          type="number"
+          inputMode="decimal"
+          step="500"
+          min="0"
+          placeholder="5000"
+          value={lump}
+          onChange={(e) => setLump(e.target.value)}
+        />
+      </div>
+
+      {result && (
+        <div className="mt-3 rounded-xl border border-sage/20 bg-sage/[0.06] p-3">
+          {result}
+        </div>
+      )}
+
+      <p className="mt-2 flex items-start gap-1 text-[11px] text-muted">
+        <span className="text-amber">⚠</span>
+        Resultado orientativo · elige «reducir plazo» en el banco para maximizar el ahorro.
+      </p>
+    </div>
+  );
+}
+
 // ---- Mortgage prepayment reference table ----
 
 function MortgageSimulator() {
@@ -424,7 +533,8 @@ function AmortizacionGuide() {
   );
 }
 
-export function PlanAhorroTab({ goals }: PlanAhorroTabProps) {
+export function PlanAhorroTab({ goals, mortgages = [] }: PlanAhorroTabProps) {
+  const activeMortgage = mortgages.find((m) => m.status === "activa" && !m.deleted_at) ?? null;
   const phaseIdx = currentPhaseIndex(goals);
   const phase = PHASE_DATA[phaseIdx];
   const nextPhase = PHASE_DATA[phaseIdx + 1] ?? null;
@@ -540,6 +650,9 @@ export function PlanAhorroTab({ goals }: PlanAhorroTabProps) {
 
       {/* Savings simulator */}
       <SavingsSimulator emergenciaAmount={emergenciaAmount} comprasAmount={comprasAmount} />
+
+      {/* Mortgage overpayment interactive calculator */}
+      <MortgageOverpaymentCalculator mortgage={activeMortgage} />
 
       {/* Mortgage simulator reference table */}
       <MortgageSimulator />

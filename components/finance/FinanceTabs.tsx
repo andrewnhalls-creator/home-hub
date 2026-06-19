@@ -217,7 +217,7 @@ export function FinanceTabs({
             <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
           )}
           {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
-          {tab === "ahorro-plan" && <PlanAhorroTab goals={savingsGoals} />}
+          {tab === "ahorro-plan" && <PlanAhorroTab goals={savingsGoals} mortgages={mortgages} />}
           {tab === "hipoteca" && (
             <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
           )}

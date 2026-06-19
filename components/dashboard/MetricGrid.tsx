@@ -16,7 +16,7 @@ interface MetricGridProps {
   pending: number;
   tasks: number;
   todayEventsCount: number;
-  activePayments: number;
+  proximosCount: number;
   hasOverdueReminders: boolean;
   hasOverduePayments: boolean;
 }
@@ -27,7 +27,7 @@ export function MetricGrid({
   pending,
   tasks,
   todayEventsCount,
-  activePayments,
+  proximosCount,
   hasOverdueReminders,
   hasOverduePayments,
 }: MetricGridProps) {
@@ -79,8 +79,8 @@ export function MetricGrid({
         iconColor="text-coral"
         iconBg="bg-rose/20"
         label="Finanzas"
-        metric={activePayments}
-        status={activePayments === 0 ? "Sin pagos activos" : "pagos activos"}
+        metric={proximosCount}
+        status={proximosCount === 0 ? "Sin próximos pagos" : "próximos pagos"}
         attention={hasOverduePayments}
         href="/finanzas"
       />

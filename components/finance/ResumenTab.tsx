@@ -298,12 +298,9 @@ export function ResumenTab({
 
   const activeMortgages = mortgages.filter((m) => m.status === "activa" && !m.deleted_at);
 
-  const annualMonthlyEquiv = annualSubscriptionsTotal / 12;
-  const totalOut = totalFixedThisMonth + monthlySubscriptionsTotal + annualMonthlyEquiv + expensesThisMonthTotal;
-  const disponible = totalMonthlyIncome - totalOut;
-  const isPositive = disponible >= 0;
-
   const totalPending = pendingThisMonthTotal + pendingSubsThisMonthTotal;
+  const disponible = accountBalance != null ? accountBalance - totalPending : null;
+  const isPositive = disponible != null && disponible >= 0;
 
   return (
     <div className="flex flex-col gap-3">
@@ -335,21 +332,15 @@ export function ResumenTab({
 
         <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
           <p className="text-[11px] font-medium uppercase tracking-wider text-muted">Disponible</p>
-          {totalMonthlyIncome > 0 ? (
+          {disponible !== null ? (
             <>
               <p className={cn("mt-1 text-xl font-bold tabular-nums", isPositive ? "text-sage" : "text-danger")}>
                 {formatCurrency(disponible)}
               </p>
-              <p className="mt-1 text-[10px] text-muted/60">Este ciclo</p>
+              <p className="mt-1 text-[10px] text-muted/60">Saldo − pendientes</p>
             </>
           ) : (
-            <button
-              type="button"
-              onClick={onGoToIngresos}
-              className="mt-1 text-xs text-terracotta hover:underline focus-visible:outline-none"
-            >
-              Añadir ingresos →
-            </button>
+            <p className="mt-1 text-sm text-muted">Introduce tu saldo</p>
           )}
         </div>
       </div>

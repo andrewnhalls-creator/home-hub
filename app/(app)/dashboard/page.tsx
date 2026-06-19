@@ -4,6 +4,7 @@ import { ForkKnife, CalendarDots, WarningCircle } from "@phosphor-icons/react/di
 import { startOfWeek, endOfWeek, format, isPast, addDays } from "date-fns";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentCycleDates, getSubscriptionCycleStatus } from "@/lib/cycle";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { GreetingCard } from "@/components/dashboard/GreetingCard";
 import { WeekCalendarWidget } from "@/components/dashboard/WeekCalendarWidget";
@@ -18,13 +19,17 @@ export default async function DashboardPage() {
   const weekEnd = format(endOfWeek(today, { weekStartsOn: 1 }), "yyyy-MM-dd");
   const todayStr = format(today, "yyyy-MM-dd");
   const in7Days = format(addDays(today, 7), "yyyy-MM-dd");
+  const { start: cycleStartDate, end: cycleEndDate } = getCurrentCycleDates();
+  const cycleStart = format(cycleStartDate, "yyyy-MM-dd");
+  const cycleEnd = format(cycleEndDate, "yyyy-MM-dd");
 
   const [
     { count: shoppingCount },
     { count: weekMealsCount },
     { data: reminders, count: remindersCount },
     { data: chores, count: choresCount },
-    { data: payments, count: paymentsCount },
+    { data: allFixedPayments },
+    { data: cycleInstances },
     { data: subscriptions },
     { data: calendarEvents },
     { data: todayMeals },
@@ -56,11 +61,17 @@ export default async function DashboardPage() {
       .limit(3),
     supabase
       .from("fixed_payments")
-      .select("id, name, amount, due_day", { count: "exact" })
+      .select("id, name, amount, due_day")
       .eq("household_id", householdId)
       .eq("is_active", true)
-      .order("due_day", { ascending: true, nullsFirst: false })
-      .limit(3),
+      .is("deleted_at", null)
+      .order("due_day", { ascending: true, nullsFirst: false }),
+    supabase
+      .from("payment_instances")
+      .select("fixed_payment_id, status")
+      .eq("household_id", householdId)
+      .gte("due_date", cycleStart)
+      .lte("due_date", cycleEnd),
     supabase
       .from("subscriptions")
       .select("id, name, amount, renewal_date")
@@ -94,11 +105,17 @@ export default async function DashboardPage() {
   const meals = weekMealsCount ?? 0;
   const pending = remindersCount ?? 0;
   const tasks = choresCount ?? 0;
-  const activePayments = paymentsCount ?? 0;
 
   const hasOverdueReminders = (reminders ?? []).some((r) => r.due_at && isPast(new Date(r.due_at)));
-  const dayOfMonth = today.getDate();
-  const hasOverduePayments = (payments ?? []).some((p) => p.due_day < dayOfMonth);
+  const instanceMap = new Map((cycleInstances ?? []).map((i) => [i.fixed_payment_id, i]));
+  const pendingFixedPayments = (allFixedPayments ?? []).filter((p) => {
+    const inst = instanceMap.get(p.id);
+    if (inst?.status === "pagado" || inst?.status === "omitido") return false;
+    if (p.due_day != null) return getSubscriptionCycleStatus(p.due_day, today) === "pendiente";
+    return true;
+  });
+  const proximosCount = pendingFixedPayments.length;
+  const hasOverduePayments = (cycleInstances ?? []).some((i) => i.status === "vencido");
 
   const todayEvents = (calendarEvents ?? []).filter((e) => e.event_date === todayStr).slice(0, 2);
   const overdueToday = (reminders ?? []).filter((r) => r.due_at && isPast(new Date(r.due_at))).slice(0, 2);
@@ -156,7 +173,7 @@ export default async function DashboardPage() {
           pending={pending}
           tasks={tasks}
           todayEventsCount={todayEventsCount}
-          activePayments={activePayments}
+          proximosCount={proximosCount}
           hasOverdueReminders={hasOverdueReminders}
           hasOverduePayments={hasOverduePayments}
         />
@@ -194,11 +211,11 @@ export default async function DashboardPage() {
             />
           )}
 
-          {(payments?.length ?? 0) > 0 && (
+          {pendingFixedPayments.length > 0 && (
             <ListSection
               title="Próximos pagos"
               href="/finanzas"
-              items={(payments ?? []).map((p) => ({
+              items={pendingFixedPayments.slice(0, 3).map((p) => ({
                 id: p.id,
                 title: p.name,
                 meta: p.due_day ? `Día ${p.due_day}` : undefined,
