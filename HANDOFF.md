@@ -1,5 +1,5 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (Confirmed Compra ⇄ Menú toggle complete)
+Updated: 2026-06-19 (AI assistant router added)
 
 ## Current state
 Build passes, lint clean (0 errors, warnings only), typecheck clean. All changes committed and pushed.
@@ -37,6 +37,15 @@ Compra ⇄ Menú toggle (SHOPA_COMPARISON.md) is also complete — was committed
 
 ## Production URL
 https://home-hub-dun.vercel.app
+
+## AI assistant router (added 2026-06-19)
+- `POST /api/assistant` — command parser endpoint, separate from the existing `/api/ai` chatbot
+- Provider fallback order: groq → cloudflare → openrouter → gemini (overrideable via `AI_PROVIDER_ORDER`)
+- Allowed actions: add_shopping_item, update_shopping_item, remove_shopping_item, add_task, update_task, complete_task, add_reminder, update_reminder, clarify
+- Execution wired for: add_shopping_item, add_task, add_reminder (pass `autoExecute: true` in body)
+- Execution TODOs: update/remove/complete actions need safe lookup-by-name logic before wiring
+- All 5 manual test cases pass; pronoun guard prevents model filling in "it" instead of clarifying
+- New files: `lib/ai/action-schema.ts`, `lib/ai/provider-router.ts`, `lib/ai/providers/{groq,cloudflare,openrouter,gemini}.ts`, `lib/ai/execute-assistant-action.ts`, `app/api/assistant/route.ts`
 
 ## Last committed state
 - Commit: `dbfae24` — Stage 4: Plan de ahorro y hipoteca rework
