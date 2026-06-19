@@ -22,7 +22,6 @@ import { ResumenTab } from "@/components/finance/ResumenTab";
 import { IngresoTab } from "@/components/finance/IngresoTab";
 import { FixedPaymentsTab } from "@/components/finance/FixedPaymentsTab";
 import { ExpensesTab } from "@/components/finance/ExpensesTab";
-import { SavingsTab } from "@/components/finance/SavingsTab";
 import { SubscriptionsTab } from "@/components/finance/SubscriptionsTab";
 import { MortgageTab } from "@/components/finance/MortgageTab";
 import { PresupuestosTab } from "@/components/finance/PresupuestosTab";
@@ -174,7 +173,6 @@ export function FinanceTabs({
       case "plan-ahorro":
         return (
           <div className="flex flex-col gap-6">
-            <SavingsTab goals={savingsGoals} />
             <PlanAhorroTab goals={savingsGoals} mortgages={mortgages} />
             <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
           </div>

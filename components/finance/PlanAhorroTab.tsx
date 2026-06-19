@@ -1,11 +1,17 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { CaretDown, CaretUp, Calculator } from "@phosphor-icons/react";
+import { useActionState, useEffect, useState, type ReactNode } from "react";
+import { Plus, CaretDown, CaretUp, Calculator } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
+import { Textarea } from "@/components/ui/Textarea";
 import { formatCurrency } from "@/lib/format";
+import { addContribution, type FinanceFormState } from "@/app/(app)/finanzas/actions";
+import { useToast } from "@/components/ui/Toast";
 import type { Mortgage, SavingsGoal } from "@/lib/types";
 
 interface PlanAhorroTabProps {
@@ -13,160 +19,173 @@ interface PlanAhorroTabProps {
   mortgages?: Mortgage[];
 }
 
-const PHASE_DATA = [
+// Stage 4 fixed monthly allocations
+const PLAN_CONFIG = [
   {
-    label: "Fase 1",
-    subtitle: "ago – dic 2026",
-    startMonth: new Date(2026, 7, 1),
-    endMonth: new Date(2026, 11, 31),
-    emergencia: 600,
-    compras: 300,
-    amortizacion: 500,
-    sinAsignar: 73.56,
+    key: "emergencia",
+    label: "Fondo de emergencia",
+    goalName: "Fondo de emergencia",
+    monthly: 400,
   },
   {
-    label: "Fase 2",
-    subtitle: "desde ene 2027 (casa amueblada)",
-    startMonth: new Date(2027, 0, 1),
-    endMonth: new Date(2099, 0, 1),
-    emergencia: 700,
-    compras: 100,
-    amortizacion: 673.56,
-    sinAsignar: 0,
+    key: "inmobiliario",
+    label: "Inmobiliario",
+    goalName: "Fondo compras casa",
+    monthly: 300,
   },
   {
-    label: "Fase 3",
-    subtitle: "cuando fondo emergencia ≥ 16.496 €",
-    startMonth: null,
-    endMonth: null,
-    emergencia: 200,
-    compras: 100,
-    amortizacion: 1173.56,
-    sinAsignar: 0,
+    key: "amortizacion",
+    label: "Amortización de hipoteca",
+    goalName: "Amortización anticipada hipoteca",
+    monthly: 700,
   },
+] as const;
+
+const BANK_ACCOUNT_OPTIONS = [
+  { value: "ING", label: "ING" },
+  { value: "BBVA", label: "BBVA" },
+  { value: "Revolut", label: "Revolut" },
 ];
 
-const EMERGENCY_TARGET_3M = 8248;
-const EMERGENCY_TARGET_6M = 16496;
-const COMPRAS_TARGET = 4000;
-const SURPLUS = 1473.56;
-
-// Approximate mortgage reference: 175 000 € · 2,90 % · 30 años · cuota 729 €/mes
-// Precomputed scenarios (extra €/mes → plazo total en años)
-const MORTGAGE_SCENARIOS = [
-  { extra: 100, years: 26.3 },
-  { extra: 200, years: 23.4 },
-  { extra: 300, years: 21.1 },
-  { extra: 500, years: 17.5 },
-  { extra: 1000, years: 12.8 },
-];
-
-function currentPhaseIndex(goals: SavingsGoal[]): number {
-  const emergencia = goals.find((g) => g.name === "Fondo de emergencia");
-  if (emergencia && Number(emergencia.current_amount) >= EMERGENCY_TARGET_6M) return 2;
-  const now = new Date();
-  if (now >= new Date(2027, 0, 1)) return 1;
-  return 0;
+// Months from the current month through December (inclusive)
+function getMonthsLeftInYear(): number {
+  return 12 - new Date().getMonth();
 }
 
-function ProgressBar({
-  value,
-  max,
-  milestone,
-  milestoneLabel,
-  colorClass = "bg-sage",
+function endOfYearLabel(): string {
+  return `dic. ${new Date().getFullYear()}`;
+}
+
+// ---- Contribution form ----
+
+const initialState: FinanceFormState = {};
+
+function AddFundsForm({
+  goalId,
+  planLabel,
+  onSuccess,
+  onCancel,
 }: {
-  value: number;
-  max: number;
-  milestone?: number;
-  milestoneLabel?: string;
-  colorClass?: string;
+  goalId: string;
+  planLabel: string;
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
-  const milestonePct = milestone && max > 0 ? Math.min((milestone / max) * 100, 100) : null;
+  const boundAction = addContribution.bind(null, goalId);
+  const [state, formAction, isPending] = useActionState(boundAction, initialState);
+
+  useEffect(() => {
+    if (state.success) onSuccess();
+  }, [state.success, onSuccess]);
 
   return (
-    <div className="relative">
-      <div className="h-2 w-full overflow-visible rounded-full bg-border">
-        <div
-          className={cn("h-full rounded-full transition-all", colorClass)}
-          style={{ width: `${pct}%` }}
+    <form action={formAction} noValidate className="flex flex-col gap-4">
+      <p className="text-sm text-muted">{planLabel}</p>
+      <div className="grid grid-cols-2 gap-3">
+        <Input
+          label="Importe (€)"
+          name="amount"
+          type="number"
+          inputMode="decimal"
+          step="0.01"
+          min="0.01"
+          required
+          error={state.fieldErrors?.amount}
+          placeholder="0,00"
         />
-        {milestonePct !== null && (
-          <div
-            className="absolute top-1/2 h-3.5 w-0.5 -translate-y-1/2 rounded-full bg-amber/70"
-            style={{ left: `${milestonePct}%` }}
-            title={milestoneLabel}
-          />
-        )}
+        <Select
+          label="Cuenta bancaria"
+          name="bankAccount"
+          placeholder="Sin cuenta"
+          options={BANK_ACCOUNT_OPTIONS}
+        />
       </div>
-    </div>
+      <Input
+        label="Fecha"
+        name="contributionDate"
+        type="date"
+        defaultValue={new Date().toISOString().slice(0, 10)}
+      />
+      <Textarea label="Notas" name="notes" />
+      {state.error && <p className="text-sm text-danger">{state.error}</p>}
+      <div className="mt-2 flex gap-3">
+        <Button type="button" variant="secondary" className="flex-1" onClick={onCancel}>
+          Cancelar
+        </Button>
+        <Button type="submit" className="flex-1" isLoading={isPending}>
+          Guardar
+        </Button>
+      </div>
+    </form>
   );
 }
 
-function GoalCard({
+// ---- Plan card ----
+
+function PlanCard({
   label,
-  current,
-  target,
-  monthlyAllocation,
-  notes,
-  children,
+  monthly,
+  currentAmount,
+  monthsLeft,
+  goal,
+  onAddFunds,
 }: {
   label: string;
-  current: number;
-  target: number | null;
-  monthlyAllocation: number;
-  notes?: string | null;
-  children?: ReactNode;
+  monthly: number;
+  currentAmount: number;
+  monthsLeft: number;
+  goal: SavingsGoal | undefined;
+  onAddFunds: () => void;
 }) {
-  const hasTarget = target !== null && target > 0;
-  const pct = hasTarget ? Math.min((current / target!) * 100, 100) : null;
+  const projected = monthly * monthsLeft;
 
   return (
-    <Card variant="subtle">
+    <Card className="flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <p className="text-sm font-semibold text-brown">{label}</p>
-        <span className="shrink-0 rounded-full bg-terracotta/10 px-2 py-0.5 text-xs font-medium text-terracotta tabular-nums">
-          +{formatCurrency(monthlyAllocation)}/mes
+        <span className="shrink-0 rounded-full bg-terracotta/10 px-2.5 py-1 text-xs font-semibold text-terracotta tabular-nums">
+          {formatCurrency(monthly)}/mes
         </span>
       </div>
 
-      <div className="mt-3 grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         <div>
           <p className="text-[11px] text-muted">Acumulado</p>
-          <p className="text-base font-bold text-sage tabular-nums">{formatCurrency(current)}</p>
+          <p className="text-base font-bold text-sage tabular-nums">{formatCurrency(currentAmount)}</p>
         </div>
-        {hasTarget ? (
-          <div>
-            <p className="text-[11px] text-muted">Objetivo</p>
-            <p className="text-base font-bold text-brown tabular-nums">{formatCurrency(target!)}</p>
-          </div>
-        ) : (
-          <div>
-            <p className="text-[11px] text-muted">Sin objetivo fijo</p>
-            <p className="text-sm text-muted">Aportaciones periódicas</p>
-          </div>
-        )}
+        <div>
+          <p className="text-[11px] text-muted">Proyectado año</p>
+          <p className="text-base font-bold text-brown tabular-nums">+{formatCurrency(projected)}</p>
+        </div>
+        <div>
+          <p className="text-[11px] text-muted">Meses hasta {endOfYearLabel()}</p>
+          <p className="text-base font-bold text-brown tabular-nums">{monthsLeft}</p>
+        </div>
       </div>
 
-      {children}
-
-      {hasTarget && pct !== null && (
-        <div className="mt-3">
-          <ProgressBar value={current} max={target!} />
-          <p className="mt-1 text-right text-xs text-muted">{Math.round(pct)}%</p>
-        </div>
-      )}
-
-      {notes && <p className="mt-2 text-xs text-muted">{notes}</p>}
+      <Button
+        type="button"
+        variant="secondary"
+        className="w-full"
+        onClick={onAddFunds}
+        disabled={!goal}
+      >
+        <Plus className="h-4 w-4" aria-hidden />
+        Añadir fondos
+      </Button>
     </Card>
   );
 }
 
 // ---- Savings Simulator ----
 
-type SimFund = "emergencia" | "compras";
+type SimFund = "emergencia" | "inmobiliario";
 type SimMode = "monthly" | "date";
+
+const SIM_CONFIG = {
+  emergencia: { label: "Emergencia", target: 16496 },
+  inmobiliario: { label: "Inmobiliario", target: 4000 },
+} as const;
 
 function formatMonths(months: number): string {
   if (months <= 0) return "¡Ya has llegado al objetivo!";
@@ -186,18 +205,18 @@ function addMonthsToDate(months: number): string {
 
 function SavingsSimulator({
   emergenciaAmount,
-  comprasAmount,
+  inmobiliarioAmount,
 }: {
   emergenciaAmount: number;
-  comprasAmount: number;
+  inmobiliarioAmount: number;
 }) {
   const [fund, setFund] = useState<SimFund>("emergencia");
   const [mode, setMode] = useState<SimMode>("monthly");
   const [monthlyInput, setMonthlyInput] = useState("");
   const [targetDateInput, setTargetDateInput] = useState("");
 
-  const current = fund === "emergencia" ? emergenciaAmount : comprasAmount;
-  const target = fund === "emergencia" ? EMERGENCY_TARGET_6M : COMPRAS_TARGET;
+  const current = fund === "emergencia" ? emergenciaAmount : inmobiliarioAmount;
+  const { label: fundLabel, target } = SIM_CONFIG[fund];
   const remaining = Math.max(0, target - current);
 
   let result: ReactNode = null;
@@ -225,9 +244,9 @@ function SavingsSimulator({
     if (targetDateInput) {
       const targetDate = new Date(targetDateInput);
       const now = new Date();
-      const monthsAvailable = Math.max(1,
-        (targetDate.getFullYear() - now.getFullYear()) * 12 +
-        (targetDate.getMonth() - now.getMonth()),
+      const monthsAvailable = Math.max(
+        1,
+        (targetDate.getFullYear() - now.getFullYear()) * 12 + (targetDate.getMonth() - now.getMonth()),
       );
       if (remaining <= 0) {
         result = <p className="text-sm font-semibold text-sage">¡Ya has alcanzado el objetivo!</p>;
@@ -253,9 +272,8 @@ function SavingsSimulator({
         <p className="text-sm font-semibold text-brown">Simulador de ahorro</p>
       </div>
 
-      {/* Fund selector */}
       <div className="mt-3 flex gap-2">
-        {(["emergencia", "compras"] as SimFund[]).map((f) => (
+        {(["emergencia", "inmobiliario"] as SimFund[]).map((f) => (
           <button
             key={f}
             type="button"
@@ -267,17 +285,16 @@ function SavingsSimulator({
                 : "border-border bg-white/[0.04] text-muted hover:bg-white/[0.08]",
             )}
           >
-            {f === "emergencia" ? "Emergencia" : "Compras casa"}
+            {SIM_CONFIG[f].label}
           </button>
         ))}
       </div>
 
       <p className="mt-2 text-[11px] text-muted">
-        Acumulado: <span className="font-medium text-brown">{formatCurrency(current)}</span>
+        {fundLabel} · Acumulado: <span className="font-medium text-brown">{formatCurrency(current)}</span>
         {" · "}Objetivo: <span className="font-medium text-brown">{formatCurrency(target)}</span>
       </p>
 
-      {/* Mode toggle */}
       <div className="mt-3 flex gap-2">
         <button
           type="button"
@@ -314,7 +331,7 @@ function SavingsSimulator({
             inputMode="decimal"
             step="10"
             min="1"
-            placeholder="600"
+            placeholder="400"
             value={monthlyInput}
             onChange={(e) => setMonthlyInput(e.target.value)}
           />
@@ -341,7 +358,7 @@ function SavingsSimulator({
 // ---- Mortgage overpayment interactive calculator ----
 
 function MortgageOverpaymentCalculator({ mortgage }: { mortgage: Mortgage | null }) {
-  const [balance, setBalance] = useState(mortgage ? String(Math.round(mortgage.current_balance)) : "");
+  const [balance, setBalance] = useState(mortgage ? String(Math.round(Number(mortgage.current_balance))) : "");
   const [rate, setRate] = useState(mortgage?.interest_rate != null ? String(mortgage.interest_rate) : "");
   const [monthly, setMonthly] = useState(mortgage ? String(mortgage.monthly_payment) : "");
   const [lump, setLump] = useState("");
@@ -353,7 +370,13 @@ function MortgageOverpaymentCalculator({ mortgage }: { mortgage: Mortgage | null
 
   let result: ReactNode = null;
 
-  if (!isNaN(P) && P > 0 && !isNaN(annualRate) && annualRate > 0 && !isNaN(M) && M > 0 && !isNaN(L) && L > 0 && L < P && M > (annualRate / 12 / 100) * P) {
+  if (
+    !isNaN(P) && P > 0 &&
+    !isNaN(annualRate) && annualRate > 0 &&
+    !isNaN(M) && M > 0 &&
+    !isNaN(L) && L > 0 && L < P &&
+    M > (annualRate / 12 / 100) * P
+  ) {
     const r = annualRate / 12 / 100;
     const Nf = -Math.log(1 - (r * P) / M) / Math.log(1 + r);
     const newP = P - L;
@@ -446,7 +469,15 @@ function MortgageOverpaymentCalculator({ mortgage }: { mortgage: Mortgage | null
   );
 }
 
-// ---- Mortgage prepayment reference table ----
+// ---- Mortgage reference table ----
+
+const MORTGAGE_SCENARIOS = [
+  { extra: 100, years: 26.3 },
+  { extra: 200, years: 23.4 },
+  { extra: 300, years: 21.1 },
+  { extra: 500, years: 17.5 },
+  { extra: 1000, years: 12.8 },
+];
 
 function MortgageSimulator() {
   const [showTable, setShowTable] = useState(false);
@@ -491,7 +522,7 @@ function MortgageSimulator() {
   );
 }
 
-// ---- Mortgage prepayment guidance ----
+// ---- Amortisation guide ----
 
 function AmortizacionGuide() {
   const [showNotes, setShowNotes] = useState(false);
@@ -521,7 +552,7 @@ function AmortizacionGuide() {
           </li>
           <li className="flex gap-2">
             <span className="mt-0.5 shrink-0 text-terracotta">•</span>
-            Los pagos anticipados durante el período fijo (2,90 %) también reducen el principal sobre el que se aplicará Euríbor +1,34 % cuando cambie el tipo.
+            Los pagos anticipados durante el período fijo también reducen el principal sobre el que se aplicará Euríbor cuando cambie el tipo.
           </li>
           <li className="flex gap-2">
             <span className="mt-0.5 shrink-0 text-amber">⚠</span>
@@ -533,132 +564,82 @@ function AmortizacionGuide() {
   );
 }
 
+// ---- Main component ----
+
 export function PlanAhorroTab({ goals, mortgages = [] }: PlanAhorroTabProps) {
   const activeMortgage = mortgages.find((m) => m.status === "activa" && !m.deleted_at) ?? null;
-  const phaseIdx = currentPhaseIndex(goals);
-  const phase = PHASE_DATA[phaseIdx];
-  const nextPhase = PHASE_DATA[phaseIdx + 1] ?? null;
+  const monthsLeft = getMonthsLeftInYear();
 
-  const emergencia = goals.find((g) => g.name === "Fondo de emergencia");
-  const compras = goals.find((g) => g.name === "Fondo compras casa");
-  const amortizacion = goals.find((g) => g.name === "Amortización anticipada hipoteca");
+  const [addFundsFor, setAddFundsFor] = useState<(typeof PLAN_CONFIG)[number] | null>(null);
+  const { showToast } = useToast();
 
-  const emergenciaAmount = Number(emergencia?.current_amount ?? 0);
-  const comprasAmount = Number(compras?.current_amount ?? 0);
-  const amortizacionAmount = Number(amortizacion?.current_amount ?? 0);
+  const goalByName = new Map(goals.map((g) => [g.name, g]));
+
+  const emergenciaGoal =
+    goalByName.get("Fondo de emergencia");
+  const inmobiliarioGoal =
+    goalByName.get("Inmobiliario") ?? goalByName.get("Fondo compras casa");
+  const amortizacionGoal =
+    goalByName.get("Amortización anticipada hipoteca");
+
+  const goalByKey: Record<string, SavingsGoal | undefined> = {
+    emergencia: emergenciaGoal,
+    inmobiliario: inmobiliarioGoal,
+    amortizacion: amortizacionGoal,
+  };
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Phase indicator */}
-      <div className="rounded-[var(--radius-xl)] border border-terracotta/20 bg-terracotta/[0.07] p-4">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-terracotta">
-              {phase.label} activa
-            </p>
-            <p className="mt-0.5 text-sm text-brown">{phase.subtitle}</p>
-          </div>
-          <p className="shrink-0 text-sm font-bold text-brown tabular-nums">
-            {formatCurrency(SURPLUS)}/mes
-          </p>
-        </div>
-
-        <div className="mt-3 flex flex-col gap-1.5 border-t border-border pt-3">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted">Fondo de emergencia</span>
-            <span className="font-semibold text-sage tabular-nums">{formatCurrency(phase.emergencia)}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted">Compras para la casa</span>
-            <span className="font-semibold text-brown tabular-nums">{formatCurrency(phase.compras)}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted">Amortización hipoteca</span>
-            <span className="font-semibold text-brown tabular-nums">{formatCurrency(phase.amortizacion)}</span>
-          </div>
-          {phase.sinAsignar > 0 && (
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted">Sin asignar</span>
-              <span className="font-semibold text-muted/60 tabular-nums">{formatCurrency(phase.sinAsignar)}</span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Fund cards */}
-      <GoalCard
-        label="Fondo de emergencia"
-        current={emergenciaAmount}
-        target={EMERGENCY_TARGET_6M}
-        monthlyAllocation={phase.emergencia}
-        notes="Objetivo: 6 meses de gastos esenciales"
-      >
-        <div className="mt-3">
-          <ProgressBar
-            value={emergenciaAmount}
-            max={EMERGENCY_TARGET_6M}
-            milestone={EMERGENCY_TARGET_3M}
-            milestoneLabel="Hito 3 meses (8.248 €)"
+      {/* Plan cards */}
+      {PLAN_CONFIG.map((plan) => {
+        const goal = goalByKey[plan.key];
+        return (
+          <PlanCard
+            key={plan.key}
+            label={plan.label}
+            monthly={plan.monthly}
+            currentAmount={Number(goal?.current_amount ?? 0)}
+            monthsLeft={monthsLeft}
+            goal={goal}
+            onAddFunds={() => setAddFundsFor(plan)}
           />
-          <div className="mt-1.5 flex justify-between text-[11px] text-muted">
-            <span>0 €</span>
-            <span>3 meses</span>
-            <span>6 meses</span>
-          </div>
-        </div>
-      </GoalCard>
-
-      <GoalCard
-        label="Fondo compras casa"
-        current={comprasAmount}
-        target={COMPRAS_TARGET}
-        monthlyAllocation={phase.compras}
-        notes="Mobiliario y electrodomésticos · importe provisional"
-      />
-
-      <GoalCard
-        label="Amortización anticipada hipoteca"
-        current={amortizacionAmount}
-        target={null}
-        monthlyAllocation={phase.amortizacion}
-        notes="Sin comisión por amortización anticipada (0 %)"
-      />
-
-      {/* Next phase preview */}
-      {nextPhase && (
-        <Card variant="subtle">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-            Próxima fase — {nextPhase.label}
-          </p>
-          <p className="mt-0.5 text-xs text-muted/70">{nextPhase.subtitle}</p>
-          <div className="mt-2 flex flex-col gap-1">
-            <div className="flex justify-between text-xs">
-              <span className="text-muted">Emergencia</span>
-              <span className="text-brown tabular-nums">{formatCurrency(nextPhase.emergencia)}/mes</span>
-            </div>
-            <div className="flex justify-between text-xs">
-              <span className="text-muted">Compras casa</span>
-              <span className="text-brown tabular-nums">{formatCurrency(nextPhase.compras)}/mes</span>
-            </div>
-            <div className="flex justify-between text-xs">
-              <span className="text-muted">Amortización</span>
-              <span className="text-brown tabular-nums">{formatCurrency(nextPhase.amortizacion)}/mes</span>
-            </div>
-          </div>
-        </Card>
-      )}
+        );
+      })}
 
       {/* Savings simulator */}
-      <SavingsSimulator emergenciaAmount={emergenciaAmount} comprasAmount={comprasAmount} />
+      <SavingsSimulator
+        emergenciaAmount={Number(emergenciaGoal?.current_amount ?? 0)}
+        inmobiliarioAmount={Number(inmobiliarioGoal?.current_amount ?? 0)}
+      />
 
-      {/* Mortgage overpayment interactive calculator */}
+      {/* Mortgage amortisation calculator */}
       <MortgageOverpaymentCalculator mortgage={activeMortgage} />
 
-      {/* Mortgage simulator reference table */}
+      {/* Reference table */}
       <MortgageSimulator />
 
-      {/* Mortgage prepayment guidance */}
+      {/* Guide */}
       <AmortizacionGuide />
+
+      {/* Add funds modal */}
+      <Modal
+        isOpen={!!addFundsFor}
+        onClose={() => setAddFundsFor(null)}
+        title="Añadir fondos"
+      >
+        {addFundsFor && goalByKey[addFundsFor.key] && (
+          <AddFundsForm
+            goalId={goalByKey[addFundsFor.key]!.id}
+            planLabel={addFundsFor.label}
+            onSuccess={() => {
+              setAddFundsFor(null);
+              showToast("Fondos añadidos");
+            }}
+            onCancel={() => setAddFundsFor(null)}
+          />
+        )}
+      </Modal>
     </div>
   );
 }
+
