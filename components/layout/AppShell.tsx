@@ -30,7 +30,7 @@ export function AppShell({ householdId, householdName, notifications, unreadCoun
         <TopBar householdName={householdName} notifications={notifications} unreadCount={unreadCount} />
         <OfflineBanner />
         <main id="main-content" className="flex-1 px-4 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-4 md:px-6 md:pb-6">
-          <div className="mx-auto w-full max-w-3xl">
+          <div className="mx-auto w-full max-w-3xl lg:max-w-5xl">
             <PageTransition>{children}</PageTransition>
           </div>
         </main>

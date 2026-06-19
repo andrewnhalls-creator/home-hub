@@ -14,8 +14,8 @@ The app already has a sidebar + hidden BottomNav on `md:` (768px+). The gaps are
 
 ### Files to change
 
-**1. `components/layout/AppShell.tsx`** — widen content container
-- Change `max-w-3xl` → `max-w-3xl lg:max-w-5xl` on the inner `<div>`
+**1. `components/layout/AppShell.tsx`** — widen content container ✅ DONE
+- Changed `max-w-3xl` → `max-w-3xl lg:max-w-5xl`
 
 **2. `app/(app)/dashboard/page.tsx`** — already has `lg:grid-cols-2` on lower section (line 151); check MetricGrid and upper section
 - MetricGrid may need `xl:grid-cols-3` or similar
