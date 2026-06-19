@@ -1,48 +1,38 @@
 # Next Steps
 
-## Immediate: browser validation (Part B)
+## Immediate: browser validation (Stage 1)
 
 Deploy to Vercel and verify at https://home-hub-dun.vercel.app:
 
-**Toggle (both surfaces)**
-- [ ] Visit `/compra` → "Lista" segment gold/active, "Semana" segment neutral
-- [ ] Visit `/menu` → "Semana" segment teal/active, "Lista" segment neutral
-- [ ] Clicking "Semana" from Compra navigates to `/menu`
-- [ ] Clicking "Lista" from Menú navigates to `/compra`
-- [ ] Toggle has no backdrop-filter (content rule)
-- [ ] Both segments keyboard-operable, visible focus ring
+**1a — KPI cards (Inicio)**
+- [ ] Mark a fixed payment as paid in Finanzas → navigate to Inicio → "Próximos pagos" count reflects the change without a manual refresh
+- [ ] Skip a payment → same check
+- [ ] Add/delete a subscription → Inicio KPI updates
 
-**Generar lista button (Menú page)**
-- [ ] Button renders with gold background (`bg-terracotta text-cream`), not teal border
-- [ ] "Recetas" button stays secondary (terracotta border/text)
+**1b — Shopping list live updates**
+- [ ] On the compra page, add an item via the quick-add bar → item appears immediately without page refresh
+- [ ] Complete an item → it moves to the completed section immediately
+- [ ] Open the page on two devices → change on one appears on the other within ~1 s
 
-**Reverse link (list → week)**
-- [ ] Go to Menú, click "Generar lista de la compra" for current week
-- [ ] Navigate to the new list in Compra → Historial
-- [ ] "Ver semana →" link appears top-right in list detail
-- [ ] Clicking it navigates to `/menu?start=YYYY-MM-DD` for the correct week
-- [ ] Older lists (created before migration) show no "Ver semana →" link
+**1c — AI button no longer blurry**
+- [ ] Add a shopping item → a success toast appears → AI chat FAB (gold button, bottom-right) remains crisp with no blur artefact
+- [ ] Toast text is still readable against the dark background (border + colour is enough contrast)
 
 ---
 
-## Part A browser validation (still pending)
+## Stage 2 — Finance data model: editable, reclassifiable, bank account, debt
 
-**Resumen tab (Finanzas)**
-- [ ] Saldo en cuenta: 4.386,48 € shown
-- [ ] Disponible shows 4.386,48 − pending (≈ 4.364,49 € if only ChatGPT 21,99 € pending)
-- [ ] Subtitle reads "Saldo − pendientes"
+Per Current Prompt.md — start only after Stage 1 browser validation is confirmed.
 
-**Plan de ahorro tab**
-- [ ] "Amortizar hipoteca — calculadora" section visible
-- [ ] Inputs pre-filled from mortgage (saldo, tipo, cuota)
-- [ ] Enter an amount → shows tiempo ahorrado + interés ahorrado
+2a. Every Ingreso, Gasto fijo, Suscripción, Gasto variable and Ahorro entry must be fully EDITABLE (amount, category/type, including moving between fijo/variable).
 
-**Dashboard (Inicio)**
-- [ ] Finanzas tile count shows pending payments only (not "7")
-- [ ] "Próximos pagos" list shows only unfulfilled payments
+2b. Add "bank account" field (ING / BBVA / Revolut enum) to Ingresos, Gastos (fijos and variables), Suscripciones, Ahorro — create/edit forms + display on items.
+
+2c. Add "Deuda" (Debt) schema: name, balance, monthly payment, payment schedule. Soft-delete rules apply. UI page can follow in Stage 3.
 
 ---
 
-## Other pending (lower priority)
-- Log a test expense → verify Presupuestos category spend shows correctly
-- Push notification infrastructure (Supabase Edge Function + pg_cron for due-date scanning)
+## Stage 3 — Finanzas IA restructure (Resumen + menu + sub-pages)
+## Stage 4 — Plan de ahorro y hipoteca rework
+
+(See Current Prompt.md for full spec of Stages 3 and 4.)
