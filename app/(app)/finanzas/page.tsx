@@ -26,6 +26,7 @@ export default async function FinancePage() {
     { data: financeCategories },
     { data: members },
     { data: householdRow },
+    { data: incomeSources },
   ] = await Promise.all([
     supabase
       .from("fixed_payments")
@@ -71,6 +72,12 @@ export default async function FinancePage() {
       .order("name", { ascending: true }),
     supabase.from("household_members").select("user_id, display_name").eq("household_id", householdId),
     supabase.from("households").select("monthly_budget").eq("id", householdId).single(),
+    supabase
+      .from("income_sources")
+      .select("*")
+      .eq("household_id", householdId)
+      .is("deleted_at", null)
+      .order("earner_name", { ascending: true }),
   ]);
 
   const allInstances = paymentInstances ?? [];
@@ -106,6 +113,15 @@ export default async function FinancePage() {
         100
       : null;
 
+  const totalMonthlyIncome = (incomeSources ?? [])
+    .filter((s) => s.is_active)
+    .reduce((sum, s) => {
+      const amt = Number(s.amount);
+      if (s.frequency === "anual") return sum + amt / 12;
+      if (s.frequency === "trimestral") return sum + amt / 3;
+      return sum + amt;
+    }, 0);
+
   return (
     <FinanceTabs
       resumen={{
@@ -119,6 +135,7 @@ export default async function FinancePage() {
         annualSubscriptionsTotal,
         savingsProgressPct,
         monthlyBudget: householdRow?.monthly_budget ?? null,
+        totalMonthlyIncome,
       }}
       fixedPayments={fixedPayments ?? []}
       paymentInstances={thisMonthInstances}
@@ -129,6 +146,7 @@ export default async function FinancePage() {
       mortgagePayments={mortgagePayments ?? []}
       financeCategories={financeCategories ?? []}
       members={members ?? []}
+      incomeSources={incomeSources ?? []}
     />
   );
 }

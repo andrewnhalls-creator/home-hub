@@ -43,6 +43,15 @@ export const subscriptionSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const incomeSourceSchema = z.object({
+  name: z.string().min(1, "Este campo es obligatorio."),
+  amount: z.coerce.number().positive("Introduce un importe válido."),
+  frequency: z.enum(["mensual", "trimestral", "anual"]).default("mensual"),
+  earnerName: z.string().optional(),
+  isActive: z.coerce.boolean().default(true),
+  notes: z.string().optional(),
+});
+
 export const mortgageSchema = z.object({
   name: z.string().min(1, "Este campo es obligatorio."),
   lender: z.string().optional(),
@@ -50,6 +59,9 @@ export const mortgageSchema = z.object({
   currentBalance: z.coerce.number().min(0, "El saldo no puede ser negativo."),
   monthlyPayment: z.coerce.number().positive("Introduce un importe válido."),
   interestRate: z.coerce.number().min(0).max(100).optional().or(z.literal("")),
+  rateType: z.enum(["fijo", "variable", "mixto"]).default("fijo"),
+  euriborSpread: z.coerce.number().min(0).max(20).optional().or(z.literal("")),
+  fixedPeriodEndDate: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   paymentDay: z.coerce.number().int().min(1).max(31).optional().or(z.literal("")),

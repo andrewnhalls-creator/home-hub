@@ -1,11 +1,18 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import type { MortgageFormState } from "@/app/(app)/finanzas/mortgageActions";
 import type { Mortgage } from "@/lib/types";
+
+const RATE_TYPE_OPTIONS = [
+  { value: "fijo", label: "Fijo" },
+  { value: "variable", label: "Variable (Euríbor)" },
+  { value: "mixto", label: "Mixto (fijo → variable)" },
+];
 
 interface MortgageFormProps {
   action: (prevState: MortgageFormState, formData: FormData) => Promise<MortgageFormState>;
@@ -18,10 +25,13 @@ const initialState: MortgageFormState = {};
 
 export function MortgageForm({ action, mortgage, onSuccess, onCancel }: MortgageFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
+  const [rateType, setRateType] = useState<string>(mortgage?.rate_type ?? "fijo");
 
   useEffect(() => {
     if (state.success) onSuccess();
   }, [state.success, onSuccess]);
+
+  const showVariableFields = rateType === "variable" || rateType === "mixto";
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-4">
@@ -94,6 +104,39 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
           placeholder="0,000"
         />
       </div>
+
+      {/* Rate type + variable fields */}
+      <Select
+        label="Modalidad del tipo"
+        name="rateType"
+        defaultValue={mortgage?.rate_type ?? "fijo"}
+        options={RATE_TYPE_OPTIONS}
+        onChange={(e) => setRateType((e.target as HTMLSelectElement).value)}
+      />
+
+      {showVariableFields && (
+        <div className="grid grid-cols-2 gap-3">
+          <Input
+            label="Diferencial Euríbor (%)"
+            name="euriborSpread"
+            type="number"
+            inputMode="decimal"
+            step="0.001"
+            min="0"
+            max="20"
+            defaultValue={mortgage?.euribor_spread ?? undefined}
+            placeholder="Ej. 1,340"
+          />
+          {rateType === "mixto" && (
+            <Input
+              label="Fin período fijo"
+              name="fixedPeriodEndDate"
+              type="date"
+              defaultValue={mortgage?.fixed_period_end_date ?? undefined}
+            />
+          )}
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <Input

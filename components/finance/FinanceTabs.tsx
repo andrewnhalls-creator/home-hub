@@ -10,18 +10,20 @@ import {
   PiggyBank,
   ArrowsClockwise,
   Bank,
+  TrendUp,
   type Icon,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { ResumenTab } from "@/components/finance/ResumenTab";
+import { IngresoTab } from "@/components/finance/IngresoTab";
 import { FixedPaymentsTab } from "@/components/finance/FixedPaymentsTab";
 import { ExpensesTab } from "@/components/finance/ExpensesTab";
 import { SavingsTab } from "@/components/finance/SavingsTab";
 import { SubscriptionsTab } from "@/components/finance/SubscriptionsTab";
 import { MortgageTab } from "@/components/finance/MortgageTab";
 import { ExportButton } from "@/components/finance/ExportButton";
-import type { Category, Expense, FixedPayment, Mortgage, MortgagePayment, PaymentInstance, SavingsGoal, Subscription } from "@/lib/types";
+import type { Category, Expense, FixedPayment, IncomeSource, Mortgage, MortgagePayment, PaymentInstance, SavingsGoal, Subscription } from "@/lib/types";
 
 interface Member {
   user_id: string;
@@ -40,6 +42,7 @@ interface FinanceTabsProps {
     annualSubscriptionsTotal: number;
     savingsProgressPct: number | null;
     monthlyBudget: number | null;
+    totalMonthlyIncome: number;
   };
   fixedPayments: FixedPayment[];
   paymentInstances: PaymentInstance[];
@@ -50,17 +53,19 @@ interface FinanceTabsProps {
   mortgagePayments: MortgagePayment[];
   financeCategories: Category[];
   members: Member[];
+  incomeSources: IncomeSource[];
 }
 
-type Tab = "resumen" | "pagos" | "gastos" | "ahorro" | "suscripciones" | "hipoteca";
+type Tab = "resumen" | "ingresos" | "pagos" | "gastos" | "ahorro" | "suscripciones" | "hipoteca";
 
 const TABS: { value: Tab; label: string; icon: Icon }[] = [
-  { value: "resumen",       label: "Resumen",       icon: ChartBar   },
-  { value: "pagos",         label: "Pagos",         icon: CreditCard  },
-  { value: "gastos",        label: "Gastos",        icon: ShoppingBag },
-  { value: "ahorro",        label: "Ahorro",        icon: PiggyBank   },
-  { value: "suscripciones", label: "Suscripciones", icon: ArrowsClockwise   },
-  { value: "hipoteca",      label: "Hipoteca",      icon: Bank    },
+  { value: "resumen",       label: "Resumen",       icon: ChartBar        },
+  { value: "ingresos",      label: "Ingresos",      icon: TrendUp         },
+  { value: "pagos",         label: "Pagos",         icon: CreditCard      },
+  { value: "gastos",        label: "Gastos",        icon: ShoppingBag     },
+  { value: "suscripciones", label: "Suscripciones", icon: ArrowsClockwise },
+  { value: "ahorro",        label: "Ahorro",        icon: PiggyBank       },
+  { value: "hipoteca",      label: "Hipoteca",      icon: Bank            },
 ];
 
 function currentMonthLabel(): string {
@@ -79,6 +84,7 @@ export function FinanceTabs({
   mortgagePayments,
   financeCategories,
   members,
+  incomeSources,
 }: FinanceTabsProps) {
   const [tab, setTab] = useState<Tab>("resumen");
 
@@ -170,16 +176,18 @@ export function FinanceTabs({
             mortgages={mortgages}
             mortgagePayments={mortgagePayments}
             onGoToMortgage={() => setTab("hipoteca")}
+            onGoToIngresos={() => setTab("ingresos")}
           />
         )}
+        {tab === "ingresos" && <IngresoTab sources={incomeSources} />}
         {tab === "pagos" && (
           <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />
         )}
         {tab === "gastos" && <ExpensesTab expenses={expenses} categories={financeCategories} members={members} />}
-        {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
         {tab === "suscripciones" && (
           <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
         )}
+        {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
         {tab === "hipoteca" && (
           <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
         )}

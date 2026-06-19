@@ -371,8 +371,27 @@ export interface ActivityLogEntry {
   created_at: string;
 }
 
+export type IncomeFrequency = "mensual" | "trimestral" | "anual";
+
+export interface IncomeSource {
+  id: string;
+  household_id: string;
+  name: string;
+  amount: number;
+  frequency: IncomeFrequency;
+  earner_name: string | null;
+  is_active: boolean;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  deleted_by: string | null;
+}
+
 export type MortgageStatus = "activa" | "pagada" | "cancelada";
 export type MortgagePaymentStatus = "pendiente" | "pagado" | "omitido";
+export type MortgageRateType = "fijo" | "variable" | "mixto";
 
 export interface Mortgage {
   id: string;
@@ -383,6 +402,9 @@ export interface Mortgage {
   current_balance: number;
   monthly_payment: number;
   interest_rate: number | null;
+  rate_type: MortgageRateType;
+  euribor_spread: number | null;
+  fixed_period_end_date: string | null;
   start_date: string | null;
   end_date: string | null;
   payment_day: number | null;

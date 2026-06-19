@@ -16,9 +16,11 @@ interface ResumenTabProps {
   annualSubscriptionsTotal: number;
   savingsProgressPct: number | null;
   monthlyBudget: number | null;
+  totalMonthlyIncome: number;
   mortgages?: Mortgage[];
   mortgagePayments?: MortgagePayment[];
   onGoToMortgage?: () => void;
+  onGoToIngresos?: () => void;
 }
 
 interface KpiChipProps {
@@ -29,13 +31,84 @@ interface KpiChipProps {
 
 function KpiChip({ label, value, danger = false }: KpiChipProps) {
   return (
-    <div
-      className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-3 shadow-[var(--shadow-card)]"
-    >
+    <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-3 shadow-[var(--shadow-card)]">
       <p className={cn("text-lg font-bold leading-none", danger ? "text-danger" : "text-brown")}>
         {value}
       </p>
       <p className="mt-1.5 text-[12px] leading-tight text-muted">{label}</p>
+    </div>
+  );
+}
+
+function BalanceCard({
+  income,
+  fixedPayments,
+  monthlySubscriptions,
+  annualSubscriptions,
+  variableExpenses,
+  onGoToIngresos,
+}: {
+  income: number;
+  fixedPayments: number;
+  monthlySubscriptions: number;
+  annualSubscriptions: number;
+  variableExpenses: number;
+  onGoToIngresos?: () => void;
+}) {
+  const annualMonthlyEquiv = annualSubscriptions / 12;
+  const totalOut = fixedPayments + monthlySubscriptions + annualMonthlyEquiv + variableExpenses;
+  const balance = income - totalOut;
+  const isPositive = balance >= 0;
+  const hasIncome = income > 0;
+
+  return (
+    <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
+      <p className="text-[12px] font-medium uppercase tracking-wider text-muted">Disponible este mes</p>
+
+      {hasIncome ? (
+        <>
+          <p className={cn("mt-1 text-3xl font-bold tabular-nums", isPositive ? "text-sage" : "text-danger")}>
+            {formatCurrency(balance)}
+          </p>
+
+          <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border pt-3">
+            <div>
+              <p className="text-[11px] text-muted">Ingresos</p>
+              <p className="text-sm font-semibold text-sage tabular-nums">{formatCurrency(income)}</p>
+            </div>
+            <div>
+              <p className="text-[11px] text-muted">Gastos totales</p>
+              <p className="text-sm font-semibold text-brown tabular-nums">{formatCurrency(totalOut)}</p>
+            </div>
+            <div>
+              <p className="text-[11px] text-muted">Pagos fijos</p>
+              <p className="text-sm tabular-nums text-brown">{formatCurrency(fixedPayments)}</p>
+            </div>
+            <div>
+              <p className="text-[11px] text-muted">Suscripciones</p>
+              <p className="text-sm tabular-nums text-brown">
+                {formatCurrency(monthlySubscriptions + annualMonthlyEquiv)}
+                <span className="ml-1 text-[11px] text-muted">/mes</span>
+              </p>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="mt-2">
+          <p className="text-sm text-muted">
+            Añade tus ingresos para ver el balance real del hogar.
+          </p>
+          {onGoToIngresos && (
+            <button
+              type="button"
+              onClick={onGoToIngresos}
+              className="mt-2 text-sm font-medium text-terracotta hover:underline focus-visible:outline-none"
+            >
+              Añadir ingresos →
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -55,18 +128,29 @@ function nextPendingPaymentDate(mortgage: Mortgage, payments: MortgagePayment[])
   return null;
 }
 
-interface MortgageCardProps {
+function MortgageCard({
+  mortgage,
+  payments,
+  onClick,
+}: {
   mortgage: Mortgage;
   payments: MortgagePayment[];
   onClick?: () => void;
-}
-
-function MortgageCard({ mortgage, payments, onClick }: MortgageCardProps) {
+}) {
   const amortisedPct =
     mortgage.original_principal > 0
       ? Math.max(0, Math.min(100, ((mortgage.original_principal - mortgage.current_balance) / mortgage.original_principal) * 100))
       : 0;
   const nextDate = nextPendingPaymentDate(mortgage, payments);
+
+  const rateLabel =
+    mortgage.rate_type === "mixto"
+      ? `${mortgage.interest_rate ?? "—"} % fijo → Euríbor${mortgage.euribor_spread != null ? ` +${mortgage.euribor_spread} %` : ""}`
+      : mortgage.rate_type === "variable"
+      ? `Euríbor${mortgage.euribor_spread != null ? ` +${mortgage.euribor_spread} %` : ""}`
+      : mortgage.interest_rate != null
+      ? `${mortgage.interest_rate} % fijo`
+      : null;
 
   const Wrapper = onClick ? "button" : "div";
   const wrapperProps = onClick
@@ -80,7 +164,7 @@ function MortgageCard({ mortgage, payments, onClick }: MortgageCardProps) {
           <div className="flex items-start justify-between gap-2">
             <div>
               <p className="text-sm font-semibold text-brown">{mortgage.name}</p>
-              {mortgage.lender && <p className="text-xs text-muted">{mortgage.lender}</p>}
+              {rateLabel && <p className="text-xs text-muted">{rateLabel}</p>}
             </div>
             {onClick && (
               <span className="shrink-0 rounded-lg bg-terracotta/10 px-2 py-0.5 text-[12px] font-medium text-terracotta">
@@ -140,9 +224,11 @@ export function ResumenTab({
   annualSubscriptionsTotal,
   savingsProgressPct,
   monthlyBudget,
+  totalMonthlyIncome,
   mortgages = [],
   mortgagePayments = [],
   onGoToMortgage,
+  onGoToIngresos,
 }: ResumenTabProps) {
   const activeMortgages = mortgages.filter((m) => m.status === "activa" && !m.deleted_at);
 
@@ -151,27 +237,38 @@ export function ResumenTab({
       <div className="flex justify-end">
         <PrintButton label="Exportar PDF" />
       </div>
+
+      {/* Balance card — the most important number */}
+      <BalanceCard
+        income={totalMonthlyIncome}
+        fixedPayments={totalFixedThisMonth}
+        monthlySubscriptions={monthlySubscriptionsTotal}
+        annualSubscriptions={annualSubscriptionsTotal}
+        variableExpenses={expensesThisMonthTotal}
+        onGoToIngresos={onGoToIngresos}
+      />
+
+      {/* Variable expenses vs budget */}
       <BudgetCard monthlyBudget={monthlyBudget} spent={expensesThisMonthTotal} />
-      {/* 6-chip KPI grid — numbers only, colour reserved for problems */}
-      <div className="grid grid-cols-3 gap-2 lg:grid-cols-6">
+
+      {/* 4-chip KPI grid */}
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <KpiChip label="Próximos" value={String(upcomingCount)} />
         <KpiChip label="Vencidos" value={String(overdueCount)} danger={overdueCount > 0} />
+        <KpiChip label="Pagado" value={formatCurrency(paidThisMonthTotal)} />
         <KpiChip
           label="Ahorro"
           value={savingsProgressPct !== null ? `${Math.round(savingsProgressPct)}%` : "—"}
         />
-        <KpiChip label="Pagado" value={formatCurrency(paidThisMonthTotal)} />
-        <KpiChip label="Pendiente" value={formatCurrency(pendingThisMonthTotal)} />
-        <KpiChip label="Variables" value={formatCurrency(expensesThisMonthTotal)} />
       </div>
 
-      {/* Secondary totals — context for the chips above */}
+      {/* Costs breakdown */}
       <Card variant="subtle">
         <div className="flex flex-col gap-2.5">
           <div className="flex items-center justify-between gap-4">
-            <span className="text-sm text-muted">Total pagos fijos</span>
+            <span className="text-sm text-muted">Pagos fijos activos</span>
             <span className="text-sm font-semibold text-brown tabular-nums">
-              {formatCurrency(totalFixedThisMonth)}
+              {formatCurrency(totalFixedThisMonth)}/mes
             </span>
           </div>
           <div className="h-px bg-border" />
@@ -188,6 +285,27 @@ export function ResumenTab({
                 <span className="text-sm text-muted">Suscripciones anuales</span>
                 <span className="text-sm font-semibold text-brown tabular-nums">
                   {formatCurrency(annualSubscriptionsTotal)}/año
+                  <span className="ml-1 text-[11px] font-normal text-muted">
+                    (≈ {formatCurrency(annualSubscriptionsTotal / 12)}/mes)
+                  </span>
+                </span>
+              </div>
+            </>
+          )}
+          <div className="h-px bg-border" />
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-sm text-muted">Gastos variables este mes</span>
+            <span className="text-sm font-semibold text-brown tabular-nums">
+              {formatCurrency(expensesThisMonthTotal)}
+            </span>
+          </div>
+          {pendingThisMonthTotal > 0 && (
+            <>
+              <div className="h-px bg-border" />
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-sm text-muted">Pendiente de pagar</span>
+                <span className="text-sm font-semibold text-amber tabular-nums">
+                  {formatCurrency(pendingThisMonthTotal)}
                 </span>
               </div>
             </>
