@@ -1,22 +1,30 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-18 (Tasks 1 + 2 complete; Tasks 3 + 4 pending)
+Updated: 2026-06-19 (Tasks 1–3 complete; Task 4 pending)
 
 ## Current state
-Tasks 1 and 2 complete. Build, lint, typecheck all pass (0 errors). Changes NOT yet pushed to origin.
+Tasks 1, 2, and 3 complete. Build, lint, typecheck all pass (0 errors). All commits pushed to origin main. Vercel deploying `6e8c30f` (should go green — fixes build error from prior deploy).
 
 ## Production URL
 https://home-hub-dun.vercel.app
 
 ## Deploy
-GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo — intentional, see KNOWN_ISSUES.md).
+GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo — intentional, see Task 4 below).
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `28c44d9` — "Audit sweep: migrate all lucide-react icons to Phosphor, fix sub-12px text and uppercase labels"
-- NOT yet pushed to origin — push before starting Task 3
+- Last commit: `6e8c30f` — "Fix server components using client Phosphor path → /dist/ssr"
+- All pushed to origin main
+
+## What was fixed in Task 3
+- 3 server components were importing from `@phosphor-icons/react` (client path, uses `createContext`) instead of `@phosphor-icons/react/dist/ssr`:
+  - `components/settings/SettingsView.tsx`
+  - `components/ui/FloatingAddLink.tsx`
+  - `components/dashboard/ListSection.tsx`
+- This caused Vercel build to fail with `createContext is not a function` on the `/ajustes` route
+- Local build now passes; Vercel rebuild in progress
 
 ## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
-- **Background:** deep indigo `#0D0B1F` + azulejo SVG tile + depth ellipse — no floating orbs
+- **Background:** deep indigo `#0D0B1F` + azulejo SVG tile + depth ellipse
 - **Brand accent:** saffron gold `#E8C547` (`--color-terracotta` CSS var, historical name kept)
 - **Surfaces:** opaque `rgba(255,255,255,0.07)` cards — NO backdrop-filter on content surfaces
 - **Two-tier glass rule:** blur only on nav bars (`blur(20px)`) and modals/sheets (`blur(24px)`); toasts `blur(8px)`
@@ -25,10 +33,11 @@ GitHub push to main auto-triggers Vercel deploy (Hobby plan requires public repo
 - **Icons:** Phosphor Icons v2 only; SSR path (`/dist/ssr`) for server components
 - **Token strategy:** CSS var names inherited from original Azulejo design — actual values documented in DESIGN.md
 
-## Completed work (2026-06-18)
+## Completed work
 - Task 1: Fixed Más sheet crash — missing `/actividad` → `ClockClockwise` icon entry (`3791097`)
 - Task 2: Full audit sweep — migrated all 51 files from lucide-react to @phosphor-icons/react, fixed 2× sub-12px text, removed 2× uppercase tracking-wide labels (`28c44d9`)
-- All previous impeccable audit P0/P1 fixes (see git log for `22394f7`)
+- Task 2 (remaining): Fixed `border-white/[0.12]` → `border-border` in 7 UI components (`f7eefff`)
+- Task 3: Push, lint/typecheck/build (0 errors), English text sweep (clean), secrets check (clean), fixed 3 server components using client Phosphor path (`6e8c30f`)
 
 ## Navigation structure
 ### Mobile bottom bar (5 items)
@@ -59,5 +68,6 @@ Logo "Home Hub" (→ /dashboard) · page title (centre, mobile) · MagnifyingGla
 - ✅ Impeccable audit + critique (2026-06-18) — P0/P1 issues resolved, DESIGN.md regenerated
 - ✅ Task 1: Más button crash fixed (`3791097`)
 - ✅ Task 2: Full Lucide → Phosphor migration + sub-12px + uppercase sweep (`28c44d9`)
-- ⏳ Task 3: Final review + build (push, then run)
+- ✅ Task 2 (remaining): border-white/[0.12] → border-border (`f7eefff`)
+- ✅ Task 3: Final review + build — all green, pushed (`6e8c30f`)
 - ⏳ Task 4: GitHub repo privacy decision

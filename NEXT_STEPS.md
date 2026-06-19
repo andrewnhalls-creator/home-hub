@@ -1,36 +1,7 @@
 # Next Steps
 
 ## Current state
-Task 1 done. Task 2 mostly done — one audit item remains. Last commit: `28c44d9` (not yet pushed).
-
----
-
-## Task 2 (remaining) — Fix border-white/[0.12]
-
-Still present in 7 files (replace with `border-border`):
-
-```bash
-grep -rn 'border-white/\[0\.12\]' components/ app/ --include="*.tsx"
-```
-
-Files: `components/ui/Card.tsx`, `components/ui/Modal.tsx`, `components/ui/PrintButton.tsx`, `components/ui/Input.tsx`, `components/ui/Select.tsx`, `components/ui/Textarea.tsx`, `components/layout/MoreMenuSheet.tsx`
-
-Fix: in each file, replace_all `border-white/[0.12]` → `border-border`. Then re-commit.
-
-Note: backdrop-filter in MoreMenuSheet.tsx is intentional — sheets are allowed blur(24px) per the two-tier glass rule.
-
----
-
-## Task 3 — Final review + build
-
-Run through all of this before the repo is locked:
-
-- [ ] `npm run lint && npm run typecheck && npm run build` — must pass 0 errors
-- [ ] Stray English text sweep — every visible string in every module must be Spanish (Spain)
-- [ ] Smoke-test core CRUD on the live Vercel deployment: compra, menú, recordatorios, tareas, calendario, finanzas, documentos, deseos, ajustes
-- [ ] Mobile layout check at ~375px viewport on every module
-- [ ] RLS spot-check: confirm a second test account cannot see the first household's data
-- [ ] Confirm no secrets committed (`git log --all -- '*.env*'` and `git grep -i "service_role"`)
+Tasks 1–3 done. Vercel deploying `6e8c30f` (in progress). Only Task 4 remains.
 
 ---
 
