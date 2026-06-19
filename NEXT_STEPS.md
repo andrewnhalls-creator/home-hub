@@ -1,23 +1,7 @@
 # Next Steps
 
 ## Current state
-Doc alignment sweep in progress (Fix 1/6 done). Stop after each fix, update HANDOFF + NEXT_STEPS, commit, push. Then task 4 (repo privacy).
-
----
-
-## Fix 2 — Deprecate DESIGN_SYSTEM.md
-
-Add a deprecation header at the top of `DESIGN_SYSTEM.md`:
-
-```
-# ~~DESIGN_SYSTEM.md~~ — DEPRECATED
-
-> **This file describes the original warm/pastel Azulejo design and is no longer accurate.**
-> The current deployed design is Índigo Profundo (dark glassmorphism).
-> See `DESIGN.md` for the canonical design reference.
-```
-
-Do not delete the file — it's git history. Just make it clear it's stale.
+Doc alignment sweep in progress (Fix 2/6 done). Stop after each fix, update HANDOFF + NEXT_STEPS, commit, push. Then task 4 (repo privacy).
 
 ---
 
