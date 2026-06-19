@@ -38,6 +38,15 @@ Compra ⇄ Menú toggle (SHOPA_COMPARISON.md) is also complete — was committed
 ## Production URL
 https://home-hub-dun.vercel.app
 
+## AI assistant — fully wired (2026-06-19)
+All execute actions now live:
+- add/remove/update_shopping_item — hard delete; bulk "all/todo" wipes uncompleted list; ilike lookup by name
+- add/complete/update_task — complete handles puntual (→ "hecho") and recurring (advances date); ilike lookup by title
+- add/update_reminder — ilike lookup by title; soft-delete-aware query
+- Execute route returns ok:false for real errors (not found) so the UI surfaces the message; ok:true/executed:false = "próximamente"
+- Savings goal "Inmobiliario" already correctly named in DB — no migration needed
+- All 12 AI env vars confirmed present in .env.local; Vercel Production env vars already set per original setup
+
 ## AI assistant router (added 2026-06-19)
 - `POST /api/assistant` — command parser endpoint, separate from the existing `/api/ai` chatbot
 - Provider fallback order: groq → cloudflare → openrouter → gemini (overrideable via `AI_PROVIDER_ORDER`)
