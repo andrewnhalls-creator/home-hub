@@ -5,6 +5,7 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { OfflineBanner } from "@/components/ui/OfflineBanner";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { RealtimeSync } from "@/components/RealtimeSync";
+import { AIChatButton } from "@/components/ai/AIChatButton";
 import type { NotificationEvent } from "@/lib/types";
 
 interface AppShellProps {
@@ -36,6 +37,7 @@ export function AppShell({ householdId, householdName, notifications, unreadCoun
         </main>
       </div>
       <BottomNav />
+      <AIChatButton />
     </div>
   );
 }
