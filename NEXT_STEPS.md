@@ -1,7 +1,7 @@
 # Next Steps
 
 ## Current state
-All previous tasks complete. AI assistant feature is planned and ready to build next session.
+AI assistant Section 1 complete (API route). Section 2 (chat UI) is next.
 
 ---
 
@@ -19,8 +19,8 @@ Get a **free Gemini API key** from https://aistudio.google.com (sign in with Goo
 
 ### Build order (stop + update docs + commit + push after EACH section)
 
-#### Section 1 — API route
-**File to create:** `app/api/ai/route.ts`
+#### ✅ Section 1 — API route (DONE — commit cd9e0a3)
+**File created:** `app/api/ai/route.ts`
 
 `POST /api/ai` handler:
 - Auth via `requireHousehold()`
