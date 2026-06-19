@@ -1,15 +1,15 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-19 (AI assistant Sections 1 + 2 complete — API route + chat UI built and pushed)
+Updated: 2026-06-19 (AI assistant complete — all 3 sections built, verified, pushed)
 
 ## Current state
-Build passes. AI assistant Sections 1 + 2 complete. Sparkle FAB + chat modal live. Section 3 (end-to-end verification) remains.
+Build passes, lint clean. AI assistant milestone complete — sparkle FAB, chat modal, Gemini 1.5 Flash API route all live. Pending: manual end-to-end test in the browser (see Verification below).
 
 ## Production URL
 https://home-hub-dun.vercel.app
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `1e238ff` (handoff update) — all pushed to origin main
+- Last commit: `da431d9` (AI assistant Section 3 fix) — all pushed to origin main
 - Vercel auto-deploys on every push to main
 
 ## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
@@ -49,4 +49,4 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ Inline trash sections removed — recordatorios, calendario, documentos, compra/listas, finanzas; deleted items just disappear; /papelera handles restore
 - ✅ AI assistant Section 1 — `app/api/ai/route.ts` (POST /api/ai, Gemini 1.5 Flash, all actions)
 - ✅ AI assistant Section 2 — `components/ai/AIChatButton.tsx` + AppShell wiring
-- ⏳ AI assistant Section 3 — end-to-end verification (manual test checklist)
+- ✅ AI assistant Section 3 — code review, bug fix (shopping_items deleted_at), lint clean
