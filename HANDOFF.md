@@ -2,18 +2,22 @@
 Updated: 2026-06-19 (AI verification blocked on Gemini quota — resume next day)
 
 ## Current state
-Build passes, lint clean. AI assistant is deployed. Three bugs found and fixed this session:
-1. `GEMINI_API_KEY` was missing from Vercel env vars → added by user
-2. `gemini-1.5-flash` is deprecated in 2026 → updated to `gemini-2.0-flash` (`734cc52`)
-3. Modal focus trap re-ran on every keystroke (onClose was a new ref each render) → fixed with useRef pattern (`1b3405b`)
+Build passes, lint clean, typecheck clean. All changes pushed to origin main.
 
-Two UX improvements also shipped (`3dd857b`):
-- 429 from Gemini now returns a readable Spanish message instead of generic error
-- Error toasts stay on screen 7s (up from 4s) so they can be read
+### Bugs fixed this session
+1. `GEMINI_API_KEY` missing from Vercel env vars → added by user
+2. `gemini-1.5-flash` deprecated → updated to `gemini-2.0-flash` (`734cc52`)
+3. Modal focus trap re-ran on every keystroke → fixed with `useRef` pattern (`1b3405b`)
+4. Shopping list Plus button was disabled when text field empty → now always tappable; opens detail form if no text typed (`b247d2c`)
 
-The Gemini free-tier daily quota is exhausted from test runs on 2026-06-19. Quota resets at UTC midnight (≈2am Spain time). Resume verification the following day.
+### Improvements shipped this session
+- 429 from Gemini now returns a readable Spanish error message (`3dd857b`)
+- Error toasts stay on screen 7s (up from 4s) (`3dd857b`)
+- Page-shaped skeleton loaders for dashboard, compra, and finanzas — perceived load speed much improved (`bdc5f43`)
 
-## What still needs verifying (manual, one at a time)
+## AI verification — still pending
+Gemini free-tier daily quota was exhausted on 2026-06-19. Resets at UTC midnight (≈2am Spain time). Resume the next day.
+
 Open https://home-hub-dun.vercel.app. Wait ~30s between each prompt.
 
 | # | Prompt | Where to check |
@@ -25,7 +29,7 @@ Open https://home-hub-dun.vercel.app. Wait ~30s between each prompt.
 | 7 | `Añade el recibo del gas, 60 euros, día 5` | /finanzas → Pagos fijos tab |
 | 8 | `Apunta un gasto de supermercado de 45 euros de hoy` | /finanzas → Gastos tab |
 | 9 | `Añade una tarea para limpiar el baño, semanal` | /tareas → baño appears |
-| 11 | Send an English prompt | AI response must be in Spanish |
+| 11 | Any English prompt | AI response must be in Spanish |
 
 Already verified:
 - ✅ Test 1: Gold sparkle FAB visible bottom-right
@@ -41,7 +45,7 @@ https://home-hub-dun.vercel.app
 
 ## Last known good state
 - Build, lint, typecheck all pass (0 errors)
-- Last commit: `3dd857b` (Improve AI error UX: specific 429 message, error toasts stay 7s)
+- Last commit: `bdc5f43` (Add page-shaped skeleton loaders for dashboard, compra, and finanzas)
 - All changes pushed to origin main
 
 ## Design identity (Índigo Profundo · Dark-first · Two-tier glass)
@@ -79,5 +83,7 @@ Menú semanal · Recordatorios · Tareas · Documentos · Deseos · Actividad ·
 - ✅ iPad Pro layout — complete
 - ✅ Chore snooze — Mañana / En 3 días / Próxima semana / Reprogramar
 - ✅ Inline trash sections removed — all modules; /papelera handles restore
-- ✅ AI assistant — API route + UI + bug fixes (env var, deprecated model, modal focus)
+- ✅ AI assistant — API route + UI + bug fixes (env var, deprecated model, modal focus, error messages)
+- ✅ Shopping list Plus button fix
+- ✅ Page skeleton loaders (dashboard, compra, finanzas)
 - 🔄 AI assistant — manual browser verification (blocked on Gemini quota, resume tomorrow)

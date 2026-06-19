@@ -1,13 +1,13 @@
 # Next Steps
 
 ## Current state
-AI assistant is live. Three bugs fixed this session (modal focus, Gemini model deprecation, missing env var). Manual verification is the only remaining task before the AI milestone is complete — blocked on Gemini free-tier daily quota until UTC midnight (≈2am Spain time).
+App is feature-complete for v1. Only remaining task is completing the AI assistant manual verification checklist, which is blocked on Gemini free-tier daily quota until UTC midnight (≈2am Spain time on 2026-06-20).
 
 ---
 
 ## Next session: complete AI verification
 
-**Wait until the day after 2026-06-19** for the Gemini quota to reset, then open https://home-hub-dun.vercel.app and test each prompt below. Wait ~30 seconds between each.
+**Wait until 2026-06-20** for the Gemini quota to reset, then open https://home-hub-dun.vercel.app and test each prompt below. Wait ~30 seconds between each.
 
 | # | Prompt | Where to check |
 |---|--------|---------------|
@@ -20,13 +20,13 @@ AI assistant is live. Three bugs fixed this session (modal focus, Gemini model d
 | 9 | `Añade una tarea para limpiar el baño, semanal` | /tareas → baño appears |
 | 11 | Any English prompt | AI response must be in Spanish |
 
-If you see 429 again, the quota hasn't reset yet — wait longer and retry.
+If you see a 429 error ("El asistente ha alcanzado el límite de uso diario"), the quota hasn't reset yet — wait longer and retry.
 
 ---
 
 ## After verification is complete
 
-No planned milestones. The app is feature-complete for v1. Possible future work:
+No planned milestones. Possible future work:
 - AI: update existing records (requires item ID matching)
 - AI: create meal plan entries directly
 - Calendar module enhancements
