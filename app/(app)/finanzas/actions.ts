@@ -14,6 +14,7 @@ import {
 } from "@/lib/validations/finance";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
 import { logActivity } from "@/lib/activity";
+import { getCurrentCycleDates, getCycleDueDate } from "@/lib/cycle";
 
 export interface FinanceFormState {
   error?: string;
@@ -145,15 +146,16 @@ export async function restoreFixedPayment(
 
 /**
  * Ensures every active fixed payment has a payment_instances row for the
- * current month, so the Resumen tab (and "Pagos fijos") always have
- * up-to-date data to compute from. Idempotent — safe to call on every
- * page load.
+ * current 25-to-25 cycle. Uses cycle-aware due dates: payments with
+ * due_day >= 25 fall in the previous calendar month; due_day < 25 fall in
+ * the current calendar month. Idempotent — safe to call on every page load.
  */
 export async function ensureCurrentMonthPaymentInstances(householdId: string) {
   const supabase = await createClient();
   const now = new Date();
-  const monthStart = format(new Date(now.getFullYear(), now.getMonth(), 1), "yyyy-MM-dd");
-  const monthEnd = format(new Date(now.getFullYear(), now.getMonth() + 1, 0), "yyyy-MM-dd");
+  const { start: cycleStartDate, end: cycleEndDate } = getCurrentCycleDates();
+  const cycleStart = format(cycleStartDate, "yyyy-MM-dd");
+  const cycleEnd = format(cycleEndDate, "yyyy-MM-dd");
 
   const { data: activePayments } = await supabase
     .from("fixed_payments")
@@ -164,22 +166,23 @@ export async function ensureCurrentMonthPaymentInstances(householdId: string) {
 
   if (!activePayments || activePayments.length === 0) return;
 
+  // Deduplicate against existing instances within the cycle date range
   const { data: existingInstances } = await supabase
     .from("payment_instances")
     .select("fixed_payment_id")
     .eq("household_id", householdId)
-    .gte("due_date", monthStart)
-    .lte("due_date", monthEnd);
+    .gte("due_date", cycleStart)
+    .lte("due_date", cycleEnd);
 
   const existingIds = new Set((existingInstances ?? []).map((i) => i.fixed_payment_id));
-  const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 
   const paymentsToCreate = activePayments.filter((payment) => !existingIds.has(payment.id));
   if (paymentsToCreate.length === 0) return;
 
   const toCreate = paymentsToCreate.map((payment) => {
-    const day = Math.min(payment.due_day ?? 1, lastDayOfMonth);
-    const dueDate = format(new Date(now.getFullYear(), now.getMonth(), day), "yyyy-MM-dd");
+    // Cycle-aware: day >= 25 → previous calendar month, day < 25 → current calendar month
+    const dueDay = payment.due_day ?? 1;
+    const dueDate = format(getCycleDueDate(dueDay, now), "yyyy-MM-dd");
     return {
       household_id: householdId,
       fixed_payment_id: payment.id,

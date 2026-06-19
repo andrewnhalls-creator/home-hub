@@ -188,7 +188,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
           )}
           {other.length > 0 && (
             <div className="flex flex-col gap-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">Trimestrales</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">Otros ciclos</p>
               <ul className="flex flex-col gap-2">
                 {other.map((s) => <SubscriptionItem key={s.id} subscription={s} />)}
               </ul>

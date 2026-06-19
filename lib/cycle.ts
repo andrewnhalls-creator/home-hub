@@ -24,17 +24,23 @@ export function getCycleLabel(locale = "es-ES"): string {
   return `${fmt(start)} – ${fmt(end)}`;
 }
 
-// Returns "pagado" | "pendiente" for a monthly subscription with a given billing_day.
+// Returns the actual Date when a recurring payment (subscription or fixed) falls
+// within the current 25-to-25 cycle. Days >= 25 fall in the PREVIOUS calendar month.
+export function getCycleDueDate(dueDay: number, today: Date = new Date()): Date {
+  const year  = today.getFullYear();
+  const month = today.getMonth();
+  return dueDay >= 25
+    ? new Date(year, month - 1, dueDay)
+    : new Date(year, month, dueDay);
+}
+
+// Returns "pagado" | "pendiente" for any recurring item with a given billing/due day.
 // Days >= 25 are charged in the PREVIOUS calendar month (within this cycle).
+// Used for both subscriptions and fixed payments.
 export function getSubscriptionCycleStatus(
   billingDay: number,
   today: Date = new Date()
 ): "pagado" | "pendiente" {
-  const year  = today.getFullYear();
-  const month = today.getMonth();
-  const billingDate =
-    billingDay >= 25
-      ? new Date(year, month - 1, billingDay)
-      : new Date(year, month, billingDay);
-  return billingDate <= today ? "pagado" : "pendiente";
+  const dueDate = getCycleDueDate(billingDay, today);
+  return dueDate <= today ? "pagado" : "pendiente";
 }

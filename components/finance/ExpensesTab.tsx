@@ -47,12 +47,17 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
         />
       ) : (
         <ul className="flex flex-col gap-3">
-          {expenses.map((expense) => (
+          {expenses.map((expense) => {
+            const cat = categories.find((c) => c.id === expense.category_id);
+            return (
             <li key={expense.id}>
               <Card className="flex items-center gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-brown">{expense.title}</p>
-                  <p className="text-xs text-muted">{formatDate(expense.expense_date)}</p>
+                  <p className="text-xs text-muted">
+                    {formatDate(expense.expense_date)}
+                    {cat ? ` · ${cat.name}` : ""}
+                  </p>
                 </div>
                 <p className="text-sm font-medium text-brown">{formatCurrency(expense.amount)}</p>
                 <button
@@ -65,7 +70,8 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
                 </button>
               </Card>
             </li>
-          ))}
+          );
+          })}
         </ul>
       )}
 

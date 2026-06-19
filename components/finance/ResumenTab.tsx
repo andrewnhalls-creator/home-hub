@@ -14,101 +14,110 @@ interface ResumenTabProps {
   expensesThisMonthTotal: number;
   monthlySubscriptionsTotal: number;
   annualSubscriptionsTotal: number;
+  paidSubsThisMonthTotal: number;
+  pendingSubsThisMonthTotal: number;
   savingsProgressPct: number | null;
   monthlyBudget: number | null;
   totalMonthlyIncome: number;
+  accountBalance: number | null;
   mortgages?: Mortgage[];
   mortgagePayments?: MortgagePayment[];
   onGoToMortgage?: () => void;
   onGoToIngresos?: () => void;
+  onGoToGastosFijos?: () => void;
+  onGoToSuscripciones?: () => void;
+  onGoToGastos?: () => void;
 }
 
-interface KpiChipProps {
+interface TappableKpiProps {
   label: string;
   value: string;
-  danger?: boolean;
+  sub?: string;
+  variant?: "default" | "positive" | "danger" | "warning";
+  onClick?: () => void;
 }
 
-function KpiChip({ label, value, danger = false }: KpiChipProps) {
-  return (
-    <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-3 shadow-[var(--shadow-card)]">
-      <p className={cn("text-lg font-bold leading-none", danger ? "text-danger" : "text-brown")}>
-        {value}
-      </p>
-      <p className="mt-1.5 text-[12px] leading-tight text-muted">{label}</p>
+function TappableKpi({ label, value, sub, variant = "default", onClick }: TappableKpiProps) {
+  const valueClass = {
+    default: "text-brown",
+    positive: "text-sage",
+    danger: "text-danger",
+    warning: "text-amber",
+  }[variant];
+
+  const el = (
+    <div
+      className={cn(
+        "flex flex-col rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-3 shadow-[var(--shadow-card)] transition",
+        onClick && "cursor-pointer hover:border-terracotta/30 hover:bg-white/[0.12] active:scale-[0.97]",
+      )}
+    >
+      <p className={cn("text-base font-bold leading-none tabular-nums", valueClass)}>{value}</p>
+      {sub && <p className="mt-0.5 text-[11px] tabular-nums text-muted">{sub}</p>}
+      <p className="mt-1.5 text-[11px] leading-tight text-muted">{label}</p>
     </div>
   );
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className="text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta rounded-[var(--radius-xl)]">
+        {el}
+      </button>
+    );
+  }
+  return el;
 }
 
-function BalanceCard({
-  income,
-  fixedPayments,
-  monthlySubscriptions,
-  annualSubscriptions,
-  variableExpenses,
-  onGoToIngresos,
+function PaymentSplitRow({
+  label,
+  paid,
+  pending,
+  onClick,
 }: {
-  income: number;
-  fixedPayments: number;
-  monthlySubscriptions: number;
-  annualSubscriptions: number;
-  variableExpenses: number;
-  onGoToIngresos?: () => void;
+  label: string;
+  paid: number;
+  pending: number;
+  onClick?: () => void;
 }) {
-  const annualMonthlyEquiv = annualSubscriptions / 12;
-  const totalOut = fixedPayments + monthlySubscriptions + annualMonthlyEquiv + variableExpenses;
-  const balance = income - totalOut;
-  const isPositive = balance >= 0;
-  const hasIncome = income > 0;
+  const total = paid + pending;
+  const paidPct = total > 0 ? (paid / total) * 100 : 0;
 
+  const inner = (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-medium text-brown">{label}</p>
+        <p className="text-sm font-semibold text-brown tabular-nums">{formatCurrency(total)}</p>
+      </div>
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-border">
+        <div
+          className="h-full rounded-full bg-sage transition-all"
+          style={{ width: `${paidPct}%` }}
+        />
+      </div>
+      <div className="flex items-center justify-between gap-2 text-xs">
+        <span className="text-sage tabular-nums">✓ {formatCurrency(paid)} pagado</span>
+        {pending > 0
+          ? <span className="text-amber tabular-nums">{formatCurrency(pending)} pendiente</span>
+          : <span className="text-muted">Todo pagado</span>
+        }
+      </div>
+    </div>
+  );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="w-full rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 text-left shadow-[var(--shadow-card)] transition hover:border-terracotta/30 hover:bg-white/[0.12] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+      >
+        {inner}
+      </button>
+    );
+  }
   return (
     <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
-      <p className="text-[12px] font-medium uppercase tracking-wider text-muted">Disponible este mes</p>
-
-      {hasIncome ? (
-        <>
-          <p className={cn("mt-1 text-3xl font-bold tabular-nums", isPositive ? "text-sage" : "text-danger")}>
-            {formatCurrency(balance)}
-          </p>
-
-          <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border pt-3">
-            <div>
-              <p className="text-[11px] text-muted">Ingresos</p>
-              <p className="text-sm font-semibold text-sage tabular-nums">{formatCurrency(income)}</p>
-            </div>
-            <div>
-              <p className="text-[11px] text-muted">Gastos totales</p>
-              <p className="text-sm font-semibold text-brown tabular-nums">{formatCurrency(totalOut)}</p>
-            </div>
-            <div>
-              <p className="text-[11px] text-muted">Pagos fijos</p>
-              <p className="text-sm tabular-nums text-brown">{formatCurrency(fixedPayments)}</p>
-            </div>
-            <div>
-              <p className="text-[11px] text-muted">Suscripciones</p>
-              <p className="text-sm tabular-nums text-brown">
-                {formatCurrency(monthlySubscriptions + annualMonthlyEquiv)}
-                <span className="ml-1 text-[11px] text-muted">/mes</span>
-              </p>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="mt-2">
-          <p className="text-sm text-muted">
-            Añade tus ingresos para ver el balance real del hogar.
-          </p>
-          {onGoToIngresos && (
-            <button
-              type="button"
-              onClick={onGoToIngresos}
-              className="mt-2 text-sm font-medium text-terracotta hover:underline focus-visible:outline-none"
-            >
-              Añadir ingresos →
-            </button>
-          )}
-        </div>
-      )}
+      {inner}
     </div>
   );
 }
@@ -222,15 +231,28 @@ export function ResumenTab({
   expensesThisMonthTotal,
   monthlySubscriptionsTotal,
   annualSubscriptionsTotal,
+  paidSubsThisMonthTotal,
+  pendingSubsThisMonthTotal,
   savingsProgressPct,
   monthlyBudget,
   totalMonthlyIncome,
+  accountBalance,
   mortgages = [],
   mortgagePayments = [],
   onGoToMortgage,
   onGoToIngresos,
+  onGoToGastosFijos,
+  onGoToSuscripciones,
+  onGoToGastos,
 }: ResumenTabProps) {
   const activeMortgages = mortgages.filter((m) => m.status === "activa" && !m.deleted_at);
+
+  const annualMonthlyEquiv = annualSubscriptionsTotal / 12;
+  const totalOut = totalFixedThisMonth + monthlySubscriptionsTotal + annualMonthlyEquiv + expensesThisMonthTotal;
+  const disponible = totalMonthlyIncome - totalOut;
+  const isPositive = disponible >= 0;
+
+  const totalPending = pendingThisMonthTotal + pendingSubsThisMonthTotal;
 
   return (
     <div className="flex flex-col gap-3">
@@ -238,80 +260,134 @@ export function ResumenTab({
         <PrintButton label="Exportar PDF" />
       </div>
 
-      {/* Balance card — the most important number */}
-      <BalanceCard
-        income={totalMonthlyIncome}
-        fixedPayments={totalFixedThisMonth}
-        monthlySubscriptions={monthlySubscriptionsTotal}
-        annualSubscriptions={annualSubscriptionsTotal}
-        variableExpenses={expensesThisMonthTotal}
-        onGoToIngresos={onGoToIngresos}
+      {/* Hero: account balance + disponible */}
+      <div className="grid grid-cols-2 gap-2">
+        <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-muted">Saldo en cuenta</p>
+          {accountBalance != null ? (
+            <p className="mt-1 text-xl font-bold tabular-nums text-brown">
+              {formatCurrency(accountBalance)}
+            </p>
+          ) : (
+            <p className="mt-1 text-sm text-muted">No configurado</p>
+          )}
+          <p className="mt-1 text-[10px] text-muted/60">Saldo actual</p>
+        </div>
+
+        <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-muted">Disponible</p>
+          {totalMonthlyIncome > 0 ? (
+            <>
+              <p className={cn("mt-1 text-xl font-bold tabular-nums", isPositive ? "text-sage" : "text-danger")}>
+                {formatCurrency(disponible)}
+              </p>
+              <p className="mt-1 text-[10px] text-muted/60">Este ciclo</p>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={onGoToIngresos}
+              className="mt-1 text-xs text-terracotta hover:underline focus-visible:outline-none"
+            >
+              Añadir ingresos →
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* KPI chips — tappable */}
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <TappableKpi
+          label="Ingresos"
+          value={totalMonthlyIncome > 0 ? formatCurrency(totalMonthlyIncome) : "—"}
+          variant="positive"
+          onClick={onGoToIngresos}
+        />
+        <TappableKpi
+          label="Gastos fijos"
+          value={formatCurrency(totalFixedThisMonth)}
+          onClick={onGoToGastosFijos}
+        />
+        <TappableKpi
+          label="Suscripciones"
+          value={formatCurrency(monthlySubscriptionsTotal)}
+          sub={annualSubscriptionsTotal > 0 ? `+ ${formatCurrency(annualSubscriptionsTotal / 12)}/mes anuales` : undefined}
+          onClick={onGoToSuscripciones}
+        />
+        <TappableKpi
+          label="Gastos variables"
+          value={formatCurrency(expensesThisMonthTotal)}
+          onClick={onGoToGastos}
+        />
+      </div>
+
+      {/* Status chips row */}
+      <div className="grid grid-cols-3 gap-2">
+        <TappableKpi
+          label="Próximos"
+          value={String(upcomingCount)}
+          variant={upcomingCount > 0 ? "warning" : "default"}
+        />
+        <TappableKpi
+          label="Vencidos"
+          value={String(overdueCount)}
+          variant={overdueCount > 0 ? "danger" : "default"}
+        />
+        <TappableKpi
+          label="Ahorro"
+          value={savingsProgressPct !== null ? `${Math.round(savingsProgressPct)}%` : "—"}
+          variant="positive"
+        />
+      </div>
+
+      {/* Gastos fijos paid/pending split */}
+      <PaymentSplitRow
+        label="Gastos fijos este ciclo"
+        paid={paidThisMonthTotal}
+        pending={pendingThisMonthTotal}
+        onClick={onGoToGastosFijos}
+      />
+
+      {/* Suscripciones paid/pending split */}
+      <PaymentSplitRow
+        label="Suscripciones mensuales"
+        paid={paidSubsThisMonthTotal}
+        pending={pendingSubsThisMonthTotal}
+        onClick={onGoToSuscripciones}
       />
 
       {/* Variable expenses vs budget */}
       <BudgetCard monthlyBudget={monthlyBudget} spent={expensesThisMonthTotal} />
 
-      {/* 4-chip KPI grid */}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <KpiChip label="Próximos" value={String(upcomingCount)} />
-        <KpiChip label="Vencidos" value={String(overdueCount)} danger={overdueCount > 0} />
-        <KpiChip label="Pagado" value={formatCurrency(paidThisMonthTotal)} />
-        <KpiChip
-          label="Ahorro"
-          value={savingsProgressPct !== null ? `${Math.round(savingsProgressPct)}%` : "—"}
-        />
-      </div>
+      {/* Annual subscriptions note */}
+      {annualSubscriptionsTotal > 0 && (
+        <Card variant="subtle">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-sm text-muted">Suscripciones anuales</span>
+            <div className="text-right">
+              <p className="text-sm font-semibold text-brown tabular-nums">
+                {formatCurrency(annualSubscriptionsTotal)}/año
+              </p>
+              <p className="text-[11px] text-muted tabular-nums">
+                ≈ {formatCurrency(annualSubscriptionsTotal / 12)}/mes
+              </p>
+            </div>
+          </div>
+        </Card>
+      )}
 
-      {/* Costs breakdown */}
-      <Card variant="subtle">
-        <div className="flex flex-col gap-2.5">
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-sm text-muted">Pagos fijos activos</span>
-            <span className="text-sm font-semibold text-brown tabular-nums">
-              {formatCurrency(totalFixedThisMonth)}/mes
-            </span>
+      {/* Total pending */}
+      {totalPending > 0 && (
+        <div className="rounded-[var(--radius-xl)] border border-amber/20 bg-amber/[0.06] p-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-medium text-brown">Total pendiente de pagar</p>
+            <p className="text-base font-bold text-amber tabular-nums">{formatCurrency(totalPending)}</p>
           </div>
-          <div className="h-px bg-border" />
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-sm text-muted">Suscripciones mensuales</span>
-            <span className="text-sm font-semibold text-brown tabular-nums">
-              {formatCurrency(monthlySubscriptionsTotal)}/mes
-            </span>
-          </div>
-          {annualSubscriptionsTotal > 0 && (
-            <>
-              <div className="h-px bg-border" />
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-sm text-muted">Suscripciones anuales</span>
-                <span className="text-sm font-semibold text-brown tabular-nums">
-                  {formatCurrency(annualSubscriptionsTotal)}/año
-                  <span className="ml-1 text-[11px] font-normal text-muted">
-                    (≈ {formatCurrency(annualSubscriptionsTotal / 12)}/mes)
-                  </span>
-                </span>
-              </div>
-            </>
-          )}
-          <div className="h-px bg-border" />
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-sm text-muted">Gastos variables este mes</span>
-            <span className="text-sm font-semibold text-brown tabular-nums">
-              {formatCurrency(expensesThisMonthTotal)}
-            </span>
-          </div>
-          {pendingThisMonthTotal > 0 && (
-            <>
-              <div className="h-px bg-border" />
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-sm text-muted">Pendiente de pagar</span>
-                <span className="text-sm font-semibold text-amber tabular-nums">
-                  {formatCurrency(pendingThisMonthTotal)}
-                </span>
-              </div>
-            </>
-          )}
+          <p className="mt-1 text-xs text-muted">
+            Gastos fijos + suscripciones pendientes este ciclo
+          </p>
         </div>
-      </Card>
+      )}
 
       {/* Mortgage summary cards */}
       {activeMortgages.map((m) => (

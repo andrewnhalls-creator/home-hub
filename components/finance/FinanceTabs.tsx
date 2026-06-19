@@ -44,9 +44,12 @@ interface FinanceTabsProps {
     expensesThisMonthTotal: number;
     monthlySubscriptionsTotal: number;
     annualSubscriptionsTotal: number;
+    paidSubsThisMonthTotal: number;
+    pendingSubsThisMonthTotal: number;
     savingsProgressPct: number | null;
     monthlyBudget: number | null;
     totalMonthlyIncome: number;
+    accountBalance: number | null;
   };
   fixedPayments: FixedPayment[];
   paymentInstances: PaymentInstance[];
@@ -64,18 +67,18 @@ interface FinanceTabsProps {
   cycleEnd?: string;
 }
 
-type Tab = "resumen" | "ingresos" | "pagos" | "gastos" | "presupuestos" | "suscripciones" | "ahorro" | "ahorro-plan" | "hipoteca";
+type Tab = "resumen" | "ingresos" | "gastos-fijos" | "gastos" | "presupuestos" | "suscripciones" | "ahorro" | "ahorro-plan" | "hipoteca";
 
 const TABS: { value: Tab; label: string; icon: Icon }[] = [
-  { value: "resumen",       label: "Resumen",        icon: ChartBar        },
-  { value: "ingresos",      label: "Ingresos",       icon: TrendUp         },
-  { value: "pagos",         label: "Pagos",          icon: CreditCard      },
-  { value: "gastos",        label: "Gastos",         icon: ShoppingBag     },
-  { value: "presupuestos",  label: "Presupuestos",   icon: ChartPie        },
-  { value: "suscripciones", label: "Suscripciones",  icon: ArrowsClockwise },
-  { value: "ahorro",        label: "Ahorro",         icon: PiggyBank       },
-  { value: "ahorro-plan",   label: "Plan de ahorro", icon: Coins           },
-  { value: "hipoteca",      label: "Hipoteca",       icon: Bank            },
+  { value: "resumen",        label: "Resumen",        icon: ChartBar        },
+  { value: "ingresos",       label: "Ingresos",       icon: TrendUp         },
+  { value: "gastos-fijos",   label: "Gastos Fijos",   icon: CreditCard      },
+  { value: "gastos",         label: "Gastos",         icon: ShoppingBag     },
+  { value: "presupuestos",   label: "Presupuestos",   icon: ChartPie        },
+  { value: "suscripciones",  label: "Suscripciones",  icon: ArrowsClockwise },
+  { value: "ahorro",         label: "Ahorro",         icon: PiggyBank       },
+  { value: "ahorro-plan",    label: "Plan de ahorro", icon: Coins           },
+  { value: "hipoteca",       label: "Hipoteca",       icon: Bank            },
 ];
 
 function currentMonthLabel(): string {
@@ -104,7 +107,7 @@ export function FinanceTabs({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Month context + export */}
+      {/* Cycle label + export */}
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-muted">{cycleLabel ?? currentMonthLabel()}</p>
         <ExportButton
@@ -183,40 +186,43 @@ export function FinanceTabs({
           })}
         </nav>
 
-      <div key={tab} className="animate-tab-enter">
-        {tab === "resumen" && (
-          <ResumenTab
-            {...resumen}
-            mortgages={mortgages}
-            mortgagePayments={mortgagePayments}
-            onGoToMortgage={() => setTab("hipoteca")}
-            onGoToIngresos={() => setTab("ingresos")}
-          />
-        )}
-        {tab === "ingresos" && <IngresoTab sources={incomeSources} />}
-        {tab === "pagos" && (
-          <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />
-        )}
-        {tab === "gastos" && <ExpensesTab expenses={expenses} categories={financeCategories} members={members} />}
-        {tab === "presupuestos" && (
-          <PresupuestosTab
-            categoryBudgets={categoryBudgets}
-            expenses={expenses}
-            categories={financeCategories}
-            cycleStart={cycleStart ?? ""}
-            cycleEnd={cycleEnd ?? ""}
-          />
-        )}
-        {tab === "suscripciones" && (
-          <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
-        )}
-        {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
-        {tab === "ahorro-plan" && <PlanAhorroTab goals={savingsGoals} />}
-        {tab === "hipoteca" && (
-          <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
-        )}
+        <div key={tab} className="animate-tab-enter">
+          {tab === "resumen" && (
+            <ResumenTab
+              {...resumen}
+              mortgages={mortgages}
+              mortgagePayments={mortgagePayments}
+              onGoToMortgage={() => setTab("hipoteca")}
+              onGoToIngresos={() => setTab("ingresos")}
+              onGoToGastosFijos={() => setTab("gastos-fijos")}
+              onGoToSuscripciones={() => setTab("suscripciones")}
+              onGoToGastos={() => setTab("gastos")}
+            />
+          )}
+          {tab === "ingresos" && <IngresoTab sources={incomeSources} />}
+          {tab === "gastos-fijos" && (
+            <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />
+          )}
+          {tab === "gastos" && <ExpensesTab expenses={expenses} categories={financeCategories} members={members} />}
+          {tab === "presupuestos" && (
+            <PresupuestosTab
+              categoryBudgets={categoryBudgets}
+              expenses={expenses}
+              categories={financeCategories}
+              cycleStart={cycleStart ?? ""}
+              cycleEnd={cycleEnd ?? ""}
+            />
+          )}
+          {tab === "suscripciones" && (
+            <SubscriptionsTab subscriptions={subscriptions} categories={financeCategories} />
+          )}
+          {tab === "ahorro" && <SavingsTab goals={savingsGoals} />}
+          {tab === "ahorro-plan" && <PlanAhorroTab goals={savingsGoals} />}
+          {tab === "hipoteca" && (
+            <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
+          )}
+        </div>
       </div>
-      </div>{/* end lg:grid wrapper */}
     </div>
   );
 }
