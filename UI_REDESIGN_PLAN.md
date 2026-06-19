@@ -1,6 +1,9 @@
 # UI_REDESIGN_PLAN.md — Home Hub
 
-## Status: Milestone UI-0 — Audit complete, plan defined
+## Status: COMPLETE — All milestones UI-0 through UI-8 shipped as of 2026-06-18
+
+> This document is historical. The redesign is live at https://home-hub-dun.vercel.app.
+> For the current design spec see `DESIGN.md`. For project state see `HANDOFF.md`.
 
 ---
 
