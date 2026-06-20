@@ -23,6 +23,7 @@ export default async function DashboardPage() {
   const cycleEnd = format(cycleEndDate, "yyyy-MM-dd");
 
   const [
+    { data: allMemberships },
     { count: shoppingCount },
     { count: weekMealsCount },
     { data: reminders, count: remindersCount },
@@ -33,6 +34,11 @@ export default async function DashboardPage() {
     { data: calendarEvents },
     { data: todayMeals },
   ] = await Promise.all([
+    supabase
+      .from("household_members")
+      .select("household_id, role, households(name)")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: true }),
     supabase
       .from("shopping_items")
       .select("id", { count: "exact", head: true })
@@ -141,6 +147,8 @@ export default async function DashboardPage() {
         firstName={firstName}
         householdName={householdName}
         pendingCount={pendingCount}
+        allMemberships={(allMemberships ?? []) as unknown as { household_id: string; role: "owner" | "member"; households: { name: string } | null }[]}
+        activeHouseholdId={householdId}
       />
 
       {/* Hoy — only when there's something to show */}

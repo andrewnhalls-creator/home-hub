@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { HouseholdNameForm } from "@/components/settings/HouseholdNameForm";
 import { ProfileNameForm } from "@/components/settings/ProfileNameForm";
 import { InviteSection } from "@/components/settings/InviteSection";
+import { HouseholdsSection } from "@/components/settings/HouseholdsSection";
 import { signOut } from "@/app/auth/actions";
 import type { HouseholdRole, HouseholdInvite, Profile } from "@/lib/types";
 
@@ -22,6 +23,12 @@ interface SettingsMember {
   created_at: string;
 }
 
+interface UserHousehold {
+  household_id: string;
+  role: HouseholdRole;
+  households: { name: string } | null;
+}
+
 interface SettingsViewProps {
   household: SettingsHousehold;
   members: SettingsMember[];
@@ -29,6 +36,8 @@ interface SettingsViewProps {
   currentUserId: string;
   role: HouseholdRole;
   initialInvite: HouseholdInvite | null;
+  allMemberships: UserHousehold[];
+  activeHouseholdId: string;
 }
 
 export function SettingsView({
@@ -38,9 +47,24 @@ export function SettingsView({
   currentUserId,
   role,
   initialInvite,
+  allMemberships,
+  activeHouseholdId,
 }: SettingsViewProps) {
   return (
     <div className="flex flex-col gap-4">
+      {allMemberships.length > 1 && (
+        <Card>
+          <CardTitle>Mis hogares</CardTitle>
+          <CardDescription>Cambia entre tus hogares o añade uno nuevo.</CardDescription>
+          <div className="mt-3">
+            <HouseholdsSection
+              memberships={allMemberships}
+              activeHouseholdId={activeHouseholdId}
+            />
+          </div>
+        </Card>
+      )}
+
       <Card>
         <CardTitle>Hogar</CardTitle>
         <CardDescription>Nombre compartido por todos los miembros.</CardDescription>
@@ -81,6 +105,19 @@ export function SettingsView({
             <InviteSection
               initialCode={initialInvite?.code ?? null}
               initialExpiresAt={initialInvite?.expires_at ?? null}
+            />
+          </div>
+        </Card>
+      )}
+
+      {allMemberships.length === 1 && (
+        <Card>
+          <CardTitle>Mis hogares</CardTitle>
+          <CardDescription>Añade otro hogar o únete a uno con un código.</CardDescription>
+          <div className="mt-3">
+            <HouseholdsSection
+              memberships={allMemberships}
+              activeHouseholdId={activeHouseholdId}
             />
           </div>
         </Card>

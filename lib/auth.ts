@@ -11,11 +11,26 @@ export async function requireHousehold() {
     redirect("/auth/login");
   }
 
-  const { data: membership } = await supabase
+  // Resolve active household from profile first, then fall back to first membership
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("active_household_id")
+    .eq("id", user.id)
+    .single();
+
+  const activeId = profile?.active_household_id as string | null;
+
+  let query = supabase
     .from("household_members")
     .select("household_id, role, households(name)")
     .eq("user_id", user.id)
-    .maybeSingle();
+    .order("created_at", { ascending: true });
+
+  if (activeId) {
+    query = query.eq("household_id", activeId);
+  }
+
+  const { data: membership } = await query.limit(1).maybeSingle();
 
   if (!membership) {
     redirect("/onboarding");

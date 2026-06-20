@@ -126,3 +126,82 @@ export async function generateInviteCode(): Promise<InviteActionState> {
   revalidatePath("/ajustes");
   return { code, expiresAt };
 }
+
+// ---------------------------------------------------------------------------
+// Multi-household actions
+// ---------------------------------------------------------------------------
+
+export interface HouseholdSwitchState {
+  error?: string;
+  success?: boolean;
+}
+
+export async function switchHousehold(
+  _prevState: HouseholdSwitchState,
+  formData: FormData,
+): Promise<HouseholdSwitchState> {
+  const householdId = formData.get("householdId") as string | null;
+  if (!householdId) return { error: "Hogar no especificado." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("switch_household", { p_household_id: householdId });
+
+  if (error) return { error: "No se ha podido cambiar de hogar. Inténtalo de nuevo." };
+
+  revalidatePath("/", "layout");
+  return { success: true };
+}
+
+export interface CreateHouseholdState {
+  error?: string;
+  fieldErrors?: Record<string, string>;
+  success?: boolean;
+}
+
+export async function createAdditionalHousehold(
+  _prevState: CreateHouseholdState,
+  formData: FormData,
+): Promise<CreateHouseholdState> {
+  const parsed = householdNameSchema.safeParse({ name: formData.get("name") });
+  if (!parsed.success) return { fieldErrors: flattenFieldErrors(parsed.error) };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("create_household", { p_name: parsed.data.name });
+
+  if (error) {
+    if (error.message.includes("4 hogares")) {
+      return { error: "Ya tienes el máximo de 4 hogares permitidos." };
+    }
+    return { error: "No se ha podido crear el hogar. Inténtalo de nuevo." };
+  }
+
+  revalidatePath("/", "layout");
+  return { success: true };
+}
+
+export interface JoinHouseholdState {
+  error?: string;
+  fieldErrors?: Record<string, string>;
+  success?: boolean;
+}
+
+export async function joinAdditionalHousehold(
+  _prevState: JoinHouseholdState,
+  formData: FormData,
+): Promise<JoinHouseholdState> {
+  const code = (formData.get("code") as string | null)?.trim().toUpperCase();
+  if (!code) return { fieldErrors: { code: "Introduce el código de invitación." } };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("redeem_household_invite", { p_code: code });
+
+  if (error) {
+    if (error.message.includes("4 hogares")) {
+      return { error: "Ya tienes el máximo de 4 hogares permitidos." };
+    }
+    return { error: "Código de invitación no válido o caducado." };
+  }
+
+  revalidatePath("/", "layout");
+  return { success: true };
+}
