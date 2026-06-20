@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { CaretDown, DownloadSimple, FileText, Printer } from "@phosphor-icons/react";
 import type { Expense, FixedPayment, SavingsGoal, Subscription } from "@/lib/types";
 
@@ -83,7 +84,7 @@ export function ExportButton({ expenses, fixedPayments, subscriptions, savingsGo
   }
 
   function handlePrint() {
-    setOpen(false);
+    flushSync(() => setOpen(false));
     window.print();
   }
 
@@ -107,7 +108,7 @@ export function ExportButton({ expenses, fixedPayments, subscriptions, savingsGo
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-full z-20 mt-1.5 min-w-[168px] overflow-hidden rounded-xl border border-border bg-[#16142a] shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+          className="absolute right-0 top-full z-20 mt-1.5 min-w-[168px] overflow-hidden rounded-xl border border-border bg-cream shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
         >
           <button
             role="menuitem"
@@ -126,7 +127,7 @@ export function ExportButton({ expenses, fixedPayments, subscriptions, savingsGo
             className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-brown transition hover:bg-white/[0.07] active:bg-white/[0.12] focus-visible:outline-none focus-visible:bg-white/[0.07]"
           >
             <Printer className="h-4 w-4 shrink-0 text-muted" aria-hidden />
-            Exportar PDF
+            Imprimir
           </button>
         </div>
       )}

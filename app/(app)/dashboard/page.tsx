@@ -1,7 +1,7 @@
 import { MetricGrid } from "@/components/dashboard/MetricGrid";
 import { Card } from "@/components/ui/Card";
 import { ForkKnife, CalendarDots, WarningCircle } from "@phosphor-icons/react/dist/ssr";
-import { startOfWeek, endOfWeek, format, isPast } from "date-fns";
+import { startOfWeek, endOfWeek, format, isPast, parseISO } from "date-fns";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentCycleDates, getSubscriptionCycleStatus } from "@/lib/cycle";
@@ -73,10 +73,11 @@ export default async function DashboardPage() {
       .lte("due_date", cycleEnd),
     supabase
       .from("subscriptions")
-      .select("id, name, amount, billing_day, billing_cycle, start_date")
+      .select("id, name, amount, billing_day, billing_cycle, start_date, renewal_date")
       .eq("household_id", householdId)
       .eq("is_active", true)
-      .is("deleted_at", null),
+      .is("deleted_at", null)
+      .limit(100),
     supabase
       .from("calendar_events")
       .select("id, title, event_date")
@@ -110,13 +111,15 @@ export default async function DashboardPage() {
     if (p.due_day != null) return getSubscriptionCycleStatus(p.due_day, today) === "pendiente";
     return true;
   });
-  const pendingSubscriptions = (subscriptions ?? []).filter(
-    (s) =>
-      s.billing_cycle === "mensual" &&
-      s.billing_day != null &&
-      !(s.start_date && new Date(s.start_date) > today) &&
-      getSubscriptionCycleStatus(s.billing_day, today) === "pendiente",
-  );
+  const pendingSubscriptions = (subscriptions ?? []).filter((s) => {
+    if (s.start_date && parseISO(s.start_date) > today) return false;
+    if (s.billing_cycle === "mensual" && s.billing_day != null) {
+      return getSubscriptionCycleStatus(s.billing_day, today) === "pendiente";
+    }
+    // Non-monthly (annual, quarterly): show if renewal_date falls within this cycle
+    return s.billing_cycle !== "mensual" && !!s.renewal_date &&
+      s.renewal_date >= todayStr && s.renewal_date <= cycleEnd;
+  });
   const proximosCount = pendingFixedPayments.length + pendingSubscriptions.length;
   const hasOverduePayments = (cycleInstances ?? []).some((i) => i.status === "vencido");
 
@@ -235,7 +238,9 @@ export default async function DashboardPage() {
               items={pendingSubscriptions.slice(0, 3).map((s) => ({
                 id: s.id,
                 title: s.name,
-                meta: s.billing_day ? `Día ${s.billing_day}` : undefined,
+                meta: s.billing_cycle === "mensual" && s.billing_day
+                  ? `Día ${s.billing_day}`
+                  : s.renewal_date ? formatDate(s.renewal_date) : undefined,
                 badgeLabel: formatCurrency(s.amount),
                 badgeVariant: "warning" as const,
               }))}
