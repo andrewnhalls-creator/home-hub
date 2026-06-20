@@ -38,7 +38,7 @@ function TrashRow({
           {format(new Date(item.deletedAt), "d MMM yyyy", { locale: es })}
         </p>
         {state.error && (
-          <p className="text-xs text-red-500 mt-0.5">{state.error}</p>
+          <p className="mt-0.5 text-xs text-danger">{state.error}</p>
         )}
       </div>
       <form action={formAction}>

@@ -54,17 +54,17 @@ const MODULE_ICON: Record<string, Icon> = {
 };
 
 const MODULE_COLOR: Record<string, string> = {
-  shopping_item:  "bg-amber-100 text-amber-700",
-  recipe:         "bg-green-100 text-green-700",
-  menu_plan:      "bg-green-100 text-green-700",
-  reminder:       "bg-rose-100 text-rose-700",
-  expense:        "bg-blue-100 text-blue-700",
-  fixed_payment:  "bg-blue-100 text-blue-700",
-  subscription:   "bg-blue-100 text-blue-700",
-  savings_goal:   "bg-blue-100 text-blue-700",
-  chore:          "bg-purple-100 text-purple-700",
-  wishlist_item:  "bg-pink-100 text-pink-700",
-  document:       "bg-slate-100 text-slate-700",
+  shopping_item:  "bg-amber/[0.15] text-amber",
+  recipe:         "bg-sage/[0.15] text-sage",
+  menu_plan:      "bg-sage/[0.15] text-sage",
+  reminder:       "bg-rose/[0.15] text-rose",
+  expense:        "bg-olive/[0.15] text-olive",
+  fixed_payment:  "bg-olive/[0.15] text-olive",
+  subscription:   "bg-olive/[0.15] text-olive",
+  savings_goal:   "bg-rose/[0.15] text-rose",
+  chore:          "bg-olive/[0.15] text-olive",
+  wishlist_item:  "bg-rose/[0.15] text-rose",
+  document:       "bg-white/[0.10] text-muted",
 };
 
 function dateGroupLabel(dateStr: string): string {

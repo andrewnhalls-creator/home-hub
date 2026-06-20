@@ -67,7 +67,7 @@ export function ChoreList({ chores, members }: ChoreListProps) {
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState icon={ListChecks} title="Tu semana está lista." description="Añade una tarea para empezar." />
+        <EmptyState icon={ListChecks} title="Sin tareas por ahora." description="Añade las tareas del hogar y asignadlas entre vosotros." />
       ) : (
         <ul className="flex flex-col gap-3">
           {filtered.map((chore) => (

@@ -179,10 +179,10 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
 
       {/* Pending payment */}
       {pendingPayment && (
-        <div className="flex items-center justify-between rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5">
+        <div className="flex items-center justify-between rounded-xl border border-amber/[0.25] bg-amber/[0.10] px-3 py-2.5">
           <div>
-            <p className="text-xs font-medium text-amber-800">Próximo pago</p>
-            <p className="text-xs text-amber-700">{formatDate(pendingPayment.due_date)} · {formatCurrency(Number(pendingPayment.amount))}</p>
+            <p className="text-xs font-medium text-amber">Próximo pago</p>
+            <p className="text-xs text-amber/70">{formatDate(pendingPayment.due_date)} · {formatCurrency(Number(pendingPayment.amount))}</p>
           </div>
           <Button
             type="button"
@@ -245,7 +245,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
                         p.status === "pagado"
                           ? "bg-success/10 text-success"
                           : p.status === "pendiente"
-                          ? "bg-amber-100 text-amber-800"
+                          ? "bg-amber/[0.15] text-amber"
                           : "bg-muted/10 text-muted"
                       }`}
                     >

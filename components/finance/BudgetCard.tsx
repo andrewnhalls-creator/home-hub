@@ -21,9 +21,9 @@ export function BudgetCard({ monthlyBudget, spent }: BudgetCardProps) {
 
   const pct = monthlyBudget && monthlyBudget > 0 ? Math.min((spent / monthlyBudget) * 100, 100) : 0;
   const barColor =
-    pct >= 100 ? "bg-danger" : pct >= 80 ? "bg-amber-400" : "bg-sage";
+    pct >= 100 ? "bg-danger" : pct >= 80 ? "bg-amber" : "bg-sage";
   const labelColor =
-    pct >= 100 ? "text-danger" : pct >= 80 ? "text-amber-600" : "text-sage";
+    pct >= 100 ? "text-danger" : pct >= 80 ? "text-amber" : "text-sage";
 
   function handleSave() {
     const parsed = value.trim() === "" ? null : parseFloat(value.replace(",", "."));

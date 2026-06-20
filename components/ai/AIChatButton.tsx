@@ -275,9 +275,9 @@ function CommandMode() {
     <div className="flex flex-col gap-4">
       {/* Clarify card */}
       {phase === "clarify" && parsedResult && (
-        <div className="flex items-start gap-3 rounded-xl border border-amber-500/30 bg-amber-500/[0.08] p-4">
-          <Question weight="fill" className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden />
-          <p className="text-sm leading-relaxed text-amber-200">{parsedResult.clarifyingQuestion}</p>
+        <div className="flex items-start gap-3 rounded-xl border border-amber/30 bg-amber/[0.08] p-4">
+          <Question weight="fill" className="mt-0.5 h-4 w-4 shrink-0 text-amber" aria-hidden />
+          <p className="text-sm leading-relaxed text-brown/80">{parsedResult.clarifyingQuestion}</p>
         </div>
       )}
 
@@ -287,12 +287,12 @@ function CommandMode() {
           className={cn(
             "rounded-xl border p-4",
             parsedResult.requiresConfirmation
-              ? "border-amber-500/30 bg-amber-500/[0.08]"
+              ? "border-amber/30 bg-amber/[0.08]"
               : "border-white/[0.10] bg-white/[0.04]",
           )}
         >
           {parsedResult.requiresConfirmation && (
-            <p className="mb-1.5 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-amber-400">
+            <p className="mb-1.5 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-amber">
               <Warning weight="fill" className="h-3.5 w-3.5" aria-hidden />
               Confirmar acción
             </p>
@@ -377,7 +377,7 @@ function CommandMode() {
             className={cn(
               "min-h-[44px] flex-1 rounded-[var(--radius-xl)] px-4 py-3 text-sm font-medium transition-colors",
               parsedResult.requiresConfirmation
-                ? "border border-amber-500/40 bg-amber-500/[0.15] text-amber-200 hover:bg-amber-500/25"
+                ? "border border-amber/40 bg-amber/[0.15] text-brown hover:bg-amber/[0.25]"
                 : "bg-terracotta text-cream hover:bg-terracotta/90",
             )}
           >

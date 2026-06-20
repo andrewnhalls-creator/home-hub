@@ -17,7 +17,7 @@ export function GreetingCard({ firstName, householdName, pendingCount }: Greetin
         : `Tienes ${pendingCount} cosas pendientes.`;
 
   return (
-    <div className="rounded-2xl border border-terracotta/15 bg-terracotta/8 p-5">
+    <div className="rounded-2xl border border-terracotta/[0.25] bg-terracotta/[0.10] p-5">
       <div className="flex flex-col gap-0.5">
         <p className="font-display text-2xl font-bold text-brown tracking-tight">{greeting}</p>
         <p className="text-sm text-muted">{householdName}</p>

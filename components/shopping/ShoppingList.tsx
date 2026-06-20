@@ -221,8 +221,8 @@ export function ShoppingList({ items, categories, members, householdId, shopping
       {activeItems.length === 0 ? (
         <EmptyState
           icon={ShoppingCart}
-          title="Todavía no hay productos en la lista."
-          description="Añade el primero para empezar."
+          title="La lista está vacía."
+          description="Añade lo que necesitéis y marcadlo al llegar al super."
         />
       ) : (
         <ul className="stagger-list flex flex-col gap-3">
