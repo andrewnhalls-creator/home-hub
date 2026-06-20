@@ -27,7 +27,7 @@ export function AppShell({ householdId, householdName, notifications, unreadCoun
         Ir al contenido principal
       </a>
       <Sidebar />
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col">
         <TopBar householdName={householdName} notifications={notifications} unreadCount={unreadCount} />
         <OfflineBanner />
         <main id="main-content" className="flex-1 px-4 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-4 md:px-6 md:pb-6">

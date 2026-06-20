@@ -307,7 +307,7 @@ export function ResumenTab({
       {/* Hero: account balance + disponible */}
       <div className="grid grid-cols-2 gap-2">
         <div className="relative rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
-          <p className="text-[11px] font-medium uppercase tracking-wider text-muted">Saldo en cuenta</p>
+          <p className="text-[11px] font-medium text-muted">Saldo en cuenta</p>
           {accountBalance != null ? (
             <p className="mt-1 text-xl font-bold tabular-nums text-brown">
               {formatCurrency(accountBalance)}
@@ -327,7 +327,7 @@ export function ResumenTab({
         </div>
 
         <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
-          <p className="text-[11px] font-medium uppercase tracking-wider text-muted">Disponible</p>
+          <p className="text-[11px] font-medium text-muted">Disponible</p>
           {disponible !== null ? (
             <>
               <p className={cn("mt-1 text-xl font-bold tabular-nums", isPositive ? "text-sage" : "text-danger")}>

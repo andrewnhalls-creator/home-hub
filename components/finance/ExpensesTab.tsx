@@ -64,7 +64,7 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
                     type="button"
                     aria-label="Editar gasto"
                     onClick={() => setEditingExpense(expense)}
-                    className="flex min-h-[44px] min-w-[44px] items-center justify-center text-muted hover:text-brown"
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                   >
                     <PencilSimple className="h-4 w-4" aria-hidden />
                   </button>
@@ -72,7 +72,7 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
                     type="button"
                     aria-label="Eliminar gasto"
                     onClick={() => setDeletingExpense(expense)}
-                    className="flex min-h-[44px] min-w-[44px] items-center justify-center text-muted hover:text-danger"
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:text-danger active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                   >
                     <Trash className="h-4 w-4" aria-hidden />
                   </button>

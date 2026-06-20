@@ -84,7 +84,16 @@ interface FinanceTabsProps {
   cycleEnd?: string;
 }
 
-type Tab = "resumen" | "ingresos" | "gastos-fijos" | "suscripciones" | "gastos-variables" | "gastos" | "plan-ahorro" | "hipoteca" | "deuda";
+type Tab =
+  | "resumen"
+  | "ingresos"
+  | "gastos-fijos"
+  | "suscripciones"
+  | "gastos-variables"
+  | "gastos"
+  | "plan-ahorro"
+  | "hipoteca"
+  | "deuda";
 
 interface SubPage {
   value: Exclude<Tab, "resumen">;
@@ -108,8 +117,6 @@ const ALL_PAGES: { value: Tab; label: string; icon: Icon }[] = [
   ...SUB_PAGES,
 ];
 
-const ALL_SIDEBAR_TABS: { value: Tab; label: string; icon: Icon }[] = ALL_PAGES;
-
 function currentMonthLabel(): string {
   const raw = format(new Date(), "MMMM yyyy", { locale: es });
   return raw.charAt(0).toUpperCase() + raw.slice(1);
@@ -126,73 +133,91 @@ interface DashboardPagerProps {
 function DashboardPager({ pages, currentIndex, onPrev, onNext, onGoTo }: DashboardPagerProps) {
   const canPrev = currentIndex > 0;
   const canNext = currentIndex < pages.length - 1;
-  const stripRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const tabListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const container = stripRef.current;
-    if (!container) return;
-    const activeBtn = container.children[currentIndex] as HTMLElement | undefined;
-    activeBtn?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    const container = scrollContainerRef.current;
+    const strip = tabListRef.current;
+    if (!container || !strip) return;
+    const activeBtn = strip.children[currentIndex] as HTMLElement | undefined;
+    if (!activeBtn) return;
+    const containerRect = container.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+    const relLeft = btnRect.left - containerRect.left + container.scrollLeft;
+    container.scrollTo({
+      left: Math.max(0, relLeft - (container.offsetWidth - activeBtn.offsetWidth) / 2),
+      behavior: "smooth",
+    });
   }, [currentIndex]);
 
   return (
     <div className="flex w-full items-center gap-1">
-      {/* Prev arrow — 44 × 44 tap target */}
+      {/* Prev — 44px tap target */}
       <button
         type="button"
         aria-label="Página anterior"
         onClick={onPrev}
         disabled={!canPrev}
         className={cn(
-          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
           canPrev
             ? "text-muted hover:bg-white/[0.08] hover:text-brown active:scale-[0.90]"
-            : "text-white/[0.15] cursor-default",
+            : "cursor-default text-white/[0.15]",
         )}
       >
         <CaretLeft weight="bold" className="h-4 w-4" aria-hidden />
       </button>
 
-      {/* Scrollable named tab strip */}
+      {/* Scrollable named tab strip.
+          [overflow-x:auto] [overflow-y:clip] prevents the browser from
+          also making overflow-y auto (which would clip content vertically). */}
       <div
-        ref={stripRef}
+        ref={scrollContainerRef}
         role="tablist"
         aria-label="Páginas de finanzas"
-        className="scrollbar-none flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto py-1"
+        className="scrollbar-none min-w-0 flex-1 [overflow-x:auto] [overflow-y:clip]"
       >
-        {pages.map((page, i) => {
-          const isActive = i === currentIndex;
-          return (
-            <button
-              key={page.value}
-              role="tab"
-              type="button"
-              aria-selected={isActive}
-              onClick={() => onGoTo(i)}
-              className={cn(
-                "flex h-9 shrink-0 items-center rounded-full px-3.5 text-[13px] font-medium whitespace-nowrap transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terracotta focus-visible:ring-offset-1 focus-visible:ring-offset-cream",
-                isActive
-                  ? "bg-terracotta text-cream"
-                  : "bg-white/[0.06] text-muted hover:bg-white/[0.12] hover:text-brown",
-              )}
-            >
-              {page.label}
-            </button>
-          );
-        })}
+        <div ref={tabListRef} className="flex items-center gap-1.5 py-1">
+          {pages.map((page, i) => {
+            const isActive = i === currentIndex;
+            return (
+              <button
+                key={page.value}
+                role="tab"
+                type="button"
+                aria-selected={isActive}
+                onClick={() => onGoTo(i)}
+                className={cn(
+                  "flex h-9 shrink-0 items-center whitespace-nowrap rounded-full px-3.5 text-[13px] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terracotta focus-visible:ring-offset-1 focus-visible:ring-offset-cream",
+                  isActive
+                    ? "bg-terracotta text-cream"
+                    : "bg-white/[0.06] text-muted hover:bg-white/[0.12] hover:text-brown",
+                )}
+              >
+                {page.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Next arrow — 44 × 44 tap target */}
+      {/* Page counter */}
+      <span className="shrink-0 min-w-[2.5rem] text-center text-[11px] tabular-nums text-muted">
+        {currentIndex + 1}/{pages.length}
+      </span>
+
+      {/* Next — 44px tap target */}
       <button
         type="button"
         aria-label="Página siguiente"
         onClick={onNext}
         disabled={!canNext}
         className={cn(
-          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
           canNext
             ? "text-muted hover:bg-white/[0.08] hover:text-brown active:scale-[0.90]"
-            : "text-white/[0.15] cursor-default",
+            : "cursor-default text-white/[0.15]",
         )}
       >
         <CaretRight weight="bold" className="h-4 w-4" aria-hidden />
@@ -235,33 +260,21 @@ export function FinanceTabs({
   }
 
   function goToIndex(index: number) {
-    if (index >= 0 && index < ALL_PAGES.length) {
-      goTo(ALL_PAGES[index].value);
-    }
+    if (index >= 0 && index < ALL_PAGES.length) goTo(ALL_PAGES[index].value);
   }
-
-  function goToPrev() {
-    goToIndex(currentIndex - 1);
-  }
-
-  function goToNext() {
-    goToIndex(currentIndex + 1);
-  }
+  function goToPrev() { goToIndex(currentIndex - 1); }
+  function goToNext() { goToIndex(currentIndex + 1); }
 
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.targetTouches[0].clientX;
     touchStartY.current = e.targetTouches[0].clientY;
     isSwiping.current = false;
   }
-
   function handleTouchMove(e: React.TouchEvent) {
     const dx = Math.abs(e.targetTouches[0].clientX - touchStartX.current);
     const dy = Math.abs(e.targetTouches[0].clientY - touchStartY.current);
-    if (!isSwiping.current && dx > dy && dx > 10) {
-      isSwiping.current = true;
-    }
+    if (!isSwiping.current && dx > dy && dx > 10) isSwiping.current = true;
   }
-
   function handleTouchEnd(e: React.TouchEvent) {
     if (!isSwiping.current) return;
     const deltaX = touchStartX.current - e.changedTouches[0].clientX;
@@ -315,8 +328,8 @@ export function FinanceTabs({
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Header row: cycle label + export */}
+    <div className="w-full flex flex-col gap-4">
+      {/* ── Top bar: cycle label + export ── */}
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-muted">{cycleLabel ?? currentMonthLabel()}</p>
         <ExportButton
@@ -327,10 +340,10 @@ export function FinanceTabs({
         />
       </div>
 
-      {/* ── MOBILE (< lg) ── */}
+      {/* ══ MOBILE / TABLET  (< lg) ══════════════════════════════════════ */}
       <div className="lg:hidden">
         {showMenu ? (
-          /* Section picker overlay */
+          /* ── Section picker overlay ── */
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-brown">Secciones</p>
@@ -338,37 +351,44 @@ export function FinanceTabs({
                 type="button"
                 aria-label="Cerrar menú"
                 onClick={() => setShowMenu(false)}
-                className="flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
               >
                 <ArrowLeft className="h-4 w-4" aria-hidden />
               </button>
             </div>
-            <div role="list" className="grid grid-cols-2 gap-2">
+            <div role="list" className="grid grid-cols-2 gap-2 md:grid-cols-4">
               {SUB_PAGES.map(({ value, label, icon: PageIcon }) => (
                 <button
                   key={value}
                   role="listitem"
                   type="button"
                   onClick={() => goTo(value)}
-                  className="flex items-center gap-2.5 rounded-xl border border-white/[0.10] bg-white/[0.05] px-3 py-3 text-left text-sm font-medium text-brown transition hover:bg-white/[0.10] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                  className={cn(
+                    "flex items-center gap-2.5 rounded-xl border px-3 py-3.5 text-left text-sm font-medium transition active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+                    tab === value
+                      ? "border-terracotta/40 bg-terracotta/10 text-terracotta"
+                      : "border-white/[0.10] bg-white/[0.05] text-brown hover:bg-white/[0.10]",
+                  )}
                 >
-                  <PageIcon className="h-4 w-4 shrink-0 text-muted" aria-hidden />
+                  <PageIcon
+                    className={cn("h-4 w-4 shrink-0", tab === value ? "text-terracotta" : "text-muted")}
+                    aria-hidden
+                  />
                   <span className="truncate">{label}</span>
                 </button>
               ))}
             </div>
           </div>
         ) : (
-          /* Main page view — unified layout for all pages */
           <div className="flex flex-col gap-3">
-            {/* Page header */}
+            {/* ── Row 1: back arrow · page title · Menú button ── */}
             <div className="flex min-w-0 items-center gap-2">
               {tab !== "resumen" && (
                 <button
                   type="button"
                   aria-label="Volver al resumen"
                   onClick={() => goTo("resumen")}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                 >
                   <ArrowLeft className="h-4 w-4" aria-hidden />
                 </button>
@@ -376,18 +396,19 @@ export function FinanceTabs({
               <p className="min-w-0 flex-1 truncate text-lg font-bold text-brown">
                 {tab === "resumen" ? "Resumen" : currentSubPage?.label}
               </p>
+              {/* Menú button — always visible, separate from the pager strip */}
               <button
                 type="button"
                 aria-label="Ver secciones"
                 onClick={() => setShowMenu(true)}
-                className="inline-flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-full border border-border bg-white/[0.07] px-4 text-sm font-medium text-brown transition hover:bg-white/[0.12] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-white/[0.15] bg-white/[0.08] px-3 text-xs font-medium text-brown transition hover:bg-white/[0.14] hover:border-white/[0.25] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
               >
-                <SquaresFour className="h-4 w-4 text-muted" aria-hidden />
+                <SquaresFour className="h-4 w-4 shrink-0 text-muted" aria-hidden />
                 Menú
               </button>
             </div>
 
-            {/* ── Page switcher: sits between header and first KPI row ── */}
+            {/* ── Row 2: page pager (named chips + counter + arrows) ── */}
             <DashboardPager
               pages={ALL_PAGES}
               currentIndex={currentIndex}
@@ -396,10 +417,10 @@ export function FinanceTabs({
               onGoTo={goToIndex}
             />
 
-            {/* Swipeable content area */}
+            {/* ── Row 3: page content ── */}
             <div
               key={tab}
-              className="animate-tab-enter min-w-0"
+              className="animate-tab-enter w-full min-w-0"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -410,10 +431,10 @@ export function FinanceTabs({
         )}
       </div>
 
-      {/* ── DESKTOP (lg+) ── sidebar nav + content */}
+      {/* ══ DESKTOP  (lg+) ═══════════════════════════════════════════════ */}
       <div className="hidden lg:grid lg:grid-cols-[200px_1fr] lg:items-start lg:gap-6">
         <nav role="tablist" aria-label="Secciones de finanzas" className="flex flex-col gap-0.5">
-          {ALL_SIDEBAR_TABS.map(({ value, label, icon: NavIcon }) => {
+          {ALL_PAGES.map(({ value, label, icon: NavIcon }) => {
             const active = tab === value;
             return (
               <button

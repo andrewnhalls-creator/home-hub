@@ -255,7 +255,7 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
                       type="button"
                       aria-label="Eliminar pago"
                       onClick={() => setDeletingPaymentId(p.id)}
-                      className="rounded-lg p-1 text-muted transition-colors hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:text-danger active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
                       <Trash size={13} />
                     </button>
