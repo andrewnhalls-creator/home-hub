@@ -6,7 +6,7 @@ These rules apply to every Claude Code session working in this repository. Read 
 
 - **Name:** Home Hub
 - **Purpose:** A private, shared household management app for two people (a married couple) to organise shopping lists, weekly menus, recipes, reminders, chores, a calendar, fixed payments with payment history, variable expenses (including weekly grocery spend tracking), savings goals, subscriptions, household documents, a wishlist, push notifications, and household planning, in one place.
-- **Audience:** Up to three members per household (owner + up to 2 invited members), invite-only. Typical use: owner, partner, and optionally a shared "home" account for a communal device (e.g. a shared iPad). Not a public or multi-tenant SaaS product.
+- **Audience:** Up to five members per household (owner + up to 4 invited members), invite-only. Typical use: owner, partner, and optionally family or housemates. Not a public or multi-tenant SaaS product.
 
 ## Language and locale (non-negotiable)
 

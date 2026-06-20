@@ -73,7 +73,7 @@ export function SettingsView({
         </ul>
       </Card>
 
-      {role === "owner" && members.length < 3 && (
+      {role === "owner" && members.length < 5 && (
         <Card>
           <CardTitle>Añadir miembro</CardTitle>
           <CardDescription>Comparte este código para que alguien se una a tu hogar.</CardDescription>

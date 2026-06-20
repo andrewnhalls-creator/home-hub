@@ -107,8 +107,8 @@ export async function generateInviteCode(): Promise<InviteActionState> {
     .select("id", { count: "exact", head: true })
     .eq("household_id", householdId);
 
-  if ((count ?? 0) >= 3) {
-    return { error: "Este hogar ya tiene el máximo de 3 miembros." };
+  if ((count ?? 0) >= 5) {
+    return { error: "Este hogar ya tiene el máximo de 5 miembros." };
   }
 
   const code = generateCode();
