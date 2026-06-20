@@ -229,15 +229,16 @@ export function FinanceTabs({
         ) : tab === "resumen" ? (
           /* Resumen landing */
           <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-brown">Resumen</p>
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-lg font-bold text-brown">Resumen</p>
               <button
                 type="button"
                 aria-label="Ver secciones"
                 onClick={() => setShowMenu(true)}
-                className="flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-white/[0.07] px-3 py-1.5 text-xs font-medium text-brown transition hover:bg-white/[0.12] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
               >
-                <SquaresFour className="h-5 w-5" aria-hidden />
+                <SquaresFour className="h-4 w-4 text-muted" aria-hidden />
+                Menú
               </button>
             </div>
             <div key="resumen" className="animate-tab-enter">
@@ -264,9 +265,10 @@ export function FinanceTabs({
                 type="button"
                 aria-label="Ver secciones"
                 onClick={() => setShowMenu(true)}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-white/[0.07] px-3 py-1.5 text-xs font-medium text-brown transition hover:bg-white/[0.12] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
               >
-                <SquaresFour className="h-5 w-5" aria-hidden />
+                <SquaresFour className="h-4 w-4 text-muted" aria-hidden />
+                Menú
               </button>
             </div>
 

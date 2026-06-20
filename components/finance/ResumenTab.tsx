@@ -4,7 +4,7 @@ import { useActionState, useEffect, useState } from "react";
 import { PencilSimple } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
-import { PrintButton } from "@/components/ui/PrintButton";
+
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -304,10 +304,6 @@ export function ResumenTab({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex justify-end">
-        <PrintButton label="Exportar PDF" />
-      </div>
-
       {/* Hero: account balance + disponible */}
       <div className="grid grid-cols-2 gap-2">
         <div className="relative rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
@@ -371,6 +367,19 @@ export function ResumenTab({
         />
       </div>
 
+      {/* Total pending — shown right after the 6 summary cards */}
+      {totalPending > 0 && (
+        <div className="rounded-[var(--radius-xl)] border border-amber/20 bg-amber/[0.06] p-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-medium text-brown">Total pendiente de pagar</p>
+            <p className="text-base font-bold text-amber tabular-nums">{formatCurrency(totalPending)}</p>
+          </div>
+          <p className="mt-1 text-xs text-muted">
+            Gastos fijos + suscripciones pendientes este ciclo
+          </p>
+        </div>
+      )}
+
       {/* Status chips row */}
       <div className="grid grid-cols-3 gap-2">
         <TappableKpi
@@ -424,19 +433,6 @@ export function ResumenTab({
             </div>
           </div>
         </Card>
-      )}
-
-      {/* Total pending */}
-      {totalPending > 0 && (
-        <div className="rounded-[var(--radius-xl)] border border-amber/20 bg-amber/[0.06] p-4">
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-sm font-medium text-brown">Total pendiente de pagar</p>
-            <p className="text-base font-bold text-amber tabular-nums">{formatCurrency(totalPending)}</p>
-          </div>
-          <p className="mt-1 text-xs text-muted">
-            Gastos fijos + suscripciones pendientes este ciclo
-          </p>
-        </div>
       )}
 
       {/* Mortgage summary cards */}
