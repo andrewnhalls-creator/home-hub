@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import {
@@ -14,6 +14,8 @@ import {
   Scales,
   ArrowLeft,
   SquaresFour,
+  CaretLeft,
+  CaretRight,
   type Icon,
 } from "@phosphor-icons/react";
 
@@ -99,14 +101,97 @@ const SUB_PAGES: SubPage[] = [
   { value: "deuda",            label: "Deuda",                      icon: Scales          },
 ];
 
-const ALL_SIDEBAR_TABS: { value: Tab; label: string; icon: Icon }[] = [
+const ALL_PAGES: { value: Tab; label: string; icon: Icon }[] = [
   { value: "resumen", label: "Resumen", icon: ChartBar },
   ...SUB_PAGES,
 ];
 
+const ALL_SIDEBAR_TABS: { value: Tab; label: string; icon: Icon }[] = ALL_PAGES;
+
 function currentMonthLabel(): string {
   const raw = format(new Date(), "MMMM yyyy", { locale: es });
   return raw.charAt(0).toUpperCase() + raw.slice(1);
+}
+
+interface DashboardPagerProps {
+  pages: typeof ALL_PAGES;
+  currentIndex: number;
+  onPrev: () => void;
+  onNext: () => void;
+  onGoTo: (index: number) => void;
+}
+
+function DashboardPager({ pages, currentIndex, onPrev, onNext, onGoTo }: DashboardPagerProps) {
+  const canPrev = currentIndex > 0;
+  const canNext = currentIndex < pages.length - 1;
+
+  return (
+    <div className="flex w-full items-center justify-between gap-2">
+      {/* Prev arrow */}
+      <button
+        type="button"
+        aria-label="Página anterior"
+        onClick={onPrev}
+        disabled={!canPrev}
+        className={cn(
+          "flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+          canPrev
+            ? "text-muted hover:bg-white/[0.08] hover:text-brown active:scale-[0.90]"
+            : "text-white/[0.15] cursor-default",
+        )}
+      >
+        <CaretLeft weight="bold" className="h-3.5 w-3.5" aria-hidden />
+      </button>
+
+      {/* Dot indicators */}
+      <div
+        role="tablist"
+        aria-label="Páginas de finanzas"
+        className="flex min-w-0 flex-1 items-center justify-center gap-1.5"
+      >
+        {pages.map((page, i) => {
+          const isActive = i === currentIndex;
+          return (
+            <button
+              key={page.value}
+              role="tab"
+              type="button"
+              aria-selected={isActive}
+              aria-label={page.label}
+              onClick={() => onGoTo(i)}
+              className={cn(
+                "h-1.5 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terracotta focus-visible:ring-offset-1 focus-visible:ring-offset-cream",
+                isActive
+                  ? "w-5 bg-terracotta"
+                  : "w-1.5 bg-white/[0.25] hover:bg-white/[0.45]",
+              )}
+            />
+          );
+        })}
+      </div>
+
+      {/* Page counter */}
+      <span className="shrink-0 min-w-[2.5rem] text-right text-[11px] tabular-nums text-muted">
+        {currentIndex + 1}/{pages.length}
+      </span>
+
+      {/* Next arrow */}
+      <button
+        type="button"
+        aria-label="Página siguiente"
+        onClick={onNext}
+        disabled={!canNext}
+        className={cn(
+          "flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+          canNext
+            ? "text-muted hover:bg-white/[0.08] hover:text-brown active:scale-[0.90]"
+            : "text-white/[0.15] cursor-default",
+        )}
+      >
+        <CaretRight weight="bold" className="h-3.5 w-3.5" aria-hidden />
+      </button>
+    </div>
+  );
 }
 
 export function FinanceTabs({
@@ -130,11 +215,54 @@ export function FinanceTabs({
   const [tab, setTab] = useState<Tab>("resumen");
   const [showMenu, setShowMenu] = useState(false);
 
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const isSwiping = useRef(false);
+
+  const currentIndex = ALL_PAGES.findIndex((p) => p.value === tab);
   const currentSubPage = SUB_PAGES.find((p) => p.value === tab);
 
   function goTo(t: Tab) {
     setTab(t);
     setShowMenu(false);
+  }
+
+  function goToIndex(index: number) {
+    if (index >= 0 && index < ALL_PAGES.length) {
+      goTo(ALL_PAGES[index].value);
+    }
+  }
+
+  function goToPrev() {
+    goToIndex(currentIndex - 1);
+  }
+
+  function goToNext() {
+    goToIndex(currentIndex + 1);
+  }
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.targetTouches[0].clientX;
+    touchStartY.current = e.targetTouches[0].clientY;
+    isSwiping.current = false;
+  }
+
+  function handleTouchMove(e: React.TouchEvent) {
+    const dx = Math.abs(e.targetTouches[0].clientX - touchStartX.current);
+    const dy = Math.abs(e.targetTouches[0].clientY - touchStartY.current);
+    if (!isSwiping.current && dx > dy && dx > 10) {
+      isSwiping.current = true;
+    }
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    if (!isSwiping.current) return;
+    const deltaX = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX > 0) goToNext();
+      else goToPrev();
+    }
+    isSwiping.current = false;
   }
 
   function renderContent() {
@@ -198,7 +326,7 @@ export function FinanceTabs({
       {/* ── MOBILE (< lg) ── */}
       <div className="lg:hidden">
         {showMenu ? (
-          /* Section picker */
+          /* Section picker overlay */
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-brown">Secciones</p>
@@ -226,40 +354,23 @@ export function FinanceTabs({
               ))}
             </div>
           </div>
-        ) : tab === "resumen" ? (
-          /* Resumen landing */
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-lg font-bold text-brown">Resumen</p>
-              <button
-                type="button"
-                aria-label="Ver secciones"
-                onClick={() => setShowMenu(true)}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-white/[0.07] px-3 py-1.5 text-xs font-medium text-brown transition hover:bg-white/[0.12] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
-              >
-                <SquaresFour className="h-4 w-4 text-muted" aria-hidden />
-                Menú
-              </button>
-            </div>
-            <div key="resumen" className="animate-tab-enter">
-              {renderContent()}
-            </div>
-          </div>
         ) : (
-          /* Sub-page view */
+          /* Main page view — unified layout for all pages */
           <div className="flex flex-col gap-3">
-            {/* Sub-page header */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                aria-label="Volver al resumen"
-                onClick={() => goTo("resumen")}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
-              >
-                <ArrowLeft className="h-4 w-4" aria-hidden />
-              </button>
-              <p className="min-w-0 flex-1 truncate text-sm font-semibold text-brown">
-                {currentSubPage?.label}
+            {/* Page header */}
+            <div className="flex min-w-0 items-center gap-2">
+              {tab !== "resumen" && (
+                <button
+                  type="button"
+                  aria-label="Volver al resumen"
+                  onClick={() => goTo("resumen")}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                >
+                  <ArrowLeft className="h-4 w-4" aria-hidden />
+                </button>
+              )}
+              <p className="min-w-0 flex-1 truncate text-lg font-bold text-brown">
+                {tab === "resumen" ? "Resumen" : currentSubPage?.label}
               </p>
               <button
                 type="button"
@@ -272,38 +383,23 @@ export function FinanceTabs({
               </button>
             </div>
 
-            {/* Horizontal page-slider strip */}
-            <div
-              role="tablist"
-              aria-label="Secciones de finanzas"
-              className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            >
-              <div className="flex gap-2" style={{ width: "max-content" }}>
-                {SUB_PAGES.map(({ value, label }) => {
-                  const active = tab === value;
-                  return (
-                    <button
-                      key={value}
-                      role="tab"
-                      type="button"
-                      aria-selected={active}
-                      onClick={() => goTo(value)}
-                      className={cn(
-                        "h-9 whitespace-nowrap rounded-full px-4 text-[13px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.96]",
-                        active
-                          ? "bg-terracotta text-cream"
-                          : "bg-white/[0.07] text-muted hover:bg-white/[0.12]",
-                      )}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            {/* ── Page switcher: sits between header and first KPI row ── */}
+            <DashboardPager
+              pages={ALL_PAGES}
+              currentIndex={currentIndex}
+              onPrev={goToPrev}
+              onNext={goToNext}
+              onGoTo={goToIndex}
+            />
 
-            {/* Sub-page content */}
-            <div key={tab} className="animate-tab-enter">
+            {/* Swipeable content area */}
+            <div
+              key={tab}
+              className="animate-tab-enter min-w-0"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               {renderContent()}
             </div>
           </div>
@@ -337,7 +433,7 @@ export function FinanceTabs({
           })}
         </nav>
 
-        <div key={tab} className="animate-tab-enter">
+        <div key={tab} className="animate-tab-enter min-w-0">
           {renderContent()}
         </div>
       </div>

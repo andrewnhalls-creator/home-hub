@@ -431,7 +431,8 @@ export function AIChatButton() {
         type="button"
         onClick={() => setIsOpen(true)}
         aria-label="Abrir asistente del hogar"
-        className="fixed bottom-20 right-4 z-40 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-terracotta text-cream shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta/60 focus-visible:ring-offset-2 active:scale-95 md:bottom-8 md:right-6"
+        className="fixed right-4 z-40 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-terracotta text-cream shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta/60 focus-visible:ring-offset-2 active:scale-95 md:right-6"
+        style={{ bottom: "calc(5rem + env(safe-area-inset-bottom))" }}
       >
         <Sparkle weight="fill" className="h-6 w-6" aria-hidden />
       </button>

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: "Home Hub",
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
   },
   icons: {
     apple: "/icons/apple-touch-icon.png",
@@ -38,6 +38,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: "#0D0B1F",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
