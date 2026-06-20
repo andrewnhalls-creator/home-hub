@@ -9,7 +9,6 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { ExpenseForm } from "@/components/finance/ExpenseForm";
-import { ExpenseCharts } from "@/components/finance/ExpenseCharts";
 import { createExpense, updateExpense, deleteExpense } from "@/app/(app)/finanzas/actions";
 import type { Category, Expense } from "@/lib/types";
 
@@ -33,7 +32,6 @@ export function ExpensesTab({ expenses, categories, members }: ExpensesTabProps)
 
   return (
     <div className="flex flex-col gap-3">
-      <ExpenseCharts expenses={expenses} categories={categories} />
       {expenses.length === 0 ? (
         <EmptyState
           icon={ShoppingBag}

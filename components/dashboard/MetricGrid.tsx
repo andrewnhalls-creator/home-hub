@@ -34,6 +34,23 @@ export function MetricGrid({
   return (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-2 lg:content-start">
       <MetricCard
+        icon={Wallet}
+        iconColor="text-coral"
+        iconBg="bg-rose/20"
+        label="Finanzas"
+        metric={proximosCount}
+        status={proximosCount === 0 ? "Sin próximos pagos" : "próximos pagos"}
+        attention={hasOverduePayments}
+        href="/finanzas"
+      />
+      <MetricCard
+        icon={CalendarDots}
+        label="Calendario"
+        metric={todayEventsCount}
+        status={todayEventsCount === 0 ? "Sin eventos hoy" : "eventos"}
+        href="/calendario"
+      />
+      <MetricCard
         icon={ShoppingCart}
         label="Compra"
         metric={shopping}
@@ -66,23 +83,6 @@ export function MetricGrid({
         metric={tasks}
         status={tasks === 0 ? "Al día" : "pendientes"}
         href="/tareas"
-      />
-      <MetricCard
-        icon={CalendarDots}
-        label="Hoy"
-        metric={todayEventsCount}
-        status={todayEventsCount === 0 ? "Sin eventos hoy" : "eventos"}
-        href="/calendario"
-      />
-      <MetricCard
-        icon={Wallet}
-        iconColor="text-coral"
-        iconBg="bg-rose/20"
-        label="Finanzas"
-        metric={proximosCount}
-        status={proximosCount === 0 ? "Sin próximos pagos" : "próximos pagos"}
-        attention={hasOverduePayments}
-        href="/finanzas"
       />
     </div>
   );

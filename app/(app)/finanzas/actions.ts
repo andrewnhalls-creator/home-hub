@@ -229,6 +229,20 @@ export async function markPaymentInstancePaid(instanceId: string) {
   revalidatePath("/dashboard");
 }
 
+export async function unmarkPaymentInstancePaid(instanceId: string) {
+  const { householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  await supabase
+    .from("payment_instances")
+    .update({ status: "pendiente", paid_date: null, paid_by: null })
+    .eq("id", instanceId)
+    .eq("household_id", householdId);
+
+  revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
+}
+
 export async function skipPaymentInstance(instanceId: string) {
   const { householdId } = await requireHousehold();
   const supabase = await createClient();

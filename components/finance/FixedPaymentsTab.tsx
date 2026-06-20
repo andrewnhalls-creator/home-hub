@@ -16,6 +16,7 @@ import {
   updateFixedPayment,
   deleteFixedPayment,
   markPaymentInstancePaid,
+  unmarkPaymentInstancePaid,
   skipPaymentInstance,
 } from "@/app/(app)/finanzas/actions";
 import type { Category, FixedPayment, PaymentInstance } from "@/lib/types";
@@ -44,11 +45,12 @@ interface PaymentRowProps {
   onEdit: (p: FixedPayment) => void;
   onDelete: (p: FixedPayment) => void;
   onMarkPaid: (instanceId: string) => void;
+  onUnmarkPaid: (instanceId: string) => void;
   onSkip: (instanceId: string) => void;
   isPending: boolean;
 }
 
-function PaymentRow({ payment, instance, onEdit, onDelete, onMarkPaid, onSkip, isPending }: PaymentRowProps) {
+function PaymentRow({ payment, instance, onEdit, onDelete, onMarkPaid, onUnmarkPaid, onSkip, isPending }: PaymentRowProps) {
   const status = deriveStatus(payment, instance);
 
   return (
@@ -66,12 +68,6 @@ function PaymentRow({ payment, instance, onEdit, onDelete, onMarkPaid, onSkip, i
           </div>
 
           <div className="flex shrink-0 items-center gap-1">
-            {status === "pagado" && (
-              <Badge variant="success">
-                <CheckCircle className="mr-1 h-3 w-3" aria-hidden />
-                Pagado
-              </Badge>
-            )}
             {status === "pendiente" && (
               <Badge variant="warning">
                 <Clock className="mr-1 h-3 w-3" aria-hidden />
@@ -99,7 +95,20 @@ function PaymentRow({ payment, instance, onEdit, onDelete, onMarkPaid, onSkip, i
           </div>
         </div>
 
-        {/* Action buttons only for items still pending where an instance exists */}
+        {/* Toggle button for pagado — tap again to revert to pending */}
+        {status === "pagado" && instance && (
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={() => onUnmarkPaid(instance.id)}
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-success/30 bg-success/[0.08] py-2 text-sm font-medium text-success transition hover:bg-success/[0.14] active:scale-[0.98] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+          >
+            <CheckCircle className="h-4 w-4" aria-hidden />
+            Pagado — toca para desmarcar
+          </button>
+        )}
+
+        {/* Action buttons for pending items where an instance exists */}
         {status === "pendiente" && instance && (
           <div className="flex gap-2">
             <Button
@@ -172,6 +181,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
     onEdit: setEditingPayment,
     onDelete: setDeletingPayment,
     onMarkPaid: (id: string) => startTransition(() => { markPaymentInstancePaid(id); showToast("Marcado como pagado"); }),
+    onUnmarkPaid: (id: string) => startTransition(() => { unmarkPaymentInstancePaid(id); showToast("Desmarcado como pendiente"); }),
     onSkip: (id: string) => startTransition(() => { skipPaymentInstance(id); showToast("Omitido este ciclo"); }),
     isPending,
   };
@@ -233,7 +243,7 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
         return (
           <div key={key} className="flex flex-col gap-2">
             <div className="flex items-baseline justify-between gap-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">{label}</p>
+              <p className="text-xs font-medium text-muted">{label}</p>
               <p className="text-xs text-muted tabular-nums">{formatCurrency(groupTotal)}/mes</p>
             </div>
             <ul className="flex flex-col gap-2">

@@ -189,7 +189,7 @@ export function IngresoTab({ sources }: IngresoTabProps) {
             return (
               <div key={earner} className="flex flex-col gap-2">
                 <div className="flex items-baseline justify-between gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">{earner}</p>
+                  <p className="text-xs font-medium text-muted">{earner}</p>
                   <p className="text-xs text-muted tabular-nums">{formatCurrency(earnerTotal)}/mes</p>
                 </div>
                 <ul className="flex flex-col gap-2">

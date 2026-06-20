@@ -170,7 +170,38 @@ export default async function DashboardPage() {
         </Card>
       )}
 
-      {/* On lg+: 2-col layout (metric grid left, calendar + lists right) */}
+      {/* Pending finances — above the module cards */}
+      {pendingFixedPayments.length > 0 && (
+        <ListSection
+          title="Próximos pagos"
+          href="/finanzas"
+          items={pendingFixedPayments.slice(0, 3).map((p) => ({
+            id: p.id,
+            title: p.name,
+            meta: p.due_day ? `Día ${p.due_day}` : undefined,
+            badgeLabel: formatCurrency(p.amount),
+            badgeVariant: "accent" as const,
+          }))}
+        />
+      )}
+
+      {pendingSubscriptions.length > 0 && (
+        <ListSection
+          title="Suscripciones pendientes"
+          href="/finanzas"
+          items={pendingSubscriptions.slice(0, 3).map((s) => ({
+            id: s.id,
+            title: s.name,
+            meta: s.billing_cycle === "mensual" && s.billing_day
+              ? `Día ${s.billing_day}`
+              : s.renewal_date ? formatDate(s.renewal_date) : undefined,
+            badgeLabel: formatCurrency(s.amount),
+            badgeVariant: "warning" as const,
+          }))}
+        />
+      )}
+
+      {/* On lg+: 2-col layout (metric tiles left, lists right) */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {/* Left: 6 metric tiles */}
         <MetricGrid
@@ -184,13 +215,8 @@ export default async function DashboardPage() {
           hasOverduePayments={hasOverduePayments}
         />
 
-        {/* Right: calendar widget + upcoming sections */}
+        {/* Right: upcoming reminders + chores */}
         <div className="flex flex-col gap-5">
-          <WeekCalendarWidget
-            weekStartStr={weekStart}
-            events={calendarEvents ?? []}
-          />
-
           {(reminders?.length ?? 0) > 0 && (
             <ListSection
               title="Próximos recordatorios"
@@ -216,38 +242,14 @@ export default async function DashboardPage() {
               }))}
             />
           )}
-
-          {pendingFixedPayments.length > 0 && (
-            <ListSection
-              title="Próximos pagos"
-              href="/finanzas"
-              items={pendingFixedPayments.slice(0, 3).map((p) => ({
-                id: p.id,
-                title: p.name,
-                meta: p.due_day ? `Día ${p.due_day}` : undefined,
-                badgeLabel: formatCurrency(p.amount),
-                badgeVariant: "accent" as const,
-              }))}
-            />
-          )}
-
-          {pendingSubscriptions.length > 0 && (
-            <ListSection
-              title="Suscripciones pendientes"
-              href="/finanzas"
-              items={pendingSubscriptions.slice(0, 3).map((s) => ({
-                id: s.id,
-                title: s.name,
-                meta: s.billing_cycle === "mensual" && s.billing_day
-                  ? `Día ${s.billing_day}`
-                  : s.renewal_date ? formatDate(s.renewal_date) : undefined,
-                badgeLabel: formatCurrency(s.amount),
-                badgeVariant: "warning" as const,
-              }))}
-            />
-          )}
         </div>
       </div>
+
+      {/* Calendar widget — at the bottom */}
+      <WeekCalendarWidget
+        weekStartStr={weekStart}
+        events={calendarEvents ?? []}
+      />
     </div>
   );
 }

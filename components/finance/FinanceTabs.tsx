@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import {
@@ -16,6 +16,7 @@ import {
   SquaresFour,
   CaretLeft,
   CaretRight,
+  Bank,
   type Icon,
 } from "@phosphor-icons/react";
 
@@ -83,7 +84,7 @@ interface FinanceTabsProps {
   cycleEnd?: string;
 }
 
-type Tab = "resumen" | "ingresos" | "gastos-fijos" | "suscripciones" | "gastos-variables" | "gastos" | "plan-ahorro" | "deuda";
+type Tab = "resumen" | "ingresos" | "gastos-fijos" | "suscripciones" | "gastos-variables" | "gastos" | "plan-ahorro" | "hipoteca" | "deuda";
 
 interface SubPage {
   value: Exclude<Tab, "resumen">;
@@ -92,13 +93,14 @@ interface SubPage {
 }
 
 const SUB_PAGES: SubPage[] = [
-  { value: "ingresos",         label: "Ingresos",                   icon: TrendUp         },
-  { value: "gastos-fijos",     label: "Gastos fijos",               icon: CreditCard      },
-  { value: "suscripciones",    label: "Suscripciones",              icon: ArrowsClockwise },
-  { value: "gastos-variables", label: "Gastos variables",           icon: ChartPie        },
-  { value: "gastos",           label: "Gastos",                     icon: ShoppingBag     },
-  { value: "plan-ahorro",      label: "Plan de ahorro y hipoteca",  icon: PiggyBank       },
-  { value: "deuda",            label: "Deuda",                      icon: Scales          },
+  { value: "ingresos",         label: "Ingresos",          icon: TrendUp         },
+  { value: "gastos-fijos",     label: "Gastos fijos",      icon: CreditCard      },
+  { value: "suscripciones",    label: "Suscripciones",     icon: ArrowsClockwise },
+  { value: "gastos-variables", label: "Gastos variables",  icon: ChartPie        },
+  { value: "gastos",           label: "Gastos",            icon: ShoppingBag     },
+  { value: "plan-ahorro",      label: "Plan de ahorro",    icon: PiggyBank       },
+  { value: "hipoteca",         label: "Hipoteca",          icon: Bank            },
+  { value: "deuda",            label: "Deuda",             icon: Scales          },
 ];
 
 const ALL_PAGES: { value: Tab; label: string; icon: Icon }[] = [
@@ -124,30 +126,39 @@ interface DashboardPagerProps {
 function DashboardPager({ pages, currentIndex, onPrev, onNext, onGoTo }: DashboardPagerProps) {
   const canPrev = currentIndex > 0;
   const canNext = currentIndex < pages.length - 1;
+  const stripRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = stripRef.current;
+    if (!container) return;
+    const activeBtn = container.children[currentIndex] as HTMLElement | undefined;
+    activeBtn?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [currentIndex]);
 
   return (
-    <div className="flex w-full items-center justify-between gap-2">
-      {/* Prev arrow */}
+    <div className="flex w-full items-center gap-1">
+      {/* Prev arrow — 44 × 44 tap target */}
       <button
         type="button"
         aria-label="Página anterior"
         onClick={onPrev}
         disabled={!canPrev}
         className={cn(
-          "flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
           canPrev
             ? "text-muted hover:bg-white/[0.08] hover:text-brown active:scale-[0.90]"
             : "text-white/[0.15] cursor-default",
         )}
       >
-        <CaretLeft weight="bold" className="h-3.5 w-3.5" aria-hidden />
+        <CaretLeft weight="bold" className="h-4 w-4" aria-hidden />
       </button>
 
-      {/* Dot indicators */}
+      {/* Scrollable named tab strip */}
       <div
+        ref={stripRef}
         role="tablist"
         aria-label="Páginas de finanzas"
-        className="flex min-w-0 flex-1 items-center justify-center gap-1.5"
+        className="scrollbar-none flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto py-1"
       >
         {pages.map((page, i) => {
           const isActive = i === currentIndex;
@@ -157,38 +168,34 @@ function DashboardPager({ pages, currentIndex, onPrev, onNext, onGoTo }: Dashboa
               role="tab"
               type="button"
               aria-selected={isActive}
-              aria-label={page.label}
               onClick={() => onGoTo(i)}
               className={cn(
-                "h-1.5 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terracotta focus-visible:ring-offset-1 focus-visible:ring-offset-cream",
+                "flex h-9 shrink-0 items-center rounded-full px-3.5 text-[13px] font-medium whitespace-nowrap transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terracotta focus-visible:ring-offset-1 focus-visible:ring-offset-cream",
                 isActive
-                  ? "w-5 bg-terracotta"
-                  : "w-1.5 bg-white/[0.25] hover:bg-white/[0.45]",
+                  ? "bg-terracotta text-cream"
+                  : "bg-white/[0.06] text-muted hover:bg-white/[0.12] hover:text-brown",
               )}
-            />
+            >
+              {page.label}
+            </button>
           );
         })}
       </div>
 
-      {/* Page counter */}
-      <span className="shrink-0 min-w-[2.5rem] text-right text-[11px] tabular-nums text-muted">
-        {currentIndex + 1}/{pages.length}
-      </span>
-
-      {/* Next arrow */}
+      {/* Next arrow — 44 × 44 tap target */}
       <button
         type="button"
         aria-label="Página siguiente"
         onClick={onNext}
         disabled={!canNext}
         className={cn(
-          "flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
           canNext
             ? "text-muted hover:bg-white/[0.08] hover:text-brown active:scale-[0.90]"
             : "text-white/[0.15] cursor-default",
         )}
       >
-        <CaretRight weight="bold" className="h-3.5 w-3.5" aria-hidden />
+        <CaretRight weight="bold" className="h-4 w-4" aria-hidden />
       </button>
     </div>
   );
@@ -273,7 +280,7 @@ export function FinanceTabs({
             {...resumen}
             mortgages={mortgages}
             mortgagePayments={mortgagePayments}
-            onGoToMortgage={() => goTo("plan-ahorro")}
+            onGoToMortgage={() => goTo("hipoteca")}
             onGoToIngresos={() => goTo("ingresos")}
             onGoToGastosFijos={() => goTo("gastos-fijos")}
             onGoToSuscripciones={() => goTo("suscripciones")}
@@ -299,12 +306,9 @@ export function FinanceTabs({
       case "gastos":
         return <ExpensesTab expenses={expenses} categories={financeCategories} members={members} />;
       case "plan-ahorro":
-        return (
-          <div className="flex flex-col gap-6">
-            <PlanAhorroTab goals={savingsGoals} mortgages={mortgages} />
-            <MortgageTab mortgages={mortgages} payments={mortgagePayments} />
-          </div>
-        );
+        return <PlanAhorroTab goals={savingsGoals} mortgages={mortgages} />;
+      case "hipoteca":
+        return <MortgageTab mortgages={mortgages} payments={mortgagePayments} />;
       case "deuda":
         return <DeudaTab debts={debts} />;
     }
@@ -376,7 +380,7 @@ export function FinanceTabs({
                 type="button"
                 aria-label="Ver secciones"
                 onClick={() => setShowMenu(true)}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-white/[0.07] px-3 py-1.5 text-xs font-medium text-brown transition hover:bg-white/[0.12] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                className="inline-flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-full border border-border bg-white/[0.07] px-4 text-sm font-medium text-brown transition hover:bg-white/[0.12] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
               >
                 <SquaresFour className="h-4 w-4 text-muted" aria-hidden />
                 Menú

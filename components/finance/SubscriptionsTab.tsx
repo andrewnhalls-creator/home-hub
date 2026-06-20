@@ -248,7 +248,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
           {monthly.length > 0 && (
             <div className="flex flex-col gap-2">
               <div className="flex items-baseline justify-between gap-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted">Mensuales</p>
+                <p className="text-xs font-medium text-muted">Mensuales</p>
                 <p className="text-xs text-muted tabular-nums">{formatCurrency(monthlyTotal)}/mes</p>
               </div>
               <ul className="flex flex-col gap-2">
@@ -259,7 +259,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
           {annual.length > 0 && (
             <div className="flex flex-col gap-2">
               <div className="flex items-baseline justify-between gap-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted">Anuales</p>
+                <p className="text-xs font-medium text-muted">Anuales</p>
                 <p className="text-xs text-muted tabular-nums">{formatCurrency(annualTotal)}/año</p>
               </div>
               <ul className="flex flex-col gap-2">
@@ -269,7 +269,7 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
           )}
           {other.length > 0 && (
             <div className="flex flex-col gap-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">Otros ciclos</p>
+              <p className="text-xs font-medium text-muted">Otros ciclos</p>
               <ul className="flex flex-col gap-2">
                 {other.map((s) => <SubscriptionItem key={s.id} subscription={s} />)}
               </ul>
