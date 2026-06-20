@@ -35,11 +35,11 @@ export function MetricGrid({
     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-2 lg:content-start">
       <MetricCard
         icon={Wallet}
-        iconColor="text-coral"
-        iconBg="bg-rose/20"
+        iconColor="text-rose"
+        iconBg="bg-rose/15"
         label="Finanzas"
         metric={proximosCount}
-        status={proximosCount === 0 ? "Sin próximos pagos" : "próximos pagos"}
+        status={proximosCount === 0 ? "Al corriente" : "próximos pagos"}
         attention={hasOverduePayments}
         href="/finanzas"
       />
@@ -47,31 +47,32 @@ export function MetricGrid({
         icon={CalendarDots}
         label="Calendario"
         metric={todayEventsCount}
-        status={todayEventsCount === 0 ? "Sin eventos hoy" : "eventos"}
+        status={todayEventsCount === 0 ? "Día tranquilo" : "eventos hoy"}
         href="/calendario"
       />
       <MetricCard
         icon={ShoppingCart}
         label="Compra"
         metric={shopping}
-        status={shopping === 0 ? "Lista vacía" : "pendientes"}
+        status={shopping === 0 ? "Lista, al día" : "pendientes"}
         href="/compra"
       />
       <MetricCard
         icon={ForkKnife}
-        iconColor="text-olive"
-        iconBg="bg-sage/20"
+        iconColor="text-sage"
+        iconBg="bg-sage/15"
         label="Menú"
         metric={meals}
-        status={meals === 0 ? "Sin planificar" : "de 7 comidas"}
+        status={meals === 0 ? "Semana por planear" : "de 7 planificadas"}
         href="/menu"
       />
       <MetricCard
         icon={Bell}
-        iconBg="bg-amber/20"
+        iconColor="text-amber"
+        iconBg="bg-amber/15"
         label="Recordatorios"
         metric={pending}
-        status={pending === 0 ? "Nada pendiente" : "pendientes"}
+        status={pending === 0 ? "Todo en orden" : "pendientes"}
         attention={hasOverdueReminders}
         href="/recordatorios"
       />

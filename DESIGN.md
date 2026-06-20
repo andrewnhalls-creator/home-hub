@@ -38,6 +38,11 @@ All values in hex. CSS custom properties defined in `app/globals.css`. `globals.
 | `--color-success` | `success` | `#009966` | Completed states |
 | `--color-danger` | `danger` | `#EF4444` | Destructive actions, overdue states |
 | `--color-warning-text` | `warning-text` | `#FBBF24` | Warning text |
+| `--color-success-soft` | `success-soft` | `rgba(0,153,102,0.12)` | Soft fill — success badge/chip bg |
+| `--color-danger-soft` | `danger-soft` | `rgba(239,68,68,0.12)` | Soft fill — error badge/chip bg |
+| `--color-warning-soft` | `warning-soft` | `rgba(251,191,36,0.12)` | Soft fill — warning badge/chip bg |
+| `--color-disabled` | — | `rgba(255,255,255,0.04)` | Disabled input / control background |
+| `--color-fg-disabled` | — | `#475569` | Disabled foreground text |
 
 ### Text on filled colours
 
@@ -74,10 +79,29 @@ This project uses a **two-tier glass rule**. Blur is a purposeful material signa
 | Hover state on cards | `rgba(255,255,255,0.12)` | **none** |
 | Fixed nav bars (BottomNav, TopBar) | `rgba(13,11,31,0.80)` | `blur(20px)` |
 | Modals / bottom sheets | `rgba(13,11,31,0.85–0.92)` | `blur(24px)` |
-| Toasts | `bg-success/[0.08]` or `bg-danger/[0.08]` | `blur(8px)` |
+| Toasts | `bg-success/[0.08]` or `bg-danger/[0.08]` | **none** |
 | Modal backdrop overlay | `bg-black/70` | `blur(4px)` |
 
 **Rule:** Never add `backdrop-filter` to content cards, form inputs, empty states, or list items. Blur only on elements that float over other content.
+
+### `.glass` utility class
+
+`globals.css` exposes a `.glass` CSS class that bundles the frosted-glass treatment (rgba tint + `blur(20px)` + border + shadow). Use it **only** on nav bars and modal/sheet shells — never on content cards, list items, or inputs.
+
+```css
+.glass { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); … }
+```
+
+Related glass variables (for use in custom inline styles):
+
+| Variable | Value | Use |
+|---|---|---|
+| `--glass-bg` | `rgba(255,255,255,0.07)` | Default glass surface |
+| `--glass-bg-hover` | `rgba(255,255,255,0.12)` | Hovered glass surface |
+| `--glass-border` | `rgba(255,255,255,0.12)` | Glass border |
+| `--glass-border-subtle` | `rgba(255,255,255,0.06)` | Lighter glass border variant |
+| `--glass-edge-top` | gradient | Top edge refraction highlight |
+| `--glass-edge-left` | gradient | Left edge refraction highlight |
 
 ---
 
@@ -94,13 +118,27 @@ No floating orbs. No positioned accent gradients on body.
 
 ## Shadows
 
-| Token | Value | Use |
+### Semantic shadows (Tailwind utilities via `@theme`)
+
+| Token | Use |
+|---|---|
+| `shadow-card` | Default card (`0 8px 32px rgba(0,0,0,0.25)` + inset highlights) |
+| `shadow-card-hover` | Hovered card (`0 12px 40px rgba(0,0,0,0.35)` + inset highlights) |
+| `shadow-modal` | Modals, sheets (`0 20px 60px rgba(0,0,0,0.50)` + inset highlight) |
+| `shadow-btn` | Primary button — glow + glint layers |
+| `shadow-btn-active` | Button pressed — `inset 0 1px 3px rgba(0,0,0,0.35)` |
+
+### Elevation scale (CSS vars, use inline or via `shadow-[var(--shadow-*)]`)
+
+| Token | Elevation | Use |
 |---|---|---|
-| `shadow-card` | `0 8px 32px rgba(0,0,0,0.25), inset highlights` | Default card |
-| `shadow-card-hover` | `0 12px 40px rgba(0,0,0,0.35), inset highlights` | Hovered card |
-| `shadow-modal` | `0 20px 60px rgba(0,0,0,0.50), inset highlight` | Modals, sheets |
-| `shadow-btn` | glow + glint layers | Primary button |
-| `shadow-btn-active` | `inset 0 1px 3px rgba(0,0,0,0.35)` | Button pressed |
+| `--shadow-2xs` | `0 1px 2px` | Hairline lift |
+| `--shadow-xs` | `0 2px 8px` | Subtle chrome |
+| `--shadow-sm` | `0 4px 16px` + inset | Small panels |
+| `--shadow-md` | `0 8px 32px` + inset | Cards (= `shadow-card`) |
+| `--shadow-lg` | `0 12px 40px` + inset | Hovered cards (= `shadow-card-hover`) |
+| `--shadow-xl` | `0 20px 50px` + inset | Large panels |
+| `--shadow-2xl` | `0 25px 60px` + inset | Modals (= `shadow-modal`) |
 
 ---
 
@@ -116,7 +154,8 @@ Fraunces is a display serif reserved for hero headings and GreetingCard. Do not 
 
 | Use | Class | Weight |
 |---|---|---|
-| Display / hero | `font-display text-3xl` | `font-bold` in `brown` |
+| Hero greeting (GreetingCard) | `font-display text-5xl` | `font-bold` in `brown`, `tracking-tight leading-none` |
+| Display / section hero | `font-display text-3xl` | `font-bold` in `brown` |
 | Page title | `text-2xl` | `font-bold` in `brown` |
 | Section / card title | `text-lg` | `font-semibold` in `brown` |
 | Body | `text-base` | `font-normal` in `brown` |
@@ -196,7 +235,7 @@ Fraunces is a display serif reserved for hero headings and GreetingCard. Do not 
 
 ### Toasts
 
-- Floating — `blur(8px)` is appropriate here.
+- Floating — no `backdrop-filter` (two-tier glass rule: blur only on nav and modal shells).
 - Success: `bg-success/[0.08] border-success/30`.
 - Error: `bg-danger/[0.08] border-danger/30`.
 - Icons: Phosphor `CheckCircle weight="fill"` (success) / `WarningCircle weight="fill"` (error).
@@ -221,10 +260,16 @@ Never import from `lucide-react` for new components. Existing Lucide usages in o
 
 | Name | Duration | Easing | Use |
 |---|---|---|---|
-| `page-fade-up` | 180ms | `cubic-bezier(0.23, 1, 0.32, 1)` | Page transitions |
-| `modal-enter` | 180ms | same | Modals |
-| `sheet-enter` | 240ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Bottom sheets |
-| `toast-enter` | 200ms | same as modal | Toasts |
+| `page-fade-up` | 180ms | `cubic-bezier(0.23, 1, 0.32, 1)` | Page transitions — class: `animate-page-in` |
+| `modal-enter` | 180ms | same | Modals — class: `animate-modal-enter` |
+| `sheet-enter` | 240ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Bottom sheets — class: `animate-sheet-enter` |
+| `toast-enter` | 200ms | same as modal | Toasts — class: `animate-toast-enter` |
+| `backdrop-enter` | 200ms | `ease-out` | Modal backdrop overlay — class: `animate-backdrop-enter` |
+| `tab-enter` | 160ms | `cubic-bezier(0.23, 1, 0.32, 1)` | Tab content transition — class: `animate-tab-enter` |
+
+**`stagger-list`:** Apply to `<ul>` to stagger-animate child `<li>` elements with escalating delays (0ms → 205ms for 8 items). Uses `page-fade-up` per item.
+
+**`progress-fill`:** Apply to a `<div>` that represents a progress bar fill — animates `scaleX` from 0 to value on paint via `@starting-style`. 700ms easing.
 
 **Reduced motion:** `@media (prefers-reduced-motion: reduce)` collapses all durations to `0.01ms` globally.
 
@@ -248,3 +293,9 @@ Short, warm, Spanish. Always: icon + one-line message + primary action.
 - Page-level: card + "No se ha podido cargar esta sección." + "Reintentar".
 - Save failure: toast — "No se ha podido guardar. Inténtalo de nuevo."
 - Mutation errors must always surface a toast — never silent failure.
+
+---
+
+## Print / PDF export
+
+`@media print` in `globals.css` remaps all tokens to a clean light palette so every glass component auto-resets without per-component changes. Nav, header, dialogs, and `[aria-live]` elements are hidden. `backdrop-filter` is stripped. No per-component print styles are needed — the token remap handles it.

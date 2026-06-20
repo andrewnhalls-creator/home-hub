@@ -78,7 +78,7 @@ Shared categories, scoped per household and per module, so households can custom
 | `module` | `text not null` | one of `shopping`, `finance`, `reminders`, `chores`, `documents`, `wishlist`, `meals` |
 | `name` | `text not null` | |
 | `color` | `text` | |
-| `icon` | `text` | `lucide-react` icon name |
+| `icon` | `text` | icon identifier — column exists in schema but is not read by the UI (all icons are Phosphor, rendered from code) |
 | `is_default` | `boolean default false` | true for seeded categories |
 | `created_at` | `timestamptz default now()` | |
 
@@ -244,6 +244,8 @@ Constraint: `create unique index expenses_shopping_list_id_unique on expenses (s
 | `deleted_by` | `uuid references auth.users(id)` | |
 
 ### `savings_contributions`
+
+> **Schema-only — no UI in v1.** The table exists and is enforced by RLS, but the savings UI does not expose contribution history or allow adding contributions through this table. The PlanAhorroTab uses a separate "Añadir fondos" modal that writes directly to savings goal state, not to this table.
 
 | column | type | notes |
 |---|---|---|

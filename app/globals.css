@@ -3,8 +3,9 @@
 :root {
   /* ── Glassmorphism · Deep Indigo · Dark-first ──────────────────────────────
      Deep indigo atmospheric base. Frosted glass surfaces float above it.
-     Mint green (#8AFFC4) is the brand accent — vivid against indigo darkness.
-     All surfaces use rgba + backdrop-filter: blur(20px) for the glass effect.
+     Saffron gold (#E8C547) is the primary brand accent — warm against the deep indigo base.
+     Two-tier glass rule: blur(20px) via .glass class — nav bars and modals/sheets only.
+     Content cards and inputs use rgba tint without backdrop-filter.
   ─────────────────────────────────────────────────────────────────────────── */
 
   /* ── Page backgrounds (mapped to old token names for component compatibility) ── */
