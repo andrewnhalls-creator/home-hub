@@ -189,7 +189,7 @@ function DashboardPager({ pages, currentIndex, onPrev, onNext, onGoTo }: Dashboa
                 aria-selected={isActive}
                 onClick={() => onGoTo(i)}
                 className={cn(
-                  "flex h-9 shrink-0 items-center whitespace-nowrap rounded-full px-3.5 text-[13px] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terracotta focus-visible:ring-offset-1 focus-visible:ring-offset-cream",
+                  "flex h-11 shrink-0 items-center whitespace-nowrap rounded-full px-4 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terracotta focus-visible:ring-offset-1 focus-visible:ring-offset-cream",
                   isActive
                     ? "bg-terracotta text-cream"
                     : "bg-white/[0.06] text-muted hover:bg-white/[0.12] hover:text-brown",
@@ -401,7 +401,7 @@ export function FinanceTabs({
                 type="button"
                 aria-label="Ver secciones"
                 onClick={() => setShowMenu(true)}
-                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-white/[0.15] bg-white/[0.08] px-3 text-xs font-medium text-brown transition hover:bg-white/[0.14] hover:border-white/[0.25] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 text-sm font-medium text-brown transition hover:bg-white/[0.14] hover:border-white/[0.25] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
               >
                 <SquaresFour className="h-4 w-4 shrink-0 text-muted" aria-hidden />
                 Menú
