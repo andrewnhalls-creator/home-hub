@@ -357,7 +357,7 @@ export function FinanceTabs({
               </button>
             </div>
             <div role="list" className="grid grid-cols-2 gap-2 md:grid-cols-4">
-              {SUB_PAGES.map(({ value, label, icon: PageIcon }) => (
+              {ALL_PAGES.map(({ value, label, icon: PageIcon }) => (
                 <button
                   key={value}
                   role="listitem"
