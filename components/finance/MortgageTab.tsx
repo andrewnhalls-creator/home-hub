@@ -149,21 +149,21 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
 
       {/* Key stats grid */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl bg-background p-3">
+        <div className="rounded-xl bg-white/[0.04] p-3">
           <p className="text-xs text-muted mb-0.5">Cuota mensual</p>
           <p className="text-sm font-semibold text-brown">{formatCurrency(Number(mortgage.monthly_payment))}</p>
         </div>
-        <div className="rounded-xl bg-background p-3">
+        <div className="rounded-xl bg-white/[0.04] p-3">
           <p className="text-xs text-muted mb-0.5">Tipo de interés</p>
           <p className="text-sm font-semibold text-brown">
             {mortgage.interest_rate != null ? `${Number(mortgage.interest_rate).toFixed(3)}%` : "—"}
           </p>
         </div>
-        <div className="rounded-xl bg-background p-3">
+        <div className="rounded-xl bg-white/[0.04] p-3">
           <p className="text-xs text-muted mb-0.5">Inicio</p>
           <p className="text-sm font-semibold text-brown">{formatDate(mortgage.start_date)}</p>
         </div>
-        <div className="rounded-xl bg-background p-3">
+        <div className="rounded-xl bg-white/[0.04] p-3">
           <p className="text-xs text-muted mb-0.5">Tiempo restante</p>
           <p className="text-sm font-semibold text-brown">{remaining ?? "—"}</p>
         </div>

@@ -226,11 +226,11 @@ export function FixedPaymentsTab({ payments, instances, categories }: FixedPayme
       <Card variant="subtle">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-[11px] text-muted">Ya pagado este ciclo</p>
+            <p className="text-xs text-muted">Ya pagado este ciclo</p>
             <p className="text-base font-bold text-sage tabular-nums">{formatCurrency(paidTotal)}</p>
           </div>
           <div>
-            <p className="text-[11px] text-muted">Pendiente de pagar</p>
+            <p className="text-xs text-muted">Pendiente de pagar</p>
             <p className="text-base font-bold text-brown tabular-nums">{formatCurrency(pendingTotal)}</p>
           </div>
         </div>

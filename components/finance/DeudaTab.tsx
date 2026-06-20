@@ -155,11 +155,11 @@ export function DeudaTab({ debts }: DeudaTabProps) {
           <Card variant="subtle">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-[11px] text-muted">Deuda total</p>
+                <p className="text-xs text-muted">Deuda total</p>
                 <p className="text-base font-bold text-danger tabular-nums">{formatCurrency(totalBalance)}</p>
               </div>
               <div>
-                <p className="text-[11px] text-muted">Cuota mensual total</p>
+                <p className="text-xs text-muted">Cuota mensual total</p>
                 <p className="text-base font-bold text-brown tabular-nums">{formatCurrency(totalMonthly)}</p>
               </div>
             </div>

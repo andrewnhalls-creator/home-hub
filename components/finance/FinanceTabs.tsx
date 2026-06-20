@@ -203,7 +203,7 @@ function DashboardPager({ pages, currentIndex, onPrev, onNext, onGoTo }: Dashboa
       </div>
 
       {/* Page counter */}
-      <span className="shrink-0 min-w-[2.5rem] text-center text-[11px] tabular-nums text-muted">
+      <span className="shrink-0 min-w-[2.5rem] text-center text-xs tabular-nums text-muted">
         {currentIndex + 1}/{pages.length}
       </span>
 

@@ -98,7 +98,7 @@ export function BudgetCard({ monthlyBudget, spent }: BudgetCardProps) {
           type="button"
           aria-label="Editar presupuesto"
           onClick={() => setEditing(true)}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-sand"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
         >
           <PencilSimple className="h-3.5 w-3.5" aria-hidden />
         </button>

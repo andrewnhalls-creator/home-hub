@@ -62,8 +62,8 @@ function TappableKpi({ label, value, sub, variant = "default", onClick }: Tappab
       )}
     >
       <p className={cn("text-base font-bold leading-none tabular-nums", valueClass)}>{value}</p>
-      {sub && <p className="mt-0.5 text-[11px] tabular-nums text-muted">{sub}</p>}
-      <p className="mt-1.5 text-[11px] leading-tight text-muted">{label}</p>
+      {sub && <p className="mt-0.5 text-xs tabular-nums text-muted">{sub}</p>}
+      <p className="mt-1.5 text-xs leading-tight text-muted">{label}</p>
     </div>
   );
 
@@ -306,8 +306,8 @@ export function ResumenTab({
     <div className="flex flex-col gap-3">
       {/* Hero: account balance + disponible */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="relative rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
-          <p className="text-[11px] font-medium text-muted">Saldo en cuenta</p>
+        <div className="relative rounded-[var(--radius-xl)] border border-rose/20 bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
+          <p className="text-xs font-medium text-rose/60">Saldo en cuenta</p>
           {accountBalance != null ? (
             <p className="mt-1 text-xl font-bold tabular-nums text-brown">
               {formatCurrency(accountBalance)}
@@ -315,25 +315,25 @@ export function ResumenTab({
           ) : (
             <p className="mt-1 text-sm text-muted">No configurado</p>
           )}
-          <p className="mt-1 text-[10px] text-muted/60">Saldo actual</p>
+          <p className="mt-1 text-xs text-muted/60">Saldo actual</p>
           <button
             type="button"
             aria-label="Actualizar saldo"
             onClick={() => setIsBalanceOpen(true)}
-            className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full text-muted transition hover:text-brown active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+            className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:text-brown active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
           >
             <PencilSimple className="h-3.5 w-3.5" aria-hidden />
           </button>
         </div>
 
-        <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
-          <p className="text-[11px] font-medium text-muted">Disponible</p>
+        <div className="rounded-[var(--radius-xl)] border border-rose/20 bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
+          <p className="text-xs font-medium text-rose/60">Disponible</p>
           {disponible !== null ? (
             <>
               <p className={cn("mt-1 text-xl font-bold tabular-nums", isPositive ? "text-sage" : "text-danger")}>
                 {formatCurrency(disponible)}
               </p>
-              <p className="mt-1 text-[10px] text-muted/60">Saldo − pendientes</p>
+              <p className="mt-1 text-xs text-muted/60">Saldo − pendientes</p>
             </>
           ) : (
             <p className="mt-1 text-sm text-muted">Introduce tu saldo</p>
@@ -427,7 +427,7 @@ export function ResumenTab({
               <p className="text-sm font-semibold text-brown tabular-nums">
                 {formatCurrency(annualSubscriptionsTotal)}/año
               </p>
-              <p className="text-[11px] text-muted tabular-nums">
+              <p className="text-xs text-muted tabular-nums">
                 ≈ {formatCurrency(annualSubscriptionsTotal / 12)}/mes
               </p>
             </div>

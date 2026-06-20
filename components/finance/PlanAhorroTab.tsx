@@ -150,15 +150,15 @@ function PlanCard({
 
       <div className="grid grid-cols-3 gap-2">
         <div>
-          <p className="text-[11px] text-muted">Acumulado</p>
+          <p className="text-xs text-muted">Acumulado</p>
           <p className="text-base font-bold text-sage tabular-nums">{formatCurrency(currentAmount)}</p>
         </div>
         <div>
-          <p className="text-[11px] text-muted">Proyectado año</p>
+          <p className="text-xs text-muted">Proyectado año</p>
           <p className="text-base font-bold text-brown tabular-nums">+{formatCurrency(projected)}</p>
         </div>
         <div>
-          <p className="text-[11px] text-muted">Meses hasta {endOfYearLabel()}</p>
+          <p className="text-xs text-muted">Meses hasta {endOfYearLabel()}</p>
           <p className="text-base font-bold text-brown tabular-nums">{monthsLeft}</p>
         </div>
       </div>
@@ -290,7 +290,7 @@ function SavingsSimulator({
         ))}
       </div>
 
-      <p className="mt-2 text-[11px] text-muted">
+      <p className="mt-2 text-xs text-muted">
         {fundLabel} · Acumulado: <span className="font-medium text-brown">{formatCurrency(current)}</span>
         {" · "}Objetivo: <span className="font-medium text-brown">{formatCurrency(target)}</span>
       </p>
@@ -406,7 +406,7 @@ function MortgageOverpaymentCalculator({ mortgage }: { mortgage: Mortgage | null
         <Calculator className="h-4 w-4 shrink-0 text-terracotta" aria-hidden />
         <p className="text-sm font-semibold text-brown">Amortizar hipoteca — calculadora</p>
       </div>
-      <p className="mt-1 text-[11px] text-muted">
+      <p className="mt-1 text-xs text-muted">
         Calcula el tiempo e interés que ahorras con un pago extraordinario
       </p>
 
@@ -461,7 +461,7 @@ function MortgageOverpaymentCalculator({ mortgage }: { mortgage: Mortgage | null
         </div>
       )}
 
-      <p className="mt-2 flex items-start gap-1 text-[11px] text-muted">
+      <p className="mt-2 flex items-start gap-1 text-xs text-muted">
         <span className="text-amber">⚠</span>
         Resultado orientativo · elige «reducir plazo» en el banco para maximizar el ahorro.
       </p>
@@ -497,7 +497,7 @@ function MortgageSimulator() {
       </button>
       {showTable && (
         <div className="mt-3 flex flex-col gap-0.5">
-          <p className="mb-2 text-[11px] text-muted">
+          <p className="mb-2 text-xs text-muted">
             Referencia aproximada · 175.000 € · 2,90 % fijo · 30 años · cuota base 729 €/mes
           </p>
           <div className="grid grid-cols-3 gap-x-4 gap-y-1 text-xs">
@@ -512,7 +512,7 @@ function MortgageSimulator() {
               </>
             ))}
           </div>
-          <p className="mt-2 flex items-start gap-1 text-[11px] text-muted">
+          <p className="mt-2 flex items-start gap-1 text-xs text-muted">
             <span className="text-amber">⚠</span>
             Confirmar con el banco importe mínimo por amortización y proceso de solicitud.
           </p>
