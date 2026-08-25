@@ -7,7 +7,17 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1 (design system), F2 (app shell), F3 (auth y hogar) and F4 (Inicio) are complete.**
+**Stages F1 (design system), F2 (app shell), F3 (auth y hogar), F4 (Inicio) and F5 (Compra) are complete.**
+
+What F5 changed:
+- Shopping list default view is now grouped category cards (mockup style) with accent-coloured
+  headers and flat rows (`ShoppingItemCard flat` prop); "Por fecha" flat view still available
+  (localStorage preference now read post-mount to avoid hydration mismatch).
+- New "Finalizar compra" flow on the standing list: floating pill (visible when there are
+  completed items) opens `FinishShoppingSheet` — summary card with progress, keypad for the
+  ticket total, "Confirmar y guardar" → `finishQuickPurchase` action: inserts a Supermercado
+  expense and clears completed standing-list items. E2E-tested against live Supabase
+  (test expense deleted afterwards). Named lists keep their own markShoppingListPurchased flow.
 
 What F4 changed (commit d93ae68):
 - Dashboard recomposed: greeting hero (mobile "¡Hola, X!", desktop time-of-day + date sentence +

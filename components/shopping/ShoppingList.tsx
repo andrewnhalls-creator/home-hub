@@ -2,13 +2,14 @@
 
 import { useActionState, useEffect, useMemo, useState } from "react";
 import { useToast } from "@/components/ui/Toast";
-import { Plus, ShoppingCart, CaretDown, X, ArrowsDownUp } from "@phosphor-icons/react";
+import { Plus, ShoppingCart, CaretDown, X, ArrowsDownUp, CheckCircle } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ShoppingItemCard } from "@/components/shopping/ShoppingItemCard";
 import { ShoppingItemForm } from "@/components/shopping/ShoppingItemForm";
+import { FinishShoppingSheet } from "@/components/shopping/FinishShoppingSheet";
 import { addShoppingItem, updateShoppingItem } from "@/app/(app)/compra/actions";
 import { createClient } from "@/lib/supabase/client";
 import type { Category, HouseholdMember, ShoppingItem } from "@/lib/types";
@@ -27,9 +28,15 @@ export function ShoppingList({ items, categories, members, householdId, shopping
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [storeFilter, setStoreFilter] = useState("");
-  const [sortMode, setSortMode] = useState<"fecha" | "categoria">(
-    () => (typeof window !== "undefined" ? (localStorage.getItem("shopping-sort") as "fecha" | "categoria" | null) : null) ?? "fecha",
-  );
+  const [sortMode, setSortMode] = useState<"fecha" | "categoria">("categoria");
+  const [isFinishOpen, setIsFinishOpen] = useState(false);
+
+  // Read the stored sort preference after mount (SSR always renders "categoria",
+  // so reading localStorage in the initializer would cause a hydration mismatch).
+  useEffect(() => {
+    const stored = localStorage.getItem("shopping-sort") as "fecha" | "categoria" | null;
+    if (stored === "fecha") setSortMode("fecha");
+  }, []);
   const [quickName, setQuickName] = useState("");
   const [quickState, quickAction, quickPending] = useActionState(addShoppingItem, {});
 
@@ -118,6 +125,25 @@ export function ShoppingList({ items, categories, members, householdId, shopping
   const filtered = localItems.filter((item) => !item.is_completed && matchesFilters(item));
   const activeItems = sortMode === "categoria" ? sortByCategory(filtered) : filtered;
   const completedItems = localItems.filter((item) => item.is_completed && matchesFilters(item));
+
+  // Grouped view (mockup): items clustered under category-header cards.
+  const GROUP_ACCENTS = ["text-sage", "text-amber", "text-olive", "text-rose"];
+  const groupedItems = useMemo(() => {
+    if (sortMode !== "categoria") return null;
+    const groups = new Map<string, ShoppingItem[]>();
+    for (const item of activeItems) {
+      const name = item.category_id ? (categoryById.get(item.category_id)?.name ?? "Otros") : "Otros";
+      const list = groups.get(name) ?? [];
+      list.push(item);
+      groups.set(name, list);
+    }
+    // "Otros" always goes last.
+    return Array.from(groups.entries()).sort(([a], [b]) => {
+      if (a === "Otros") return 1;
+      if (b === "Otros") return -1;
+      return a.localeCompare(b, "es");
+    });
+  }, [sortMode, activeItems, categoryById]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -224,6 +250,33 @@ export function ShoppingList({ items, categories, members, householdId, shopping
           title="La lista está vacía."
           description="Añade lo que necesitéis y marcadlo al llegar al super."
         />
+      ) : groupedItems ? (
+        <div className="flex flex-col gap-4">
+          {groupedItems.map(([groupName, groupItems], index) => (
+            <section
+              key={groupName}
+              aria-label={groupName}
+              className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-card)]"
+            >
+              <h3 className={`text-sm font-bold ${GROUP_ACCENTS[index % GROUP_ACCENTS.length]}`}>
+                {groupName}
+              </h3>
+              <ul className="mt-1 flex flex-col divide-y divide-border/60">
+                {groupItems.map((item) => (
+                  <li key={`${item.id}-${item.is_completed}`}>
+                    <ShoppingItemCard
+                      flat
+                      item={item}
+                      category={item.category_id ? categoryById.get(item.category_id) : undefined}
+                      membersById={memberById}
+                      onEdit={() => setEditingItem(item)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
       ) : (
         <ul className="stagger-list flex flex-col gap-3">
           {activeItems.map((item) => (
@@ -268,6 +321,29 @@ export function ShoppingList({ items, categories, members, householdId, shopping
             </ul>
           )}
         </div>
+      )}
+
+      {/* Finalizar compra — standing list only (named lists have their own purchase flow) */}
+      {!shoppingListId && completedItems.length > 0 && (
+        <>
+          <button
+            type="button"
+            onClick={() => setIsFinishOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={isFinishOpen}
+            className="fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-terracotta px-5 py-3 text-sm font-semibold text-cream shadow-[var(--shadow-lg)] transition hover:bg-coral active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+            style={{ bottom: "calc(5rem + env(safe-area-inset-bottom))" }}
+          >
+            <CheckCircle weight="fill" size={18} aria-hidden />
+            Finalizar compra
+          </button>
+          <FinishShoppingSheet
+            isOpen={isFinishOpen}
+            onClose={() => setIsFinishOpen(false)}
+            boughtCount={completedItems.length}
+            pendingCount={activeItems.length}
+          />
+        </>
       )}
 
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir producto">

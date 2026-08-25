@@ -18,9 +18,11 @@ interface ShoppingItemCardProps {
   category?: Category;
   membersById?: Map<string, string>;
   onEdit: () => void;
+  /** Render as a plain row (for use inside a grouped category card) instead of a standalone card. */
+  flat?: boolean;
 }
 
-export function ShoppingItemCard({ item, category, membersById, onEdit }: ShoppingItemCardProps) {
+export function ShoppingItemCard({ item, category, membersById, onEdit, flat }: ShoppingItemCardProps) {
   const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -36,9 +38,16 @@ export function ShoppingItemCard({ item, category, membersById, onEdit }: Shoppi
     .filter(Boolean)
     .join(" · ");
 
+  const Wrapper = flat ? "div" : Card;
   return (
     <>
-      <Card className={cn("flex items-start gap-3 transition-opacity duration-300", localCompleted && "opacity-60")}>
+      <Wrapper
+        className={cn(
+          "flex items-start gap-3 transition-opacity duration-300",
+          flat && "px-1 py-1.5",
+          localCompleted && "opacity-60",
+        )}
+      >
         <button
           type="button"
           aria-label={localCompleted ? "Volver a pendiente" : "Marcar como comprado"}
@@ -104,7 +113,7 @@ export function ShoppingItemCard({ item, category, membersById, onEdit }: Shoppi
             <Trash className="h-4 w-4" aria-hidden />
           </button>
         </div>
-      </Card>
+      </Wrapper>
 
       <Modal
         isOpen={isConfirmingDelete}

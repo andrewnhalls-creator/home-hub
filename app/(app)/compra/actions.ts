@@ -151,6 +151,62 @@ export async function deleteShoppingItem(itemId: string) {
   revalidatePath("/compra");
 }
 
+/**
+ * Closes a shopping run on the standing list: records the ticket total as a
+ * Supermercado expense and removes the bought (completed) items from the list.
+ * Amount arrives in cents to avoid any floating-point parsing on the client.
+ */
+export async function finishQuickPurchase(
+  _prevState: ShoppingFormState,
+  formData: FormData,
+): Promise<ShoppingFormState> {
+  const cents = Number(formData.get("amountCents"));
+  if (!Number.isInteger(cents) || cents <= 0) {
+    return { error: "Introduce el total del ticket." };
+  }
+  const amount = cents / 100;
+
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("id")
+    .eq("household_id", householdId)
+    .eq("module", "finance")
+    .eq("name", "Supermercado")
+    .limit(1);
+  const categoryId = categories?.[0]?.id ?? null;
+
+  const today = new Date().toISOString().slice(0, 10);
+  const { error: insertError } = await supabase.from("expenses").insert({
+    household_id: householdId,
+    title: "Compra del súper",
+    amount,
+    expense_date: today,
+    category_id: categoryId,
+    paid_by: user.id,
+    created_by: user.id,
+  });
+
+  if (insertError) {
+    return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+  }
+
+  // Clear the bought items off the standing list (named lists keep their own flow).
+  await supabase
+    .from("shopping_items")
+    .delete()
+    .eq("household_id", householdId)
+    .eq("is_completed", true)
+    .is("shopping_list_id", null);
+
+  revalidatePath("/compra");
+  revalidatePath("/finanzas");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
 function flattenFieldErrors(error: z.ZodError) {
   const fieldErrors: Record<string, string> = {};
   for (const issue of error.issues) {
