@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
+import { House } from "@phosphor-icons/react";
 import { signUp, type AuthActionState } from "@/app/auth/actions";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -13,11 +14,16 @@ export default function SignupPage() {
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-4 py-10">
-      <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-semibold text-brown">Crear cuenta</h1>
-        <p className="mt-1 text-sm text-muted">
-          Organiza tu casa, tus tareas y tus finanzas en un solo lugar.
-        </p>
+      <div className="w-full max-w-sm rounded-[var(--radius-xl)] bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
+        <div className="flex flex-col items-center text-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-terracotta text-cream" aria-hidden>
+            <House weight="regular" size={26} />
+          </div>
+          <h1 className="mt-4 text-2xl font-bold text-brown">Crear cuenta</h1>
+          <p className="mt-1.5 text-sm text-muted">
+            Organiza tu casa, tus tareas y tus finanzas en un solo lugar.
+          </p>
+        </div>
 
         {state.info ? (
           <p className="mt-6 rounded-xl border border-success/30 bg-card p-4 text-sm text-brown">

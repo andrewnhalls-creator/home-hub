@@ -7,6 +7,7 @@ import { MagnifyingGlass, CaretDown, List } from "@phosphor-icons/react";
 import { NAV_ITEMS } from "@/lib/constants";
 import { NotificationCentre } from "@/components/notifications/NotificationCentre";
 import { AppDrawer } from "@/components/layout/AppDrawer";
+import { HouseholdSwitchSheet, type HouseholdOption } from "@/components/layout/HouseholdSwitchSheet";
 import { cn } from "@/lib/utils";
 import type { NotificationEvent } from "@/lib/types";
 
@@ -14,13 +15,15 @@ interface TopBarProps {
   householdName?: string;
   userName?: string;
   userRole?: "owner" | "member";
+  households?: HouseholdOption[];
   notifications?: NotificationEvent[];
   unreadCount?: number;
 }
 
-export function TopBar({ householdName, userName, userRole, notifications = [], unreadCount = 0 }: TopBarProps) {
+export function TopBar({ householdName, userName, userRole, households = [], notifications = [], unreadCount = 0 }: TopBarProps) {
   const pathname = usePathname();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
 
   const current = NAV_ITEMS.find((item) => pathname?.startsWith(item.href));
   const pageTitle = current?.label ?? "";
@@ -32,14 +35,17 @@ export function TopBar({ householdName, userName, userRole, notifications = [], 
         {/* Mobile: household pill on Inicio, page title elsewhere */}
         {isHome || !pageTitle ? (
           householdName ? (
-            <Link
-              href="/ajustes"
+            <button
+              type="button"
+              onClick={() => setIsSwitcherOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={isSwitcherOpen}
               className="flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-full py-1 pr-2 text-sm font-semibold text-brown transition hover:text-terracotta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta md:hidden"
-              aria-label={`Casa actual: ${householdName}. Gestionar en Ajustes`}
+              aria-label={`Casa actual: ${householdName}. Cambiar de casa`}
             >
               <span className="max-w-[160px] truncate">{householdName}</span>
               <CaretDown weight="bold" size={12} className="text-muted" aria-hidden />
-            </Link>
+            </button>
           ) : (
             <span className="font-display text-base font-bold text-terracotta tracking-tight md:hidden" translate="no">
               Home Hub
@@ -101,6 +107,11 @@ export function TopBar({ householdName, userName, userRole, notifications = [], 
         householdName={householdName}
         userName={userName}
         userRole={userRole}
+      />
+      <HouseholdSwitchSheet
+        isOpen={isSwitcherOpen}
+        onClose={() => setIsSwitcherOpen(false)}
+        households={households}
       />
     </header>
   );

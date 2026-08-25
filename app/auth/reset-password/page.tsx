@@ -40,9 +40,9 @@ export default function ResetPasswordPage() {
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-4 py-10">
-      <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-semibold text-brown">Nueva contraseña</h1>
-        <p className="mt-1 text-sm text-muted">Elige una contraseña segura para tu cuenta.</p>
+      <div className="w-full max-w-sm rounded-[var(--radius-xl)] bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
+        <h1 className="text-2xl font-bold text-brown">Nueva contraseña</h1>
+        <p className="mt-1.5 text-sm text-muted">Elige una contraseña segura para tu cuenta.</p>
 
         <form onSubmit={handleSubmit} noValidate className="mt-6 flex flex-col gap-4">
           <Input

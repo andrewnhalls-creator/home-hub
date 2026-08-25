@@ -6,6 +6,7 @@ import { OfflineBanner } from "@/components/ui/OfflineBanner";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { RealtimeSync } from "@/components/RealtimeSync";
 import { AIChatButton } from "@/components/ai/AIChatButton";
+import type { HouseholdOption } from "@/components/layout/HouseholdSwitchSheet";
 import type { NotificationEvent } from "@/lib/types";
 
 interface AppShellProps {
@@ -13,12 +14,13 @@ interface AppShellProps {
   householdName?: string;
   userName?: string;
   userRole?: "owner" | "member";
+  households?: HouseholdOption[];
   notifications?: NotificationEvent[];
   unreadCount?: number;
   children: ReactNode;
 }
 
-export function AppShell({ householdId, householdName, userName, userRole, notifications, unreadCount, children }: AppShellProps) {
+export function AppShell({ householdId, householdName, userName, userRole, households, notifications, unreadCount, children }: AppShellProps) {
   return (
     <div className="flex min-h-dvh [overflow-x:clip] bg-cream">
       <RealtimeSync householdId={householdId} />
@@ -34,6 +36,7 @@ export function AppShell({ householdId, householdName, userName, userRole, notif
           householdName={householdName}
           userName={userName}
           userRole={userRole}
+          households={households}
           notifications={notifications}
           unreadCount={unreadCount}
         />
