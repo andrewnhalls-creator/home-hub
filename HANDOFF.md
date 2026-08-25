@@ -7,7 +7,17 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stage F1 (design-system foundation) is complete.** Build passes, lint 0 errors, typecheck clean.
+**Stages F1 (design-system foundation) and F2 (app shell) are complete.** Build passes, lint 0 errors, typecheck clean. F2 verified visually at 480px and desktop against the live app.
+
+What F2 changed (commit bb4a165):
+- Bottom nav: Inicio · Compra · center green quick-add FAB · Finanzas · Calendario; the FAB opens
+  `QuickAddSheet` (links to compra/finanzas/tareas/calendario).
+- `MoreMenuSheet` deleted → new left `AppDrawer` (profile header, household pill → /ajustes,
+  module list with green active pill, Cerrar sesión) opened from the TopBar avatar.
+- TopBar: household-name pill (mobile, Inicio) linking to /ajustes; avatar button opens the drawer.
+- Sidebar (desktop): grouped nav (main 4 + MÓDULOS + bottom Ajustes/Cerrar sesión), green pill actives.
+- `lib/constants.ts` nav icons converted lucide → Phosphor; PRIMARY_NAV_ITEMS reordered.
+- Fixed pre-existing OfflineBanner hydration mismatch (`useOnlineStatus` → `useSyncExternalStore`).
 
 What F1 changed:
 - `app/globals.css`: all tokens retargeted from dark "Índigo Profundo" to light **Casa Calma**
