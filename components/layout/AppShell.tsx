@@ -11,12 +11,14 @@ import type { NotificationEvent } from "@/lib/types";
 interface AppShellProps {
   householdId: string;
   householdName?: string;
+  userName?: string;
+  userRole?: "owner" | "member";
   notifications?: NotificationEvent[];
   unreadCount?: number;
   children: ReactNode;
 }
 
-export function AppShell({ householdId, householdName, notifications, unreadCount, children }: AppShellProps) {
+export function AppShell({ householdId, householdName, userName, userRole, notifications, unreadCount, children }: AppShellProps) {
   return (
     <div className="flex min-h-dvh [overflow-x:clip] bg-cream">
       <RealtimeSync householdId={householdId} />
@@ -28,7 +30,13 @@ export function AppShell({ householdId, householdName, notifications, unreadCoun
       </a>
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <TopBar householdName={householdName} notifications={notifications} unreadCount={unreadCount} />
+        <TopBar
+          householdName={householdName}
+          userName={userName}
+          userRole={userRole}
+          notifications={notifications}
+          unreadCount={unreadCount}
+        />
         <OfflineBanner />
         <main id="main-content" className="flex-1 px-4 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-4 md:px-6 md:pb-6">
           <div className="mx-auto w-full max-w-3xl lg:max-w-5xl">

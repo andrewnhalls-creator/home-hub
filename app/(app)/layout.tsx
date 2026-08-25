@@ -5,7 +5,7 @@ import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AppGroupLayout({ children }: { children: ReactNode }) {
-  const { user, householdName, householdId } = await requireHousehold();
+  const { user, householdName, householdId, role } = await requireHousehold();
   const supabase = await createClient();
 
   const [{ data: notifications }, { count: unreadCount }] = await Promise.all([
@@ -28,6 +28,8 @@ export default async function AppGroupLayout({ children }: { children: ReactNode
       <AppShell
         householdId={householdId}
         householdName={householdName}
+        userName={(user.user_metadata?.display_name as string | undefined) ?? user.email ?? undefined}
+        userRole={role === "owner" ? "owner" : "member"}
         notifications={notifications ?? []}
         unreadCount={unreadCount ?? 0}
       >
