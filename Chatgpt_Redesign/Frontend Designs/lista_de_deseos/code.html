@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lista de Deseos - Casa Calma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eef5f7",
+                        "secondary-fixed-dim": "#ffb598",
+                        "on-primary-fixed-variant": "#23501e",
+                        "on-surface-variant": "#42493e",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#002201",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary": "#974723",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary-container": "#6d4820",
+                        "surface": "#f4fafd",
+                        "surface-variant": "#dde4e6",
+                        "surface-container": "#e8eff1",
+                        "surface-tint": "#3b6934",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-secondary-container": "#772f0c",
+                        "on-tertiary-fixed": "#2c1600",
+                        "primary-fixed-dim": "#a1d494",
+                        "surface-bright": "#f4fafd",
+                        "outline": "#72796e",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#ff996e",
+                        "on-primary-container": "#9dd090",
+                        "on-tertiary-container": "#ecb987",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#dde4e6",
+                        "on-error": "#ffffff",
+                        "primary-container": "#2d5a27",
+                        "on-background": "#161d1f",
+                        "inverse-surface": "#2b3234",
+                        "surface-container-high": "#e2e9ec",
+                        "surface-dim": "#d4dbdd",
+                        "tertiary": "#52320b",
+                        "on-secondary-fixed": "#370e00",
+                        "primary": "#154212",
+                        "inverse-on-surface": "#ebf2f4",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c2c9bb",
+                        "background": "#f4fafd",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "on-surface": "#161d1f",
+                        "inverse-primary": "#a1d494"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "sm": "12px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #FDFCF8; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        /* Ambient shadows as per style guide */
+        .card-shadow { box-shadow: 0 4px 12px 0 rgba(0,0,0,0.04); }
+        .overlay-shadow { box-shadow: 0 8px 24px 0 rgba(0,0,0,0.08); }
+        
+        /* Hide scrollbar for clean horizontal scrolling */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="h-full bg-[#FDFCF8] text-on-surface flex flex-col md:flex-row antialiased">
+<!-- Desktop Navigation Drawer -->
+<nav class="hidden md:flex flex-col bg-surface-container-low h-full w-72 rounded-r-xl shadow-xl fixed inset-y-0 left-0 z-[60] py-lg">
+<div class="px-4 mb-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-headline-sm">
+                EG
+            </div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-primary font-bold">Elena García</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Piso en Madrid</p>
+<span class="text-label-sm font-label-sm text-outline">Admin</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-2 px-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-body-md font-body-md">Recetas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-body-md font-body-md">Documentos</span>
+</a>
+<!-- Active State - Mapped intent for Wishlist -> Casa/Home context, but since "Casa" isn't in drawer, highlight settings as placeholder or none. Leaving inactive as 'Casa' is bottom nav. -->
+</div>
+<div class="px-2 pb-4 border-t border-surface-variant pt-4 mt-auto">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-body-md font-body-md">Ajustes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="text-body-md font-body-md">Soporte</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mt-4 text-error" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-body-md font-body-md">Cerrar Sesión</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col md:ml-72 pb-24 md:pb-0 h-full overflow-y-auto">
+<!-- Mobile TopAppBar -->
+<header class="md:hidden flex justify-between items-center w-full px-margin-mobile h-16 bg-background top-0 sticky z-40">
+<button aria-label="Menu" class="w-12 h-12 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">swap_vert</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary text-center flex-1">Piso en Madrid</h1>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-container flex items-center justify-center text-on-primary-container font-bold">
+                EG
+            </div>
+</header>
+<!-- Desktop Header Anchor -->
+<div class="hidden md:block px-margin-desktop py-8">
+<h1 class="text-display-lg font-display-lg text-primary">Lista de Deseos</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant mt-2">Cosas que queremos o necesitamos para la casa.</p>
+</div>
+<div class="px-margin-mobile md:px-margin-desktop md:hidden mt-4">
+<h1 class="text-display-lg-mobile font-display-lg-mobile text-primary">Lista de Deseos</h1>
+</div>
+<!-- Filters & Actions -->
+<div class="px-margin-mobile md:px-margin-desktop mt-6 flex flex-wrap items-center justify-between gap-4">
+<div class="flex gap-2 overflow-x-auto hide-scrollbar py-2">
+<button class="px-4 py-2 bg-primary-container text-on-primary-container rounded-full text-label-md font-label-md whitespace-nowrap transition-transform hover:scale-95">Todos</button>
+<button class="px-4 py-2 border border-outline-variant text-on-surface-variant rounded-full text-label-md font-label-md whitespace-nowrap hover:bg-surface-container-low transition-colors">Alta Prioridad</button>
+<button class="px-4 py-2 border border-outline-variant text-on-surface-variant rounded-full text-label-md font-label-md whitespace-nowrap hover:bg-surface-container-low transition-colors">Comprados</button>
+</div>
+<button class="h-11 px-6 bg-primary text-on-primary rounded-full text-label-md font-label-md font-semibold flex items-center gap-2 hover:bg-[#11350e] transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Añadir Artículo
+            </button>
+</div>
+<!-- Bento Grid Wishlist -->
+<div class="px-margin-mobile md:px-margin-desktop mt-lg grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg pb-12">
+<!-- Item 1: High Priority -->
+<article class="bg-surface-container-lowest rounded-[16px] p-4 card-shadow border border-[#EBE9E0] flex flex-col relative group transition-all hover:-translate-y-1">
+<div class="absolute top-4 right-4 z-10 flex gap-1">
+<span class="px-2 py-1 bg-error-container text-on-error-container rounded-md text-[10px] font-bold uppercase tracking-wider">Alta</span>
+</div>
+<div class="w-full h-40 rounded-lg overflow-hidden mb-4 bg-surface-container flex items-center justify-center relative">
+<img class="w-full h-full object-cover" data-alt="A warm, inviting product photography shot of an elegant olive green velvet sofa, minimalist living room setting with soft Mediterranean sunlight streaming through a window, light wood flooring, neutral tones, conveying comfort and Casa Calma tranquility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCnly20VzsBH1_hWV6cQ8OArYxy7XUqc1jopbpZRcHlJGtongt3SN2A9DVaWSsUXBh-uFMMPmA0LpY36j2q9J-ula2Yykp8egROGxLV18OE-BvfKmMYd3pVSnDnHXbk39UwXxKJEdkI6gzB4oNSaP_T-sekNfJLNWMfwmL7NdAyHp6GSqrMzuJxKzKOxRrmc1nYCyEJxTgXYZQCHRxTgusjvSylcq21Up6YcKfyzWcSqik8fcS-LG5"/>
+</div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface line-clamp-2">Sofá Verde Oliva (3 plazas)</h3>
+</div>
+<p class="text-primary font-bold text-headline-sm mb-3">~850€</p>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm line-clamp-2 mb-4 flex-1">
+                    El viejo se hunde en el medio. Vi uno en Maisons du Monde que encaja perfecto.
+                </p>
+<div class="flex items-center justify-between pt-3 border-t border-surface-variant">
+<div class="flex items-center gap-1 bg-surface rounded-full px-2 py-1">
+<button class="w-8 h-8 rounded-full hover:bg-surface-container-highest flex items-center justify-center text-on-surface-variant transition-colors group/btn">
+<span class="material-symbols-outlined text-[20px] group-hover/btn:text-secondary group-hover/btn:filled">favorite</span>
+</button>
+<span class="text-label-md font-label-md text-on-surface-variant pr-2">3</span>
+</div>
+<a class="text-secondary text-label-sm font-label-sm uppercase tracking-wider hover:underline flex items-center gap-1" href="#">
+                        Ver Link
+                        <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+</article>
+<!-- Item 2: Medium Priority -->
+<article class="bg-surface-container-lowest rounded-[16px] p-4 card-shadow border border-[#EBE9E0] flex flex-col relative transition-all hover:-translate-y-1">
+<div class="absolute top-4 right-4 z-10 flex gap-1">
+<span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container rounded-md text-[10px] font-bold uppercase tracking-wider">Media</span>
+</div>
+<div class="w-full h-40 rounded-lg overflow-hidden mb-4 bg-surface-container flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A sleek, modern espresso machine resting on a light wood kitchen counter, bright morning light, minimalist aesthetic, warm Mediterranean kitchen setting, organic textures, conveying a sense of relaxed morning routines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7TkBS8lF6yCXkIqgjmr20tvjSzG9Nb5IFL8k89x2bDse2henC1azoWREVsULXQmAYSo6Cr8tfFETw6ceAaTkS_z0pdPNOsq56G1MbGKX5PDxDldP3gu6rpQXsRI3esVKF0vsY0kX05-8jbAD5M4XMvd47XchvitYCVvHb45atDWUlVCeIkiM__h9Lqw1PKN7R4KyK9Mal-FzEBedtJivWGnhcazj2GjVGYkZeHrcGfiuGp_FR9bNS"/>
+</div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface line-clamp-2">Máquina Espresso Breville</h3>
+</div>
+<p class="text-primary font-bold text-headline-sm mb-3">~400€</p>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm line-clamp-2 mb-4 flex-1">
+                    Para dejar de gastar en cafeterías. Papá dice que él pone la mitad.
+                </p>
+<div class="flex items-center justify-between pt-3 border-t border-surface-variant">
+<div class="flex items-center gap-1 bg-surface rounded-full px-2 py-1">
+<button class="w-8 h-8 rounded-full hover:bg-surface-container-highest flex items-center justify-center text-on-surface-variant transition-colors group/btn">
+<span class="material-symbols-outlined text-[20px] group-hover/btn:text-secondary">favorite</span>
+</button>
+<span class="text-label-md font-label-md text-on-surface-variant pr-2">1</span>
+</div>
+<a class="text-secondary text-label-sm font-label-sm uppercase tracking-wider hover:underline flex items-center gap-1" href="#">
+                        Ver Link
+                        <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+</article>
+<!-- Item 3: Low Priority (Text heavy, no image) -->
+<article class="bg-surface-container-lowest rounded-[16px] p-4 card-shadow border border-[#EBE9E0] flex flex-col relative transition-all hover:-translate-y-1 bg-gradient-to-br from-surface-container-lowest to-surface">
+<div class="absolute top-4 right-4 z-10 flex gap-1">
+<span class="px-2 py-1 bg-surface-container-high text-on-surface-variant rounded-md text-[10px] font-bold uppercase tracking-wider">Baja</span>
+</div>
+<div class="w-full h-32 rounded-lg mb-4 bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[48px] opacity-50">shopping_bag</span>
+</div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface line-clamp-2">Juego de Toallas Extra</h3>
+</div>
+<p class="text-primary font-bold text-headline-sm mb-3">~45€</p>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm line-clamp-3 mb-4 flex-1">
+                    Las de invitados están un poco gastadas. Buscar en color arena o gris claro para que combinen con el baño.
+                </p>
+<div class="flex items-center justify-between pt-3 border-t border-surface-variant">
+<div class="flex items-center gap-1 bg-surface rounded-full px-2 py-1">
+<button class="w-8 h-8 rounded-full hover:bg-surface-container-highest flex items-center justify-center text-on-surface-variant transition-colors group/btn">
+<span class="material-symbols-outlined text-[20px] group-hover/btn:text-secondary group-hover/btn:filled">favorite</span>
+</button>
+<span class="text-label-md font-label-md text-on-surface-variant pr-2">2</span>
+</div>
+</div>
+</article>
+<!-- Item 4: Purchased/Completed -->
+<article class="bg-surface-container-lowest rounded-[16px] p-4 card-shadow border border-[#EBE9E0] flex flex-col relative opacity-75 grayscale-[30%]">
+<div class="absolute top-4 right-4 z-10 flex gap-1">
+<span class="px-2 py-1 bg-primary text-on-primary rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+                        Comprado
+                    </span>
+</div>
+<div class="w-full h-40 rounded-lg overflow-hidden mb-4 bg-surface-container flex items-center justify-center relative">
+<div class="absolute inset-0 bg-surface/20 z-10"></div>
+<img class="w-full h-full object-cover" data-alt="A smart thermostat mounted on a soft cream wall, minimalist modern design, gentle shadow casting from natural light, Mediterranean home interior detail, conveying energy efficiency and quiet technology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcL-kG_fLncUzfhX8FGJt8J6QGw-A1R4dl6U6plAnN0yt9xfwdFqBFjYS5he7OkCmrN1Key2gCFVONwSX-97iwsrPeng_jYI2q3__LKl6xSUvkraImM6TA1ENFl7HqKYj3b-HXqGJFIuHSQxTWcQrR5pXhDw3w4EVvrvXYiKHTIDzZ52_zPvLEJBvLf3yy3kwZidND1EBFarlAMlL9b_vXiWuimDoqcb1g7ebSGmaydVQIDZpN9MhF"/>
+</div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface line-clamp-2 line-through decoration-outline">Termostato Inteligente</h3>
+</div>
+<p class="text-on-surface-variant font-bold text-headline-sm mb-3">~120€</p>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm line-clamp-2 mb-4 flex-1">
+                    Comprado en Black Friday. Instalado en el pasillo.
+                </p>
+<div class="flex items-center justify-between pt-3 border-t border-surface-variant">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-[10px] border border-surface-container-lowest z-10">EG</div>
+<div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-[10px] border border-surface-container-lowest z-0">M</div>
+</div>
+<span class="text-label-sm text-outline">Querían esto</span>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] bg-surface-container-lowest rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="text-label-sm font-label-sm">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-semibold scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1 filled">cottage</span>
+<span class="text-label-sm font-label-sm">Casa</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors transform -translate-y-2" href="#">
+<span class="material-symbols-outlined text-[40px] text-primary">add_circle</span>
+<span class="text-label-sm font-label-sm sr-only">Añadir</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">payments</span>
+<span class="text-label-sm font-label-sm">Finanzas</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">calendar_today</span>
+<span class="text-label-sm font-label-sm">Calendario</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for fav buttons
+        document.querySelectorAll('button:has(.material-symbols-outlined:contains("favorite"))').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const icon = btn.querySelector('.material-symbols-outlined');
+                if (icon.classList.contains('filled')) {
+                    icon.classList.remove('filled');
+                    icon.classList.remove('text-secondary');
+                    // Decrease count placeholder logic
+                } else {
+                    icon.classList.add('filled');
+                    icon.classList.add('text-secondary');
+                    // Increase count placeholder logic
+                    
+                    // Tiny pop animation
+                    icon.style.transform = 'scale(1.2)';
+                    setTimeout(() => icon.style.transform = 'scale(1)', 150);
+                }
+            });
+        });
+    </script>
+</body></html>

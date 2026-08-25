@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Selector de Hogar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#9dd090",
+                        "primary": "#154212",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary-fixed-dim": "#ffb598",
+                        "primary-container": "#2d5a27",
+                        "background": "#f4fafd",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "secondary": "#974723",
+                        "surface-container": "#e8eff1",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2b3234",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#2c1600",
+                        "secondary-fixed": "#ffdbce",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary": "#52320b",
+                        "surface": "#f4fafd",
+                        "surface-container-high": "#e2e9ec",
+                        "on-surface": "#161d1f",
+                        "outline": "#72796e",
+                        "on-primary-fixed-variant": "#23501e",
+                        "tertiary-container": "#6d4820",
+                        "on-tertiary-container": "#ecb987",
+                        "outline-variant": "#c2c9bb",
+                        "on-surface-variant": "#42493e",
+                        "surface-dim": "#d4dbdd",
+                        "on-background": "#161d1f",
+                        "surface-variant": "#dde4e6",
+                        "surface-tint": "#3b6934",
+                        "surface-container-highest": "#dde4e6",
+                        "surface-container-low": "#eef5f7",
+                        "inverse-primary": "#a1d494",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#772f0c",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "primary-fixed-dim": "#a1d494",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#ff996e",
+                        "surface-bright": "#f4fafd",
+                        "inverse-on-surface": "#ebf2f4",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#370e00",
+                        "on-primary-fixed": "#002201",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "sm": "12px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-full font-body-md overflow-hidden antialiased">
+<!-- Mock Background Content to give context -->
+<div class="h-full flex flex-col relative z-0 opacity-50 blur-sm pointer-events-none">
+<!-- TopAppBar (from JSON) - Mocked for visual context -->
+<header class="bg-background dark:bg-inverse-surface docked full-width top-0 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16">
+<button class="text-primary dark:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-colors rounded-full p-2 flex items-center justify-center w-11 h-11">
+<span class="material-symbols-outlined text-[24px]">swap_vert</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed flex items-center gap-2 cursor-pointer">
+                Piso en Madrid
+                <span class="material-symbols-outlined text-[20px]">expand_more</span>
+</h1>
+<div class="w-11 h-11 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A small circular avatar showing a generic minimalist portrait illustration in warm pastel tones, suitable for a light-themed Mediterranean inspired web app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd6fzzyhyGTI7bKGcGjqNY6jUgMJPMUcoE5CtH-bugVyIeE4-P89CtqcWDtNs96pW5PAluzEduU5O_2Otpb4qerLUbMRP4EpL7gSzrc-Nd-HgEf7Q0zbimBW5pxVv_f14k4yQaHNUiY8U38WeZOGbkpmGb839bJZYGEy7cVCK8mlDbVBqXGQCb-5q4bt9rPqr6GXMyLNom_9fg1lln4_h9uIUu-5CLZ3lnPyNzrvCsQq-obflxqjuW"/>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto px-margin-mobile py-lg">
+<div class="max-w-md mx-auto space-y-lg">
+<!-- Mock Cards -->
+<div class="bg-surface-container-lowest rounded-[16px] p-md shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-[#EBE9E0]">
+<h2 class="text-headline-sm font-headline-sm text-primary mb-sm">Tareas Pendientes</h2>
+<div class="space-y-sm">
+<div class="flex items-center gap-sm">
+<div class="w-11 h-11 rounded-full border border-outline-variant flex items-center justify-center text-outline"></div>
+<span class="text-body-md">Comprar pan</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (from JSON) - Mocked -->
+<nav class="bg-surface-container-lowest dark:bg-surface-container shadow-lg docked full-width bottom-0 rounded-t-xl fixed left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe md:hidden">
+<div class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed font-semibold">
+<span class="material-symbols-outlined text-[24px] mb-xs">home</span>
+<span class="text-label-sm font-label-sm">Inicio</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant">
+<span class="material-symbols-outlined text-[24px] mb-xs">cottage</span>
+<span class="text-label-sm font-label-sm">Casa</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant relative -top-6">
+<button class="bg-primary text-on-primary rounded-[16px] w-14 h-14 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant">
+<span class="material-symbols-outlined text-[24px] mb-xs">payments</span>
+<span class="text-label-sm font-label-sm">Finanzas</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant">
+<span class="material-symbols-outlined text-[24px] mb-xs">calendar_today</span>
+<span class="text-label-sm font-label-sm">Calendario</span>
+</div>
+</nav>
+</div>
+<!-- Semi-transparent overlay -->
+<div aria-hidden="true" class="fixed inset-0 bg-[#161d1f]/40 z-40 transition-opacity duration-300" id="overlay"></div>
+<!-- Bottom Sheet -->
+<div class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest rounded-t-[24px] shadow-[0_-8px_24px_rgba(0,0,0,0.08)] transform transition-transform duration-300 ease-out translate-y-0 flex flex-col max-h-[80vh]" id="bottom-sheet">
+<!-- Drag Handle -->
+<div class="w-full flex justify-center pt-sm pb-xs cursor-grab active:cursor-grabbing">
+<div class="w-12 h-1.5 bg-surface-variant rounded-full"></div>
+</div>
+<!-- Header -->
+<div class="px-margin-mobile pb-sm pt-xs border-b border-surface-variant flex justify-between items-center">
+<h2 class="text-headline-sm font-headline-sm text-primary">Seleccionar hogar</h2>
+<button class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors" onclick="closeSheet()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Home List -->
+<div class="overflow-y-auto px-margin-mobile py-sm flex-1">
+<ul class="space-y-sm">
+<!-- Current Home (Active) -->
+<li>
+<button class="w-full flex items-center p-md bg-surface-container rounded-[16px] border border-primary/20 hover:bg-surface-container-highest transition-colors text-left group">
+<div class="w-12 h-12 rounded-xl bg-primary text-on-primary flex items-center justify-center mr-md shrink-0">
+<span class="material-symbols-outlined text-[24px]">apartment</span>
+</div>
+<div class="flex-1">
+<h3 class="text-body-lg font-body-lg text-on-surface font-semibold group-hover:text-primary transition-colors">Piso en Madrid</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Hogar actual</p>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+</button>
+</li>
+<!-- Other Home -->
+<li>
+<button class="w-full flex items-center p-md bg-transparent rounded-[16px] border border-transparent hover:bg-surface-container-low transition-colors text-left group">
+<div class="w-12 h-12 rounded-xl bg-surface-variant text-on-surface-variant flex items-center justify-center mr-md shrink-0 group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 0;">cottage</span>
+</div>
+<div class="flex-1">
+<h3 class="text-body-lg font-body-lg text-on-surface group-hover:text-primary transition-colors">Casa de Verano</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">2 miembros</p>
+</div>
+</button>
+</li>
+</ul>
+</div>
+<!-- Add New Home Action -->
+<div class="p-margin-mobile pt-md border-t border-surface-variant pb-[calc(20px+env(safe-area-inset-bottom))]">
+<button class="w-full flex items-center p-md bg-transparent rounded-[16px] border border-dashed border-outline-variant hover:bg-surface-container-low transition-colors text-left group text-secondary">
+<div class="w-12 h-12 rounded-xl bg-transparent border border-secondary text-secondary flex items-center justify-center mr-md shrink-0">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</div>
+<div class="flex-1">
+<h3 class="text-body-lg font-body-lg font-medium">Añadir otra casa</h3>
+</div>
+</button>
+</div>
+</div>
+<script>
+        // Simple interactions for demonstration
+        function closeSheet() {
+            document.getElementById('bottom-sheet').style.transform = 'translateY(100%)';
+            document.getElementById('overlay').style.opacity = '0';
+            setTimeout(() => {
+                // In a real app, this would remove the elements or navigate
+                document.getElementById('bottom-sheet').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+                
+                // Remove blur from background
+                document.querySelector('.z-0').classList.remove('blur-sm', 'opacity-50', 'pointer-events-none');
+            }, 300);
+        }
+
+        // Add touch drag logic for bottom sheet (basic implementation)
+        const sheet = document.getElementById('bottom-sheet');
+        let startY;
+        let currentY;
+        
+        sheet.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        sheet.addEventListener('touchmove', (e) => {
+            currentY = e.touches[0].clientY;
+            const deltaY = currentY - startY;
+            
+            // Only allow dragging down
+            if (deltaY > 0) {
+                sheet.style.transform = `translateY(${deltaY}px)`;
+                sheet.style.transition = 'none';
+            }
+        }, { passive: true });
+
+        sheet.addEventListener('touchend', (e) => {
+            sheet.style.transition = 'transform 300ms ease-out';
+            const deltaY = currentY - startY;
+            
+            if (deltaY > 100) { // Threshold to close
+                closeSheet();
+            } else { // Snap back
+                sheet.style.transform = 'translateY(0)';
+            }
+        });
+    </script>
+</body></html>

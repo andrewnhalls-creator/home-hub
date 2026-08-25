@@ -23,8 +23,8 @@ export function TopBar({ householdName, notifications = [], unreadCount = 0 }: T
 
   return (
     <header
-      className="sticky top-0 z-30 border-b border-white/[0.10] px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] md:px-6"
-      style={{ background: "rgba(13,11,31,0.80)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+      className="sticky top-0 z-30 border-b border-border px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] md:px-6"
+      style={{ background: "var(--color-card)" }}
     >
         <div className="flex items-center gap-2">
           {/* Left: Home Hub brand link — mobile only, shown on home page and as fallback */}

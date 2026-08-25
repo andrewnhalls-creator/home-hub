@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Piso en Madrid - Tablero Principal</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#9dd090",
+                        "primary": "#154212",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary-fixed-dim": "#ffb598",
+                        "primary-container": "#2d5a27",
+                        "background": "#f4fafd",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "secondary": "#974723",
+                        "surface-container": "#e8eff1",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2b3234",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#2c1600",
+                        "secondary-fixed": "#ffdbce",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary": "#52320b",
+                        "surface": "#f4fafd",
+                        "surface-container-high": "#e2e9ec",
+                        "on-surface": "#161d1f",
+                        "outline": "#72796e",
+                        "on-primary-fixed-variant": "#23501e",
+                        "tertiary-container": "#6d4820",
+                        "on-tertiary-container": "#ecb987",
+                        "outline-variant": "#c2c9bb",
+                        "on-surface-variant": "#42493e",
+                        "surface-dim": "#d4dbdd",
+                        "on-background": "#161d1f",
+                        "surface-variant": "#dde4e6",
+                        "surface-tint": "#3b6934",
+                        "surface-container-highest": "#dde4e6",
+                        "surface-container-low": "#eef5f7",
+                        "inverse-primary": "#a1d494",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#772f0c",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "primary-fixed-dim": "#a1d494",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#ff996e",
+                        "surface-bright": "#f4fafd",
+                        "inverse-on-surface": "#ebf2f4",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#370e00",
+                        "on-primary-fixed": "#002201",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "sm": "12px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #FDFCF8; }
+        .bento-card {
+            background-color: #FFFFFF;
+            border: 1px solid #EBE9E0;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04);
+        }
+        .chip-elena { background-color: #f0bd8b; color: #52320b; }
+        .chip-papa { background-color: #bcf0ae; color: #154212; }
+    </style>
+</head>
+<body class="font-body-md text-on-surface flex h-screen overflow-hidden">
+<!-- Sidebar (Desktop Navigation) -->
+<nav class="hidden md:flex flex-col w-72 bg-surface-container-low border-r border-outline-variant/30 h-full py-lg z-50">
+<!-- House Switcher (Profile Header) -->
+<div class="px-6 mb-8 flex items-center gap-4 cursor-pointer hover:bg-surface-container-highest transition-colors rounded-xl mx-2 py-3">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="A warm, sunlit interior of a Mediterranean home featuring terracotta tiles, white walls, and a large wooden dining table, creating a feeling of shared family life and tranquility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSSkySdLPlHp7MrXoDz205hYbisQNzdUOb_UKLz1ENdMWnmsifyATBR4WSPu_8tCM_36BIPsl2RFbSHHkfnFmlJDcPVelEUuVaDPJRLdAy4xmBHotDl1R8YPwu9lTE6wExAbLKlmhuSmQCdyXvyyxpX_CYF6uC5WkRziNyBD_bG0I5cxFXyuHTsjI6UEg9f00t_EfgKHuO-crYW_siVHFBFE0NeqSxOtX60raSbf0S5biQOP9vZeFY"/>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface-variant">Elena García</p>
+<div class="flex items-center gap-1">
+<p class="font-headline-sm text-headline-sm text-primary font-bold">Piso en Madrid</p>
+<span class="material-symbols-outlined text-primary text-sm">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 px-4 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-full mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#">
+<span class="material-symbols-outlined">cottage</span>
+<span class="font-label-md text-label-md">Casa</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Finanzas</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Calendario</span>
+</a>
+<div class="my-4 border-t border-outline-variant/30 mx-4"></div>
+<p class="px-6 py-2 text-xs font-semibold text-outline tracking-wider uppercase">Módulos</p>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-label-md text-label-md">Recetas</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Documentos</span>
+</a>
+</div>
+<!-- Bottom Actions -->
+<div class="px-4 mt-auto">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Ajustes</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Cerrar Sesión</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto p-margin-desktop bg-background">
+<div class="max-w-7xl mx-auto space-y-lg">
+<!-- Welcome Header -->
+<header class="flex justify-between items-end mb-xl">
+<div>
+<h1 class="font-display-lg text-display-lg text-primary mb-2">¡Buenos días, Elena! ☀️</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Es martes, 24 de Octubre. Hay 3 cosas pendientes hoy en el Piso en Madrid.</p>
+</div>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-xl hover:bg-primary-container transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                    Añadir Nuevo
+                </button>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Left Column (Tasks & Meals) -->
+<div class="md:col-span-4 space-y-lg flex flex-col">
+<!-- Tasks Card -->
+<section class="bento-card flex-1">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+                                Tareas de hoy
+                            </h2>
+<button class="text-secondary font-label-sm hover:underline">Ver todas</button>
+</div>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 p-3 hover:bg-surface rounded-lg transition-colors group cursor-pointer border border-transparent hover:border-outline-variant/30">
+<input class="mt-1 w-5 h-5 rounded-sm border-outline text-surface-tint focus:ring-surface-tint" type="checkbox"/>
+<div class="flex-1">
+<p class="font-body-md text-body-md text-on-surface">Comprar pan y leche</p>
+<p class="font-label-sm text-label-sm text-outline mt-1">Supermercado</p>
+</div>
+<span class="px-3 py-1 rounded-full text-xs font-semibold chip-elena">Elena</span>
+</li>
+<li class="flex items-start gap-3 p-3 hover:bg-surface rounded-lg transition-colors group cursor-pointer border border-transparent hover:border-outline-variant/30">
+<input class="mt-1 w-5 h-5 rounded-sm border-outline text-surface-tint focus:ring-surface-tint" type="checkbox"/>
+<div class="flex-1">
+<p class="font-body-md text-body-md text-on-surface">Llamar al fontanero</p>
+<p class="font-label-sm text-label-sm text-outline mt-1">Mantenimiento</p>
+</div>
+<span class="px-3 py-1 rounded-full text-xs font-semibold chip-papa">Papá</span>
+</li>
+<li class="flex items-start gap-3 p-3 hover:bg-surface rounded-lg transition-colors group cursor-pointer border border-transparent hover:border-outline-variant/30">
+<input checked="" class="mt-1 w-5 h-5 rounded-sm border-outline text-surface-tint focus:ring-surface-tint" type="checkbox"/>
+<div class="flex-1">
+<p class="font-body-md text-body-md text-on-surface line-through text-outline">Regar las plantas</p>
+</div>
+</li>
+</ul>
+</section>
+<!-- Meals Card -->
+<section class="bento-card">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container">restaurant</span>
+                                Menú de hoy
+                            </h2>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4 flex gap-4 items-center">
+<div class="w-16 h-16 rounded-lg bg-tertiary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-container text-3xl">local_pizza</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">CENA</p>
+<p class="font-body-lg text-body-lg text-on-surface">Pizza casera</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Receta de Papá • Faltan 2 ingr.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Center Column (Calendar & Finance Focus) -->
+<div class="md:col-span-5 space-y-lg flex flex-col">
+<!-- Calendar Highlights -->
+<section class="bento-card relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-fixed/20 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+                                    Próximos Eventos
+                                </h2>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4 p-4 rounded-xl border border-outline-variant/30 hover:border-primary/50 transition-colors bg-white">
+<div class="flex flex-col items-center justify-center px-4 py-2 bg-primary/5 rounded-lg text-primary">
+<span class="font-label-sm text-label-sm uppercase">Oct</span>
+<span class="font-headline-md text-headline-md font-bold">25</span>
+</div>
+<div class="flex-1 py-1">
+<p class="font-headline-sm text-headline-sm text-on-surface">Cena con Abuelos</p>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-sm">schedule</span> 20:30 hrs
+                                        </p>
+</div>
+</div>
+<div class="flex gap-4 p-4 rounded-xl border border-outline-variant/30 hover:border-primary/50 transition-colors bg-white opacity-80">
+<div class="flex flex-col items-center justify-center px-4 py-2 bg-surface-variant rounded-lg text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase">Oct</span>
+<span class="font-headline-md text-headline-md font-bold">28</span>
+</div>
+<div class="flex-1 py-1">
+<p class="font-headline-sm text-headline-sm text-on-surface">Revisión Coche</p>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-sm">schedule</span> 10:00 hrs
+                                        </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Finances -->
+<section class="bento-card flex-1">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container">account_balance_wallet</span>
+                                Bote Común
+                            </h2>
+</div>
+<div class="flex items-end gap-4 mb-6">
+<h3 class="font-display-lg text-display-lg text-on-surface">€342.50</h3>
+<p class="font-body-md text-body-md text-outline pb-2">disponible</p>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2.5 mb-2">
+<div class="bg-primary h-2.5 rounded-full" style="width: 45%"></div>
+</div>
+<p class="font-label-sm text-label-sm text-outline text-right mb-6">45% del presupuesto mensual</p>
+<div class="flex gap-3">
+<button class="flex-1 py-2 px-4 rounded-lg border border-secondary text-secondary font-label-md hover:bg-secondary/5 transition-colors text-center">
+                                Añadir Gasto
+                            </button>
+<button class="flex-1 py-2 px-4 rounded-lg bg-surface-container text-on-surface font-label-md hover:bg-surface-container-high transition-colors text-center">
+                                Liquidar
+                            </button>
+</div>
+</section>
+</div>
+<!-- Right Column (Activity & Household) -->
+<div class="md:col-span-3 space-y-lg flex flex-col">
+<!-- Household Members -->
+<section class="bento-card">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">group</span>
+                            En Casa
+                        </h2>
+<div class="flex flex-wrap gap-3">
+<div class="flex flex-col items-center gap-1 cursor-pointer group">
+<div class="w-12 h-12 rounded-full border-2 border-primary p-0.5 transition-transform group-hover:scale-105">
+<img class="w-full h-full rounded-full object-cover" data-alt="A small circular portrait of a young woman with a warm smile, softly lit in a modern Mediterranean home setting, light airy background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA21RrW1kGmV_HSFgyw_tiYq1e64bgylz481RKhfXxmnjj2N8uEsFuK2OB4EgAW0Rnnw03pWTHaA61AAKh6rBDxd96PAtyHGqFD08CqVXppNZeTQhJx_LCFvxY4udUoRz-SQZGhBbHB7N1JziaPkJRFr4Ps8ZPe1D591WpZTlMCw15YG_YQ-qSJWd41RF4-8RySZ9RoOLTZwi4uEeSQC-_aiyBfc6ocX-BRQugxNB2W9O_yF0IIBsH6"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Tú</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer group opacity-50">
+<div class="w-12 h-12 rounded-full border-2 border-transparent p-0.5 transition-transform group-hover:scale-105">
+<div class="w-full h-full rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant font-headline-sm">P</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Papá</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer group">
+<div class="w-12 h-12 rounded-full border-2 border-primary p-0.5 transition-transform group-hover:scale-105">
+<div class="w-full h-full rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-headline-sm">M</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Mamá</span>
+</div>
+</div>
+</section>
+<!-- Recent Activity -->
+<section class="bento-card flex-1 bg-surface-container-lowest">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">history</span>
+                            Actividad
+                        </h2>
+<div class="space-y-4 relative before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-surface-variant">
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-white border-2 border-primary flex items-center justify-center z-10">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+<p class="font-body-md text-body-md text-on-surface">Compraste el pan</p>
+<p class="font-label-sm text-label-sm text-outline">Hace 2 horas</p>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-white border-2 border-surface-variant flex items-center justify-center z-10"></div>
+<p class="font-body-md text-body-md text-on-surface-variant">Papá añadió "Cena Abuelos" al calendario</p>
+<p class="font-label-sm text-label-sm text-outline">Ayer</p>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-white border-2 border-surface-variant flex items-center justify-center z-10"></div>
+<p class="font-body-md text-body-md text-on-surface-variant">Mamá liquidó cuentas (€45.00)</p>
+<p class="font-label-sm text-label-sm text-outline">Ayer</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</body></html>

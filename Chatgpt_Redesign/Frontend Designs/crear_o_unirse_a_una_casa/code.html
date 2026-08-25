@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Configuración Inicial</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-container": "#9dd090",
+                        "primary": "#154212",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary-fixed-dim": "#ffb598",
+                        "primary-container": "#2d5a27",
+                        "background": "#f4fafd",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "secondary": "#974723",
+                        "surface-container": "#e8eff1",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2b3234",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#2c1600",
+                        "secondary-fixed": "#ffdbce",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary": "#52320b",
+                        "surface": "#f4fafd",
+                        "surface-container-high": "#e2e9ec",
+                        "on-surface": "#161d1f",
+                        "outline": "#72796e",
+                        "on-primary-fixed-variant": "#23501e",
+                        "tertiary-container": "#6d4820",
+                        "on-tertiary-container": "#ecb987",
+                        "outline-variant": "#c2c9bb",
+                        "on-surface-variant": "#42493e",
+                        "surface-dim": "#d4dbdd",
+                        "on-background": "#161d1f",
+                        "surface-variant": "#dde4e6",
+                        "surface-tint": "#3b6934",
+                        "surface-container-highest": "#dde4e6",
+                        "surface-container-low": "#eef5f7",
+                        "inverse-primary": "#a1d494",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#772f0c",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "primary-fixed-dim": "#a1d494",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#ff996e",
+                        "surface-bright": "#f4fafd",
+                        "inverse-on-surface": "#ebf2f4",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#370e00",
+                        "on-primary-fixed": "#002201",
+                        "on-secondary": "#ffffff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "gutter": "16px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "sm": "12px",
+                        "margin-desktop": "40px"
+                    },
+                    fontFamily: {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    fontSize: {
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "500" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f4fafd;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .option-card {
+            transition: all 0.3s ease;
+        }
+        .option-card.selected {
+            border-color: #154212;
+            background-color: #f4fafd;
+            box-shadow: 0 4px 12px rgba(21, 66, 18, 0.08);
+        }
+        .option-card.selected .icon-container {
+            background-color: #2d5a27;
+            color: #ffffff;
+        }
+        #join-input-section {
+            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        #join-input-section.expanded {
+            display: block;
+            max-height: 100px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+<!-- Linear flow: No navigation shell needed -->
+<main class="flex-grow flex items-center justify-center p-margin-mobile md:p-margin-desktop">
+<div class="max-w-xl w-full mx-auto flex flex-col gap-xl">
+<!-- Header Section -->
+<div class="text-center space-y-base">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-container-high text-primary mb-md">
+<span class="material-symbols-outlined text-4xl" data-icon="waving_hand">waving_hand</span>
+</div>
+<h1 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-surface">
+                    ¿Cómo quieres empezar?
+                </h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant">
+                    Configura tu espacio para empezar a organizar tu hogar.
+                </p>
+</div>
+<!-- Options Grid -->
+<div class="flex flex-col gap-lg">
+<!-- Option 1: Create New -->
+<button class="option-card w-full text-left bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-lg flex items-start gap-md hover:bg-surface focus:outline-none" id="btn-create" onclick="selectOption('create')" type="button">
+<div class="icon-container flex-shrink-0 w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="add_home">add_home</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-xs">Crear una nueva casa</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Configura tu hogar desde cero e invita a otros más tarde.</p>
+</div>
+</button>
+<!-- Option 2: Join Existing -->
+<div class="flex flex-col gap-base">
+<button class="option-card w-full text-left bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-lg flex items-start gap-md hover:bg-surface focus:outline-none" id="btn-join" onclick="selectOption('join')" type="button">
+<div class="icon-container flex-shrink-0 w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="vpn_key">vpn_key</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-xs">Unirse a una casa existente</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Introduce el código de invitación que te han compartido.</p>
+</div>
+</button>
+<!-- Invite Code Input (Hidden by default) -->
+<div class="px-md" id="join-input-section">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs" for="inviteCode">Código de invitación</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-[12px] px-md py-sm text-body-md font-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-outline-variant uppercase tracking-widest" id="inviteCode" oninput="validateInput()" placeholder="Ej: A1B2-C3D4" type="text"/>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="pt-lg">
+<button class="w-full bg-surface-container text-on-surface-variant font-label-md text-label-md py-4 rounded-xl opacity-50 cursor-not-allowed transition-all" disabled="" id="btn-continue">
+                    Continuar
+                </button>
+</div>
+</div>
+</main>
+<script>
+        let currentSelection = null;
+        const btnCreate = document.getElementById('btn-create');
+        const btnJoin = document.getElementById('btn-join');
+        const joinInputSection = document.getElementById('join-input-section');
+        const inviteCodeInput = document.getElementById('inviteCode');
+        const btnContinue = document.getElementById('btn-continue');
+
+        function selectOption(option) {
+            currentSelection = option;
+            
+            // Reset states
+            btnCreate.classList.remove('selected');
+            btnJoin.classList.remove('selected');
+            joinInputSection.classList.remove('expanded');
+            
+            if (option === 'create') {
+                btnCreate.classList.add('selected');
+                enableContinueButton();
+            } else if (option === 'join') {
+                btnJoin.classList.add('selected');
+                joinInputSection.classList.add('expanded');
+                validateInput(); // Check if input already has value
+                inviteCodeInput.focus();
+            }
+        }
+
+        function validateInput() {
+            if (currentSelection === 'join') {
+                if (inviteCodeInput.value.trim().length > 0) {
+                    enableContinueButton();
+                } else {
+                    disableContinueButton();
+                }
+            }
+        }
+
+        function enableContinueButton() {
+            btnContinue.disabled = false;
+            btnContinue.classList.remove('bg-surface-container', 'text-on-surface-variant', 'opacity-50', 'cursor-not-allowed');
+            btnContinue.classList.add('bg-primary', 'text-on-primary', 'shadow-md', 'hover:bg-primary-container');
+        }
+
+        function disableContinueButton() {
+            btnContinue.disabled = true;
+            btnContinue.classList.add('bg-surface-container', 'text-on-surface-variant', 'opacity-50', 'cursor-not-allowed');
+            btnContinue.classList.remove('bg-primary', 'text-on-primary', 'shadow-md', 'hover:bg-primary-container');
+        }
+    </script>
+</body></html>

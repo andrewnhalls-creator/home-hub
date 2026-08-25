@@ -1,91 +1,29 @@
 # Home Hub — Handoff Document
-Updated: 2026-06-20 (Finanzas UI overhaul + audit)
+Updated: 2026-08-25 (Casa Calma redesign — Stage F1 done)
 
 ## Current state
-Build passes, lint clean (0 errors, warnings only), typecheck clean. All changes committed and pushed.
-All 4 stages of the finance overhaul are complete.
-Compra ⇄ Menú toggle (SHOPA_COMPARISON.md) is also complete — was committed in 5d95428 prior to Stage 1–4, confirmed fully wired: SegmentedToggle on both /compra and /menu, primary-gold GenerateListButton, "Ver semana →" reverse link in ShoppingListDetail, migration 029 applied (source_menu_week_start column live in DB).
+A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/`:
+- `Frontend Designs/` — 36 screens (code.html + screen.png each), design system in `casa_calma/DESIGN.md`
+- `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
+- `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-## What changed (Stages 1–4)
+**Stage F1 (design-system foundation) is complete.** Build passes, lint 0 errors, typecheck clean.
 
-### Stage 1 — Bug fixes
-- KPI cards desync: `revalidatePath("/dashboard")` added to all finance actions
-- Shopping list live update: fixed derived-state sync in `ShoppingList.tsx`
-- AI button blur: removed illegal `backdropFilter` from `Toast.tsx`
+What F1 changed:
+- `app/globals.css`: all tokens retargeted from dark "Índigo Profundo" to light **Casa Calma**
+  (cream `#f4fafd` bg, forest-green primary `#154212` on legacy var `--color-terracotta`,
+  terracotta secondary `#974723` on `--color-amber`, soft shadows, 16px card radius).
+  `.glass` is now a plain soft white card (no blur). Legacy token *names* kept everywhere.
+- `app/layout.tsx` + `app/manifest.ts`: Plus Jakarta Sans (`--font-jakarta`), light themeColor `#f4fafd`.
+- Swept all `bg-white/[0.0x]` glass tints, edge-glint overlays, inline `rgba(13,11,31,…)` nav/modal
+  backgrounds, `[color-scheme:dark]` → light equivalents (`bg-card`, `bg-sand`, `border-border`).
+- Button secondary restyled to terracotta outline per Casa Calma spec; ghost hover → sand.
+- `DESIGN.md` rewritten for Casa Calma; CLAUDE.md design section updated.
 
-### Stage 2 — Finance data model overhaul
-- All finance entries now editable
-- `bank_account` field (ING/BBVA/Revolut) added to income_sources, fixed_payments, expenses, subscriptions, savings_contributions (migration 030)
-- `debts` table added with full RLS + soft delete (migration 031)
+Stitch MCP server is configured (`claude mcp add stitch`, key in `~/.claude.json`); screens were
+also mirrored to `Chatgpt_Redesign/stitch/` via the API. `Frontend Designs/` is the working copy.
 
-### Stage 3 — Finanzas page restructure
-- Landing = Resumen only + grid icon to open 7-section picker
-- Sub-pages: back arrow + horizontal scrollable pill strip (page-slider)
-- 7 sub-pages in order: Ingresos · Gastos fijos · Suscripciones · Gastos variables · Gastos · Plan de ahorro y hipoteca · Deuda
-- DeudaTab built: list/add/edit/delete debts with summary card
-- Desktop sidebar updated
-
-### Stage 4 — Plan de ahorro y hipoteca rework
-- Removed all phases/fases concept from PlanAhorroTab
-- No objectives/targets displayed — each plan shows: monthly amount + projected year total + months left until Dec
-- Fixed monthly amounts: Emergencia 400€/mes · Amortización hipoteca 700€/mes · Inmobiliario 300€/mes
-- "Fondo compra casa" → renamed to "Inmobiliario" in display
-- "Añadir fondos" button per plan card → modal with amount + bank account selector
-- MortgageOverpaymentCalculator kept (months saved + interest saved for lump payment)
-- SavingsTab removed from plan-ahorro combined view (absorbed into PlanAhorroTab)
-- SavingsSimulator fund label "Compras casa" → "Inmobiliario"
-
-## Production URL
-https://home-hub-dun.vercel.app
-
-## AI assistant — fully wired (2026-06-19)
-All execute actions now live:
-- add/remove/update_shopping_item — hard delete; bulk "all/todo" wipes uncompleted list; ilike lookup by name
-- add/complete/update_task — complete handles puntual (→ "hecho") and recurring (advances date); ilike lookup by title
-- add/update_reminder — ilike lookup by title; soft-delete-aware query
-- Execute route returns ok:false for real errors (not found) so the UI surfaces the message; ok:true/executed:false = "próximamente"
-- Savings goal "Inmobiliario" already correctly named in DB — no migration needed
-- All 12 AI env vars confirmed present in .env.local; Vercel Production env vars already set per original setup
-
-## AI assistant router (added 2026-06-19)
-- `POST /api/assistant` — command parser endpoint, separate from the existing `/api/ai` chatbot
-- Provider fallback order: groq → cloudflare → openrouter → gemini (overrideable via `AI_PROVIDER_ORDER`)
-- Allowed actions: add_shopping_item, update_shopping_item, remove_shopping_item, add_task, update_task, complete_task, add_reminder, update_reminder, clarify
-- Execution wired for: add_shopping_item, add_task, add_reminder (pass `autoExecute: true` in body)
-- Execution TODOs: update/remove/complete actions need safe lookup-by-name logic before wiring
-- All 5 manual test cases pass; pronoun guard prevents model filling in "it" instead of clarifying
-- New files: `lib/ai/action-schema.ts`, `lib/ai/provider-router.ts`, `lib/ai/providers/{groq,cloudflare,openrouter,gemini}.ts`, `lib/ai/execute-assistant-action.ts`, `app/api/assistant/route.ts`
-
-## Finanzas UI overhaul (2026-06-20)
-Commit `81f94b5` — all changes committed and deployed to production.
-
-### Pager / navigation
-- Dot indicators replaced with scrollable named tab strip (chips + X/N counter + arrows)
-- DashboardPager: two-ref fix (`scrollContainerRef` on outer scroll div, `tabListRef` on inner flex div) using `getBoundingClientRect` — active chip now centres correctly in the strip
-- Menú button restored as a separate pill (always visible, opens section picker grid)
-- Touch swipe between pages preserved
-
-### Layout
-- AppShell main content wrapper: added `min-w-0` — fixes 800px intrinsic min-width overflow that caused all finance content to bleed off-screen on 390px viewports
-
-### Tab audit — all tabs now consistent
-- **IngresoTab**: 44px tap targets, `uppercase tracking-wider` removed
-- **FixedPaymentsTab**: 44px tap targets, `uppercase tracking-wider` removed
-- **SubscriptionsTab**: 44px tap targets, `uppercase tracking-wider` removed
-- **PresupuestosTab (Gastos variables)**: full edit + delete wired; all "presupuesto" labels renamed to "gasto variable"
-- **ExpensesTab**: buttons updated to `h-11 w-11 rounded-full` with focus ring, transition, and `active:scale-[0.9]`
-- **MortgageTab**: history delete button fixed to 44px tap target
-- **ResumenTab**: two `uppercase tracking-wider` violations removed from hero card labels
-- **DeudaTab**, **PlanAhorroTab**: already correct, no changes needed
-
-### Housekeeping
-- Playwright removed (`@playwright/test` uninstalled, config/tests/.github deleted, `.gitignore` restored) — was added by verify tool, not needed in the project
-
-## Last committed state
-- Commit: `81f94b5` — Fix finanzas pager scroll, mobile overflow, and tap target consistency
-
-## SQL migrations applied
-- 001–031 (full schema through bank_account + debts)
-
-## Edge Function + pg_cron
-- `send-push` v8 deployed; `send-push-cron` (every min) + `document-expiry-scan` (08:00 UTC daily)
+## Known follow-ups
+- Screens have only had the token flip — layout alignment to the Stitch mockups happens per stage (F2+).
+- Icon buttons/accents using sage/olive/amber/rose tints were retargeted globally; verify per screen.
+- PWA icons (`public/icons/`) still show the old dark branding — regenerate in a later stage.

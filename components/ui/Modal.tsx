@@ -66,7 +66,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
 
   return createPortal(
     <div
-      className="animate-backdrop-enter fixed inset-0 z-50 flex items-end justify-center bg-black/70 sm:items-center sm:p-4"
+      className="animate-backdrop-enter fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center sm:p-4"
       style={{ backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
       onClick={onClose}
     >
@@ -77,25 +77,9 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
           "rounded-t-[var(--radius-xl)] sm:rounded-[var(--radius-xl)]",
           className,
         )}
-        style={{
-          background: "rgba(13, 11, 31, 0.85)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-        }}
+        style={{ background: "var(--color-card)" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Edge highlights */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[var(--radius-xl)]"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)" }}
-        />
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 w-px"
-          style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.12), transparent)" }}
-        />
-
         {/* Scrollable content */}
         <div
           ref={dialogRef}
@@ -112,7 +96,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
               type="button"
               onClick={onClose}
               aria-label="Cerrar"
-              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta/50 active:scale-[0.97]"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta/50 active:scale-[0.97]"
             >
               <X className="h-5 w-5" aria-hidden />
             </button>

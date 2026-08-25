@@ -14,16 +14,10 @@ export function EmptyState({ icon: Icon, title, description, action, className }
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center gap-4 overflow-hidden rounded-[var(--radius-xl)] border border-dashed border-white/[0.15] bg-white/[0.04] px-6 py-12 text-center",
+        "relative flex flex-col items-center gap-4 overflow-hidden rounded-[var(--radius-xl)] border border-dashed border-border bg-sand/60 px-6 py-12 text-center",
         className,
       )}
     >
-      {/* Subtle top edge */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)" }}
-      />
       {Icon && (
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-terracotta/[0.12] text-terracotta ring-1 ring-terracotta/20">
           <Icon className="h-7 w-7" aria-hidden />

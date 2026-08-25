@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Calendario - Casa Calma</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config from Brand Anchors -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#52320b",
+                    "inverse-primary": "#a1d494",
+                    "on-tertiary-fixed-variant": "#623f18",
+                    "inverse-on-surface": "#ebf2f4",
+                    "primary": "#154212",
+                    "outline": "#72796e",
+                    "on-primary-fixed-variant": "#23501e",
+                    "primary-fixed-dim": "#a1d494",
+                    "on-primary-container": "#9dd090",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#ffdbce",
+                    "on-secondary-fixed": "#370e00",
+                    "on-surface-variant": "#42493e",
+                    "on-primary-fixed": "#002201",
+                    "secondary-container": "#ff996e",
+                    "secondary-fixed-dim": "#ffb598",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d4dbdd",
+                    "on-surface": "#161d1f",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#2c1600",
+                    "surface-bright": "#f4fafd",
+                    "surface-container-high": "#e2e9ec",
+                    "on-background": "#161d1f",
+                    "on-secondary-container": "#772f0c",
+                    "primary-container": "#2d5a27",
+                    "background": "#f4fafd",
+                    "surface-variant": "#dde4e6",
+                    "on-error": "#ffffff",
+                    "error": "#ba1a1a",
+                    "surface-container": "#e8eff1",
+                    "surface": "#f4fafd",
+                    "outline-variant": "#c2c9bb",
+                    "surface-container-low": "#eef5f7",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#2b3234",
+                    "tertiary-fixed": "#ffdcbd",
+                    "surface-tint": "#3b6934",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#79300e",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#ecb987",
+                    "surface-container-highest": "#dde4e6",
+                    "tertiary-fixed-dim": "#f0bd8b",
+                    "secondary": "#974723",
+                    "primary-fixed": "#bcf0ae",
+                    "tertiary-container": "#6d4820"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "md": "16px",
+                    "gutter": "16px",
+                    "sm": "12px",
+                    "base": "8px",
+                    "margin-desktop": "40px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "xl": "32px"
+            },
+            "fontFamily": {
+                    "label-md": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .shadow-soft {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        .shadow-overlay {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased flex h-screen overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Desktop Navigation Drawer (from JSON) -->
+<aside class="hidden md:flex flex-col h-full w-72 rounded-r-xl bg-surface-container-low shadow-xl z-[60] fixed inset-y-0 left-0 py-lg">
+<div class="px-md mb-xl flex items-center gap-sm">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A warm, professional profile portrait of a smiling Spanish woman in her 30s, natural lighting, soft focus background, wearing a simple olive green linen shirt, embodying a calm and trustworthy persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIYPy4S6SIMXk1Pli_D7uvZN_3PCXoToQHOIn3NWtANIdUki0BSIczNYWiyWyaOqfNKZ80g9w0_L7J3mN81BrMBjV1CVKzGy-s9_WRjw-uC7OcZZazoAj3ybvWa2PbeNDvyjSHVFmkI8PEoT0HkESX6S7fB2xLA6Wq25jSr214ctmMjfKuYBeT6_w4eY2LlQ8Dbdxi_ixRW__i2dUJws901A2e5dP_QVxUwtMUg08D8ii2Zg2JcJEz"/>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-primary font-bold">Elena García</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Piso en Madrid</p>
+<span class="text-label-sm font-label-sm text-outline px-2 py-0.5 rounded border border-outline/30">Admin</span>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-xs px-2">
+<!-- Tabs from JSON, none match 'Calendario' directly, so all inactive as per strict rules -->
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-label-md font-label-md">Recetas</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-label-md font-label-md">Documentos</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Ajustes</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="text-label-md font-label-md">Soporte</span>
+</a>
+</nav>
+<div class="mt-auto px-2">
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-label-md font-label-md">Cerrar Sesión</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-full relative w-full md:pl-72 overflow-y-auto">
+<!-- TopAppBar (from JSON) -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 bg-background top-0 z-40 sticky">
+<button class="flex items-center justify-center w-11 h-11 rounded-full text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-primary">swap_vert</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Piso en Madrid</h1>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-surface-container">
+<img class="w-full h-full object-cover" data-alt="A minimalist, stylized avatar illustration of a Mediterranean family home, featuring terracotta roof tiles and a soft cream facade, set against a pale blue sky, evoking warmth and stability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ3UQT2HvDGDlmJ2zYY8OCQi77arDDpqsMXHqxkYTzI9Zy1A44GAaNIbVb3TuobSjWJKuarnK9mLWtwzBbpur8_ULbOmbJgey8sBkuwBg0vQt9OTiZHCWZLANvSgrtsRAAMvwsw4W8O9KAgLa0I9ce3Lc7wsGtxcQo0Lvhn4-QdSVjetMJKlRQ6X35Tm10cHeMWmd5O8QMbzeZyhqQzPv-zNeAdjw3Gz7eefsYA7cvptvGocFI8CsS"/>
+</div>
+</header>
+<!-- Canvas -->
+<main class="px-margin-mobile md:px-margin-desktop py-lg pb-32 max-w-7xl mx-auto w-full flex-1 flex flex-col">
+<div class="flex flex-col lg:flex-row gap-xl items-start h-full">
+<!-- Left Column: Calendar (Bento Style) -->
+<section class="w-full lg:w-2/3 bg-surface-container-lowest rounded-xl shadow-soft p-md lg:p-lg border border-surface-container-high/50 flex flex-col">
+<!-- Calendar Header -->
+<div class="flex justify-between items-center mb-lg">
+<div class="flex flex-col">
+<h2 class="text-headline-md font-headline-md text-on-background capitalize">Noviembre 2023</h2>
+<p class="text-label-md font-label-md text-outline">Organización familiar</p>
+</div>
+<div class="flex gap-2">
+<button class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-container text-on-surface-variant transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-container text-on-surface-variant transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Calendar Grid -->
+<div class="grid grid-cols-7 gap-1 lg:gap-2 mb-2 text-center text-label-sm font-label-sm text-outline">
+<div class="py-2">L</div>
+<div class="py-2">M</div>
+<div class="py-2">X</div>
+<div class="py-2">J</div>
+<div class="py-2">V</div>
+<div class="py-2">S</div>
+<div class="py-2">D</div>
+</div>
+<!-- Days -->
+<div class="grid grid-cols-7 gap-1 lg:gap-2 flex-1">
+<!-- Empty slots for offset -->
+<div class="min-h-[64px] rounded-lg bg-transparent"></div>
+<div class="min-h-[64px] rounded-lg bg-transparent"></div>
+<!-- Days Example -->
+<!-- Normal Day -->
+<div class="min-h-[64px] min-w-[44px] rounded-lg hover:bg-surface-container-low transition-colors flex flex-col items-center justify-center p-1 cursor-pointer relative group">
+<span class="text-body-md font-body-md text-on-background">1</span>
+</div>
+<!-- Day with Event (Discrete indicator) -->
+<div class="min-h-[64px] min-w-[44px] rounded-lg hover:bg-surface-container-low transition-colors flex flex-col items-center p-1 cursor-pointer relative">
+<span class="text-body-md font-body-md text-on-background mt-1">2</span>
+<div class="flex gap-1 mt-auto pb-1">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary"></div>
+</div>
+</div>
+<div class="min-h-[64px] min-w-[44px] rounded-lg hover:bg-surface-container-low transition-colors flex flex-col items-center justify-center p-1 cursor-pointer">
+<span class="text-body-md font-body-md text-on-background">3</span>
+</div>
+<!-- Selected Day / Today -->
+<div class="min-h-[64px] min-w-[44px] rounded-lg bg-primary text-on-primary shadow-md flex flex-col items-center p-1 cursor-pointer relative ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest">
+<span class="text-body-md font-body-md font-bold mt-1">4</span>
+<div class="flex gap-1 mt-auto pb-1">
+<div class="w-1.5 h-1.5 rounded-full bg-inverse-primary"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></div>
+</div>
+</div>
+<!-- Weekend Days (subtle visual diff) -->
+<div class="min-h-[64px] min-w-[44px] rounded-lg bg-surface/50 flex flex-col items-center justify-center p-1 cursor-pointer">
+<span class="text-body-md font-body-md text-on-surface-variant">5</span>
+</div>
+<div class="min-h-[64px] min-w-[44px] rounded-lg bg-surface/50 flex flex-col items-center p-1 cursor-pointer">
+<span class="text-body-md font-body-md text-on-surface-variant mt-1">6</span>
+<div class="flex gap-1 mt-auto pb-1">
+<div class="w-1.5 h-1.5 rounded-full bg-primary-container"></div>
+</div>
+</div>
+<!-- Filling out some more days to show grid -->
+<script>
+                            for(let i=7; i<=30; i++) {
+                                document.write(`
+                                <div class="min-h-[64px] min-w-[44px] rounded-lg hover:bg-surface-container-low transition-colors flex flex-col items-center p-1 cursor-pointer relative">
+                                    <span class="text-body-md font-body-md text-on-background mt-1">${i}</span>
+                                    ${i % 8 === 0 ? '<div class="flex gap-1 mt-auto pb-1"><div class="w-1.5 h-1.5 rounded-full bg-secondary"></div></div>' : ''}
+                                </div>`);
+                            }
+                        </script>
+</div>
+</section>
+<!-- Right Column: Agenda -->
+<section class="w-full lg:w-1/3 flex flex-col gap-md">
+<div class="flex justify-between items-end mb-sm px-2">
+<h3 class="text-headline-sm font-headline-sm text-primary">Jueves, 4 Nov</h3>
+<span class="text-label-sm font-label-sm text-outline bg-surface-container px-3 py-1 rounded-full">2 Eventos</span>
+</div>
+<!-- Agenda Cards (Glassmorphism inspired, soft layers) -->
+<article class="bg-surface-container-lowest rounded-xl p-md border-l-4 border-l-secondary shadow-soft hover:shadow-overlay transition-shadow cursor-pointer relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[64px]">restaurant</span>
+</div>
+<div class="flex justify-between items-start mb-2 relative z-10">
+<span class="text-label-sm font-label-sm text-secondary bg-secondary-fixed/50 px-2 py-0.5 rounded">20:30 - 23:00</span>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[20px]">more_horiz</span></button>
+</div>
+<h4 class="text-body-lg font-body-lg font-semibold text-on-background mb-1 relative z-10">Cena con abuelos</h4>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-1 mb-4 relative z-10">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                            Casa de los abuelos, Centro
+                        </p>
+<!-- Family Chips -->
+<div class="flex gap-2 relative z-10">
+<div class="flex items-center gap-1.5 bg-surface-container-low px-3 py-1 rounded-full border border-surface-container">
+<div class="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center"><span class="text-[10px] text-primary font-bold">E</span></div>
+<span class="text-label-sm font-label-sm text-on-surface">Elena</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-low px-3 py-1 rounded-full border border-surface-container">
+<div class="w-4 h-4 rounded-full bg-tertiary/20 flex items-center justify-center"><span class="text-[10px] text-tertiary font-bold">M</span></div>
+<span class="text-label-sm font-label-sm text-on-surface">Mateo</span>
+</div>
+</div>
+</article>
+<article class="bg-surface-container-lowest rounded-xl p-md border-l-4 border-l-primary-container shadow-soft hover:shadow-overlay transition-shadow cursor-pointer relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[64px]">directions_car</span>
+</div>
+<div class="flex justify-between items-start mb-2 relative z-10">
+<span class="text-label-sm font-label-sm text-primary-container bg-primary-container/10 px-2 py-0.5 rounded">09:00 - 11:30</span>
+</div>
+<h4 class="text-body-lg font-body-lg font-semibold text-on-background mb-1 relative z-10">Revisión coche</h4>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-1 mb-4 relative z-10">
+<span class="material-symbols-outlined text-[16px]">build</span>
+                            Taller Martínez, Sur
+                        </p>
+<div class="flex gap-2 relative z-10">
+<div class="flex items-center gap-1.5 bg-surface-container-low px-3 py-1 rounded-full border border-surface-container">
+<div class="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center"><span class="text-[10px] text-primary font-bold">E</span></div>
+<span class="text-label-sm font-label-sm text-on-surface">Elena</span>
+</div>
+</div>
+</article>
+</section>
+</div>
+</main>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-24 md:bottom-lg right-margin-mobile md:right-margin-desktop w-14 h-14 bg-primary text-on-primary rounded-xl shadow-overlay flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-50 group">
+<span class="material-symbols-outlined group-hover:rotate-90 transition-transform duration-300">add</span>
+</button>
+</div>
+<!-- BottomNavBar (Mobile Only, from JSON) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe md:hidden bg-surface-container-lowest shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] rounded-t-xl">
+<!-- Inicio -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary min-h-[44px] min-w-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="text-label-sm font-label-sm">Inicio</span>
+</a>
+<!-- Casa -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary min-h-[44px] min-w-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">cottage</span>
+<span class="text-label-sm font-label-sm">Casa</span>
+</a>
+<!-- Add (Empty label in JSON) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary min-h-[44px] min-w-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">add_circle</span>
+<span class="text-label-sm font-label-sm"></span>
+</a>
+<!-- Finanzas -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary min-h-[44px] min-w-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">payments</span>
+<span class="text-label-sm font-label-sm">Finanzas</span>
+</a>
+<!-- Calendario (Active) -->
+<a class="flex flex-col items-center justify-center text-primary font-semibold scale-90 transition-transform min-h-[44px] min-w-[44px]" href="#">
+<div class="px-4 py-1 bg-primary-container/20 rounded-full mb-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+</div>
+<span class="text-label-sm font-label-sm">Calendario</span>
+</a>
+</nav>
+</body></html>

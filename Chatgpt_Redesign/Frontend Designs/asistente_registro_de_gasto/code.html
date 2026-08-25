@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gasto Confirmado - Home Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#6d4820",
+                      "error": "#ba1a1a",
+                      "background": "#f4fafd",
+                      "on-error-container": "#93000a",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#a1d494",
+                      "on-tertiary-fixed": "#2c1600",
+                      "inverse-surface": "#2b3234",
+                      "inverse-primary": "#a1d494",
+                      "on-secondary-container": "#772f0c",
+                      "tertiary": "#52320b",
+                      "surface": "#f4fafd",
+                      "on-primary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-tertiary-container": "#ecb987",
+                      "on-tertiary": "#ffffff",
+                      "outline": "#72796e",
+                      "surface-variant": "#dde4e6",
+                      "on-primary-fixed": "#002201",
+                      "surface-container-highest": "#dde4e6",
+                      "surface-container-high": "#e2e9ec",
+                      "primary": "#154212",
+                      "secondary": "#974723",
+                      "on-secondary-fixed-variant": "#79300e",
+                      "on-surface-variant": "#42493e",
+                      "on-tertiary-fixed-variant": "#623f18",
+                      "tertiary-fixed-dim": "#f0bd8b",
+                      "on-surface": "#161d1f",
+                      "surface-container-low": "#eef5f7",
+                      "surface-bright": "#f4fafd",
+                      "tertiary-fixed": "#ffdcbd",
+                      "on-background": "#161d1f",
+                      "outline-variant": "#c2c9bb",
+                      "surface-tint": "#3b6934",
+                      "on-primary-fixed-variant": "#23501e",
+                      "inverse-on-surface": "#ebf2f4",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#ffdbce",
+                      "primary-fixed": "#bcf0ae",
+                      "on-secondary": "#ffffff",
+                      "surface-container": "#e8eff1",
+                      "secondary-fixed-dim": "#ffb598",
+                      "on-secondary-fixed": "#370e00",
+                      "on-primary-container": "#9dd090",
+                      "secondary-container": "#ff996e",
+                      "primary-container": "#2d5a27",
+                      "surface-dim": "#d4dbdd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "base": "8px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "sm": "12px",
+                      "xl": "32px",
+                      "gutter": "16px",
+                      "margin-mobile": "20px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "label-md": ["Plus Jakarta Sans"],
+                      "label-sm": ["Plus Jakarta Sans"],
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "headline-sm": ["Plus Jakarta Sans"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "body-md": ["Plus Jakarta Sans"],
+                      "display-lg-mobile": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          }
+        }
+      </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FDFCF8; /* Override for organic warmth */
+        }
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        .success-animation {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background dark:bg-background flex items-center justify-between px-margin-mobile h-16 shadow-none">
+<div class="flex items-center gap-sm cursor-pointer active:scale-95 duration-150 transition-transform">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-surface-variant">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A warm, candid portrait of a woman in her 30s with dark hair, smiling softly in a brightly lit modern kitchen. Soft natural lighting, highly detailed, realistic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv5LBo3UveUoLSUrxXLMSx4s732LMnMbRnWRSL-4PjK_kcPJyhlNg-SXSkmjOsmjEyuDiwMsmXHoYpaIA49tFSvRM7LziM0oejfSK4BRftDCnVmEVano5xuzV1AR3o-L87mUiAnuEWQ-NBlyQls0Lo5FcvEG0yr_tlNM90ZaET150vS_eodmi7M0WdjcfOrfmZPZTmk2_26oHdktXLbq9EM8YXzMZSUNR0lGSPiPbgze1p83548O-h"/>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim">Home Hub</span>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas (Transactional - No Bottom Nav) -->
+<main class="flex-1 mt-16 px-margin-mobile pt-lg pb-xl max-w-2xl mx-auto w-full flex flex-col justify-center min-h-[calc(100vh-64px)]">
+<!-- Assistant Context -->
+<div class="mb-lg text-center animate-[fadeIn_0.5s_ease-out]">
+<p class="font-body-md text-body-md text-on-surface-variant mb-xs">"Apunta 45 € de gasolina"</p>
+</div>
+<!-- Success Card -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-[0_8px_24px_rgba(0,0,0,0.08)] border border-surface-variant success-animation flex flex-col items-center text-center">
+<!-- Success Icon -->
+<div class="w-16 h-16 rounded-full bg-[#E5F5E0] text-primary flex items-center justify-center mb-md">
+<span class="material-symbols-outlined fill text-[32px]" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-xs">Gasto registrado</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Se ha añadido correctamente a vuestras cuentas.</p>
+<!-- Details Bento -->
+<div class="w-full bg-surface-container-low rounded-lg p-md grid grid-cols-2 gap-sm mb-lg text-left">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-xs uppercase tracking-wider">Importe</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">45,00 €</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-xs uppercase tracking-wider">Categoría</span>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px] text-tertiary-container" data-icon="local_gas_station">local_gas_station</span>
+<span class="font-body-md text-body-md text-on-surface">Transporte</span>
+</div>
+</div>
+<div class="flex flex-col col-span-2 pt-xs border-t border-surface-variant mt-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-xs uppercase tracking-wider">Asignado a</span>
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-sm text-label-sm font-bold">E</div>
+<span class="font-body-md text-body-md text-on-surface">Elena</span>
+</div>
+</div>
+</div>
+<!-- Action -->
+<button class="bg-primary text-on-primary font-label-md text-label-md px-lg py-sm rounded-full w-full hover:bg-on-primary-fixed-variant transition-colors active:scale-95 duration-150 flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+                Ver gasto en Finanzas
+            </button>
+<button class="mt-md text-on-surface-variant font-label-md text-label-md hover:text-on-surface transition-colors">
+                Deshacer
+            </button>
+</div>
+</main>
+<script>
+        // Simple script to demonstrate the progression from preview to success.
+        // In a real app, this would be handled by state management.
+        // For this static demo, the HTML is structured to show the final success state as requested.
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('UI Loaded: Success state active.');
+        });
+    </script>
+</body></html>

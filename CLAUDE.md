@@ -20,12 +20,13 @@ These rules apply to every Claude Code session working in this repository. Read 
 
 ## Design style
 
-- **Palette: Índigo Profundo — dark-first glassmorphism.** Page background is deep indigo `#0D0B1F` (token `cream`), not light or pastel. Never use a light background.
-- **Primary action colour: saffron gold `#E8C547`** (CSS var `--color-terracotta` — historical name kept to avoid mass-renaming). Secondary accents: teal (`sage`), indigo-purple (`olive`), amber, rose.
-- Two-tier glass rule: blur only on nav bars (`blur(20px)`) and modals/sheets (`blur(24px)`). Never add `backdrop-filter` to content cards, inputs, or list items.
-- Mobile-first. Rounded corners (`--radius-xl` = 20px for cards/modals), dark shadows, generous spacing, large tap targets (min 44×44px).
-- **Icons: Phosphor Icons v2 only** (`@phosphor-icons/react`). Use `/dist/ssr` path for server components. Never import from `lucide-react`.
-- See `DESIGN.md` for the full palette, token table, surface hierarchy, typography, and component patterns. `DESIGN_SYSTEM.md` is deprecated (old warm/pastel design) — ignore it.
+- **Palette: Casa Calma — light, Mediterranean calm.** Page background is cream `#f4fafd` (token `cream`). White cards with soft ambient shadows. Never use a dark background; no glassmorphism, no `backdrop-filter`.
+- **Primary action colour: forest green `#154212`** (CSS var `--color-terracotta` — historical name kept to avoid mass-renaming). Secondary accent: terracotta `#974723` (var `--color-amber`). Other accents: calm green (`sage`), earth brown (`olive`), deep rose (`rose`).
+- Typography: **Plus Jakarta Sans** for everything (no serif display font).
+- Mobile-first. Rounded corners (`--radius-xl` = 16px for cards/modals, 12px buttons/inputs), soft light shadows, generous spacing, large tap targets (min 44×44px).
+- **Icons: Phosphor Icons v2 only** (`@phosphor-icons/react`). Use `/dist/ssr` path for server components. Never import from `lucide-react`. Stitch mockups show Material Symbols — always map them to Phosphor equivalents.
+- Source designs: `Chatgpt_Redesign/Frontend Designs/` (36 Stitch screens), staged plan in `Chatgpt_Redesign/REDESIGN_PLAN.md`.
+- See `DESIGN.md` for the token table and component patterns. `DESIGN_SYSTEM.md` is deprecated (old warm/pastel design) — ignore it.
 
 ## Tech stack
 

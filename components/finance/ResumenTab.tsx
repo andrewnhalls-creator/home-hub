@@ -57,8 +57,8 @@ function TappableKpi({ label, value, sub, variant = "default", onClick }: Tappab
   const el = (
     <div
       className={cn(
-        "flex flex-col rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-3 shadow-[var(--shadow-card)] transition",
-        onClick && "cursor-pointer hover:border-terracotta/30 hover:bg-white/[0.12] active:scale-[0.97]",
+        "flex flex-col rounded-[var(--radius-xl)] border border-border bg-card p-3 shadow-[var(--shadow-card)] transition",
+        onClick && "cursor-pointer hover:border-terracotta/30 hover:bg-sand active:scale-[0.97]",
       )}
     >
       <p className={cn("text-base font-bold leading-none tabular-nums", valueClass)}>{value}</p>
@@ -118,14 +118,14 @@ function PaymentSplitRow({
       <button
         type="button"
         onClick={onClick}
-        className="w-full rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 text-left shadow-[var(--shadow-card)] transition hover:border-terracotta/30 hover:bg-white/[0.12] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+        className="w-full rounded-[var(--radius-xl)] border border-border bg-card p-4 text-left shadow-[var(--shadow-card)] transition hover:border-terracotta/30 hover:bg-sand active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
       >
         {inner}
       </button>
     );
   }
   return (
-    <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
+    <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-card)]">
       {inner}
     </div>
   );
@@ -306,7 +306,7 @@ export function ResumenTab({
     <div className="flex flex-col gap-3">
       {/* Hero: account balance + disponible */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="relative rounded-[var(--radius-xl)] border border-rose/20 bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
+        <div className="relative rounded-[var(--radius-xl)] border border-rose/20 bg-card p-4 shadow-[var(--shadow-card)]">
           <p className="text-xs font-medium text-rose/60">Saldo en cuenta</p>
           {accountBalance != null ? (
             <p className="mt-1 text-xl font-bold tabular-nums text-brown">
@@ -326,7 +326,7 @@ export function ResumenTab({
           </button>
         </div>
 
-        <div className="rounded-[var(--radius-xl)] border border-rose/20 bg-white/[0.07] p-4 shadow-[var(--shadow-card)]">
+        <div className="rounded-[var(--radius-xl)] border border-rose/20 bg-card p-4 shadow-[var(--shadow-card)]">
           <p className="text-xs font-medium text-rose/60">Disponible</p>
           {disponible !== null ? (
             <>

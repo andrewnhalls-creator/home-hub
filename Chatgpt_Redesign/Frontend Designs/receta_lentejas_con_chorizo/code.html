@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lentejas con chorizo - Detalle de Receta</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface": "#161d1f",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed": "#2c1600",
+                      "tertiary-fixed-dim": "#f0bd8b",
+                      "surface-dim": "#d4dbdd",
+                      "surface-container-low": "#eef5f7",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#ebf2f4",
+                      "background": "#f4fafd",
+                      "secondary": "#974723",
+                      "surface-container-highest": "#dde4e6",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "on-surface-variant": "#42493e",
+                      "on-secondary-container": "#772f0c",
+                      "secondary-fixed-dim": "#ffb598",
+                      "surface-tint": "#3b6934",
+                      "outline": "#72796e",
+                      "surface": "#f4fafd",
+                      "primary-fixed-dim": "#a1d494",
+                      "tertiary": "#52320b",
+                      "secondary-container": "#ff996e",
+                      "surface-container": "#e8eff1",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#a1d494",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#ffdcbd",
+                      "inverse-surface": "#2b3234",
+                      "on-background": "#161d1f",
+                      "outline-variant": "#c2c9bb",
+                      "surface-container-high": "#e2e9ec",
+                      "on-tertiary-container": "#ecb987",
+                      "on-secondary-fixed": "#370e00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-fixed-variant": "#79300e",
+                      "secondary-fixed": "#ffdbce",
+                      "on-primary-container": "#9dd090",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed-variant": "#623f18",
+                      "surface-bright": "#f4fafd",
+                      "on-primary-fixed": "#002201",
+                      "on-primary-fixed-variant": "#23501e",
+                      "primary-fixed": "#bcf0ae",
+                      "primary-container": "#2d5a27",
+                      "primary": "#154212",
+                      "tertiary-container": "#6d4820",
+                      "surface-variant": "#dde4e6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "margin-desktop": "40px",
+                      "sm": "12px",
+                      "base": "8px",
+                      "margin-mobile": "20px",
+                      "gutter": "16px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Plus Jakarta Sans"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "headline-sm": ["Plus Jakarta Sans"],
+                      "display-lg-mobile": ["Plus Jakarta Sans"],
+                      "label-md": ["Plus Jakarta Sans"],
+                      "body-md": ["Plus Jakarta Sans"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "body-lg": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #FDFCF8; /* Minimalist Cream base as per Style Guidance */
+            color: #161d1f; /* on-surface */
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dde4e6;
+            border-radius: 10px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md text-on-surface pb-24 md:pb-0">
+<!-- Top Navigation App Bar -->
+<header class="fixed top-0 w-full z-50 bg-background dark:bg-background flex items-center justify-between px-margin-mobile h-16 shadow-[0_4px_12px_0_rgba(0,0,0,0.02)] md:hidden">
+<button class="p-2 -ml-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-150 text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed-dim font-bold truncate px-4 text-center">
+            Receta
+        </h1>
+<button class="p-2 -mr-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-150 text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="favorite_border">favorite_border</span>
+</button>
+</header>
+<!-- Desktop Sidebar/Nav (Hidden on Mobile) -->
+<nav class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant/30 flex-col py-6 px-4 z-40">
+<div class="mb-8 px-4">
+<span class="font-display-lg-mobile text-display-lg-mobile text-primary font-bold">Home Hub</span>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">shopping_cart</span> Grocery
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">calendar_month</span> Menu
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-bold" href="#">
+<span class="material-symbols-outlined filled-icon">restaurant_menu</span> Recipes
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">analytics</span> Stats
+            </a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-16 md:pt-8 px-margin-mobile md:px-margin-desktop md:ml-64 max-w-5xl mx-auto">
+<!-- Hero Section: Image & Title -->
+<div class="relative w-full h-[40vh] md:h-[50vh] rounded-2xl overflow-hidden mt-4 shadow-sm">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="A top-down view of a rustic, comforting bowl of Spanish lentil stew (lentejas con chorizo). The stew is rich and thick, featuring brown lentils, chunks of red chorizo, tender carrots, and potatoes in a deep, savory broth. Soft, warm, inviting natural lighting from a nearby window highlights the steam rising from the bowl. Set on a clean, light wood table with a minimalist, cozy Mediterranean aesthetic, conveying a sense of home and comfort." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3hCyy0o9jnXceXvGO2LxWu8igaUiC_7lpj72laoNgCcwxuGU43jPVoTC8Ow4uK9CUbv31bD3F9vDJPZvIhFHZBUkk6aR3gH-zBpvKAj2Dv4GWL18L9fKmDrh5JuoWNpy84mCLcna1pOM2sjbOuMMfZPoWL5q4yHkOiEWajT7I5lC7j97WChMfzFPBobQP38ZH1v_gIQUbLBbwfdE7ff4ELnaaPaYprzShy9AEUiyc_3Y88CoUYwlm"/>
+<!-- Gradient Overlay for readability if title was here, but keeping it clean -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-6">
+<!-- Tags floating on image -->
+<div class="flex gap-2">
+<span class="bg-surface-container-lowest/90 backdrop-blur-sm px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">schedule</span> 45 min
+                    </span>
+<span class="bg-surface-container-lowest/90 backdrop-blur-sm px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">group</span> 4 Raciones
+                    </span>
+</div>
+</div>
+</div>
+<div class="mt-6 md:mt-8">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary font-bold mb-2">Lentejas con chorizo</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                Un plato tradicional, reconfortante y lleno de sabor. Perfecto para reunir a la familia alrededor de la mesa con la calidez del hogar.
+            </p>
+</div>
+<!-- Bento Grid Layout for Content -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg mt-8 mb-16">
+<!-- Left Column: Ingredients -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Ingredients Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] border border-outline-variant/20">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">kitchen</span>
+                        Ingredientes
+                    </h2>
+<ul class="flex flex-col gap-3">
+<li class="flex justify-between items-center py-2 border-b border-surface-container-highest last:border-0">
+<span class="font-body-md text-body-md">Lentejas pardinas</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-semibold">350 g</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-surface-container-highest last:border-0">
+<span class="font-body-md text-body-md">Chorizo para guisar</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-semibold">150 g</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-surface-container-highest last:border-0">
+<span class="font-body-md text-body-md">Zanahorias</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-semibold">2 uds</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-surface-container-highest last:border-0">
+<span class="font-body-md text-body-md">Patata grande</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-semibold">1 ud</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-surface-container-highest last:border-0">
+<span class="font-body-md text-body-md">Cebolla</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-semibold">1/2 ud</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-surface-container-highest last:border-0">
+<span class="font-body-md text-body-md">Ajo</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-semibold">2 dientes</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-surface-container-highest last:border-0">
+<span class="font-body-md text-body-md">Pimentón dulce</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-semibold">1 cdta</span>
+</li>
+</ul>
+<!-- Primary Action Button -->
+<button class="w-full mt-6 bg-primary text-on-primary hover:bg-primary-fixed-variant active:scale-95 transition-all duration-200 py-4 px-6 rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 shadow-sm min-h-[44px]">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+                        Añadir ingredientes a la compra
+                    </button>
+</div>
+<!-- Quick Tips Card (Secondary Info) -->
+<div class="bg-secondary-container/20 rounded-2xl p-6 border border-secondary-container/30">
+<h3 class="font-label-md text-label-md text-secondary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span> Consejo
+                    </h3>
+<p class="font-body-sm text-sm text-on-surface-variant leading-relaxed">
+                        Si usas lentejas pardinas, no es estrictamente necesario remojarlas, pero 2 horas en agua reducirán el tiempo de cocción.
+                    </p>
+</div>
+</div>
+<!-- Right Column: Preparation Steps -->
+<div class="md:col-span-8">
+<div class="bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] border border-outline-variant/20">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-8 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">menu_book</span>
+                        Preparación
+                    </h2>
+<div class="space-y-8">
+<!-- Step 1 -->
+<div class="flex gap-4 group">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant font-headline-sm text-headline-sm flex items-center justify-center group-hover:bg-primary-container group-hover:text-primary transition-colors">
+                                1
+                            </div>
+<div class="pt-1">
+<h3 class="font-label-md text-label-md text-on-surface font-bold mb-1">Preparar las verduras</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                                    Pela y pica la cebolla y los ajos muy finos. Pela las zanahorias y córtalas en rodajas gruesas. Pela la patata y 'cáscala' en trozos medianos (cortar un poco y tirar para romperla, así soltará más almidón).
+                                </p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex gap-4 group">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant font-headline-sm text-headline-sm flex items-center justify-center group-hover:bg-primary-container group-hover:text-primary transition-colors">
+                                2
+                            </div>
+<div class="pt-1">
+<h3 class="font-label-md text-label-md text-on-surface font-bold mb-1">El sofrito inicial</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                                    En una olla amplia, pon un chorro de aceite de oliva a fuego medio. Añade la cebolla y el ajo y pocha durante 5 minutos. Incorpora el chorizo cortado en rodajas gruesas y rehoga un par de minutos para que suelte su jugo.
+                                </p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex gap-4 group">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant font-headline-sm text-headline-sm flex items-center justify-center group-hover:bg-primary-container group-hover:text-primary transition-colors">
+                                3
+                            </div>
+<div class="pt-1">
+<h3 class="font-label-md text-label-md text-on-surface font-bold mb-1">Añadir especias y lentejas</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                                    Retira la olla del fuego un momento, añade el pimentón dulce y remueve rápidamente para que no se queme. Vuelve al fuego, añade las lentejas (escurridas si las remojaste), la zanahoria y la patata. Mezcla todo bien.
+                                </p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="flex gap-4 group">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant font-headline-sm text-headline-sm flex items-center justify-center group-hover:bg-primary-container group-hover:text-primary transition-colors">
+                                4
+                            </div>
+<div class="pt-1">
+<h3 class="font-label-md text-label-md text-on-surface font-bold mb-1">Cocción lenta</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                                    Cubre con agua fría (unos dos dedos por encima de los ingredientes). Añade sal al gusto. Lleva a ebullición, baja el fuego a suave, tapa la olla y deja cocer unos 40-45 minutos, removiendo ocasionalmente, hasta que las lentejas estén tiernas.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-lowest dark:bg-surface-container-low shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] flex justify-around items-center px-4 py-2 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-90 duration-200 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1">shopping_cart</span>
+<span class="font-label-sm text-label-sm">Grocery</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-90 duration-200 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1">calendar_month</span>
+<span class="font-label-sm text-label-sm">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 hover:bg-surface-container-highest transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-1 filled-icon">restaurant_menu</span>
+<span class="font-label-sm text-label-sm">Recipes</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-90 duration-200 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1">analytics</span>
+<span class="font-label-sm text-label-sm">Stats</span>
+</a>
+</nav>
+</body></html>

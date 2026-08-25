@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ajustes - Casa Calma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eef5f7",
+                        "secondary-fixed-dim": "#ffb598",
+                        "on-primary-fixed-variant": "#23501e",
+                        "on-surface-variant": "#42493e",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#002201",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary": "#974723",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary-container": "#6d4820",
+                        "surface": "#f4fafd",
+                        "surface-variant": "#dde4e6",
+                        "surface-container": "#e8eff1",
+                        "surface-tint": "#3b6934",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-secondary-container": "#772f0c",
+                        "on-tertiary-fixed": "#2c1600",
+                        "primary-fixed-dim": "#a1d494",
+                        "surface-bright": "#f4fafd",
+                        "outline": "#72796e",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#ff996e",
+                        "on-primary-container": "#9dd090",
+                        "on-tertiary-container": "#ecb987",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#dde4e6",
+                        "on-error": "#ffffff",
+                        "primary-container": "#2d5a27",
+                        "on-background": "#161d1f",
+                        "inverse-surface": "#2b3234",
+                        "surface-container-high": "#e2e9ec",
+                        "surface-dim": "#d4dbdd",
+                        "tertiary": "#52320b",
+                        "on-secondary-fixed": "#370e00",
+                        "primary": "#154212",
+                        "inverse-on-surface": "#ebf2f4",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c2c9bb",
+                        "background": "#f4fafd",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "on-surface": "#161d1f",
+                        "inverse-primary": "#a1d494"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "sm": "12px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #FDFCF8; /* Custom cream base as per styling guidelines */
+        }
+    </style>
+</head>
+<body class="text-on-surface font-body-md min-h-screen flex flex-col md:flex-row">
+<!-- Navigation Drawer (Desktop) -->
+<aside class="hidden md:flex flex-col h-full w-72 rounded-r-xl bg-surface-container-low dark:bg-surface-container-high shadow-xl fixed inset-y-0 left-0 z-[60] py-lg transition-transform duration-300">
+<div class="px-4 mb-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden shrink-0">
+<img alt="Usuario actual" class="w-full h-full object-cover" data-alt="A close up, high key portrait of a modern Spanish woman with dark hair, warm lighting, soft shadows, reflecting a welcoming and trustworthy persona in a minimalistic, well-lit domestic setting. High quality photography, subtle earth tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh-vuHnPm5YWuXxnpCobvvlG9ATvFlWwkOg1G0eB7TJWUEKSou0qGmH6dz__QJocO6pvuI8dLCeEQKccl9oVMoze8uY_sYPW8odmW-brhOxey9PmzAkf8SEtLGegbyZyuy_r_iYtUxxPPTC7WpebN8hwbRfzg4FiuS_mrAfEAbYTVROrAshAIaKDN7oVlPYOeCHWLGJlQn35yi7DApUwLsjsnJ8SqTFRVI6E-DzCVH-AxiWfjrc-IT"/>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm text-primary dark:text-primary-fixed font-bold">Elena García</span>
+<span class="text-body-md font-body-md text-on-surface-variant">Piso en Madrid</span>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-wider mt-1">Admin</span>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors mx-2 rounded-full" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-body-md font-body-md">Recetas</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors mx-2 rounded-full" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-body-md font-body-md">Documentos</span>
+</a>
+<a class="flex items-center gap-3 bg-primary-container text-on-primary-container font-bold rounded-full mx-2 px-4 py-3 opacity-100 scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-body-md font-body-md">Ajustes</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors mx-2 rounded-full mt-auto" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="text-body-md font-body-md">Soporte</span>
+</a>
+<a class="flex items-center gap-3 text-error px-4 py-3 hover:bg-error-container transition-colors mx-2 rounded-full" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-body-md font-body-md">Cerrar Sesión</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col md:ml-72 w-full pb-32 md:pb-8">
+<!-- TopAppBar (Mobile) -->
+<header class="md:hidden flex justify-between items-center w-full px-margin-mobile h-16 bg-background dark:bg-inverse-surface sticky top-0 z-40">
+<button class="text-primary dark:text-primary-fixed p-2 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed">Ajustes</h1>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A close up, high key portrait of a modern Spanish woman with dark hair, warm lighting, soft shadows, reflecting a welcoming and trustworthy persona in a minimalistic, well-lit domestic setting. High quality photography, subtle earth tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxhFP9DmSWqDCPN224K6v2XKBnKCgXy9Kqwf6PnpS-BhXyRDNoE7_7-r23L3dGyCmlPTdq5IRJ3oNXYyXA1DTXq_HOxEqHJpyg0uKdgPl-FfeKS1fN56wENr6YPk9nbudLoxxxrZPXoU3JH9XpnNA-9f7nPkQANw-kURb6JoZpvybH03UrHqlwrlFSbANQFSM8Vj1msdzOPqPOFdxuQa1_u4dmzPrgytm-aYLt0Yti-2Zr3d1T8cRG"/>
+</div>
+</header>
+<div class="px-margin-mobile md:px-margin-desktop py-lg max-w-5xl mx-auto w-full">
+<div class="hidden md:block mb-xl">
+<h1 class="text-display-lg font-display-lg text-primary">Ajustes</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant mt-2">Configura los detalles de tu hogar y tu cuenta.</p>
+</div>
+<!-- Bento Grid Layout for Settings -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Hogar y Miembros (Owner Actions Highlighted) -->
+<section class="md:col-span-8 bg-surface-container-lowest rounded-xl p-md border border-[#EBE9E0] shadow-[0_4px_12px_0_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">home_work</span>
+<h2 class="text-headline-md font-headline-md text-primary">Hogar y Miembros</h2>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between p-4 bg-surface rounded-lg border border-outline-variant">
+<div>
+<h3 class="text-body-md font-body-md font-semibold">Código de Invitación</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Comparte este código para añadir miembros a 'Piso en Madrid'.</p>
+</div>
+<div class="flex items-center gap-4 bg-primary-container/20 px-4 py-2 rounded-lg border border-primary/20">
+<span class="font-mono text-lg font-bold text-primary tracking-widest">MAD-2024-XQ</span>
+<button aria-label="Rotar código" class="text-primary hover:text-primary-container-highest transition-colors p-2" title="Acción de Administrador">
+<span class="material-symbols-outlined">autorenew</span>
+</button>
+</div>
+</div>
+<div>
+<h3 class="text-label-sm font-label-sm text-secondary uppercase tracking-wider mb-4">Miembros Actuales</h3>
+<ul class="space-y-4">
+<li class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold">EG</div>
+<div>
+<p class="text-body-md font-body-md font-medium">Elena García (Tú)</p>
+<p class="text-label-md font-label-md text-on-surface-variant">Administrador</p>
+</div>
+</div>
+<span class="bg-primary-container text-on-primary-container text-xs px-2 py-1 rounded-full font-semibold">Admin</span>
+</li>
+<li class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold">JM</div>
+<div>
+<p class="text-body-md font-body-md font-medium">Javier Martín</p>
+<p class="text-label-md font-label-md text-on-surface-variant">Miembro</p>
+</div>
+</div>
+<button class="text-error hover:bg-error-container p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined text-sm">person_remove</span>
+</button>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Mi Perfil -->
+<section class="md:col-span-4 bg-surface-container-lowest rounded-xl p-md border border-[#EBE9E0] shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">account_circle</span>
+<h2 class="text-headline-md font-headline-md text-primary">Mi Perfil</h2>
+</div>
+<div class="flex flex-col items-center mb-6">
+<div class="w-24 h-24 rounded-full overflow-hidden mb-4 relative group cursor-pointer border-4 border-surface-container">
+<img alt="Tu avatar" class="w-full h-full object-cover" data-alt="A close up, high key portrait of a modern Spanish woman with dark hair, warm lighting, soft shadows, reflecting a welcoming and trustworthy persona in a minimalistic, well-lit domestic setting. High quality photography, subtle earth tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOfZgu2vQFa39E-gbJNFCVCI-8TkCG5jm0mgXGy_PCHYecGfElz2cq4nc1WGd_e938ncnyGZW3YljHppDZBQNnKMomSmuUze8fgb-dZ48WSuVgpM-u0XDUcljxGzdSBjwDfqzWBEduDnk8p0HiJ8dGc_cNgFoLk1Aon33PByD-U7G_ZwsoQyXTIAR4Yqyd1b_kyPe4e5dErVatXDd3OwynuzCw73TuVn7U7hAUeXjTM8ve_Tm-rpus"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white">photo_camera</span>
+</div>
+</div>
+<button class="text-secondary font-label-md text-label-md font-semibold hover:underline">Editar Foto</button>
+</div>
+<div class="space-y-4 flex-1">
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Nombre</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" type="text" value="Elena García"/>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Correo Electrónico</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" type="email" value="elena@casacalma.es"/>
+</div>
+</div>
+<button class="mt-6 w-full py-3 bg-secondary text-on-primary font-bold rounded-xl hover:bg-secondary/90 transition-colors">Guardar Cambios</button>
+</section>
+<!-- Notificaciones & Horas Silenciosas -->
+<section class="md:col-span-6 bg-surface-container-lowest rounded-xl p-md border border-[#EBE9E0] shadow-[0_4px_12px_0_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">notifications_active</span>
+<h2 class="text-headline-md font-headline-md text-primary">Notificaciones</h2>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-body-md font-body-md font-medium">Alertas de Tareas</p>
+<p class="text-label-md font-label-md text-on-surface-variant">Avisos de tareas asignadas y vencidas.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-body-md font-body-md font-medium">Resumen Semanal</p>
+<p class="text-label-md font-label-md text-on-surface-variant">Un email con el balance del hogar.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="pt-4 border-t border-outline-variant/30">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-secondary">bedtime</span>
+<h3 class="text-body-md font-body-md font-semibold text-secondary">Horas Silenciosas (Quiet Hours)</h3>
+</div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-4">Pausa las notificaciones para descansar tranquilamente.</p>
+<div class="flex items-center gap-4">
+<div class="flex-1">
+<label class="block text-label-sm font-label-sm mb-1 text-on-surface-variant">Desde</label>
+<input class="w-full bg-surface-container border border-outline-variant rounded-lg px-3 py-2 text-body-md font-body-md focus:border-primary outline-none" type="time" value="22:00"/>
+</div>
+<div class="flex-1">
+<label class="block text-label-sm font-label-sm mb-1 text-on-surface-variant">Hasta</label>
+<input class="w-full bg-surface-container border border-outline-variant rounded-lg px-3 py-2 text-body-md font-body-md focus:border-primary outline-none" type="time" value="08:00"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Dispositivos Vinculados & Privacidad -->
+<div class="md:col-span-6 flex flex-col gap-lg">
+<section class="bg-surface-container-lowest rounded-xl p-md border border-[#EBE9E0] shadow-[0_4px_12px_0_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">devices</span>
+<h2 class="text-headline-sm font-headline-sm text-primary">Dispositivos Vinculados</h2>
+</div>
+<ul class="space-y-3">
+<li class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">smartphone</span>
+<div>
+<p class="text-body-md font-body-md font-medium">iPhone 13 (Actual)</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Madrid, España</p>
+</div>
+</div>
+</li>
+<li class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">laptop_mac</span>
+<div>
+<p class="text-body-md font-body-md font-medium">MacBook Air</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Último acceso: ayer</p>
+</div>
+</div>
+<button class="text-secondary font-label-md font-label-md hover:underline">Desvincular</button>
+</li>
+</ul>
+</section>
+<section class="bg-surface-container-lowest rounded-xl p-md border border-[#EBE9E0] shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] flex-1">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">security</span>
+<h2 class="text-headline-sm font-headline-sm text-primary">Privacidad y Datos</h2>
+</div>
+<div class="space-y-4">
+<a class="flex items-center justify-between p-3 hover:bg-surface-container transition-colors rounded-lg group" href="#">
+<span class="text-body-md font-body-md">Gestionar Categorías del Hogar</span>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-3 hover:bg-surface-container transition-colors rounded-lg group" href="#">
+<span class="text-body-md font-body-md">Descargar mis datos</span>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">download</span>
+</a>
+<a class="flex items-center justify-between p-3 hover:bg-error-container transition-colors rounded-lg group mt-4" href="#">
+<span class="text-body-md font-body-md text-error font-medium">Eliminar Cuenta</span>
+<span class="material-symbols-outlined text-error">delete_forever</span>
+</a>
+</div>
+</section>
+</div>
+</div>
+<div class="mt-xl flex justify-center md:hidden">
+<button class="flex items-center gap-2 px-6 py-3 border-2 border-error text-error rounded-xl font-bold hover:bg-error hover:text-on-error transition-colors w-full justify-center">
+<span class="material-symbols-outlined">logout</span>
+                    Cerrar Sesión
+                 </button>
+</div>
+</div>
+</main>
+</body></html>

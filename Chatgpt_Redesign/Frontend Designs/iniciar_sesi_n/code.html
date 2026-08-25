@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Iniciar Sesión - Home Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#9dd090",
+                        "primary": "#154212",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary-fixed-dim": "#ffb598",
+                        "primary-container": "#2d5a27",
+                        "background": "#f4fafd",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "secondary": "#974723",
+                        "surface-container": "#e8eff1",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2b3234",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#2c1600",
+                        "secondary-fixed": "#ffdbce",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary": "#52320b",
+                        "surface": "#f4fafd",
+                        "surface-container-high": "#e2e9ec",
+                        "on-surface": "#161d1f",
+                        "outline": "#72796e",
+                        "on-primary-fixed-variant": "#23501e",
+                        "tertiary-container": "#6d4820",
+                        "on-tertiary-container": "#ecb987",
+                        "outline-variant": "#c2c9bb",
+                        "on-surface-variant": "#42493e",
+                        "surface-dim": "#d4dbdd",
+                        "on-background": "#161d1f",
+                        "surface-variant": "#dde4e6",
+                        "surface-tint": "#3b6934",
+                        "surface-container-highest": "#dde4e6",
+                        "surface-container-low": "#eef5f7",
+                        "inverse-primary": "#a1d494",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#772f0c",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "primary-fixed-dim": "#a1d494",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#ff996e",
+                        "surface-bright": "#f4fafd",
+                        "inverse-on-surface": "#ebf2f4",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#370e00",
+                        "on-primary-fixed": "#002201",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "sm": "12px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex items-center justify-center p-margin-mobile md:p-margin-desktop antialiased">
+<!-- Main Container -->
+<main class="w-full max-w-md bg-surface-container-lowest rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] p-8 md:p-10 border border-outline-variant/30 flex flex-col items-center">
+<!-- Logo -->
+<div class="mb-6 flex flex-col items-center">
+<div class="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center mb-4 text-on-primary-container">
+<span class="material-symbols-outlined fill text-[32px]" data-icon="cottage">cottage</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary text-center">Bienvenido a Casa</h1>
+<p class="font-body-md text-body-md text-on-surface-variant text-center mt-2">Introduce tus datos para acceder a tu hogar digital.</p>
+</div>
+<!-- Form -->
+<form action="#" class="w-full flex flex-col gap-5 mt-2" method="POST">
+<!-- Email Input -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="email">Correo electrónico</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+</div>
+<input class="w-full pl-10 pr-4 py-3 bg-surface border border-outline-variant rounded-xl text-on-surface focus:ring-2 focus:ring-primary focus:border-primary transition-shadow font-body-md text-body-md outline-none" id="email" name="email" placeholder="tu@email.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface" for="password">Contraseña</label>
+<a class="font-label-sm text-label-sm text-secondary hover:text-secondary-container transition-colors" href="#">¿Has olvidado la contraseña?</a>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+</div>
+<input class="w-full pl-10 pr-10 py-3 bg-surface border border-outline-variant rounded-xl text-on-surface focus:ring-2 focus:ring-primary focus:border-primary transition-shadow font-body-md text-body-md outline-none" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-on-surface-variant hover:text-primary transition-colors focus:outline-none" type="button">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full mt-4 bg-primary text-on-primary py-3.5 px-6 rounded-xl font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm flex items-center justify-center gap-2 min-h-[44px]" type="submit">
+                Entrar
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="w-full flex items-center my-8">
+<div class="flex-grow border-t border-outline-variant/50"></div>
+<span class="mx-4 font-label-sm text-label-sm text-on-surface-variant">O</span>
+<div class="flex-grow border-t border-outline-variant/50"></div>
+</div>
+<!-- Secondary Action -->
+<p class="font-body-md text-body-md text-on-surface-variant text-center">
+            ¿No tienes cuenta? <a class="text-primary font-label-md hover:underline underline-offset-4 decoration-primary/50" href="#">Regístrate</a>
+</p>
+</main>
+</body></html>

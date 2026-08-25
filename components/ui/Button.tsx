@@ -15,11 +15,11 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary:
     "bg-terracotta text-cream border border-transparent shadow-[var(--shadow-btn)] hover:bg-coral enabled:active:translate-y-px enabled:active:shadow-[var(--shadow-btn-active)] focus-visible:ring-terracotta/50",
   secondary:
-    "bg-white/[0.07] text-terracotta border border-terracotta/40 shadow-[var(--shadow-xs)] hover:bg-white/[0.12] enabled:active:scale-[0.97] focus-visible:ring-terracotta/50",
+    "bg-transparent text-amber border border-amber/50 hover:bg-amber/[0.08] enabled:active:scale-[0.97] focus-visible:ring-amber/50",
   danger:
     "bg-danger/90 text-white border border-transparent shadow-[var(--shadow-btn)] hover:bg-danger enabled:active:scale-[0.97] focus-visible:ring-danger/50",
   ghost:
-    "bg-transparent text-brown border border-transparent hover:bg-white/[0.08] enabled:active:scale-[0.97] focus-visible:ring-muted/50",
+    "bg-transparent text-brown border border-transparent hover:bg-sand enabled:active:scale-[0.97] focus-visible:ring-muted/50",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

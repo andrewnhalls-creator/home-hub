@@ -162,8 +162,8 @@ function DashboardPager({ pages, currentIndex, onPrev, onNext, onGoTo }: Dashboa
         className={cn(
           "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
           canPrev
-            ? "text-muted hover:bg-white/[0.08] hover:text-brown active:scale-[0.90]"
-            : "cursor-default text-white/[0.15]",
+            ? "text-muted hover:bg-sand hover:text-brown active:scale-[0.90]"
+            : "cursor-default text-brown/20",
         )}
       >
         <CaretLeft weight="bold" className="h-4 w-4" aria-hidden />
@@ -192,7 +192,7 @@ function DashboardPager({ pages, currentIndex, onPrev, onNext, onGoTo }: Dashboa
                   "flex h-11 shrink-0 items-center whitespace-nowrap rounded-full px-4 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-terracotta focus-visible:ring-offset-1 focus-visible:ring-offset-cream",
                   isActive
                     ? "bg-terracotta text-cream"
-                    : "bg-white/[0.06] text-muted hover:bg-white/[0.12] hover:text-brown",
+                    : "bg-card text-muted hover:bg-sand hover:text-brown",
                 )}
               >
                 {page.label}
@@ -216,8 +216,8 @@ function DashboardPager({ pages, currentIndex, onPrev, onNext, onGoTo }: Dashboa
         className={cn(
           "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
           canNext
-            ? "text-muted hover:bg-white/[0.08] hover:text-brown active:scale-[0.90]"
-            : "cursor-default text-white/[0.15]",
+            ? "text-muted hover:bg-sand hover:text-brown active:scale-[0.90]"
+            : "cursor-default text-brown/20",
         )}
       >
         <CaretRight weight="bold" className="h-4 w-4" aria-hidden />
@@ -351,7 +351,7 @@ export function FinanceTabs({
                 type="button"
                 aria-label="Cerrar menú"
                 onClick={() => setShowMenu(false)}
-                className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
               >
                 <ArrowLeft className="h-4 w-4" aria-hidden />
               </button>
@@ -367,7 +367,7 @@ export function FinanceTabs({
                     "flex items-center gap-2.5 rounded-xl border px-3 py-3.5 text-left text-sm font-medium transition active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
                     tab === value
                       ? "border-terracotta/40 bg-terracotta/10 text-terracotta"
-                      : "border-white/[0.10] bg-white/[0.05] text-brown hover:bg-white/[0.10]",
+                      : "border-border bg-sand/60 text-brown hover:bg-sand",
                   )}
                 >
                   <PageIcon
@@ -388,7 +388,7 @@ export function FinanceTabs({
                   type="button"
                   aria-label="Volver al resumen"
                   onClick={() => goTo("resumen")}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                 >
                   <ArrowLeft className="h-4 w-4" aria-hidden />
                 </button>
@@ -401,7 +401,7 @@ export function FinanceTabs({
                 type="button"
                 aria-label="Ver secciones"
                 onClick={() => setShowMenu(true)}
-                className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 text-sm font-medium text-brown transition hover:bg-white/[0.14] hover:border-white/[0.25] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-sm font-medium text-brown transition hover:bg-sand hover:border-muted/40 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
               >
                 <SquaresFour className="h-4 w-4 shrink-0 text-muted" aria-hidden />
                 Menú
@@ -445,7 +445,7 @@ export function FinanceTabs({
                 onClick={() => goTo(value)}
                 className={cn(
                   "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta active:scale-[0.97]",
-                  active ? "bg-terracotta text-cream" : "text-brown hover:bg-white/[0.07]",
+                  active ? "bg-terracotta text-cream" : "text-brown hover:bg-sand",
                 )}
               >
                 <NavIcon

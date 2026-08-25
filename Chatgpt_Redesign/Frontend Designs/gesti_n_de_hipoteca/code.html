@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="es-ES"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hipoteca - Home Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2b3234",
+                        "surface-container-high": "#e2e9ec",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "on-secondary-container": "#772f0c",
+                        "surface": "#f4fafd",
+                        "on-primary-container": "#9dd090",
+                        "surface-variant": "#dde4e6",
+                        "surface-container-low": "#eef5f7",
+                        "tertiary": "#52320b",
+                        "background": "#f4fafd",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#370e00",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "on-error-container": "#93000a",
+                        "primary": "#154212",
+                        "primary-fixed-dim": "#a1d494",
+                        "on-surface-variant": "#42493e",
+                        "on-surface": "#161d1f",
+                        "secondary-container": "#ff996e",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#ffdbce",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "secondary": "#974723",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#23501e",
+                        "inverse-primary": "#a1d494",
+                        "on-tertiary-container": "#ecb987",
+                        "outline-variant": "#c2c9bb",
+                        "surface-dim": "#d4dbdd",
+                        "on-error": "#ffffff",
+                        "outline": "#72796e",
+                        "surface-tint": "#3b6934",
+                        "on-primary-fixed": "#002201",
+                        "on-tertiary-fixed": "#2c1600",
+                        "tertiary-container": "#6d4820",
+                        "secondary-fixed-dim": "#ffb598",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f4fafd",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#bcf0ae",
+                        "inverse-on-surface": "#ebf2f4",
+                        "tertiary-fixed": "#ffdcbd",
+                        "surface-container-highest": "#dde4e6",
+                        "primary-container": "#2d5a27",
+                        "on-background": "#161d1f",
+                        "surface-container": "#e8eff1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "margin-mobile": "20px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "margin-desktop": "40px",
+                        "sm": "12px",
+                        "md": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Modal Transition */
+        .modal-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md selection:bg-primary-container selection:text-on-primary-container pb-24 md:pb-0">
+<!-- Desktop Navigation Drawer (hidden on mobile) -->
+<nav class="hidden md:flex fixed inset-y-0 left-0 z-[60] flex-col py-lg h-full w-72 rounded-r-xl bg-surface-container-low dark:bg-surface-container-high shadow-xl transition-all duration-300">
+<div class="px-lg pb-md mb-md border-b border-surface-variant flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-headline-sm font-bold">
+                EG
+            </div>
+<div>
+<h2 class="text-label-md font-label-md font-bold text-on-surface">Elena García</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Admin • Piso en Madrid</p>
+</div>
+</div>
+<ul class="flex flex-col gap-2 flex-grow overflow-y-auto px-xs">
+<li><a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#"><span class="material-symbols-outlined">restaurant_menu</span><span class="text-body-md font-body-md">Recetas</span></a></li>
+<li><a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#"><span class="material-symbols-outlined">description</span><span class="text-body-md font-body-md">Documentos</span></a></li>
+<li><a class="flex items-center gap-md bg-primary-container text-on-primary-container font-bold px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#"><span class="material-symbols-outlined fill-icon">payments</span><span class="text-body-md font-body-md">Finanzas</span></a></li>
+<li><a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#"><span class="material-symbols-outlined">settings</span><span class="text-body-md font-body-md">Ajustes</span></a></li>
+<li class="mt-auto pt-md border-t border-surface-variant"><a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#"><span class="material-symbols-outlined">help_outline</span><span class="text-body-md font-body-md">Soporte</span></a></li>
+<li><a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2" href="#"><span class="material-symbols-outlined">logout</span><span class="text-body-md font-body-md">Cerrar Sesión</span></a></li>
+</ul>
+</nav>
+<!-- Top App Bar -->
+<header class="md:ml-72 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 bg-background dark:bg-inverse-surface sticky top-0 z-40 transition-colors">
+<div class="flex items-center gap-sm">
+<button aria-label="Open menu" class="md:hidden text-on-surface-variant p-2 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed">Finanzas</h1>
+</div>
+<div class="flex items-center gap-sm">
+<button aria-label="Notifications" class="text-on-surface-variant p-2 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+</button>
+<img alt="User avatar" class="w-8 h-8 rounded-full object-cover border border-outline-variant hidden md:block" data-alt="A small, circular avatar portrait of a modern Spanish woman with dark hair and a warm smile, set against a subtle, light cream background. The lighting is soft and natural, emphasizing a welcoming and calm Mediterranean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf4QBXFI-9p0OF6cg_GAgbaQPW93CLFqxNY8YwhpOB0DvjWW3-qvdSWbY7P2h7FITgZXFqd9IgHVE9a4a0B_DnnXJ34sgX-240eaG1ymkn5iu6mxValFfgTpA6lY7uBazybbQnjbWLwS5OivD197cIeVRrfTcw61V3NaK1Ek3CfXKG_TRWtbHU67PPXUdDAByUbkyQ1OYeGbisianVvPGriRPjnwpz71d2opvlU6URiJXL5tw_R5k5"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="md:ml-72 p-margin-mobile md:p-margin-desktop max-w-5xl mx-auto space-y-lg">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">account_balance</span> BBVA España</p>
+<h2 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-surface mt-1">Hipoteca Principal</h2>
+</div>
+<button class="bg-primary hover:bg-primary-container text-on-primary hover:text-on-primary-container transition-colors px-6 py-3 rounded-xl text-label-md font-label-md font-bold shadow-sm flex items-center gap-2 min-h-[44px] justify-center w-full md:w-auto" onclick="openModal()">
+<span class="material-symbols-outlined">add_circle</span>
+                Registrar pago
+            </button>
+</div>
+<!-- Summary Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Balance Card -->
+<div class="col-span-1 md:col-span-2 bg-surface-container-lowest rounded-2xl p-lg shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant">Capital Pendiente</p>
+<h3 class="text-display-lg-mobile font-display-lg-mobile text-primary mt-xs" id="current-balance">142.350,00 €</h3>
+</div>
+<!-- Progress Bar -->
+<div class="mt-xl">
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant mb-2">
+<span>Pagado: 57.650 € (28%)</span>
+<span>Total: 200.000 €</span>
+</div>
+<div class="w-full h-3 bg-surface-variant rounded-full overflow-hidden flex">
+<div class="bg-primary h-full transition-all duration-1000 ease-out" style="width: 28%"></div>
+</div>
+<div class="flex gap-4 mt-3">
+<div class="flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant"><div class="w-2 h-2 rounded-full bg-primary"></div> Capital (22%)</div>
+<div class="flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant"><div class="w-2 h-2 rounded-full bg-primary-fixed-dim"></div> Intereses (6%)</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Stats -->
+<div class="flex flex-col gap-md">
+<div class="bg-surface-container-lowest rounded-2xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant flex-1 flex flex-col justify-center">
+<p class="text-label-md font-label-md text-on-surface-variant flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">calendar_month</span> Cuota Mensual</p>
+<p class="text-headline-md font-headline-md text-on-surface mt-2">845,20 €</p>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant flex-1 flex flex-col justify-center">
+<p class="text-label-md font-label-md text-on-surface-variant flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">trending_up</span> Tipo de Interés</p>
+<p class="text-headline-md font-headline-md text-on-surface mt-2">2.85% <span class="text-label-md font-label-md text-on-surface-variant font-normal">Fijo</span></p>
+</div>
+</div>
+</div>
+<!-- Payment Schedule -->
+<div class="bg-surface-container-lowest rounded-2xl p-lg shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-md">Calendario de Pagos</h3>
+<div class="space-y-sm">
+<!-- Upcoming Payment -->
+<div class="flex items-center justify-between p-md rounded-xl bg-surface-container-low border border-primary-fixed">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined">event_upcoming</span>
+</div>
+<div>
+<p class="text-label-md font-label-md font-bold text-on-surface">Próximo pago</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">5 Noviembre 2023</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md font-body-md font-bold text-on-surface">845,20 €</p>
+<p class="text-label-sm font-label-sm text-primary">Pendiente</p>
+</div>
+</div>
+<!-- Past Payments -->
+<div class="flex items-center justify-between p-md rounded-xl hover:bg-surface transition-colors cursor-pointer border border-transparent">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Octubre 2023</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Pagado el 5 Oct</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md font-body-md text-on-surface">845,20 €</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-md rounded-xl hover:bg-surface transition-colors cursor-pointer border border-transparent">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Septiembre 2023</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Pagado el 5 Sep</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md font-body-md text-on-surface">845,20 €</p>
+</div>
+</div>
+</div>
+<button class="mt-4 w-full py-2 text-label-md font-label-md text-secondary border border-secondary rounded-xl hover:bg-secondary/5 transition-colors min-h-[44px]">
+                Ver histórico completo
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] bg-surface-container-lowest dark:bg-surface-container rounded-t-xl transition-colors">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors min-w-[44px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="text-label-sm font-label-sm">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors min-w-[44px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">cottage</span>
+<span class="text-label-sm font-label-sm">Casa</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors -mt-6" href="#">
+<div class="bg-primary text-on-primary rounded-full p-2 shadow-lg">
+<span class="material-symbols-outlined text-[32px]">add_circle</span>
+</div>
+<span class="sr-only">Añadir</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed font-semibold scale-90 transition-transform min-w-[44px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined fill-icon mb-1">payments</span>
+<span class="text-label-sm font-label-sm">Finanzas</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors min-w-[44px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">calendar_today</span>
+<span class="text-label-sm font-label-sm">Calendario</span>
+</a>
+</nav>
+<!-- Payment Modal (Overlay) -->
+<div class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" id="paymentModal">
+<div class="absolute inset-0 bg-on-background/20 backdrop-blur-sm" onclick="closeModal()"></div>
+<div class="modal-content relative bg-surface-container-lowest rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-full">
+<div class="p-lg border-b border-surface-variant flex justify-between items-center bg-surface">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Registrar Pago</h3>
+<button class="text-on-surface-variant hover:text-on-surface p-2 rounded-full hover:bg-surface-container-high transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" onclick="closeModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-lg overflow-y-auto" id="modal-form-step">
+<p class="text-body-md font-body-md text-on-surface-variant mb-6">Confirma el registro del pago correspondiente a Noviembre 2023.</p>
+<div class="space-y-md">
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Importe</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary min-h-[44px]" readonly="" type="text" value="845,20 €"/>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Fecha de pago</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary min-h-[44px]" type="date" value="2023-11-05"/>
+</div>
+</div>
+<div class="mt-xl flex gap-md">
+<button class="flex-1 py-3 text-label-md font-label-md text-secondary border border-secondary rounded-xl hover:bg-secondary/5 transition-colors min-h-[44px]" onclick="closeModal()">
+                        Cancelar
+                    </button>
+<button class="flex-1 py-3 bg-primary text-on-primary rounded-xl text-label-md font-label-md font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors min-h-[44px] shadow-sm" onclick="processPayment()">
+                        Confirmar
+                    </button>
+</div>
+</div>
+<!-- Success State -->
+<div class="p-lg hidden flex-col items-center justify-center text-center py-xl" id="modal-success-step">
+<div class="w-16 h-16 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-[32px]">task_alt</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-2">Pago Registrado</h3>
+<p class="text-body-md font-body-md text-on-surface-variant mb-6">El nuevo saldo pendiente ha sido actualizado.</p>
+<div class="bg-surface-container p-md rounded-xl w-full mb-lg">
+<p class="text-label-sm font-label-sm text-on-surface-variant">Nuevo Capital Pendiente</p>
+<p class="text-headline-sm font-headline-sm text-primary mt-1">141.714,10 €</p>
+</div>
+<button class="w-full py-3 bg-primary text-on-primary rounded-xl text-label-md font-label-md font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors min-h-[44px] shadow-sm" onclick="finishPayment()">
+                    Hecho
+                </button>
+</div>
+</div>
+</div>
+<script>
+        const modal = document.getElementById('paymentModal');
+        const formStep = document.getElementById('modal-form-step');
+        const successStep = document.getElementById('modal-success-step');
+        const mainBalance = document.getElementById('current-balance');
+
+        function openModal() {
+            modal.classList.add('active');
+            formStep.classList.remove('hidden');
+            successStep.classList.add('hidden');
+            successStep.classList.remove('flex');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        function processPayment() {
+            // Simulate processing
+            formStep.classList.add('hidden');
+            successStep.classList.remove('hidden');
+            successStep.classList.add('flex');
+        }
+
+        function finishPayment() {
+            closeModal();
+            // Update UI to reflect new balance (simplified for demo)
+            setTimeout(() => {
+                mainBalance.textContent = "141.714,10 €";
+                mainBalance.classList.add('text-secondary-container');
+                setTimeout(() => {
+                    mainBalance.classList.remove('text-secondary-container');
+                }, 500);
+            }, 300);
+        }
+    </script>
+</body></html>

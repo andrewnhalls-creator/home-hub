@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finanzas - Piso en Madrid</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#23501e",
+                    "tertiary-container": "#6d4820",
+                    "inverse-primary": "#a1d494",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#72796e",
+                    "primary-fixed-dim": "#a1d494",
+                    "secondary-container": "#ff996e",
+                    "surface-dim": "#d4dbdd",
+                    "surface-container-highest": "#dde4e6",
+                    "on-tertiary-container": "#ecb987",
+                    "on-background": "#161d1f",
+                    "outline-variant": "#c2c9bb",
+                    "secondary-fixed": "#ffdbce",
+                    "primary-fixed": "#bcf0ae",
+                    "on-error": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#ffb598",
+                    "on-secondary-fixed": "#370e00",
+                    "tertiary": "#52320b",
+                    "inverse-surface": "#2b3234",
+                    "on-surface-variant": "#42493e",
+                    "on-tertiary-fixed": "#2c1600",
+                    "primary-container": "#2d5a27",
+                    "background": "#f4fafd",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e2e9ec",
+                    "on-tertiary-fixed-variant": "#623f18",
+                    "on-surface": "#161d1f",
+                    "surface-tint": "#3b6934",
+                    "on-primary-fixed": "#002201",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#f4fafd",
+                    "surface-container-low": "#eef5f7",
+                    "tertiary-fixed": "#ffdcbd",
+                    "on-secondary-fixed-variant": "#79300e",
+                    "surface-variant": "#dde4e6",
+                    "surface-container": "#e8eff1",
+                    "inverse-on-surface": "#ebf2f4",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#772f0c",
+                    "on-primary-container": "#9dd090",
+                    "tertiary-fixed-dim": "#f0bd8b",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#974723",
+                    "primary": "#154212",
+                    "surface": "#f4fafd",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "lg": "24px",
+                    "margin-mobile": "20px",
+                    "xl": "32px",
+                    "gutter": "16px",
+                    "sm": "12px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FDFCF8; /* Manual override for Cream base as per guidance */
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="text-on-background min-h-screen flex">
+<!-- NavigationDrawer -->
+<aside class="fixed inset-y-0 left-0 z-[60] flex flex-col py-lg h-full w-72 rounded-r-xl bg-surface-container-low dark:bg-surface-container-high shadow-xl hidden md:flex">
+<!-- Header: Profile -->
+<div class="px-6 pb-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-variant flex-shrink-0">
+<img alt="Usuario actual" class="w-full h-full object-cover" data-alt="A clean, modern professional headshot of a woman named Elena García. The lighting is soft and warm, reflecting a natural Mediterranean daylight. She is smiling gently, exuding warmth and reliability. The background is a soft, blurred neutral color that matches the overall light mode aesthetic of the UI. The overall mood is approachable and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9IJR2-giLI2KrREbhfze5P1NP_HDpjQhdDNeIrOiUr8Af2zdEgp7qJqLFDWwOKBBjRaop2gBFvKh5IBmMmNufa54n0uae4aEU_TaSdRx97Exb-XRNoOv7JOwIa4Mrxd2MQU4CBDHNiyBdjFknbSyJHbaImOHttkXZ8JNKH30xLGNnWgUiADrqvkyEinWbFO95orT_PhS1AyXLZiCPiKRYiyxtY7dvMexDiMh7-8FQNlsBXkrknRzJ"/>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed">Elena García</span>
+<span class="text-body-md font-body-md text-on-surface-variant">Piso en Madrid</span>
+<span class="text-label-sm font-label-sm text-outline">Admin</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto mt-4 px-2 space-y-1">
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span>Recetas</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span>Documentos</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Ajustes</span>
+</a>
+<!-- Active Tab logic applied here based on 'Finanzas' context from prompt, mapping to closest nav intent if we had a full list, but using the JSON list provided, we'll keep Finanzas active in top nav, but for drawer we highlight nothing as it's not present, or maybe 'Documentos' is closest. Let's stick to JSON strictly. The drawer doesn't have Finanzas. We will not highlight any. -->
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>Soporte</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full text-body-md font-body-md mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Cerrar Sesión</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-72 min-h-screen bg-[#FDFCF8]">
+<!-- TopAppBar (Web Desktop variation - acting as page header) -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 bg-background dark:bg-inverse-surface sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary dark:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed">Finanzas</h1>
+</div>
+<!-- Web Top Navigation Cluster (replacing BottomNavBar on Desktop) -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container transition-colors px-3 py-2 rounded-md text-label-md font-label-md" href="#">Inicio</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container transition-colors px-3 py-2 rounded-md text-label-md font-label-md" href="#">Casa</a>
+<a class="text-primary dark:text-primary-fixed font-bold bg-primary-container/20 rounded-md px-3 py-2 text-label-md font-label-md" href="#">Finanzas</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container transition-colors px-3 py-2 rounded-md text-label-md font-label-md" href="#">Calendario</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-margin-mobile md:p-margin-desktop max-w-7xl mx-auto space-y-lg">
+<!-- Balance Overview -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] border border-[#EBE9E0] flex flex-col justify-between h-48">
+<div>
+<h2 class="text-label-md font-label-md text-on-surface-variant">Fondo Común</h2>
+<p class="text-display-lg font-display-lg mt-2">€1,240.50</p>
+</div>
+<div class="flex items-center gap-2 text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined filled text-[20px]" data-icon="trending_up">trending_up</span>
+<span>+€150 este mes</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] border border-[#EBE9E0] flex flex-col justify-between h-48">
+<div>
+<h2 class="text-label-md font-label-md text-on-surface-variant">Gastos Previstos</h2>
+<p class="text-display-lg font-display-lg mt-2">€850.00</p>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2 mt-4">
+<div class="bg-secondary h-2 rounded-full" style="width: 65%"></div>
+</div>
+<p class="text-label-sm font-label-sm text-outline mt-2">65% del presupuesto mensual</p>
+</div>
+<div class="bg-primary-container rounded-xl p-6 shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] text-on-primary-container flex flex-col justify-between h-48">
+<div>
+<h2 class="text-label-md font-label-md text-primary-fixed-dim">Próximo Pago Principal</h2>
+<p class="text-headline-md font-headline-md mt-2">Alquiler</p>
+<p class="text-body-lg font-body-lg opacity-90">€900.00</p>
+</div>
+<div class="flex items-center gap-2 mt-4">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="text-label-md font-label-md">En 5 días (1 de Nov)</span>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Chart & Transactions -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Cash Flow Placeholder -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] border border-[#EBE9E0] min-h-[400px] flex flex-col">
+<h3 class="text-headline-sm font-headline-sm mb-6 text-primary">Flujo de Caja</h3>
+<div class="flex-1 bg-surface-container-low rounded-lg flex items-center justify-center relative overflow-hidden">
+<div class="bg-cover bg-center absolute inset-0 w-full h-full opacity-50" data-alt="A minimalist, stylized abstract line chart representing financial growth. The chart lines are soft green and terracotta, set against a pristine, soft off-white background. The design is modern, clean, and warm, avoiding harsh grid lines. Subtle ambient light gives a sense of depth, fitting a Mediterranean, nurturing digital aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAi0MFDj_YAuGGfMcPipF0xWxXQKCGrFMuse-n1rCcPtjsLDy9PSZkvNbX90RhaQOEiqYVC2ozvPRiVFjb-wp325u0QtwpoTm0io_8g3RYCFKKgtDxf33RuQOqfLfP3UEifSqegy1VleWxhCB-0PSqof3hWjeXqcbQC9FUGW7VFourxyIhB-W_GKFKLnRrUiaVCO796cjYYtwBODg_WmuxwOIrx0SBbjlZl77zp6trI-nz4pw8HYol-')"></div>
+<p class="relative z-10 text-on-surface-variant text-body-md font-body-md">[Gráfico de Gastos vs Ingresos]</p>
+</div>
+</div>
+<!-- Recent Activity / Upcoming -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] border border-[#EBE9E0] flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-headline-sm font-headline-sm text-primary">Próximos Pagos</h3>
+<button class="text-primary hover:text-primary-fixed-dim transition-colors">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+<div class="space-y-4 flex-1">
+<!-- Item -->
+<div class="flex items-center justify-between p-3 hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="flash_on">flash_on</span>
+</div>
+<div>
+<p class="text-label-md font-label-md">Luz - Iberdrola</p>
+<p class="text-label-sm font-label-sm text-outline">15 Nov</p>
+</div>
+</div>
+<p class="text-body-md font-body-md font-medium">~€65.00</p>
+</div>
+<!-- Item -->
+<div class="flex items-center justify-between p-3 hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="wifi">wifi</span>
+</div>
+<div>
+<p class="text-label-md font-label-md">Internet - O2</p>
+<p class="text-label-sm font-label-sm text-outline">20 Nov</p>
+</div>
+</div>
+<p class="text-body-md font-body-md font-medium">€38.00</p>
+</div>
+<!-- Item -->
+<div class="flex items-center justify-between p-3 hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</div>
+<div>
+<p class="text-label-md font-label-md">Compra Semanal</p>
+<p class="text-label-sm font-label-sm text-outline">Pendiente liquidar</p>
+</div>
+</div>
+<p class="text-body-md font-body-md font-medium text-secondary">€120.40</p>
+</div>
+</div>
+<button class="w-full mt-4 py-3 border border-secondary text-secondary rounded-lg font-label-md text-label-md hover:bg-secondary/5 transition-colors">
+                        Ver todos los movimientos
+                    </button>
+</div>
+</section>
+</div>
+</main>
+</body></html>

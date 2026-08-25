@@ -126,7 +126,7 @@ function ChatMode() {
       <div className="flex h-72 flex-col gap-3 overflow-y-auto pr-1 sm:h-80">
         {showGreeting && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white/[0.07] px-4 py-3 text-sm leading-relaxed text-brown">
+            <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-card px-4 py-3 text-sm leading-relaxed text-brown">
               {GREETING}
             </div>
           </div>
@@ -138,7 +138,7 @@ function ChatMode() {
                 "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
                 msg.role === "user"
                   ? "rounded-tr-sm bg-terracotta text-cream"
-                  : "rounded-tl-sm bg-white/[0.07] text-brown",
+                  : "rounded-tl-sm bg-card text-brown",
               )}
             >
               {msg.content}
@@ -147,7 +147,7 @@ function ChatMode() {
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white/[0.07] px-4 py-3 text-sm text-muted">
+            <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-card px-4 py-3 text-sm text-muted">
               <span className="animate-pulse">Pensando…</span>
             </div>
           </div>
@@ -168,7 +168,7 @@ function ChatMode() {
           onKeyDown={handleKeyDown}
           disabled={loading}
           placeholder="Escribe un mensaje…"
-          className="min-h-[44px] flex-1 rounded-[var(--radius-xl)] border border-border bg-white/[0.06] px-3 py-2.5 text-sm text-brown placeholder:text-muted transition-[border-color,box-shadow] duration-150 focus:border-terracotta/70 focus:outline-none focus:ring-1 focus:ring-terracotta/50 disabled:cursor-not-allowed disabled:opacity-40"
+          className="min-h-[44px] flex-1 rounded-[var(--radius-xl)] border border-border bg-card px-3 py-2.5 text-sm text-brown placeholder:text-muted transition-[border-color,box-shadow] duration-150 focus:border-terracotta/70 focus:outline-none focus:ring-1 focus:ring-terracotta/50 disabled:cursor-not-allowed disabled:opacity-40"
         />
         <button
           type="button"
@@ -288,7 +288,7 @@ function CommandMode() {
             "rounded-xl border p-4",
             parsedResult.requiresConfirmation
               ? "border-amber/30 bg-amber/[0.08]"
-              : "border-white/[0.10] bg-white/[0.04]",
+              : "border-border bg-sand/60",
           )}
         >
           {parsedResult.requiresConfirmation && (
@@ -314,7 +314,7 @@ function CommandMode() {
 
       {/* Not yet wired */}
       {phase === "unavailable" && (
-        <div className="flex items-start gap-3 rounded-xl border border-white/[0.08] bg-white/[0.04] p-4">
+        <div className="flex items-start gap-3 rounded-xl border border-border/70 bg-sand/60 p-4">
           <Sparkle weight="fill" className="mt-0.5 h-4 w-4 shrink-0 text-muted" aria-hidden />
           <p className="text-sm text-muted">Entendido. Esta acción estará disponible próximamente.</p>
         </div>
@@ -341,7 +341,7 @@ function CommandMode() {
               placeholder={
                 phase === "clarify" ? "Escribe tu respuesta…" : "Ej: añadir leche a la compra"
               }
-              className="min-h-[44px] flex-1 rounded-[var(--radius-xl)] border border-border bg-white/[0.06] px-3 py-2.5 text-sm text-brown placeholder:text-muted transition-[border-color,box-shadow] duration-150 focus:border-terracotta/70 focus:outline-none focus:ring-1 focus:ring-terracotta/50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="min-h-[44px] flex-1 rounded-[var(--radius-xl)] border border-border bg-card px-3 py-2.5 text-sm text-brown placeholder:text-muted transition-[border-color,box-shadow] duration-150 focus:border-terracotta/70 focus:outline-none focus:ring-1 focus:ring-terracotta/50 disabled:cursor-not-allowed disabled:opacity-40"
             />
             <button
               type="button"
@@ -386,7 +386,7 @@ function CommandMode() {
           <button
             type="button"
             onClick={reset}
-            className="min-h-[44px] rounded-[var(--radius-xl)] border border-border bg-white/[0.04] px-4 py-3 text-sm font-medium text-muted transition-colors hover:bg-white/[0.08]"
+            className="min-h-[44px] rounded-[var(--radius-xl)] border border-border bg-sand/60 px-4 py-3 text-sm font-medium text-muted transition-colors hover:bg-sand"
           >
             Cancelar
           </button>
@@ -409,7 +409,7 @@ function CommandMode() {
         <button
           type="button"
           onClick={reset}
-          className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[var(--radius-xl)] border border-border bg-white/[0.04] px-4 py-3 text-sm font-medium text-muted transition-colors hover:bg-white/[0.08]"
+          className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[var(--radius-xl)] border border-border bg-sand/60 px-4 py-3 text-sm font-medium text-muted transition-colors hover:bg-sand"
         >
           <ArrowCounterClockwise className="h-4 w-4" aria-hidden />
           Nuevo comando
@@ -444,13 +444,13 @@ export function AIChatButton() {
         className="sm:max-w-lg"
       >
         {/* Mode toggle */}
-        <div className="mb-4 flex rounded-xl bg-white/[0.05] p-1">
+        <div className="mb-4 flex rounded-xl bg-sand/60 p-1">
           <button
             type="button"
             onClick={() => setMode("chat")}
             className={cn(
               "flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-sm font-medium transition-colors",
-              mode === "chat" ? "bg-white/[0.10] text-brown" : "text-muted hover:text-brown/70",
+              mode === "chat" ? "bg-sand text-brown" : "text-muted hover:text-brown/70",
             )}
           >
             <ChatCircle className="h-4 w-4" aria-hidden />
@@ -461,7 +461,7 @@ export function AIChatButton() {
             onClick={() => setMode("command")}
             className={cn(
               "flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-sm font-medium transition-colors",
-              mode === "command" ? "bg-white/[0.10] text-brown" : "text-muted hover:text-brown/70",
+              mode === "command" ? "bg-sand text-brown" : "text-muted hover:text-brown/70",
             )}
           >
             <Lightning className="h-4 w-4" aria-hidden />

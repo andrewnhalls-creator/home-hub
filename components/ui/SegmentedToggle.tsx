@@ -18,7 +18,7 @@ export function SegmentedToggle({ className }: SegmentedToggleProps) {
       role="tablist"
       aria-label="Cambiar vista"
       className={cn(
-        "flex gap-1 rounded-xl border border-white/10 p-1",
+        "flex gap-1 rounded-xl border border-border p-1",
         className,
       )}
     >
@@ -30,7 +30,7 @@ export function SegmentedToggle({ className }: SegmentedToggleProps) {
           "flex flex-1 items-center justify-center rounded-lg py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
           isLista
             ? "bg-terracotta/20 text-terracotta"
-            : "text-muted hover:text-cream",
+            : "text-muted hover:text-brown",
         )}
       >
         Lista
@@ -43,7 +43,7 @@ export function SegmentedToggle({ className }: SegmentedToggleProps) {
           "flex flex-1 items-center justify-center rounded-lg py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage",
           isSemana
             ? "bg-sage/20 text-sage"
-            : "text-muted hover:text-cream",
+            : "text-muted hover:text-brown",
         )}
       >
         Semana

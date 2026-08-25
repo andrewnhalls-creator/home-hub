@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finanzas - Pagos y Movimientos</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-primary-container": "#9dd090",
+                      "primary": "#154212",
+                      "outline-variant": "#c2c9bb",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#dde4e6",
+                      "surface-tint": "#3b6934",
+                      "on-primary-fixed-variant": "#23501e",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed": "#370e00",
+                      "tertiary": "#52320b",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#161d1f",
+                      "surface": "#f4fafd",
+                      "secondary-container": "#ff996e",
+                      "secondary-fixed": "#ffdbce",
+                      "inverse-surface": "#2b3234",
+                      "primary-fixed": "#bcf0ae",
+                      "primary-fixed-dim": "#a1d494",
+                      "on-tertiary-fixed": "#2c1600",
+                      "on-secondary-fixed-variant": "#79300e",
+                      "secondary": "#974723",
+                      "surface-container": "#e8eff1",
+                      "primary-container": "#2d5a27",
+                      "surface-container-highest": "#dde4e6",
+                      "surface-bright": "#f4fafd",
+                      "on-secondary-container": "#772f0c",
+                      "on-tertiary-container": "#ecb987",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed": "#ffdcbd",
+                      "error-container": "#ffdad6",
+                      "tertiary-container": "#6d4820",
+                      "tertiary-fixed-dim": "#f0bd8b",
+                      "on-tertiary-fixed-variant": "#623f18",
+                      "surface-dim": "#d4dbdd",
+                      "surface-container-high": "#e2e9ec",
+                      "surface-container-low": "#eef5f7",
+                      "background": "#f4fafd",
+                      "secondary-fixed-dim": "#ffb598",
+                      "on-primary-fixed": "#002201",
+                      "on-background": "#161d1f",
+                      "inverse-on-surface": "#ebf2f4",
+                      "outline": "#72796e",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#42493e",
+                      "inverse-primary": "#a1d494"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "margin-mobile": "20px",
+                      "base": "8px",
+                      "xl": "32px",
+                      "md": "16px",
+                      "gutter": "16px",
+                      "lg": "24px",
+                      "margin-desktop": "40px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "display-lg-mobile": ["Plus Jakarta Sans"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "label-md": ["Plus Jakarta Sans"],
+                      "body-md": ["Plus Jakarta Sans"],
+                      "label-sm": ["Plus Jakarta Sans"],
+                      "headline-sm": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Minimal custom CSS for scrollbar hiding in the filter area */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Smooth transitions for tabs */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md antialiased pb-24 pt-16">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-background flex justify-between items-center px-margin-mobile h-16 shadow-none">
+<div class="flex items-center gap-md">
+<img class="w-10 h-10 rounded-full object-cover border border-surface-variant" data-alt="A small, circular profile picture of a middle-aged woman with short dark hair, smiling warmly. The lighting is soft and natural, suggesting a bright Mediterranean home setting. The image is cropped tightly as an avatar. The overall color palette is warm and inviting, fitting a digital household management tool." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvs4KFZoAQTwqTYCz0yJNjoDPb1Z7RH-2t5Qeogi6NyTAhvVD1NlKqlCN__xpQ5bnvHgUB3yJEuU6HEe6kHvfq7BSt3h1lt_XJQeBh9eEKW7XaZwiF6HdLkI55L6A3CUl3T-71_oacznkuNj6XaF29gNnP3gmi1vV8RazdMk7Srh2UP2RVo2mIwVTXHIXFTLcgkNgGS4w732ORVxirwCcEBuyCRcf0dAuHHzj5sb803xoNaQpcClF3"/>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">Finanzas</h1>
+</div>
+<button class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-200 text-on-surface-variant dark:text-outline">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</header>
+<main class="w-full max-w-3xl mx-auto px-margin-mobile mt-4 flex flex-col gap-lg">
+<!-- Custom Segmented Control for Tabs -->
+<div class="bg-surface-container-low p-1 rounded-xl flex w-full relative">
+<button class="flex-1 py-2 font-label-md text-label-md rounded-lg transition-all duration-200 text-on-surface bg-surface shadow-[0_2px_8px_rgba(0,0,0,0.04)] z-10" id="tab-historial" onclick="switchTab('historial')">
+                Historial
+            </button>
+<button class="flex-1 py-2 font-label-md text-label-md rounded-lg transition-all duration-200 text-on-surface-variant hover:bg-surface-variant/30 z-10" id="tab-pagos" onclick="switchTab('pagos')">
+                Pagos Fijos
+            </button>
+</div>
+<!-- VIEW: HISTORIAL (Transactions) -->
+<section class="tab-content active flex flex-col gap-md" id="view-historial">
+<!-- Filters -->
+<div class="flex gap-sm overflow-x-auto no-scrollbar pb-2 -mx-margin-mobile px-margin-mobile">
+<button class="flex items-center gap-xs px-4 py-2 h-11 rounded-full border border-outline-variant bg-surface text-on-surface font-label-sm text-label-sm whitespace-nowrap active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                    Este mes
+                </button>
+<button class="flex items-center gap-xs px-4 py-2 h-11 rounded-full border border-outline-variant bg-surface text-on-surface font-label-sm text-label-sm whitespace-nowrap active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">category</span>
+                    Categoría
+                </button>
+<button class="flex items-center gap-xs px-4 py-2 h-11 rounded-full border border-outline-variant bg-surface text-on-surface font-label-sm text-label-sm whitespace-nowrap active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">group</span>
+                    Miembro
+                </button>
+</div>
+<!-- Transaction List -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.02)] border border-surface-container-high overflow-hidden">
+<div class="px-md py-sm bg-surface-container-lowest border-b border-surface-container-high">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Hoy</span>
+</div>
+<!-- Item 1 -->
+<div class="flex items-center justify-between p-md border-b border-surface-container-high hover:bg-surface-container-lowest/80 transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface">Mercadona Compra Semanal</span>
+<div class="flex items-center gap-xs mt-xs text-on-surface-variant">
+<span class="font-label-sm text-label-sm">Cuenta Común</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-label-sm text-label-sm">Elena</span>
+</div>
+</div>
+</div>
+<div class="text-right flex flex-col items-end">
+<span class="font-headline-sm text-headline-sm text-on-surface">-145,20 €</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">10:42 AM</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between p-md border-b border-surface-container-high hover:bg-surface-container-lowest/80 transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined">directions_car</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface">Gasolinera Repsol</span>
+<div class="flex items-center gap-xs mt-xs text-on-surface-variant">
+<span class="font-label-sm text-label-sm">Tarjeta Papá</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-label-sm text-label-sm">Carlos</span>
+</div>
+</div>
+</div>
+<div class="text-right flex flex-col items-end">
+<span class="font-headline-sm text-headline-sm text-on-surface">-55,00 €</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">08:15 AM</span>
+</div>
+</div>
+<div class="px-md py-sm bg-surface-container-lowest border-b border-surface-container-high mt-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Ayer</span>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center justify-between p-md hover:bg-surface-container-lowest/80 transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-tertiary-container/20 flex items-center justify-center text-tertiary-container">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface">Bizum a Laura</span>
+<div class="flex items-center gap-xs mt-xs text-on-surface-variant">
+<span class="font-label-sm text-label-sm">Regalo Cumpleaños</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-label-sm text-label-sm">Elena</span>
+</div>
+</div>
+</div>
+<div class="text-right flex flex-col items-end">
+<span class="font-headline-sm text-headline-sm text-on-surface">-30,00 €</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">19:30 PM</span>
+</div>
+</div>
+</div>
+</section>
+<!-- VIEW: PAGOS FIJOS (Fixed Payments) -->
+<section class="tab-content flex flex-col gap-lg" id="view-pagos">
+<!-- Upcoming Group -->
+<div class="flex flex-col gap-sm">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider ml-1">Próximos (Esta Semana)</h2>
+<div class="flex flex-col bg-surface-container-lowest rounded-2xl border border-surface-container-high shadow-[0_4px_12px_rgba(0,0,0,0.02)] overflow-hidden">
+<!-- Rent -->
+<div class="flex items-center justify-between p-md border-b border-surface-container-high bg-error-container/10">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-xl bg-error-container text-on-error-container flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Alquiler Piso</span>
+<span class="font-label-sm text-label-sm text-error mt-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Vence mañana
+                                </span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-sm text-headline-sm text-on-surface">850,00 €</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Cuenta Común</span>
+</div>
+</div>
+<!-- Electricity -->
+<div class="flex items-center justify-between p-md hover:bg-surface-container-lowest/80 transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/30 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-on-surface">Luz (Iberdrola)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-xs">Vence el 15 Oct</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-sm text-headline-sm text-on-surface">~65,00 €</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Estimado</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Paid Group -->
+<div class="flex flex-col gap-sm">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider ml-1">Pagados (Octubre)</h2>
+<div class="flex flex-col bg-surface-container-lowest rounded-2xl border border-surface-container-high shadow-[0_4px_12px_rgba(0,0,0,0.04)] overflow-hidden opacity-75">
+<!-- Internet -->
+<div class="flex items-center justify-between p-md">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-xl bg-primary-container/20 text-primary flex items-center justify-center relative">
+<span class="material-symbols-outlined">router</span>
+<div class="absolute -bottom-1 -right-1 w-5 h-5 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface line-through decoration-on-surface-variant/30">Internet (Movistar)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-xs">Pagado el 02 Oct</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-body-md text-body-md text-on-surface-variant">45,00 €</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Archived Link -->
+<button class="flex items-center justify-center gap-2 py-3 mt-2 text-primary font-label-md text-label-md hover:bg-primary-container/10 rounded-xl transition-colors">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+                Ver pagos archivados
+            </button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface dark:bg-surface-container-lowest shadow-[0_-4px_12px_rgba(0,0,0,0.04)] rounded-t-xl md:hidden">
+<!-- Inicio -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 rounded-full w-[64px] h-[64px] active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-sm text-label-sm">Inicio</span>
+</button>
+<!-- Gastos (Active Tab) -->
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-container text-on-primary-container dark:text-on-primary-container rounded-full px-4 py-1 w-[64px] h-[64px] active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm">Gastos</span>
+</button>
+<!-- Presupuesto -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 rounded-full w-[64px] h-[64px] active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="font-label-sm text-label-sm">Presupuesto</span>
+</button>
+<!-- Ahorro -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 rounded-full w-[64px] h-[64px] active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1">savings</span>
+<span class="font-label-sm text-label-sm">Ahorro</span>
+</button>
+<!-- Más -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 rounded-full w-[64px] h-[64px] active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1">menu</span>
+<span class="font-label-sm text-label-sm">Más</span>
+</button>
+</nav>
+<!-- Tab Switching Logic -->
+<script>
+        function switchTab(tabId) {
+            // Get views
+            const historialView = document.getElementById('view-historial');
+            const pagosView = document.getElementById('view-pagos');
+            
+            // Get buttons
+            const historialBtn = document.getElementById('tab-historial');
+            const pagosBtn = document.getElementById('tab-pagos');
+
+            // Reset styles
+            historialBtn.className = 'flex-1 py-2 font-label-md text-label-md rounded-lg transition-all duration-200 text-on-surface-variant hover:bg-surface-variant/30 z-10';
+            pagosBtn.className = 'flex-1 py-2 font-label-md text-label-md rounded-lg transition-all duration-200 text-on-surface-variant hover:bg-surface-variant/30 z-10';
+            
+            historialView.classList.remove('active');
+            pagosView.classList.remove('active');
+
+            // Apply active styles
+            if (tabId === 'historial') {
+                historialView.classList.add('active');
+                historialBtn.className = 'flex-1 py-2 font-label-md text-label-md rounded-lg transition-all duration-200 text-on-surface bg-surface shadow-[0_2px_8px_rgba(0,0,0,0.04)] z-10';
+            } else {
+                pagosView.classList.add('active');
+                pagosBtn.className = 'flex-1 py-2 font-label-md text-label-md rounded-lg transition-all duration-200 text-on-surface bg-surface shadow-[0_2px_8px_rgba(0,0,0,0.04)] z-10';
+            }
+        }
+    </script>
+</body></html>

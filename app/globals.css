@@ -1,99 +1,87 @@
 @import "tailwindcss";
 
 :root {
-  /* ── Glassmorphism · Deep Indigo · Dark-first ──────────────────────────────
-     Deep indigo atmospheric base. Frosted glass surfaces float above it.
-     Saffron gold (#E8C547) is the primary brand accent — warm against the deep indigo base.
-     Two-tier glass rule: blur(20px) via .glass class — nav bars and modals/sheets only.
-     Content cards and inputs use rgba tint without backdrop-filter.
+  /* ── Casa Calma · light · Mediterranean calm ───────────────────────────────
+     Cream (#f4fafd) paper-like base. White cards gently resting on it with
+     soft ambient shadows — no glass, no blur, no heavy black shadows.
+     Primary: forest green. Secondary: terracotta. Type: Plus Jakarta Sans.
+     Legacy token names (cream/terracotta/sage/…) are kept and retargeted so
+     existing components pick up the new palette without renaming.
   ─────────────────────────────────────────────────────────────────────────── */
 
-  /* ── Page backgrounds (mapped to old token names for component compatibility) ── */
-  --color-cream:  #0D0B1F;   /* was warm cream bg — now deep indigo base */
-  --color-sand:   #121130;   /* was hover/section bg — now slightly lighter indigo */
-  --color-card:   rgba(255, 255, 255, 0.07);  /* glass surface tint — blur added via .glass */
+  /* ── Page backgrounds ── */
+  --color-cream:  #f4fafd;   /* page background (Casa Calma surface) */
+  --color-sand:   #e8eff1;   /* hover / section bg (surface-container) */
+  --color-card:   #ffffff;   /* card surface (surface-container-lowest) */
 
-  /* ── Brand (terracotta → saffron gold) ── */
-  --color-terracotta: #E8C547;   /* primary action — saffron, warm Spanish light */
-  --color-coral:      #D4AE2E;   /* hover variant — deeper gold */
+  /* ── Brand (historical name kept — now forest green primary) ── */
+  --color-terracotta: #154212;   /* primary action — forest green */
+  --color-coral:      #2d5a27;   /* hover variant — lighter forest green */
 
   /* ── Secondary accents ── */
-  --color-sage:  #2DD4BF;   /* teal */
-  --color-olive: #818CF8;   /* indigo accent */
-  --color-amber: #FBBF24;   /* warm amber */
-  --color-rose:  #F472B6;   /* pink */
+  --color-sage:  #3b6934;   /* calm green — success-adjacent accent */
+  --color-olive: #6d4820;   /* warm earth brown (tertiary) */
+  --color-amber: #974723;   /* terracotta — collaborative/secondary accent */
+  --color-rose:  #9f1239;   /* deep rose accent */
 
   /* ── Text ── */
-  --color-brown: #F0F6FC;   /* was dark ink — now light heading text */
-  --color-muted: #94A3B8;   /* secondary text */
+  --color-brown: #161d1f;   /* headings / primary ink (on-surface) */
+  --color-muted: #42493e;   /* secondary text (on-surface-variant) */
 
   /* ── UI chrome ── */
-  --color-border:       rgba(255, 255, 255, 0.12);
-  --color-success:      #009966;
-  --color-warning-text: #FBBF24;
-  --color-danger:       #EF4444;
+  --color-border:       #dde4e6;
+  --color-success:      #2d5a27;
+  --color-warning-text: #92400e;
+  --color-danger:       #ba1a1a;
 
   /* ── Status fill backgrounds ── */
-  --color-success-soft: rgba(0, 153, 102, 0.12);
-  --color-danger-soft:  rgba(239, 68, 68, 0.12);
-  --color-warning-soft: rgba(251, 191, 36, 0.12);
+  --color-success-soft: rgba(45, 90, 39, 0.10);
+  --color-danger-soft:  rgba(186, 26, 26, 0.08);
+  --color-warning-soft: rgba(146, 64, 14, 0.10);
 
-  /* ── Glass surface tokens ── */
-  --glass-bg:            rgba(255, 255, 255, 0.07);
-  --glass-bg-hover:      rgba(255, 255, 255, 0.12);
-  --glass-border:        rgba(255, 255, 255, 0.12);
-  --glass-border-subtle: rgba(255, 255, 255, 0.06);
-  --glass-edge-top:      linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-  --glass-edge-left:     linear-gradient(180deg, rgba(255, 255, 255, 0.15), transparent, rgba(255, 255, 255, 0.05));
+  /* ── Surface tokens (former glass — now plain soft cards) ── */
+  --glass-bg:            #ffffff;
+  --glass-bg-hover:      #eef5f7;
+  --glass-border:        #e2e9ec;
+  --glass-border-subtle: #eef5f7;
+  --glass-edge-top:      none;
+  --glass-edge-left:     none;
 
-  /* ── Shadows ── */
-  --shadow-2xs: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-xs:  0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-sm:  0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --shadow-md:  0 8px 32px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.10);
-  --shadow-lg:  0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  --shadow-xl:  0 20px 50px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  --shadow-2xl: 0 25px 60px rgba(0, 0, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.20);
+  /* ── Shadows — soft, ambient, barely-there ── */
+  --shadow-2xs: 0 1px 2px rgba(22, 29, 31, 0.04);
+  --shadow-xs:  0 2px 6px rgba(22, 29, 31, 0.05);
+  --shadow-sm:  0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-md:  0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-xl:  0 12px 32px rgba(0, 0, 0, 0.10);
+  --shadow-2xl: 0 16px 40px rgba(0, 0, 0, 0.12);
 
-  --shadow-card:
-    0 8px 32px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
-  --shadow-card-hover:
-    0 12px 40px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
-  --shadow-modal:
-    0 20px 60px rgba(0, 0, 0, 0.50),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --shadow-card:       0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-modal:      0 8px 24px rgba(0, 0, 0, 0.08);
 
-  /* Button glint layers (brand + neutral) */
-  --shadow-btn:
-    var(--shadow-xs),
-    inset rgba(255, 255, 255, 0.15) 0 6px 0px -5px,
-    rgba(0, 0, 0, 0.20) 0 4px 10px -5px;
-  --shadow-btn-active:
-    inset 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-btn:        0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-btn-active: inset 0 1px 2px rgba(0, 0, 0, 0.10);
 
   /* ── Border radius ── */
-  --radius-sm:   0.375rem;   /* 6px  — controls, badges */
-  --radius-md:   0.5rem;     /* 8px  — inputs */
+  --radius-sm:   0.5rem;     /* 8px  — controls, badges */
+  --radius-md:   0.75rem;    /* 12px — buttons, inputs */
   --radius-lg:   0.75rem;    /* 12px — overlays, dropdowns */
-  --radius-xl:   1.25rem;    /* 20px — cards, modals, sheets */
+  --radius-xl:   1rem;       /* 16px — cards, modals, sheets */
   --radius-full: 9999px;
 
-  /* ── Button glint variables ── */
-  --color-1-400: rgba(255, 255, 255, 0.15);
-  --color-1-700: rgba(0, 0, 0, 0.20);
+  /* ── Button glint variables (legacy — now neutral) ── */
+  --color-1-400: rgba(255, 255, 255, 0.0);
+  --color-1-700: rgba(0, 0, 0, 0.08);
 
   /* ── Disabled state ── */
-  --color-disabled:    rgba(255, 255, 255, 0.04);
-  --color-fg-disabled: #475569;
+  --color-disabled:    rgba(22, 29, 31, 0.05);
+  --color-fg-disabled: #9aa4a6;
 }
 
 @theme inline {
-  --font-sans:    var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans:    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
   /* Surfaces */
   --color-cream:  var(--color-cream);
@@ -138,23 +126,16 @@
   --shadow-xl:          var(--shadow-xl);
 }
 
-/* ── Body — atmospheric deep indigo gradient ───────────────────────────────── */
+/* ── Body — calm cream base ────────────────────────────────────────────────── */
 body {
-  background:
-    radial-gradient(ellipse 90% 80% at 50% 50%, rgba(26, 24, 71, 0.60) 0%, transparent 90%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpolygon points='20,2 38,20 20,38 2,20' fill='none' stroke='rgba(255,255,255,0.055)' stroke-width='0.6'/%3E%3Cpolygon points='20,13 27,20 20,27 13,20' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='0.5'/%3E%3Cline x1='2' y1='20' x2='38' y2='20' stroke='rgba(255,255,255,0.025)' stroke-width='0.4'/%3E%3Cline x1='20' y1='2' x2='20' y2='38' stroke='rgba(255,255,255,0.025)' stroke-width='0.4'/%3E%3C/svg%3E"),
-    var(--color-cream);
+  background: var(--color-cream);
   color: var(--color-muted);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
-/* ── Glass surface utility ─────────────────────────────────────────────────── */
-/* Apply .glass to any container that should look like frosted glass.
-   backdrop-filter requires a transparent background on the element — use with bg-card or rgba bg. */
+/* ── Soft card surface utility (formerly glass — no blur in Casa Calma) ────── */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-card);
   position: relative;
@@ -163,32 +144,6 @@ body {
 
 .glass:hover {
   background: var(--glass-bg-hover);
-}
-
-/* Top and left edge light refraction */
-.glass::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--glass-edge-top);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.glass::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  bottom: 0;
-  background: var(--glass-edge-left);
-  pointer-events: none;
-  z-index: 1;
 }
 
 /* ── Scrollbar ─────────────────────────────────────────────────────────────── */
@@ -292,11 +247,11 @@ body {
     --color-cream:      #ffffff;
     --color-sand:       #f8f8f8;
     --color-card:       #ffffff;
-    --color-brown:      #1a1a2e;
-    --color-muted:      #64748b;
+    --color-brown:      #161d1f;
+    --color-muted:      #42493e;
     --color-border:     #e2e8f0;
-    --color-terracotta: #1a6641;
-    --color-coral:      #155d38;
+    --color-terracotta: #154212;
+    --color-coral:      #2d5a27;
     --color-success:    #166534;
     --color-danger:     #991b1b;
     --color-amber:      #92400e;

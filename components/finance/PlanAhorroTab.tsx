@@ -266,7 +266,7 @@ function SavingsSimulator({
   }
 
   return (
-    <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.04] p-4">
+    <div className="rounded-[var(--radius-xl)] border border-border bg-sand/60 p-4">
       <div className="flex items-center gap-2">
         <Calculator className="h-4 w-4 shrink-0 text-terracotta" aria-hidden />
         <p className="text-sm font-semibold text-brown">Simulador de ahorro</p>
@@ -282,7 +282,7 @@ function SavingsSimulator({
               "flex-1 rounded-xl border px-3 py-2 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
               fund === f
                 ? "border-terracotta/30 bg-terracotta/10 text-terracotta"
-                : "border-border bg-white/[0.04] text-muted hover:bg-white/[0.08]",
+                : "border-border bg-sand/60 text-muted hover:bg-sand",
             )}
           >
             {SIM_CONFIG[f].label}
@@ -303,7 +303,7 @@ function SavingsSimulator({
             "flex-1 rounded-xl border px-3 py-2 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
             mode === "monthly"
               ? "border-terracotta/30 bg-terracotta/10 text-terracotta"
-              : "border-border bg-white/[0.04] text-muted hover:bg-white/[0.08]",
+              : "border-border bg-sand/60 text-muted hover:bg-sand",
           )}
         >
           ¿Cuándo llegaré?
@@ -315,7 +315,7 @@ function SavingsSimulator({
             "flex-1 rounded-xl border px-3 py-2 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
             mode === "date"
               ? "border-terracotta/30 bg-terracotta/10 text-terracotta"
-              : "border-border bg-white/[0.04] text-muted hover:bg-white/[0.08]",
+              : "border-border bg-sand/60 text-muted hover:bg-sand",
           )}
         >
           ¿Cuánto necesito?
@@ -401,7 +401,7 @@ function MortgageOverpaymentCalculator({ mortgage }: { mortgage: Mortgage | null
   }
 
   return (
-    <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.04] p-4">
+    <div className="rounded-[var(--radius-xl)] border border-border bg-sand/60 p-4">
       <div className="flex items-center gap-2">
         <Calculator className="h-4 w-4 shrink-0 text-terracotta" aria-hidden />
         <p className="text-sm font-semibold text-brown">Amortizar hipoteca — calculadora</p>
@@ -483,7 +483,7 @@ function MortgageSimulator() {
   const [showTable, setShowTable] = useState(false);
 
   return (
-    <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.04] p-4">
+    <div className="rounded-[var(--radius-xl)] border border-border bg-sand/60 p-4">
       <button
         type="button"
         onClick={() => setShowTable((p) => !p)}
@@ -528,7 +528,7 @@ function AmortizacionGuide() {
   const [showNotes, setShowNotes] = useState(false);
 
   return (
-    <div className="rounded-[var(--radius-xl)] border border-border bg-white/[0.04] p-4">
+    <div className="rounded-[var(--radius-xl)] border border-border bg-sand/60 p-4">
       <button
         type="button"
         onClick={() => setShowNotes((p) => !p)}

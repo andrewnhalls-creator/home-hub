@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Home Hub - Navegación</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#9dd090",
+                    "primary": "#154212",
+                    "primary-fixed": "#bcf0ae",
+                    "secondary-fixed-dim": "#ffb598",
+                    "primary-container": "#2d5a27",
+                    "background": "#f4fafd",
+                    "on-secondary-fixed-variant": "#79300e",
+                    "secondary": "#974723",
+                    "surface-container": "#e8eff1",
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#2b3234",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#2c1600",
+                    "secondary-fixed": "#ffdbce",
+                    "on-tertiary-fixed-variant": "#623f18",
+                    "tertiary": "#52320b",
+                    "surface": "#f4fafd",
+                    "surface-container-high": "#e2e9ec",
+                    "on-surface": "#161d1f",
+                    "outline": "#72796e",
+                    "on-primary-fixed-variant": "#23501e",
+                    "tertiary-container": "#6d4820",
+                    "on-tertiary-container": "#ecb987",
+                    "outline-variant": "#c2c9bb",
+                    "on-surface-variant": "#42493e",
+                    "surface-dim": "#d4dbdd",
+                    "on-background": "#161d1f",
+                    "surface-variant": "#dde4e6",
+                    "surface-tint": "#3b6934",
+                    "surface-container-highest": "#dde4e6",
+                    "surface-container-low": "#eef5f7",
+                    "inverse-primary": "#a1d494",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#772f0c",
+                    "tertiary-fixed": "#ffdcbd",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#f0bd8b",
+                    "primary-fixed-dim": "#a1d494",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#ff996e",
+                    "surface-bright": "#f4fafd",
+                    "inverse-on-surface": "#ebf2f4",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed": "#370e00",
+                    "on-primary-fixed": "#002201",
+                    "on-secondary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "base": "8px",
+                    "xl": "32px",
+                    "margin-mobile": "20px",
+                    "xs": "4px",
+                    "sm": "12px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background h-full font-body-md overflow-hidden antialiased flex">
+<!-- Scrim (Overlay) -->
+<div aria-hidden="true" class="fixed inset-0 bg-on-background/20 z-[50]"></div>
+<!-- NavigationDrawer -->
+<nav class="fixed inset-y-0 left-0 z-[60] flex flex-col py-lg bg-surface-container-low h-full w-72 rounded-r-xl shadow-xl">
+<!-- Header Profile -->
+<div class="px-md pb-lg border-b border-surface-variant flex items-center gap-sm">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary-container text-on-primary-container flex-shrink-0 flex items-center justify-center">
+<img alt="Usuario actual" class="w-full h-full object-cover" data-alt="A softly lit, warm portrait photograph of a young Spanish woman, Elena, smiling gently. The lighting suggests a sunny Mediterranean morning, enhancing the welcoming and trustworthy aesthetic of the home management interface. The background is softly blurred, focusing entirely on her approachable expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqxVudEM89EpC0757yh1AGAJkNVZdPC8oboChhrJxnFazeeN2486CVHae0SEvytqYFEU46M-rIEWgIBb1dyfliT-gQPG_G7R4cSJ6ihnVCHY1TzczI_DhxI9hd4fMT9aNiA_0mtkr_6tWsCpn6ni39NFxX2r1lk6Qu5mdfGNHo1u95K1V7jKhLRKOh74YhRGzut22IV_RMIv30CoApF1VInX8qsHZ2kRbSbcoRd4vky3WrXlrSPgj2"/>
+</div>
+<div class="flex-1 overflow-hidden flex flex-col justify-center">
+<div class="text-headline-sm font-headline-sm text-primary font-bold truncate">Elena García</div>
+<div class="text-label-md font-label-md text-on-surface-variant truncate">Admin</div>
+</div>
+</div>
+<!-- Home Switcher -->
+<div class="px-md py-md mt-sm">
+<button class="w-full flex items-center justify-between p-sm rounded-lg border border-outline-variant hover:bg-surface-container-highest transition-colors group">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary group-hover:scale-95 transition-transform duration-150">cottage</span>
+<span class="text-body-md font-body-md text-on-surface font-medium">Piso en Madrid</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</button>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto px-xs py-sm flex flex-col gap-xs mt-sm">
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2 group" href="#">
+<span class="material-symbols-outlined group-active:opacity-80">restaurant_menu</span>
+<span class="text-body-md font-body-md font-medium">Recetas</span>
+</a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2 group" href="#">
+<span class="material-symbols-outlined group-active:opacity-80">description</span>
+<span class="text-body-md font-body-md font-medium">Documentos</span>
+</a>
+<!-- Active Item based on intent (Settings/Ajustes) -->
+<a aria-current="page" class="flex items-center gap-md px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-full mx-2 group" href="#">
+<span class="material-symbols-outlined group-active:opacity-80" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-body-md font-body-md">Ajustes</span>
+</a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2 group" href="#">
+<span class="material-symbols-outlined group-active:opacity-80">help_outline</span>
+<span class="text-body-md font-body-md font-medium">Soporte</span>
+</a>
+</div>
+<!-- Bottom Action -->
+<div class="px-xs pt-sm pb-md mt-auto border-t border-surface-variant">
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full mx-2 group" href="#">
+<span class="material-symbols-outlined text-error group-active:opacity-80">logout</span>
+<span class="text-body-md font-body-md font-medium text-error">Cerrar Sesión</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas Placeholder -->
+<main class="flex-1 ml-72 p-lg hidden md:block">
+<!-- Content goes here -->
+</main>
+</body></html>

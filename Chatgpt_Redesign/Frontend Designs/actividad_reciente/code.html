@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Actividad Reciente - Casa Calma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eef5f7",
+                        "secondary-fixed-dim": "#ffb598",
+                        "on-primary-fixed-variant": "#23501e",
+                        "on-surface-variant": "#42493e",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#002201",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary": "#974723",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary-container": "#6d4820",
+                        "surface": "#f4fafd",
+                        "surface-variant": "#dde4e6",
+                        "surface-container": "#e8eff1",
+                        "surface-tint": "#3b6934",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-secondary-container": "#772f0c",
+                        "on-tertiary-fixed": "#2c1600",
+                        "primary-fixed-dim": "#a1d494",
+                        "surface-bright": "#f4fafd",
+                        "outline": "#72796e",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#ff996e",
+                        "on-primary-container": "#9dd090",
+                        "on-tertiary-container": "#ecb987",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#dde4e6",
+                        "on-error": "#ffffff",
+                        "primary-container": "#2d5a27",
+                        "on-background": "#161d1f",
+                        "inverse-surface": "#2b3234",
+                        "surface-container-high": "#e2e9ec",
+                        "surface-dim": "#d4dbdd",
+                        "tertiary": "#52320b",
+                        "on-secondary-fixed": "#370e00",
+                        "primary": "#154212",
+                        "inverse-on-surface": "#ebf2f4",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c2c9bb",
+                        "background": "#f4fafd",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "on-surface": "#161d1f",
+                        "inverse-primary": "#a1d494"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "sm": "12px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #FDFCF8; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid #EBE9E0;
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="text-on-background font-body-md min-h-screen flex flex-col md:flex-row pb-24 md:pb-0">
+<!-- Drawer (Desktop) -->
+<nav class="hidden md:flex bg-surface-container-low dark:bg-surface-container-high h-screen w-72 rounded-r-xl shadow-xl flex-col py-lg fixed inset-y-0 left-0 z-[60]">
+<div class="px-4 mb-8 flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="A warm, soft-focus portrait of a Spanish mother smiling gently in a bright, sunlit kitchen. Natural Mediterranean lighting, cozy atmosphere, pastel tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSyVjhA6jBGDaWBTNnvlNoK1a1bl9jN4LxkV7tBqOBAc1uxje-8fK90UgWQsfvEgCHT_YYG9LOboACiH-J6TIUk-aK51XifG8Ry5MmUdZgDNbi6fZqeFJi_Kud5tvC_iBxX9kBHBN2oKNgnDocmtl727JzaNuC5tQLkBwIh2TQnA7-LBgfPT-sY-mhMyDtb6DhbkFBl6RGn81wTJ-QFvv3RUaZb0aZ1ZKrQSqs83RfqXI9JydOoZ5X"/>
+<div>
+<h2 class="text-primary dark:text-primary-fixed text-headline-sm font-headline-sm font-bold">Elena García</h2>
+<p class="text-on-surface-variant text-body-md font-body-md text-sm">Piso en Madrid</p>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-r-full" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-body-md font-body-md">Recetas</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-r-full" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-body-md font-body-md">Documentos</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-r-full" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-body-md font-body-md">Ajustes</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-r-full" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="text-body-md font-body-md">Soporte</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="mt-auto pt-4">
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-body-md font-body-md">Cerrar Sesión</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col md:ml-72 w-full max-w-4xl mx-auto md:p-8">
+<!-- TopAppBar (Mobile & Desktop) -->
+<header class="bg-background dark:bg-inverse-surface flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 sticky top-0 z-40 md:bg-transparent md:h-24 md:static">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined md:hidden text-primary dark:text-primary-fixed">swap_vert</span>
+<h1 class="text-headline-sm font-headline-sm md:text-display-lg md:font-display-lg font-bold text-primary dark:text-primary-fixed">Actividad</h1>
+</div>
+<img class="md:hidden w-8 h-8 rounded-full object-cover" data-alt="A warm, soft-focus portrait of a Spanish mother smiling gently in a bright, sunlit kitchen. Natural Mediterranean lighting, cozy atmosphere, pastel tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqXPocgBkb0MsxzMho7zgn2mmD5XQfmnryeQYaPabps01ouGGjjNe6GYtNwKK8ySU0a31P5uahBaSXOhRhcFFIdyNb8UFK-qz8hRMvf65vQFsFs4ufOqiPtxTVrYPzMR4SHvbEj_juKwUvbkt-JTuHA0YgdGaVbZhCnBRVJQyJa1bQ19VFPD0F7B46XkS9FgOpmUm7rk1TaCeVMwlApDj6pnZSQxyooW4FBw08TjJqKxIXMx4wc6cb"/>
+</header>
+<div class="px-margin-mobile md:px-0 py-6 md:py-0 space-y-lg">
+<!-- Bento-style Header Card -->
+<div class="glass-card rounded-2xl p-6 relative overflow-hidden">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary-fixed-dim rounded-full blur-3xl opacity-30"></div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h2 class="text-headline-md font-headline-md text-on-background mb-1">Registro de la Casa</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Mantente al día con las tareas y compras familiares.</p>
+</div>
+<button class="bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md px-6 py-3 rounded-full transition-colors flex items-center gap-2 shadow-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                        Nueva Nota
+                    </button>
+</div>
+</div>
+<!-- Timeline Grids -->
+<div class="space-y-8">
+<!-- Hoy Group -->
+<section>
+<h3 class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-4 pl-2 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span> Hoy
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Activity Card 1 -->
+<div class="glass-card rounded-xl p-4 flex gap-4 items-start hover:shadow-md transition-shadow">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-surface-container-lowest" data-alt="A soft, natural portrait of a teenage girl with dark hair, smiling slightly, standing in a bright home interior with warm light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGdt07mUao8XevecSrUn0giT8UY3hwFU5LAGs6aUqvbpoevnpfpiirRuWR9TLqyyvvUg4FnALnol8lbZ5bLBJtrp04NGXShfxjQwuTzv46jM80WbQw0Qqe1P_nHZM0dwiCccoVeksru6-_OxzqXJp15ilmpicDdjxRmA_WhmiEQWw2MPChOY2OLREMMvgLz2aAOcxagJBrldW8wbYPfNJ_wgYh-l83k-DnrL4aykFnQSQe1i9VXaTf"/>
+<div class="absolute -bottom-1 -right-1 bg-surface-container-lowest rounded-full p-[2px] shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-secondary">shopping_cart</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-1">
+<p class="text-body-md font-body-md font-medium text-on-background">Elena añadió Leche</p>
+<span class="text-label-sm font-label-sm text-outline">10:30 AM</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm">Lista de la compra</p>
+<div class="mt-3 inline-flex items-center gap-2 bg-secondary-fixed/30 text-on-secondary-container px-3 py-1 rounded-full text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]">local_drink</span> Leche Semidesnatada
+                                </div>
+</div>
+</div>
+<!-- Activity Card 2 -->
+<div class="glass-card rounded-xl p-4 flex gap-4 items-start hover:shadow-md transition-shadow">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-surface-container-lowest" data-alt="A portrait of a middle-aged man with a short beard, wearing a comfortable sweater, smiling warmly in a Mediterranean home setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFvBHoJ6961xjhjOuWj0EndqQKg11TjPFItL1SC2nKVqz_kFSexJ9YB6iSel66DyhfkkGnDHE1oL3sxjClaKSAOGu24Ves5MEExb5aSvjdTEi-U9bfBU3OFYUs4L5x9AKB-U1BVp6SDLG9Cxipq2cJ_W6dwu1obpzndARLqks45AwYs5OqPdg69XZmmSnf5g5BuzpLFAu6CP7ObeDhHspwUkdQWH_3fHUXbARerHXNHSZi8J3s31lJ"/>
+<div class="absolute -bottom-1 -right-1 bg-surface-container-lowest rounded-full p-[2px] shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-surface-tint">check_circle</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-1">
+<p class="text-body-md font-body-md font-medium text-on-background">Papá completó una tarea</p>
+<span class="text-label-sm font-label-sm text-outline">8:00 AM</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm">Tareas del hogar</p>
+<div class="mt-3 flex items-center gap-2 text-surface-tint">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_box</span>
+<span class="text-body-md font-body-md line-through text-on-surface-variant/70">Sacar la basura</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Ayer Group -->
+<section>
+<h3 class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-4 pl-2 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span> Ayer
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 opacity-80">
+<!-- Activity Card 3 -->
+<div class="glass-card rounded-xl p-4 flex gap-4 items-start">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-surface-container-lowest" data-alt="A warm, soft-focus portrait of a Spanish mother smiling gently in a bright, sunlit kitchen. Natural Mediterranean lighting, cozy atmosphere, pastel tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxzoVfaI71GRSL0H7CC1qK36-Spi2V0ri_bReK58JnBGGBxpOkQI6wppWbHcNe6jhDiaS76vdJ5mgxs1kbTndzGJ_iQOLwNm7iEUEBJJC_3GMaedcfKS93Pvr0WGuJxIQWhXDa-zXJaTHpHPtbOjWxIR9zGlx_d0JdiwyAt0bscH0M2BUfmksM2FVvz_a0QLrjRmvC5jSJwBDVOeTv6F_JXi6IlMEKdAsdn2ZDlGFROa7c9-Sxb9_U"/>
+<div class="absolute -bottom-1 -right-1 bg-surface-container-lowest rounded-full p-[2px] shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-tertiary">event</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-1">
+<p class="text-body-md font-body-md font-medium text-on-background">Mamá creó un evento</p>
+<span class="text-label-sm font-label-sm text-outline">19:45 PM</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm">Calendario Familiar</p>
+<div class="mt-3 bg-surface-container-low border border-surface-variant rounded-lg p-3">
+<p class="text-body-md font-body-md font-medium text-on-surface">Cena de Cumpleaños</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> Sábado, 21:00
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden bg-surface-container-lowest dark:bg-surface-container shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm font-label-sm mt-1">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined">cottage</span>
+<span class="text-label-sm font-label-sm mt-1">Casa</span>
+</a>
+<!-- Active Tab Intent matches "Actividad/Registro" -> Closest generic intent might be Finanzas or a custom one if missing, but we'll highlight Casa for household activity -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed font-semibold scale-90 transition-transform bg-primary-container/20 rounded-full p-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<!-- Hidden label as per JSON empty string -->
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-sm font-label-sm mt-1">Finanzas</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-sm font-label-sm mt-1">Calendario</span>
+</a>
+</nav>
+</body></html>

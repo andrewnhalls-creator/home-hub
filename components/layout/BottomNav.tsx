@@ -23,15 +23,9 @@ export function BottomNav() {
     <>
       <nav
         aria-label="Navegación principal"
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.10] pb-[env(safe-area-inset-bottom)] md:hidden"
-        style={{ background: "rgba(13,11,31,0.80)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-border pb-[env(safe-area-inset-bottom)] md:hidden"
+        style={{ background: "var(--color-card)" }}
       >
-        {/* Top edge highlight */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)" }}
-        />
         <ul className="flex">
           {PRIMARY_NAV_ITEMS.map((item) => {
             const isActive = pathname?.startsWith(item.href);

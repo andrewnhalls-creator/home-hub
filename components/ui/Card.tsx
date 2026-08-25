@@ -8,14 +8,14 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const variantBase =
-  "relative overflow-hidden rounded-[var(--radius-xl)] border bg-white/[0.07] p-4";
+  "relative overflow-hidden rounded-[var(--radius-xl)] border bg-card p-4";
 
 const variantClasses: Record<CardVariant, string> = {
   default:  "border-border shadow-[var(--shadow-card)]",
   featured: "border-terracotta/40 shadow-[0_0_0_1px_var(--color-terracotta),var(--shadow-card)]",
-  subtle:   "border-white/[0.06] bg-white/[0.04]",
+  subtle:   "border-border/70 bg-sand/60",
   metric:
-    "border-border shadow-[var(--shadow-card)] transition-[background,box-shadow] duration-200 hover:bg-white/[0.12] hover:shadow-[var(--shadow-card-hover)]",
+    "border-border shadow-[var(--shadow-card)] transition-[background,box-shadow] duration-200 hover:bg-sand hover:shadow-[var(--shadow-card-hover)]",
 };
 
 export function Card({ className, variant = "default", children, ...rest }: CardProps) {
@@ -24,18 +24,6 @@ export function Card({ className, variant = "default", children, ...rest }: Card
       className={cn(variantBase, variantClasses[variant], className)}
       {...rest}
     >
-      {/* Top edge light refraction */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)" }}
-      />
-      {/* Left edge light refraction */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 left-0 w-px"
-        style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.15), transparent, rgba(255,255,255,0.05))" }}
-      />
       {children}
     </div>
   );

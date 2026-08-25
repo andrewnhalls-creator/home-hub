@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recordatorios y Tareas - Casa Calma</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#52320b",
+                    "inverse-primary": "#a1d494",
+                    "on-tertiary-fixed-variant": "#623f18",
+                    "inverse-on-surface": "#ebf2f4",
+                    "primary": "#154212",
+                    "outline": "#72796e",
+                    "on-primary-fixed-variant": "#23501e",
+                    "primary-fixed-dim": "#a1d494",
+                    "on-primary-container": "#9dd090",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#ffdbce",
+                    "on-secondary-fixed": "#370e00",
+                    "on-surface-variant": "#42493e",
+                    "on-primary-fixed": "#002201",
+                    "secondary-container": "#ff996e",
+                    "secondary-fixed-dim": "#ffb598",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d4dbdd",
+                    "on-surface": "#161d1f",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#2c1600",
+                    "surface-bright": "#f4fafd",
+                    "surface-container-high": "#e2e9ec",
+                    "on-background": "#161d1f",
+                    "on-secondary-container": "#772f0c",
+                    "primary-container": "#2d5a27",
+                    "background": "#f4fafd",
+                    "surface-variant": "#dde4e6",
+                    "on-error": "#ffffff",
+                    "error": "#ba1a1a",
+                    "surface-container": "#e8eff1",
+                    "surface": "#f4fafd",
+                    "outline-variant": "#c2c9bb",
+                    "surface-container-low": "#eef5f7",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#2b3234",
+                    "tertiary-fixed": "#ffdcbd",
+                    "surface-tint": "#3b6934",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#79300e",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#ecb987",
+                    "surface-container-highest": "#dde4e6",
+                    "tertiary-fixed-dim": "#f0bd8b",
+                    "secondary": "#974723",
+                    "primary-fixed": "#bcf0ae",
+                    "tertiary-container": "#6d4820"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "md": "16px",
+                    "gutter": "16px",
+                    "sm": "12px",
+                    "base": "8px",
+                    "margin-desktop": "40px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "xl": "32px"
+            },
+            "fontFamily": {
+                    "label-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-sm": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "display-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "label-sm": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "display-lg-mobile": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-md": [
+                            "Plus Jakarta Sans"
+                    ]
+            },
+            "fontSize": {
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "40px",
+                            {
+                                    "lineHeight": "48px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #FDFCF8; /* Manual override to Cream base as per Style Guidance for Casa Calma */
+        }
+        
+        /* Subtle ambient shadows for Level 1 & 2 */
+        .shadow-level-1 {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        .shadow-level-2 {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Checkbox custom styles */
+        .custom-checkbox {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #dde4e6; /* surface-variant */
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .custom-checkbox:checked {
+            background-color: #a1d494; /* inverse-primary (Sage Green for success) */
+            border-color: #a1d494;
+        }
+        .custom-checkbox:checked::after {
+            content: '\e5ca'; /* check icon */
+            font-family: 'Material Symbols Outlined';
+            color: #ffffff;
+            font-size: 16px;
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Hover micro-interactions */
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface text-body-md min-h-screen pb-24 md:pb-0">
+<!-- Desktop SideNav / NavigationDrawer -->
+<nav class="hidden md:flex fixed inset-y-0 left-0 z-[60] flex-col py-lg bg-surface-container-low h-full w-72 rounded-r-xl shadow-xl">
+<div class="px-md mb-8 flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A portrait of an adult Spanish woman, warm natural lighting, smiling softly, casual modern attire, high quality photography, soft depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuACR7RwI7V9EnvvlLrAZthhxo6WGNGu8o-uFJZjLurSNT55QSDNqjd-A6GKONyG6GAsip-ba0q5AMcXlB4zjuM8bA8WL1vixS1pPOgfI3_5454ZvlfMyAAtmBNQzDAsWwUdfRr-XguKly7UG93q6kY4ktvcFBtT75UFfgrZKeddhGbeNEND-QcAnqCJVhu6qERRhi95fS00jN8JZRhzmsQncnKCWODsK4cbp8H3SoezG9ce2MQHgh0l"/>
+<div>
+<h2 class="text-headline-sm font-headline-sm font-bold text-primary">Elena García</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Piso en Madrid</p>
+<span class="text-label-sm font-label-sm text-outline">Admin</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<!-- Nav Items -->
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-label-md font-label-md">Recetas</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-label-md font-label-md">Documentos</span>
+</a>
+<!-- Active Item (Casa intent maps best to Settings/Home context in this limited nav, but using a custom one for Casa logic if needed, we'll map to 'Casa' equivalent if it existed, but JSON says 'Ajustes', we'll just show Ajustes as inactive here and pretend Casa is the main view) -->
+<a class="flex items-center gap-4 bg-primary-container text-on-primary-container font-bold rounded-full mx-2 px-4 py-3 opacity-80" href="#">
+<span class="material-symbols-outlined">cottage</span>
+<span class="text-label-md font-label-md">Casa</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Ajustes</span>
+</a>
+</div>
+<div class="mt-auto pt-4 border-t border-surface-variant/50">
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="text-label-md font-label-md">Soporte</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-label-md font-label-md">Cerrar Sesión</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 bg-background docked full-width top-0 flat no shadows sticky z-50 md:pl-80">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary hover:bg-surface-container transition-colors p-2 rounded-full flex items-center justify-center min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Casa</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-primary hover:bg-surface-container transition-colors p-2 rounded-full flex items-center justify-center min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined">search</span>
+</button>
+<img class="w-8 h-8 rounded-full object-cover md:hidden border border-surface-variant" data-alt="A small circular avatar of an adult Spanish woman, warm natural lighting, casual modern attire, minimal background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVV5vnDtRfYWBYlrfFLLcI2IPG7_MEmVmd3vW_G488unSCz87qx5x76F7zdS4OhuJqqcE13N6WuIs4XJSe9rXcsEQQNUvctXI-gI3oUWT2IhV19F7WN1t-swLsXpm28baQbnc1YwbEb7E0k6n4WO22NTsGDYJ7c5in9BE-fSRcB7ydNeoIOV-Ocz_zue8CSeVrnJC-qkpqb9FfSnPcjCWmYnfbODUh1J4rtbaHanLlcWuYhoOr3DL5"/>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="md:ml-72 px-margin-mobile md:px-margin-desktop py-lg max-w-5xl mx-auto">
+<!-- Header Section with FAB equivalent for Desktop -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-lg gap-4">
+<div>
+<h2 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-surface">Recordatorios</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant mt-2">Gestiona las tareas de tu hogar en calma.</p>
+</div>
+<button class="hidden md:flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-full hover:bg-primary-container hover:text-on-primary-container transition-colors font-label-md text-label-md shadow-level-1 min-h-[44px]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                Nueva Tarea
+            </button>
+</div>
+<!-- Bento Grid Layout for Task Sections -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- HOY Section (Spans more columns on desktop to emphasize priority) -->
+<section class="md:col-span-8 flex flex-col gap-md">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">today</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Hoy</h3>
+<span class="bg-surface-container text-on-surface-variant text-label-sm font-label-sm px-2 py-1 rounded-full ml-2">3</span>
+</div>
+<!-- Overdue Task Card -->
+<article class="bg-surface-container-lowest p-md rounded-xl border border-error-container shadow-level-1 flex flex-col sm:flex-row gap-4 items-start sm:items-center card-hover relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<label class="flex-shrink-0 flex items-center justify-center min-w-[44px] min-h-[44px]">
+<input class="custom-checkbox border-error" type="checkbox"/>
+</label>
+<div class="flex-1 w-full">
+<div class="flex justify-between items-start">
+<h4 class="text-body-lg font-body-lg text-on-surface font-medium">Sacar la basura</h4>
+<span class="text-label-sm font-label-sm text-error bg-error-container px-2 py-1 rounded-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Vencido
+                            </span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span> 08:00
+                            <span class="mx-1">•</span>
+<span class="material-symbols-outlined text-[16px]">repeat</span> Diaria
+                        </p>
+</div>
+<!-- Assignee Chip -->
+<div class="flex-shrink-0 flex items-center gap-2 bg-secondary-fixed-dim/20 px-3 py-1.5 rounded-full border border-secondary-fixed">
+<span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-label-sm font-label-sm">P</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Papá</span>
+</div>
+</article>
+<!-- Normal Today Task -->
+<article class="bg-surface-container-lowest p-md rounded-xl border border-surface-variant shadow-level-1 flex flex-col sm:flex-row gap-4 items-start sm:items-center card-hover">
+<label class="flex-shrink-0 flex items-center justify-center min-w-[44px] min-h-[44px]">
+<input class="custom-checkbox" type="checkbox"/>
+</label>
+<div class="flex-1 w-full">
+<h4 class="text-body-lg font-body-lg text-on-surface font-medium">Comprar pan</h4>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span> 18:30
+                        </p>
+</div>
+<!-- Assignee Chip -->
+<div class="flex-shrink-0 flex items-center gap-2 bg-tertiary-fixed-dim/20 px-3 py-1.5 rounded-full border border-tertiary-fixed">
+<span class="w-6 h-6 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center text-label-sm font-label-sm">E</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Elena</span>
+</div>
+</article>
+<!-- Normal Today Task -->
+<article class="bg-surface-container-lowest p-md rounded-xl border border-surface-variant shadow-level-1 flex flex-col sm:flex-row gap-4 items-start sm:items-center card-hover">
+<label class="flex-shrink-0 flex items-center justify-center min-w-[44px] min-h-[44px]">
+<input class="custom-checkbox" type="checkbox"/>
+</label>
+<div class="flex-1 w-full">
+<h4 class="text-body-lg font-body-lg text-on-surface font-medium">Regar plantas del salón</h4>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px]">water_drop</span> Sin hora fija
+                            <span class="mx-1">•</span>
+<span class="material-symbols-outlined text-[16px]">repeat</span> Semanal
+                        </p>
+</div>
+<!-- Assignee Chip -->
+<div class="flex-shrink-0 flex items-center gap-2 bg-primary-fixed/20 px-3 py-1.5 rounded-full border border-primary-fixed">
+<span class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-label-sm font-label-sm">M</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Mamá</span>
+</div>
+</article>
+</section>
+<!-- Sidebar Column for Upcoming and Completed -->
+<section class="md:col-span-4 flex flex-col gap-lg">
+<!-- PRÓXIMOS -->
+<div class="bg-surface-container-lowest p-md rounded-xl border border-surface-variant shadow-level-1">
+<div class="flex items-center gap-2 mb-4 border-b border-surface-variant pb-2">
+<span class="material-symbols-outlined text-tertiary">upcoming</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Próximos</h3>
+</div>
+<ul class="flex flex-col gap-sm">
+<li class="flex items-start gap-3 group">
+<span class="material-symbols-outlined text-outline mt-1 text-[20px]">circle</span>
+<div>
+<h4 class="text-body-md font-body-md text-on-surface group-hover:text-primary transition-colors cursor-pointer">Pagar recibo luz</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Mañana, 10:00</p>
+</div>
+</li>
+<li class="flex items-start gap-3 group">
+<span class="material-symbols-outlined text-outline mt-1 text-[20px]">circle</span>
+<div>
+<h4 class="text-body-md font-body-md text-on-surface group-hover:text-primary transition-colors cursor-pointer">Revisión caldera</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Jue, 24 Oct</p>
+</div>
+</li>
+</ul>
+<button class="w-full mt-4 py-2 border border-secondary text-secondary rounded-lg font-label-md text-label-md hover:bg-secondary/5 transition-colors min-h-[44px]">
+                        Ver calendario
+                    </button>
+</div>
+<!-- COMPLETADOS -->
+<div class="bg-surface-container-low p-md rounded-xl shadow-inner">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-inverse-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Completados</h3>
+</div>
+<ul class="flex flex-col gap-3 opacity-60">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-inverse-primary">check_box</span>
+<span class="text-body-md font-body-md text-on-surface-variant line-through decoration-outline">Barrer cocina</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-inverse-primary">check_box</span>
+<span class="text-body-md font-body-md text-on-surface-variant line-through decoration-outline">Comida del perro</span>
+</li>
+</ul>
+</div>
+</section>
+</div>
+</main>
+<!-- Mobile Floating Action Button (FAB) -->
+<button class="md:hidden fixed bottom-24 right-4 z-50 bg-primary text-on-primary w-14 h-14 rounded-2xl shadow-level-2 flex items-center justify-center hover:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] bg-surface-container-lowest docked full-width bottom-0 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary min-w-[44px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm font-label-sm mt-1">Inicio</span>
+</a>
+<!-- Active Tab: Casa -->
+<a class="flex flex-col items-center justify-center text-primary font-semibold scale-90 transition-transform min-w-[44px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cottage</span>
+<span class="text-label-sm font-label-sm mt-1">Casa</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary min-w-[44px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[28px] opacity-0">add_circle</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary min-w-[44px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-sm font-label-sm mt-1">Finanzas</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary min-w-[44px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-sm font-label-sm mt-1">Calendario</span>
+</a>
+</nav>
+</body></html>

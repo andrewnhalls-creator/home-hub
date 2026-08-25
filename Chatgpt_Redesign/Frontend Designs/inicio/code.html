@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Home Hub - Inicio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#9dd090",
+                        "primary": "#154212",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary-fixed-dim": "#ffb598",
+                        "primary-container": "#2d5a27",
+                        "background": "#f4fafd",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "secondary": "#974723",
+                        "surface-container": "#e8eff1",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2b3234",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#2c1600",
+                        "secondary-fixed": "#ffdbce",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary": "#52320b",
+                        "surface": "#f4fafd",
+                        "surface-container-high": "#e2e9ec",
+                        "on-surface": "#161d1f",
+                        "outline": "#72796e",
+                        "on-primary-fixed-variant": "#23501e",
+                        "tertiary-container": "#6d4820",
+                        "on-tertiary-container": "#ecb987",
+                        "outline-variant": "#c2c9bb",
+                        "on-surface-variant": "#42493e",
+                        "surface-dim": "#d4dbdd",
+                        "on-background": "#161d1f",
+                        "surface-variant": "#dde4e6",
+                        "surface-tint": "#3b6934",
+                        "surface-container-highest": "#dde4e6",
+                        "surface-container-low": "#eef5f7",
+                        "inverse-primary": "#a1d494",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#772f0c",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "primary-fixed-dim": "#a1d494",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#ff996e",
+                        "surface-bright": "#f4fafd",
+                        "inverse-on-surface": "#ebf2f4",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#370e00",
+                        "on-primary-fixed": "#002201",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "sm": "12px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #FDFCF8; }
+        .card-shadow { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); }
+        .fab-shadow { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); }
+    </style>
+</head>
+<body class="text-on-background font-body-md pb-24 md:pb-0">
+<!-- Header / TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 bg-background dark:bg-inverse-surface flat no shadows">
+<div class="flex items-center gap-2 cursor-pointer hover:bg-surface-container dark:hover:bg-surface-container-highest transition-colors rounded-lg p-2 -ml-2">
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed">Piso en Madrid</span>
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">swap_vert</span>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a friendly woman named Elena, representing the user profile avatar, smiling warmly in soft, natural Mediterranean morning light. The background is a gently blurred modern, light-toned apartment interior." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDClQWxisN2nAl2e8hS1Ox3U0LhgIDNmCbYe2yPWrX7h5f6E3rnjDULp_4RMV6v1UIFSMd3JasvYqy7uQWBG0Rj2XGFw-dRTSdpl-l5Z0-_PMJ7LGXebVZvaJUeEV13aGeXq7sI9CskYbI0ZF_U9zO_9KzH3Xreeg2KlnSuNGtK1AmS5quSpCqR-JNf2bYit4Y9klqda-pvzyyVvua-H6vtfa7k37H3H4Pz6YkLlqAHwWnV5iqRVUxm">
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="px-margin-mobile md:px-margin-desktop py-lg max-w-7xl mx-auto flex flex-col gap-lg">
+<!-- Greeting -->
+<section>
+<h1 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-primary">¡Hola, Elena!</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant mt-2">Aquí tienes un resumen de tu hogar hoy.</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Comidas (Bento Item 1) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-2xl p-md border border-outline-variant card-shadow flex flex-col md:flex-row gap-md items-center">
+<div class="w-full md:w-1/3 aspect-[4/3] rounded-xl overflow-hidden relative">
+<img alt="Lentejas con chorizo" class="w-full h-full object-cover absolute inset-0" data-alt="A comforting, rustic bowl of traditional Spanish lentil soup with chorizo, served on a textured light cream ceramic plate. Soft, warm directional window light casts gentle shadows, emphasizing the rich earthy tones and the fresh parsley garnish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCF8g4DGtCvxEwmbZpb_welqsxubG-3rxs4e3nLegbSPQwN6G9dIXplCS9F-LvNyWzQXEZjgtO_8KP1d9lzV7drhBDl02tUhQg1crTSy_VKwKy8tZ5nK-IhY10QDOsJ8DmkKTFees5VlWGnpayuA_DhxVYLql9SnUipvPCKDiTuUf-kx5nAQbAVG9i8ydpBbn9QFvzfZ7NKECeeDwU-m1PZoKhf3AZvW5BHL5Kw0Rwz9fjtJpDUASY2">
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 text-secondary mb-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="text-label-sm font-label-sm uppercase tracking-wider">Hoy para comer</span>
+</div>
+<h2 class="text-headline-md font-headline-md text-on-surface mb-2">Lentejas con chorizo</h2>
+<button class="text-primary text-label-md font-label-md flex items-center gap-1 hover:underline">
+                        Ver receta <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Tareas Pendientes (Bento Item 2) -->
+<div class="md:col-span-4 bg-surface-container-low rounded-2xl p-md border border-outline-variant card-shadow flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined">checklist</span>
+<span class="text-headline-sm font-headline-sm">Tareas</span>
+</div>
+</div>
+<ul class="flex flex-col gap-sm flex-1">
+<li class="flex items-center gap-3 bg-surface-container-lowest p-3 rounded-lg border border-outline-variant">
+<button class="rounded-full border-2 border-outline-variant flex items-center justify-center hover:border-primary transition-colors w-11 h-11" aria-label="Marcar tarea como completada"></button>
+<span class="text-body-md font-body-md flex-1">Poner lavadora</span>
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-label-sm font-label-sm">Tú</span>
+</li>
+</ul>
+</div>
+<!-- Recordatorios Urgentes (Bento Item 3) -->
+<div class="md:col-span-6 bg-[#fff8f6] rounded-2xl p-md border border-[#ffdbce] card-shadow">
+<div class="flex items-center gap-2 text-secondary mb-md">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">error</span>
+<span class="text-headline-sm font-headline-sm">Atención</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-0.5">shopping_cart</span>
+<span class="text-body-md font-body-md">Comprar pan</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-0.5">plumbing</span>
+<span class="text-body-md font-body-md">Llamar al fontanero</span>
+</div>
+</div>
+</div>
+<!-- Eventos & Finanzas (Bento Item 4) -->
+<div class="md:col-span-6 flex flex-col gap-lg">
+<!-- Evento -->
+<div class="bg-surface-container-lowest rounded-2xl p-md border border-outline-variant card-shadow flex justify-between items-center">
+<div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-1">
+<span class="material-symbols-outlined text-sm">calendar_month</span>
+<span class="text-label-sm font-label-sm">Próximo evento</span>
+</div>
+<p class="text-body-md font-body-md font-medium text-on-surface">Cena con los abuelos</p>
+</div>
+<div class="text-right">
+<p class="text-headline-sm font-headline-sm text-primary">20:30</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Hoy</p>
+</div>
+</div>
+<!-- Finanzas -->
+<div class="bg-surface-container-lowest rounded-2xl p-md border border-outline-variant card-shadow flex justify-between items-center">
+<div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-1">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span class="text-label-sm font-label-sm">Próximo pago</span>
+</div>
+<p class="text-body-md font-body-md font-medium text-on-surface">Alquiler</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">01/10</p>
+</div>
+<div class="text-right">
+<p class="text-headline-sm font-headline-sm text-primary">1.200€</p>
+</div>
+</div>
+</div>
+<!-- Actividad Reciente (Bento Item 5) -->
+<div class="md:col-span-12 bg-surface-container-lowest rounded-2xl p-md border border-outline-variant card-shadow flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-label-md shrink-0">
+                    D
+                </div>
+<div>
+<p class="text-body-md font-body-md text-on-surface">Dani ha añadido 'Leche' a la lista</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Hace 10 min</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest dark:bg-surface-container shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] rounded-t-xl">
+<!-- Inicio (Active) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed font-semibold scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-label-sm font-label-sm mt-1">Inicio</span>
+</a>
+<!-- Casa (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined">cottage</span>
+<span class="text-label-sm font-label-sm mt-1">Casa</span>
+</a>
+<!-- Center FAB Spacer -->
+<div class="w-14"></div>
+<!-- Finanzas (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-sm font-label-sm mt-1">Finanzas</span>
+</a>
+<!-- Calendario (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-sm font-label-sm mt-1">Calendario</span>
+</a>
+</nav>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 md:translate-x-0 md:left-auto md:right-10 z-[60] w-14 h-14 bg-primary text-on-primary rounded-full flex items-center justify-center fab-shadow hover:bg-primary-container transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary md:w-auto md:px-6 md:gap-2" aria-label="Añadir nuevo elemento">
+<span class="material-symbols-outlined" style="font-size: 28px;">add</span>
+<span class="hidden md:inline text-label-md font-label-md font-bold">Añadir</span>
+</button>
+
+
+</body></html>

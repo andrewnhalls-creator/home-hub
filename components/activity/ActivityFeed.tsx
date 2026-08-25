@@ -64,7 +64,7 @@ const MODULE_COLOR: Record<string, string> = {
   savings_goal:   "bg-rose/[0.15] text-rose",
   chore:          "bg-olive/[0.15] text-olive",
   wishlist_item:  "bg-rose/[0.15] text-rose",
-  document:       "bg-white/[0.10] text-muted",
+  document:       "bg-sand text-muted",
 };
 
 function dateGroupLabel(dateStr: string): string {
@@ -116,7 +116,7 @@ export function ActivityFeed({ entries, memberMap }: ActivityFeedProps) {
               "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition active:scale-[0.97]",
               activeFilter === f.value
                 ? "border-terracotta bg-terracotta text-cream"
-                : "border-white/[0.10] bg-white/[0.05] text-brown hover:bg-white/[0.10]",
+                : "border-border bg-sand/60 text-brown hover:bg-sand",
             )}
           >
             {f.label}

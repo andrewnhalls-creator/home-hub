@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Documentos - Piso en Madrid</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eef5f7",
+                        "secondary-fixed-dim": "#ffb598",
+                        "on-primary-fixed-variant": "#23501e",
+                        "on-surface-variant": "#42493e",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#002201",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary": "#974723",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary-container": "#6d4820",
+                        "surface": "#f4fafd",
+                        "surface-variant": "#dde4e6",
+                        "surface-container": "#e8eff1",
+                        "surface-tint": "#3b6934",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-secondary-container": "#772f0c",
+                        "on-tertiary-fixed": "#2c1600",
+                        "primary-fixed-dim": "#a1d494",
+                        "surface-bright": "#f4fafd",
+                        "outline": "#72796e",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#ff996e",
+                        "on-primary-container": "#9dd090",
+                        "on-tertiary-container": "#ecb987",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#dde4e6",
+                        "on-error": "#ffffff",
+                        "primary-container": "#2d5a27",
+                        "on-background": "#161d1f",
+                        "inverse-surface": "#2b3234",
+                        "surface-container-high": "#e2e9ec",
+                        "surface-dim": "#d4dbdd",
+                        "tertiary": "#52320b",
+                        "on-secondary-fixed": "#370e00",
+                        "primary": "#154212",
+                        "inverse-on-surface": "#ebf2f4",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c2c9bb",
+                        "background": "#f4fafd",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "on-surface": "#161d1f",
+                        "inverse-primary": "#a1d494"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "sm": "12px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f4fafd; /* background */
+            color: #161d1f; /* on-surface */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background text-on-surface font-body-md flex flex-col md:flex-row">
+<!-- Navigation Drawer (Desktop/Tablet) -->
+<nav class="hidden md:flex flex-col fixed inset-y-0 left-0 z-[60] bg-surface-container-low dark:bg-surface-container-high shadow-xl h-full w-72 rounded-r-xl py-lg">
+<div class="px-6 mb-8 flex items-center space-x-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-primary dark:text-primary-fixed">Elena García</h2>
+<p class="text-label-md font-label-md text-on-surface-variant">Piso en Madrid • Admin</p>
+</div>
+</div>
+<ul class="flex-1 space-y-2">
+<li>
+<a class="flex items-center space-x-3 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-r-full mr-4" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="text-body-md font-body-md">Recetas</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 bg-primary-container text-on-primary-container font-bold rounded-full mx-2 px-4 py-3 opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-body-md font-body-md">Documentos</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-r-full mr-4" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-body-md font-body-md">Ajustes</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-r-full mr-4" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="text-body-md font-body-md">Soporte</span>
+</a>
+</li>
+<li class="mt-auto">
+<a class="flex items-center space-x-3 text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-r-full mr-4" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-body-md font-body-md">Cerrar Sesión</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Top App Bar (Mobile) -->
+<header class="md:hidden sticky top-0 z-50 bg-background dark:bg-inverse-surface flex justify-between items-center w-full px-margin-mobile h-16">
+<button class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-primary dark:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="swap_vert">swap_vert</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed truncate">Piso en Madrid</h1>
+<div class="w-11 h-11 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full md:ml-72 pb-24 md:pb-8 pt-8 md:pt-12 px-margin-mobile md:px-margin-desktop">
+<div class="max-w-4xl mx-auto">
+<header class="mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+<div>
+<h1 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-surface mb-2">Documentos</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Gestiona facturas, seguros y garantías del hogar.</p>
+</div>
+<button class="bg-primary text-on-primary rounded-full px-6 py-3 flex items-center justify-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-md h-[44px] sm:h-auto">
+<span class="material-symbols-outlined">add</span>
+<span class="text-label-md font-label-md">Nuevo Documento</span>
+</button>
+</header>
+<!-- Filters -->
+<div class="flex gap-3 mb-8 overflow-x-auto pb-2 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0 scrollbar-hide">
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-full text-label-md font-label-md whitespace-nowrap border border-primary-container">Todos</button>
+<button class="bg-surface text-on-surface-variant px-4 py-2 rounded-full text-label-md font-label-md whitespace-nowrap border border-outline-variant hover:bg-surface-container transition-colors">Facturas</button>
+<button class="bg-surface text-on-surface-variant px-4 py-2 rounded-full text-label-md font-label-md whitespace-nowrap border border-outline-variant hover:bg-surface-container transition-colors">Seguros</button>
+<button class="bg-surface text-on-surface-variant px-4 py-2 rounded-full text-label-md font-label-md whitespace-nowrap border border-outline-variant hover:bg-surface-container transition-colors">Garantías</button>
+</div>
+<!-- Documents Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Card 1: Upcoming Expiry (Warning) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[16px] p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col h-full">
+<div class="absolute top-0 right-0 w-16 h-16 bg-error-container rounded-bl-[100%] z-0 opacity-50"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined">receipt_long</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-wider block">Facturas</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Factura Luz Octubre</h3>
+</div>
+</div>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant mb-6 flex-grow">Iberdrola - Consumo mensual del piso.</p>
+<div class="mt-auto">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-error text-[20px]">error</span>
+<span class="text-label-md font-label-md text-error">Vence en 3 días (15 Nov)</span>
+</div>
+<a class="inline-flex items-center justify-center w-full py-2 px-4 rounded-lg border border-outline text-on-surface hover:bg-surface-container transition-colors min-h-[44px]" href="#">
+<span class="material-symbols-outlined mr-2 text-[20px]">open_in_new</span>
+<span class="text-label-md font-label-md">Ver en portal</span>
+</a>
+</div>
+</div>
+<!-- Card 2: Safe/Good Standing -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[16px] p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col h-full">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined">shield</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-primary uppercase tracking-wider block">Seguros</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Seguro de Hogar Mapfre</h3>
+</div>
+</div>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant mb-6 flex-grow">Póliza anual básica con cobertura de daños por agua y robo.</p>
+<div class="mt-auto">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-surface-tint text-[20px]">check_circle</span>
+<span class="text-label-md font-label-md text-surface-tint">Renovación en 8 meses (Jun 2024)</span>
+</div>
+<a class="inline-flex items-center justify-center w-full py-2 px-4 rounded-lg border border-outline text-on-surface hover:bg-surface-container transition-colors min-h-[44px]" href="#">
+<span class="material-symbols-outlined mr-2 text-[20px]">open_in_new</span>
+<span class="text-label-md font-label-md">Ver póliza</span>
+</a>
+</div>
+</div>
+<!-- Card 3: Notice/Medium urgency -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[16px] p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col h-full">
+<div class="absolute top-0 right-0 w-16 h-16 bg-tertiary-container rounded-bl-[100%] z-0 opacity-20"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-tertiary uppercase tracking-wider block">Garantías</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Lavadora Bosch</h3>
+</div>
+</div>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant mb-6 flex-grow">Garantía extendida. Incluye piezas y mano de obra.</p>
+<div class="mt-auto">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-tertiary text-[20px]">schedule</span>
+<span class="text-label-md font-label-md text-tertiary">Expira en 45 días (30 Dic)</span>
+</div>
+<a class="inline-flex items-center justify-center w-full py-2 px-4 rounded-lg border border-outline text-on-surface hover:bg-surface-container transition-colors min-h-[44px]" href="#">
+<span class="material-symbols-outlined mr-2 text-[20px]">open_in_new</span>
+<span class="text-label-md font-label-md">Ver recibo</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] bg-surface-container-lowest dark:bg-surface-container rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed w-16 h-12" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed w-16 h-12" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="cottage">cottage</span>
+<span class="text-label-sm font-label-sm">Casa</span>
+</a>
+<!-- Add/FAB placeholder in nav -->
+<div class="relative -top-5">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined text-[28px]" data-icon="add_circle">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed w-16 h-12" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="payments">payments</span>
+<span class="text-label-sm font-label-sm">Finanzas</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed w-16 h-12" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-sm font-label-sm">Calendario</span>
+</a>
+</nav>
+</body></html>

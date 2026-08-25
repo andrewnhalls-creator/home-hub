@@ -186,7 +186,7 @@ export function DeudaTab({ debts }: DeudaTabProps) {
                       type="button"
                       aria-label="Editar deuda"
                       onClick={() => setEditingDebt(debt)}
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-white/[0.08] active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
                       <PencilSimple className="h-4 w-4" aria-hidden />
                     </button>

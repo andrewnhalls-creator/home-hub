@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es-ES"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Deudas - Piso en Madrid</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2b3234",
+                        "surface-container-high": "#e2e9ec",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "on-secondary-container": "#772f0c",
+                        "surface": "#f4fafd",
+                        "on-primary-container": "#9dd090",
+                        "surface-variant": "#dde4e6",
+                        "surface-container-low": "#eef5f7",
+                        "tertiary": "#52320b",
+                        "background": "#f4fafd",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#370e00",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "on-error-container": "#93000a",
+                        "primary": "#154212",
+                        "primary-fixed-dim": "#a1d494",
+                        "on-surface-variant": "#42493e",
+                        "on-surface": "#161d1f",
+                        "secondary-container": "#ff996e",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#ffdbce",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "secondary": "#974723",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#23501e",
+                        "inverse-primary": "#a1d494",
+                        "on-tertiary-container": "#ecb987",
+                        "outline-variant": "#c2c9bb",
+                        "surface-dim": "#d4dbdd",
+                        "on-error": "#ffffff",
+                        "outline": "#72796e",
+                        "surface-tint": "#3b6934",
+                        "on-primary-fixed": "#002201",
+                        "on-tertiary-fixed": "#2c1600",
+                        "tertiary-container": "#6d4820",
+                        "secondary-fixed-dim": "#ffb598",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f4fafd",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#bcf0ae",
+                        "inverse-on-surface": "#ebf2f4",
+                        "tertiary-fixed": "#ffdcbd",
+                        "surface-container-highest": "#dde4e6",
+                        "primary-container": "#2d5a27",
+                        "on-background": "#161d1f",
+                        "surface-container": "#e8eff1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "margin-mobile": "20px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "margin-desktop": "40px",
+                        "sm": "12px",
+                        "md": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FDFCF8; /* Custom Base Level 0 from Style Guide */
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="text-on-background min-h-screen flex flex-col md:flex-row">
+<!-- TopAppBar (Web) / Hidden on Mobile -->
+<header class="hidden md:flex justify-between items-center w-full px-margin-desktop h-16 bg-background dark:bg-inverse-surface fixed top-0 z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container transition-colors p-2 rounded-full" data-icon="swap_vert">swap_vert</span>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed tracking-tight">Piso en Madrid</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="flex gap-6">
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-primary transition-colors flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+                    Inicio
+                </a>
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-primary transition-colors flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container" href="#">
+<span class="material-symbols-outlined" data-icon="cottage">cottage</span>
+                    Casa
+                </a>
+<a class="text-primary font-bold text-label-md font-label-md bg-primary-container/20 rounded-lg flex items-center gap-2 px-3 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="payments" style="font-variation-settings: 'FILL' 1;">payments</span>
+                    Finanzas
+                </a>
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-primary transition-colors flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-container" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                    Calendario
+                </a>
+</nav>
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant cursor-pointer hover:bg-surface-container-highest transition-colors">
+<img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBEu9cdCu5kGObBOkEg8WhOVumIrA01HSxjmFqgxwMY5RRjWlTLO7KjFYxZG28W5k5IfbY4lPFj0ijgxduxyASUpOd-IEnnCtBJc_Ico4jBUFpScCkZaazsOWo_l8rXwm2KtvAjj65yPmYBpz2d4sSgYAEF_e-ds9xHAJg0j89jVDm_TxxO9Bujpsy7utXLYAoVJEIVGjegO1yni_wc_FKO0j0GXRPGXqnEvATuiCh6HQZa4dH3ip1"/>
+</div>
+</div>
+</header>
+<!-- TopAppBar (Mobile) -->
+<header class="md:hidden flex justify-between items-center w-full px-margin-mobile h-16 bg-background dark:bg-inverse-surface sticky top-0 z-40">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="swap_vert">swap_vert</span>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed">Piso en Madrid</h1>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcIAfpMzYG73Hf7oPG4d-eszIb_L-DNNK6xE6eDpaK8GtShMrrIi2N8ONZkp7efN8pXJEPaMkntnn1a_vPvr_pOgENwr9I5S7g1L19gTYomngA6TQsPf_vsOvKnXpctDafPomUMEPaaWjXHHGsfH_HFbo3CHnNgK5DmJRgb0CM8NXYdZOolcy4Y3eufRZ35NO9GBzJK0RoxJvaQ1QewY4rVUds_cEDf5jyRoHjNwKepz1Z4isq3IB6"/>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg md:pt-24 pb-24 md:pb-lg grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Header Section -->
+<div class="col-span-1 md:col-span-12 mb-4">
+<h2 class="text-headline-md font-headline-md text-on-surface mb-2">Deudas</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Resumen de obligaciones financieras del hogar.</p>
+</div>
+<!-- Total Debt Overview Bento Card -->
+<div class="col-span-1 md:col-span-12 bg-white rounded-[16px] p-lg border border-[#EBE9E0] card-shadow relative overflow-hidden">
+<!-- Decorative subtle pattern -->
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(#154212_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div>
+<h3 class="text-label-md font-label-md text-on-surface-variant mb-1 uppercase tracking-wider">Deuda Total Pendiente</h3>
+<p class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-surface">€18.450,00</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-primary text-white text-label-md font-label-md px-6 py-3 rounded-xl hover:bg-primary-container transition-colors shadow-sm flex items-center gap-2 min-h-[44px] min-w-[44px]">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                        Nueva Deuda
+                    </button>
+</div>
+</div>
+</div>
+<!-- Debt List - Grid Layout -->
+<div class="col-span-1 md:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-lg mt-4">
+<!-- Préstamo Coche Card -->
+<div class="bg-white rounded-[16px] p-lg border border-[#EBE9E0] card-shadow flex flex-col gap-4 hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+</div>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Préstamo Coche</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="account_balance">account_balance</span>
+                                Banco Santander
+                            </p>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[12px] font-medium bg-[#E8F5E9] text-[#2E7D32]">
+                        Al día
+                    </span>
+</div>
+<div class="mt-2">
+<div class="flex justify-between text-body-md font-body-md mb-2">
+<span class="text-on-surface-variant">Pendiente</span>
+<span class="font-semibold text-on-surface">€12.300,00</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-variant rounded-full h-2 mb-1">
+<div class="bg-primary h-2 rounded-full" style="width: 45%"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span>45% Pagado</span>
+<span>Total: €22.000,00</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-2 pt-4 border-t border-surface-variant">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Tasa de Interés</p>
+<p class="text-body-md font-body-md text-on-surface">5.2% TAE</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Próximo Pago</p>
+<p class="text-body-md font-body-md text-on-surface">€345,00 (05 Nov)</p>
+</div>
+</div>
+</div>
+<!-- Tarjeta de Crédito Card -->
+<div class="bg-white rounded-[16px] p-lg border border-[#EBE9E0] card-shadow flex flex-col gap-4 hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+</div>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Tarjeta VISA</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="account_balance">account_balance</span>
+                                BBVA
+                            </p>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[12px] font-medium bg-[#FFF3E0] text-[#E65100]">
+                        Pago Próximo
+                    </span>
+</div>
+<div class="mt-2">
+<div class="flex justify-between text-body-md font-body-md mb-2">
+<span class="text-on-surface-variant">Pendiente</span>
+<span class="font-semibold text-on-surface">€2.150,00</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-variant rounded-full h-2 mb-1">
+<div class="bg-secondary h-2 rounded-full" style="width: 70%"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span>Límite de crédito utilizado</span>
+<span>Límite: €3.000,00</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-2 pt-4 border-t border-surface-variant">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Tasa de Interés</p>
+<p class="text-body-md font-body-md text-on-surface">18.5% TAE</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Pago Mínimo</p>
+<p class="text-body-md font-body-md text-on-surface">€120,00 (28 Oct)</p>
+</div>
+</div>
+</div>
+<!-- Préstamo Reforma Card -->
+<div class="bg-white rounded-[16px] p-lg border border-[#EBE9E0] card-shadow flex flex-col gap-4 hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined" data-icon="home_repair_service">home_repair_service</span>
+</div>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Reforma Cocina</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="account_balance">account_balance</span>
+                                CaixaBank
+                            </p>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[12px] font-medium bg-[#E8F5E9] text-[#2E7D32]">
+                        Al día
+                    </span>
+</div>
+<div class="mt-2">
+<div class="flex justify-between text-body-md font-body-md mb-2">
+<span class="text-on-surface-variant">Pendiente</span>
+<span class="font-semibold text-on-surface">€4.000,00</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-variant rounded-full h-2 mb-1">
+<div class="bg-tertiary h-2 rounded-full" style="width: 80%"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span>80% Pagado</span>
+<span>Total: €20.000,00</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-2 pt-4 border-t border-surface-variant">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Tasa de Interés</p>
+<p class="text-body-md font-body-md text-on-surface">4.8% TAE</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Próximo Pago</p>
+<p class="text-body-md font-body-md text-on-surface">€250,00 (10 Nov)</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] bg-surface-container-lowest dark:bg-surface-container rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm mt-1">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="cottage">cottage</span>
+<span class="text-label-sm font-label-sm mt-1">Casa</span>
+</a>
+<a class="flex flex-col items-center justify-center -mt-6" href="#">
+<div class="bg-primary text-white rounded-full p-3 shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[28px]" data-icon="add_circle" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+</div>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed font-semibold scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="payments" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="text-label-sm font-label-sm mt-1">Finanzas</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-sm font-label-sm mt-1">Calendario</span>
+</a>
+</nav>
+</body></html>

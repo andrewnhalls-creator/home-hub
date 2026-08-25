@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Centro de Notificaciones y Ajustes</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#52320b",
+                        "inverse-primary": "#a1d494",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "inverse-on-surface": "#ebf2f4",
+                        "primary": "#154212",
+                        "outline": "#72796e",
+                        "on-primary-fixed-variant": "#23501e",
+                        "primary-fixed-dim": "#a1d494",
+                        "on-primary-container": "#9dd090",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#ffdbce",
+                        "on-secondary-fixed": "#370e00",
+                        "on-surface-variant": "#42493e",
+                        "on-primary-fixed": "#002201",
+                        "secondary-container": "#ff996e",
+                        "secondary-fixed-dim": "#ffb598",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d4dbdd",
+                        "on-surface": "#161d1f",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#2c1600",
+                        "surface-bright": "#f4fafd",
+                        "surface-container-high": "#e2e9ec",
+                        "on-background": "#161d1f",
+                        "on-secondary-container": "#772f0c",
+                        "primary-container": "#2d5a27",
+                        "background": "#f4fafd",
+                        "surface-variant": "#dde4e6",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-container": "#e8eff1",
+                        "surface": "#f4fafd",
+                        "outline-variant": "#c2c9bb",
+                        "surface-container-low": "#eef5f7",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2b3234",
+                        "tertiary-fixed": "#ffdcbd",
+                        "surface-tint": "#3b6934",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#ecb987",
+                        "surface-container-highest": "#dde4e6",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "secondary": "#974723",
+                        "primary-fixed": "#bcf0ae",
+                        "tertiary-container": "#6d4820"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "margin-desktop": "40px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Navigation Drawer (Desktop Shell) -->
+<nav class="hidden md:flex flex-col bg-surface-container-low fixed inset-y-0 left-0 z-[60] h-full w-72 rounded-r-xl shadow-xl py-lg">
+<!-- Header Profile -->
+<div class="px-md mb-lg flex items-center gap-md">
+<img alt="Usuario actual" class="w-12 h-12 rounded-full object-cover border-2 border-surface-container-lowest shadow-sm" data-alt="A small circular profile picture of a woman named Elena García, brightly lit, smiling warmly in a Mediterranean home setting, clean light-mode aesthetic, matching Casa Calma UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRWF0AzpXYIDBOfFsmyS5J3hkRhhCBNI-i_Oq4enZbmSecTVW4yfMhY3RhzLjWJE6Am7l9DwV0KuE3Wi4i2kl3e6k48-epKw7KRT2YaxlPu0gMqcffsEkP7-7DzV3IuXGXFpCaiI5PfEEOoUv7W20BH58Jl3ItzxzXSIQArPohGL8rRgNDsg7FRoHUGlAbDlNsYrZA4FQ-Q9F4JI9i1TmDOFl0VsR9UoeZkgXgx1vWrsrdQMGwZPkL"/>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-primary font-bold">Elena García</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Piso en Madrid</p>
+<span class="inline-block mt-xs bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">Admin</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<ul class="flex flex-col gap-xs flex-1">
+<!-- Inactive Tab -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2 text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span>Recetas</span>
+</a>
+</li>
+<!-- Inactive Tab -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2 text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined">description</span>
+<span>Documentos</span>
+</a>
+</li>
+<!-- Active Tab -->
+<li>
+<a class="flex items-center gap-md bg-primary-container text-on-primary-container font-bold rounded-full mx-2 px-4 py-3 opacity-80 hover:bg-surface-container-highest transition-colors text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span>Ajustes</span>
+</a>
+</li>
+<!-- Inactive Tab -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2 text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span>Soporte</span>
+</a>
+</li>
+</ul>
+<!-- Bottom Link -->
+<div class="mt-auto">
+<a class="flex items-center gap-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-colors rounded-full mx-2 text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Cerrar Sesión</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col md:ml-72 min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-background flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 docked full-width top-0 sticky z-40 transition-colors">
+<div class="flex items-center gap-sm">
+<button class="md:hidden p-2 -ml-2 text-on-surface-variant rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">swap_vert</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Piso en Madrid</h1>
+</div>
+<div class="flex items-center">
+<img alt="User profile avatar" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A clean, minimalist circular avatar placeholder showing a generic user silhouette in soft sage green tones, fitting a tranquil household management app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDak4lGLxpue8QWq-IQhY5QwTzVND4CkH_8YqVsElShiiiBDfsPWyl0t-QKHyK1QLVwL2xgzVr31afF3SviCIqvfMa2LNmKM1GKzNxcWojmf8XmkboVvF-Tq94H2xiCrDHhObfhRmLGevjMmnSh70zsCSbOWMDAQ98qP6UU_Kx6kdy-nywR429VDTCqxktTOHI9cO0b_kiy8b-ob6C51sgY6-U_VBmjqxZw_Bm2avzBWPqg6XTxUP99"/>
+</div>
+</header>
+<!-- Content Area -->
+<div class="px-margin-mobile md:px-margin-desktop py-lg max-w-7xl mx-auto w-full flex-1">
+<!-- Page Header (Contextual) -->
+<div class="mb-lg">
+<h2 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-primary tracking-tight">Avisos y Preferencias</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant mt-xs">Gestiona lo que ocurre en casa y cómo te enteras.</p>
+</div>
+<!-- iOS PWA Educational Banner -->
+<div class="bg-surface-container-low border border-outline-variant/50 rounded-xl p-md flex flex-col sm:flex-row items-start sm:items-center gap-md mb-xl shadow-sm relative overflow-hidden">
+<div class="absolute -right-10 -top-10 w-32 h-32 bg-secondary-container/20 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex-shrink-0 w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+</div>
+<div class="flex-1">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-xs">Activa las notificaciones push en iOS</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">Para recibir avisos inmediatos cuando alguien complete una tarea, instala esta app. Toca el icono <span class="inline-flex items-center justify-center bg-surface-container-highest rounded px-1.5 py-0.5 text-on-surface mx-1"><span class="material-symbols-outlined text-[16px]">ios_share</span></span> en la barra de tu navegador y selecciona <strong>"Añadir a pantalla de inicio"</strong>.</p>
+</div>
+<button class="shrink-0 text-label-md font-label-md text-primary font-bold hover:bg-surface-container px-4 py-2 rounded-full transition-colors mt-4 sm:mt-0">
+                    Entendido
+                </button>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Left Column: Historial (Recientes) -->
+<div class="lg:col-span-7 flex flex-col gap-md">
+<div class="flex items-center justify-between mb-xs">
+<h3 class="text-headline-md font-headline-md text-primary">Historial Reciente</h3>
+<button class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider hover:text-primary transition-colors">Marcar todo leído</button>
+</div>
+<!-- Notification Card 1 (Unread) -->
+<div class="bg-surface-container-lowest border-l-4 border-l-primary rounded-xl p-md shadow-sm flex items-start gap-md relative overflow-hidden group hover:shadow-md transition-shadow cursor-default">
+<div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-primary/5 to-transparent pointer-events-none"></div>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container">task_alt</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2">
+<p class="text-label-md font-label-md text-primary font-semibold flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+                                    Papá
+                                </p>
+<span class="text-label-sm font-label-sm text-on-surface-variant/70 shrink-0">Hace 10 min</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface mt-xs">Ha completado la tarea <strong>"Compra semanal"</strong>.</p>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1 line-clamp-1">"He dejado los tickets en la mesa del comedor."</p>
+</div>
+</div>
+<!-- Notification Card 2 (Read) -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm flex items-start gap-md opacity-80 hover:opacity-100 transition-opacity cursor-default">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant">local_florist</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2">
+<p class="text-label-md font-label-md text-on-surface-variant font-semibold">Sistema</p>
+<span class="text-label-sm font-label-sm text-on-surface-variant/70 shrink-0">Ayer, 18:30</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface mt-xs">Recordatorio automático: Regar las plantas del salón.</p>
+</div>
+</div>
+<!-- Notification Card 3 (Read) -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm flex items-start gap-md opacity-80 hover:opacity-100 transition-opacity cursor-default">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant">description</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2">
+<p class="text-label-md font-label-md text-on-surface-variant font-semibold">Elena</p>
+<span class="text-label-sm font-label-sm text-on-surface-variant/70 shrink-0">Lun, 09:15</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface mt-xs">Añadió un nuevo documento: <strong>"Recibo Luz Enero"</strong> en la sección de Finanzas.</p>
+</div>
+</div>
+<button class="w-full py-3 mt-2 rounded-xl border border-outline-variant text-label-md font-label-md text-on-surface-variant hover:bg-surface-container-lowest transition-colors flex items-center justify-center gap-2">
+                        Ver todas las notificaciones
+                        <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+<!-- Right Column: Settings Grid -->
+<div class="lg:col-span-5 flex flex-col gap-lg">
+<h3 class="text-headline-md font-headline-md text-primary mb-xs">Configuración</h3>
+<!-- Categories Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] border border-outline-variant/20 overflow-hidden">
+<div class="p-md border-b border-outline-variant/20 bg-surface-container-low/50">
+<h4 class="text-label-md font-label-md text-on-surface font-bold">Categorías de Avisos</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">Elige de qué quieres que te informemos.</p>
+</div>
+<div class="flex flex-col">
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-md hover:bg-surface-container-lowest/80 transition-colors border-b border-outline-variant/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-body-md font-body-md text-on-surface">Tareas Completadas</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-outline-variant after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-md hover:bg-surface-container-lowest/80 transition-colors border-b border-outline-variant/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">euro_symbol</span>
+<span class="text-body-md font-body-md text-on-surface">Nuevos Gastos</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-outline-variant after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-md hover:bg-surface-container-lowest/80 transition-colors border-b border-outline-variant/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">event</span>
+<span class="text-body-md font-body-md text-on-surface">Eventos del Calendario</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-outline-variant after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-md hover:bg-surface-container-lowest/80 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">campaign</span>
+<span class="text-body-md font-body-md text-on-surface">Menciones Directas</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" disabled="" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white/70 after:border after:border-outline-variant/50 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary/50 cursor-not-allowed"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Quiet Hours Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] border border-outline-variant/20 overflow-hidden">
+<div class="p-md border-b border-outline-variant/20 bg-surface-container-low/50 flex justify-between items-center">
+<div>
+<h4 class="text-label-md font-label-md text-on-surface font-bold">Horas de Silencio</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">Pausar notificaciones.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-outline-variant after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="p-md flex items-center justify-between gap-4">
+<div class="flex-1 bg-background rounded-lg p-3 border border-outline-variant/30 focus-within:border-primary transition-colors">
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Desde</label>
+<input class="w-full bg-transparent border-none p-0 text-body-lg font-body-lg text-primary focus:ring-0 outline-none" type="time" value="22:30"/>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+<div class="flex-1 bg-background rounded-lg p-3 border border-outline-variant/30 focus-within:border-primary transition-colors">
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Hasta</label>
+<input class="w-full bg-transparent border-none p-0 text-body-lg font-body-lg text-primary focus:ring-0 outline-none" type="time" value="08:00"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Shell) -->
+<!-- Note: Following semantic mapping rules, Settings/Notifications is typically a departure from the main flow. 
+         However, as per JSON provided, rendering the component structure exactly. 
+         No tab is active because this specific view doesn't correspond to the 5 primary intents. -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe docked full-width bottom-0 rounded-t-xl shadow-[0_-4px_12px_0_rgba(0,0,0,0.04)] bg-surface-container-lowest">
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="text-label-sm font-label-sm">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined mb-1">cottage</span>
+<span class="text-label-sm font-label-sm">Casa</span>
+</a>
+<!-- FAB Placeholder from JSON -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant relative -top-4" href="#">
+<div class="bg-primary text-on-primary rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</div>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined mb-1">payments</span>
+<span class="text-label-sm font-label-sm">Finanzas</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined mb-1">calendar_today</span>
+<span class="text-label-sm font-label-sm">Calendario</span>
+</a>
+</nav>
+</body></html>

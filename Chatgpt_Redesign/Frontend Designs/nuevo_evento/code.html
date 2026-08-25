@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Crear Evento - Casa Calma</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#52320b",
+                        "inverse-primary": "#a1d494",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "inverse-on-surface": "#ebf2f4",
+                        "primary": "#154212",
+                        "outline": "#72796e",
+                        "on-primary-fixed-variant": "#23501e",
+                        "primary-fixed-dim": "#a1d494",
+                        "on-primary-container": "#9dd090",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#ffdbce",
+                        "on-secondary-fixed": "#370e00",
+                        "on-surface-variant": "#42493e",
+                        "on-primary-fixed": "#002201",
+                        "secondary-container": "#ff996e",
+                        "secondary-fixed-dim": "#ffb598",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d4dbdd",
+                        "on-surface": "#161d1f",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#2c1600",
+                        "surface-bright": "#f4fafd",
+                        "surface-container-high": "#e2e9ec",
+                        "on-background": "#161d1f",
+                        "on-secondary-container": "#772f0c",
+                        "primary-container": "#2d5a27",
+                        "background": "#f4fafd",
+                        "surface-variant": "#dde4e6",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-container": "#e8eff1",
+                        "surface": "#f4fafd",
+                        "outline-variant": "#c2c9bb",
+                        "surface-container-low": "#eef5f7",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2b3234",
+                        "tertiary-fixed": "#ffdcbd",
+                        "surface-tint": "#3b6934",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#79300e",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#ecb987",
+                        "surface-container-highest": "#dde4e6",
+                        "tertiary-fixed-dim": "#f0bd8b",
+                        "secondary": "#974723",
+                        "primary-fixed": "#bcf0ae",
+                        "tertiary-container": "#6d4820"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "margin-desktop": "40px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Base input styling adjustments for Casa Calma aesthetic */
+        input[type="text"], input[type="date"], input[type="time"], textarea, select {
+            border-radius: 12px;
+            border-color: #c2c9bb; /* outline-variant */
+            background-color: transparent;
+            min-height: 44px;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #154212 !important; /* primary */
+            box-shadow: 0 0 0 1px #154212 !important;
+            outline: none;
+        }
+        
+        /* Custom scrollbar for textareas */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #dde4e6;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md antialiased pb-xl">
+<!-- TopAppBar (From JSON) -->
+<header class="docked full-width top-0 bg-background flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 flat no shadows z-40 sticky">
+<button aria-label="Volver" class="flex items-center justify-center w-11 h-11 rounded-full text-primary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[24px]">swap_vert</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Piso en Madrid</h1>
+<div class="w-11 h-11 rounded-full overflow-hidden bg-surface-variant flex-shrink-0 cursor-pointer">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A small, circular profile avatar showing a smiling young woman with dark hair in a well-lit, minimalist room, indicating the current user." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5UkiboL053L0y0uW7BJdMsnmoHtuuIR3q8olSjHUB7d-WYMriD3_JCoboUVxki0Fd9COvddQ1d-UfV_oPo9QrTvrzFrxOpoy77PF_EZaJZVgAi-nQqTb0rhWSn2QDoaI5ac9YqBgh6FEcqW5wJ8FkLWA71OFU_ngiQeq9k-RF9retsN-TErH-QPHVMpJi76PuF2LsK-8LmektQ7zfaVbMOp8Qzn-x1qBc-X7eKFmywI2RS43SV2OW"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-3xl mx-auto px-margin-mobile md:px-0 mt-lg">
+<!-- Task Header -->
+<div class="mb-lg flex items-center justify-between">
+<h2 class="text-headline-md font-headline-md text-on-surface">Nuevo Evento</h2>
+</div>
+<!-- Form Container (Level 1 Card) -->
+<form class="bg-surface-container-lowest rounded-[16px] p-md md:p-lg shadow-[0_4px_12px_0_rgba(0,0,0,0.04)] border border-[#EBE9E0]">
+<!-- Título -->
+<div class="mb-lg">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs" for="titulo">Título del evento</label>
+<input class="w-full px-4 py-3 text-body-lg font-body-lg text-on-surface placeholder:text-outline transition-colors" id="titulo" placeholder="Ej. Cena con abuelos, Pagar recibo luz..." required="" type="text"/>
+</div>
+<!-- Grid: Fecha y Hora (Inicio y Fin) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md md:gap-lg mb-lg">
+<!-- Inicio -->
+<div class="space-y-sm">
+<label class="block text-label-md font-label-md text-on-surface-variant">Empieza</label>
+<div class="flex gap-sm">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none">calendar_today</span>
+<input class="w-full pl-10 pr-3 py-3 text-body-md font-body-md text-on-surface" id="fecha-inicio" required="" type="date"/>
+</div>
+<div class="relative w-32 flex-shrink-0">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none">schedule</span>
+<input class="w-full pl-10 pr-3 py-3 text-body-md font-body-md text-on-surface" id="hora-inicio" type="time"/>
+</div>
+</div>
+</div>
+<!-- Fin -->
+<div class="space-y-sm">
+<label class="block text-label-md font-label-md text-on-surface-variant">Termina</label>
+<div class="flex gap-sm">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none">calendar_today</span>
+<input class="w-full pl-10 pr-3 py-3 text-body-md font-body-md text-on-surface" id="fecha-fin" type="date"/>
+</div>
+<div class="relative w-32 flex-shrink-0">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none">schedule</span>
+<input class="w-full pl-10 pr-3 py-3 text-body-md font-body-md text-on-surface" id="hora-fin" type="time"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Ubicación -->
+<div class="mb-lg relative">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs" for="ubicacion">Ubicación</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none">location_on</span>
+<input class="w-full pl-12 pr-4 py-3 text-body-md font-body-md text-on-surface placeholder:text-outline transition-colors" id="ubicacion" placeholder="Añadir lugar" type="text"/>
+</div>
+</div>
+<!-- Notas -->
+<div class="mb-lg">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs" for="notas">Notas adicionales</label>
+<textarea class="w-full px-4 py-3 text-body-md font-body-md text-on-surface placeholder:text-outline transition-colors resize-y" id="notas" placeholder="Detalles, enlaces, lista de la compra..." rows="3"></textarea>
+</div>
+<!-- Grid: Recurrencia y Avisos -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md md:gap-lg mb-xl">
+<!-- Recurrencia -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs" for="recurrencia">Se repite</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none">cycle</span>
+<select %2372796e\"="" 0="" 24="" 24\"="" class="w-full pl-12 pr-10 py-3 text-body-md font-body-md text-on-surface appearance-none bg-no-repeat" height='\"24\"' id="recurrencia" style="background-image: url('data:image/svg+xml;utf8,&lt;svg fill=\" viewbox='\"0' width='\"24\"' xmlns='\"http://www.w3.org/2000/svg\"'>'); background-position: right 12px center;"&gt;
+                            <option value="none">No se repite</option>
+<option value="daily">Todos los días</option>
+<option value="weekly">Todas las semanas</option>
+<option value="monthly">Todos los meses</option>
+<option value="yearly">Todos los años</option>
+</select>
+</div>
+</div>
+<!-- Avisos -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs" for="aviso">Aviso</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none">notifications</span>
+<select %2372796e\"="" 0="" 24="" 24\"="" class="w-full pl-12 pr-10 py-3 text-body-md font-body-md text-on-surface appearance-none bg-no-repeat" height='\"24\"' id="aviso" style="background-image: url('data:image/svg+xml;utf8,&lt;svg fill=\" viewbox='\"0' width='\"24\"' xmlns='\"http://www.w3.org/2000/svg\"'>'); background-position: right 12px center;"&gt;
+                            <option value="0">En el momento del evento</option>
+<option selected="" value="15">15 minutos antes</option>
+<option value="30">30 minutos antes</option>
+<option value="60">1 hora antes</option>
+<option value="1440">1 día antes</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Divider -->
+<hr class="border-t border-surface-variant mb-lg"/>
+<!-- Acciones -->
+<div class="flex flex-col-reverse sm:flex-row justify-end gap-md">
+<button class="border border-secondary text-secondary px-6 py-3 rounded-xl text-label-md font-label-md min-h-[44px] hover:bg-secondary-container hover:text-on-secondary-container transition-colors w-full sm:w-auto text-center" type="button">
+                    Cancelar
+                </button>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-xl text-label-md font-label-md min-h-[44px] hover:bg-primary-container hover:text-on-primary-container transition-colors w-full sm:w-auto text-center flex items-center justify-center gap-2 shadow-sm" type="submit">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                    Guardar Evento
+                </button>
+</div>
+</form>
+</main>
+<script>
+        // Simple logic to ensure end date is not before start date (UI enhancement)
+        const startDateInput = document.getElementById('fecha-inicio');
+        const endDateInput = document.getElementById('fecha-fin');
+
+        startDateInput.addEventListener('change', (e) => {
+            if(endDateInput.value === '' || endDateInput.value < e.target.value) {
+                endDateInput.value = e.target.value;
+            }
+            endDateInput.min = e.target.value;
+        });
+
+        // Form submission prevention for demo
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // In a real app, this would submit the data
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">sync</span> Guardando...';
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span> ¡Guardado!';
+                btn.classList.remove('bg-primary');
+                btn.classList.add('bg-[#a1d494]', 'text-[#002201]'); // inverse-primary / on-primary-fixed
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.add('bg-primary');
+                    btn.classList.remove('bg-[#a1d494]', 'text-[#002201]', 'opacity-80', 'cursor-not-allowed');
+                }, 2000);
+            }, 800);
+        });
+    </script>
+</body></html>

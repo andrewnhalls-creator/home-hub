@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Búsqueda Global - Casa Calma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#eef5f7",
+                      "secondary-fixed-dim": "#ffb598",
+                      "on-primary-fixed-variant": "#23501e",
+                      "on-surface-variant": "#42493e",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed": "#ffdbce",
+                      "on-primary-fixed": "#002201",
+                      "primary-fixed": "#bcf0ae",
+                      "secondary": "#974723",
+                      "on-error-container": "#93000a",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#623f18",
+                      "tertiary-container": "#6d4820",
+                      "surface": "#f4fafd",
+                      "surface-variant": "#dde4e6",
+                      "surface-container": "#e8eff1",
+                      "surface-tint": "#3b6934",
+                      "tertiary-fixed": "#ffdcbd",
+                      "on-secondary-container": "#772f0c",
+                      "on-tertiary-fixed": "#2c1600",
+                      "primary-fixed-dim": "#a1d494",
+                      "surface-bright": "#f4fafd",
+                      "outline": "#72796e",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "secondary-container": "#ff996e",
+                      "on-primary-container": "#9dd090",
+                      "on-tertiary-container": "#ecb987",
+                      "error": "#ba1a1a",
+                      "surface-container-highest": "#dde4e6",
+                      "on-error": "#ffffff",
+                      "primary-container": "#2d5a27",
+                      "on-background": "#161d1f",
+                      "inverse-surface": "#2b3234",
+                      "surface-container-high": "#e2e9ec",
+                      "surface-dim": "#d4dbdd",
+                      "tertiary": "#52320b",
+                      "on-secondary-fixed": "#370e00",
+                      "primary": "#154212",
+                      "inverse-on-surface": "#ebf2f4",
+                      "on-secondary-fixed-variant": "#79300e",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c2c9bb",
+                      "background": "#f4fafd",
+                      "tertiary-fixed-dim": "#f0bd8b",
+                      "on-surface": "#161d1f",
+                      "inverse-primary": "#a1d494"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "margin-mobile": "20px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "sm": "12px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "base": "8px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #FDFCF8; /* Manual override for Level 0 Cream Base based on Style Guidance, Tailwind config background is a light blue tint */
+        }
+        /* Custom utilities for soft ambient shadows */
+        .shadow-ambient-lvl1 {
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        .shadow-ambient-lvl2 {
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
+        }
+      </style>
+</head>
+<body class="text-on-surface font-body-md min-h-screen flex flex-col md:flex-row pb-safe">
+<!-- Mobile Top App Bar (Only visible on small screens when searching, acts as search header) -->
+<header class="md:hidden bg-background sticky top-0 z-40 flex flex-col w-full px-margin-mobile pt-sm pb-sm">
+<div class="flex items-center gap-sm">
+<button class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="relative flex-grow">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input autofocus="" class="w-full h-12 pl-10 pr-sm rounded-xl border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary transition-all text-body-md font-body-md outline-none" placeholder="Buscar en Casa Calma..." type="text"/>
+</div>
+<img alt="User profile avatar" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A small circular profile picture of a woman with dark hair smiling warmly in a sunlit kitchen, wearing a simple olive green shirt. The lighting is soft and natural, fitting a Mediterranean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0y_fyXjSTcko6c9OO3VKj_SmjTjdt3QRYi_1rzp8o9M2VHJwDCTvN_WxF-27x0gCa4e8pEteGAO1JvWOGoXKVBoC7vcqiGZrbyEKPH5eIuyGRDuKbOapE3icuvB_jSKmAH97Jxo8UA6v6YuaSh5FhqtAkJogUygxsm5QEtRoKIoONLv-U5Yy0aeWRSO7qw5Ur-kdPPq4XDRgAMWS_WFc0us0pTaM8fwQAmRDhDPaQXJAiOOKLgrGl"/>
+</div>
+</header>
+<!-- Navigation Drawer (Web) -->
+<nav class="hidden md:flex fixed inset-y-0 left-0 z-[60] flex-col py-lg bg-surface-container-low h-full w-72 rounded-r-xl shadow-xl">
+<div class="px-lg pb-md flex items-center gap-sm border-b border-surface-variant mb-md">
+<img alt="Usuario actual" class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A small circular profile picture of a woman with dark hair smiling warmly in a sunlit kitchen, wearing a simple olive green shirt. The lighting is soft and natural, fitting a Mediterranean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfv9OHCc9CSbBxRpI0VcKn0X7Fs10OTXVXq9ZHQxoiSiRKRM7oguxwKtkNu6HOcrQybJ01Xq74Y3T3x937NmaH0pkOs1Yg6S1pBjI2vt_dxGJR7CRDyfIq77eNTBhr5y8h1nTh-eX1LE8SJ6wc9a0-RWRyp6n-lDT_rGMzuDEpO8n_fN4CPRIHbTaDZUw3ZTRpdLRFgPSL7NuAuHA3oXLvCmKDPxP8APeBesDXdGBBvkERTYSKSTIZ"/>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary font-bold">Elena García</h2>
+<p class="font-label-md text-label-md text-on-surface-variant">Piso en Madrid</p>
+</div>
+</div>
+<ul class="flex flex-col gap-xs px-sm flex-grow">
+<!-- No active state needed here as we are in a global search overlay/mode, but visually we might show 'Casa' as the base -->
+<li><a class="flex items-center gap-sm px-4 py-3 rounded-full hover:bg-surface-container-highest transition-colors text-on-surface-variant font-label-md text-label-md" href="#"><span class="material-symbols-outlined" data-icon="home">home</span>Inicio</a></li>
+<li><a class="flex items-center gap-sm px-4 py-3 rounded-full hover:bg-surface-container-highest transition-colors text-on-surface-variant font-label-md text-label-md" href="#"><span class="material-symbols-outlined" data-icon="cottage">cottage</span>Casa</a></li>
+<li><a class="flex items-center gap-sm px-4 py-3 rounded-full hover:bg-surface-container-highest transition-colors text-on-surface-variant font-label-md text-label-md" href="#"><span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>Recetas</a></li>
+<li><a class="flex items-center gap-sm px-4 py-3 rounded-full hover:bg-surface-container-highest transition-colors text-on-surface-variant font-label-md text-label-md" href="#"><span class="material-symbols-outlined" data-icon="payments">payments</span>Finanzas</a></li>
+<li><a class="flex items-center gap-sm px-4 py-3 rounded-full hover:bg-surface-container-highest transition-colors text-on-surface-variant font-label-md text-label-md" href="#"><span class="material-symbols-outlined" data-icon="description">description</span>Documentos</a></li>
+</ul>
+<ul class="flex flex-col gap-xs px-sm mt-auto">
+<li><a class="flex items-center gap-sm px-4 py-3 rounded-full hover:bg-surface-container-highest transition-colors text-on-surface-variant font-label-md text-label-md" href="#"><span class="material-symbols-outlined" data-icon="settings">settings</span>Ajustes</a></li>
+<li><a class="flex items-center gap-sm px-4 py-3 rounded-full hover:bg-surface-container-highest transition-colors text-on-surface-variant font-label-md text-label-md" href="#"><span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>Soporte</a></li>
+</ul>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 w-full md:ml-72 flex flex-col md:px-margin-desktop md:py-lg min-h-screen">
+<!-- Desktop Search Header -->
+<header class="hidden md:flex items-center gap-md mb-xl w-full max-w-4xl mx-auto">
+<button class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="relative flex-grow">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full h-14 pl-12 pr-md rounded-xl border border-primary focus:border-primary focus:ring-1 focus:ring-primary transition-all text-body-lg font-body-lg bg-surface-container-lowest outline-none shadow-ambient-lvl1" placeholder="Buscar recetas, documentos, gastos..." type="text" value="paella"/>
+<button class="absolute right-sm top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+</div>
+</header>
+<!-- Search Content -->
+<div class="w-full max-w-4xl mx-auto px-margin-mobile md:px-0 flex flex-col gap-xl pb-24 md:pb-0">
+<!-- Bento Grid Layout for Results -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-md md:gap-lg">
+<!-- Recetas Category -->
+<section class="md:col-span-8 flex flex-col gap-sm">
+<h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+                        Recetas
+                    </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-sm">
+<!-- Result Card -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-[#EBE9E0] flex gap-4 hover:shadow-ambient-lvl1 transition-shadow cursor-pointer">
+<div class="w-16 h-16 rounded-lg bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A close up overhead shot of a vibrant traditional Spanish paella in a black pan, featuring yellow saffron rice, shrimp, mussels, and lemon wedges. The lighting is warm and natural, evoking a sunny afternoon lunch." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASRusyfpl_jZjX2Bvsai4dOL7TqxSbvjtyMGboT5rIF9exEunJ2MtaMIfG33cfLAkW2Cwjc4XVwkrLWdorJRWhfncFuLj3PgsWTxmFNdx0xqS7mUtA7o26wRTfhC-FuMW-uiMpHjFBXVwYpVjM3iTSyQiwK8k_d8ohGsVVd07SGlwLvWU-Gl457ASmfwjlAptOwtmPz-jDefbnCqmKr1hIhPrY5Ub9fzxpa64jDRQh-YYOSdBeizOQ"/>
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Paella de Mariscos</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Añadida por Mamá • 45 min</p>
+</div>
+</div>
+<!-- Result Card -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-[#EBE9E0] flex gap-4 hover:shadow-ambient-lvl1 transition-shadow cursor-pointer">
+<div class="w-16 h-16 rounded-lg bg-surface-container overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline-variant text-[32px]" data-icon="receipt_long">receipt_long</span>
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Lista de la compra: Paella</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Faltan 3 ingredientes</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Documentos Category -->
+<section class="md:col-span-4 flex flex-col gap-sm">
+<h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                        Documentos
+                    </h3>
+<div class="flex flex-col gap-sm">
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-[#EBE9E0] flex items-center justify-between hover:shadow-ambient-lvl1 transition-shadow cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed/30 flex items-center justify-center text-on-secondary-container shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Ticket Paellera</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">12 Mar 2023</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Finanzas Category -->
+<section class="md:col-span-12 flex flex-col gap-sm mt-md">
+<h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                        Finanzas
+                    </h3>
+<div class="bg-surface-container-lowest rounded-xl border border-[#EBE9E0] overflow-hidden">
+<div class="flex items-center justify-between p-4 border-b border-[#EBE9E0] hover:bg-surface-container/30 transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-on-error-container shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="shopping_cart">shopping_cart</span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Compra Supermercado (Ingredientes Paella)</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center justify-center h-5 px-2 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-[10px]">Compartido</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mercadona • Hace 2 días</span>
+</div>
+</div>
+</div>
+<div class="font-label-md text-label-md font-bold text-error">- 45,20 €</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Suppressed Bottom Navigation for Search Context -->
+<!-- As per the rules, bottom nav is hidden on transactional/focused screens like search -->
+</body></html>
