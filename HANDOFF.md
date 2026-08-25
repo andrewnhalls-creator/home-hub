@@ -7,7 +7,16 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1 (design-system foundation) and F2 (app shell) are complete.** Build passes, lint 0 errors, typecheck clean. F2 verified visually at 480px and desktop against the live app.
+**Stages F1 (design system), F2 (app shell) and F3 (auth y hogar) are complete.**
+
+What F3 changed (commit 27aff2a):
+- Login/signup/forgot/reset restyled as centred white cards with icon headers; login has
+  field icons, show-password toggle and the mockup's copy ("Bienvenido a casa").
+- Onboarding is now two-step: selectable create/join cards ("¿Cómo quieres empezar?") → form.
+- New `HouseholdSwitchSheet` ("Seleccionar hogar") opens from the TopBar household pill,
+  lists memberships with member counts (fetched in `app/(app)/layout.tsx`) and calls
+  `switchHousehold`; "Añadir otra casa" links to /ajustes.
+- `Input` gained `icon`, `endSlot`, `labelEnd` props. Build passes, lint 0 errors, typecheck clean. F2 verified visually at 480px and desktop against the live app.
 
 What F2 changed (commit bb4a165):
 - Bottom nav: Inicio · Compra · center green quick-add FAB · Finanzas · Calendario; the FAB opens
