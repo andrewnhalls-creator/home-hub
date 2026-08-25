@@ -1,76 +1,60 @@
-import { cn } from "@/lib/utils";
-import { HouseholdSwitcherMenu } from "@/components/dashboard/HouseholdSwitcherMenu";
-
-interface Membership {
-  household_id: string;
-  role: "owner" | "member";
-  households: { name: string } | null;
-}
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { AddNewButton } from "@/components/dashboard/AddNewButton";
 
 interface GreetingCardProps {
   firstName?: string;
   householdName: string;
   pendingCount: number;
-  allMemberships?: Membership[];
-  activeHouseholdId?: string;
 }
 
-export function GreetingCard({
-  firstName,
-  householdName,
-  pendingCount,
-  allMemberships,
-  activeHouseholdId,
-}: GreetingCardProps) {
-  const greeting = firstName ? `Hola, ${firstName}` : "Hola";
-  const hasMultiple = (allMemberships?.length ?? 0) > 1;
+function madridHour(now: Date): number {
+  return Number(
+    new Intl.DateTimeFormat("es-ES", {
+      hour: "numeric",
+      hour12: false,
+      timeZone: "Europe/Madrid",
+    }).format(now),
+  );
+}
 
-  const statusLine =
+export function GreetingCard({ firstName, householdName, pendingCount }: GreetingCardProps) {
+  const now = new Date();
+  const hour = madridHour(now);
+  const daypart =
+    hour < 7 || hour >= 21 ? "¡Buenas noches" : hour < 14 ? "¡Buenos días" : "¡Buenas tardes";
+  const emoji = hour < 7 || hour >= 21 ? "🌙" : hour < 14 ? "☀️" : "🌤️";
+
+  const dateSentence = format(now, "EEEE, d 'de' MMMM", { locale: es });
+  const dateLine = `Es ${dateSentence}.`;
+  const pendingLine =
     pendingCount === 0
-      ? "Todo en orden por hoy."
+      ? `Todo en orden hoy en ${householdName}.`
       : pendingCount === 1
-        ? "Tienes 1 cosa pendiente."
-        : `Tienes ${pendingCount} cosas pendientes.`;
+        ? `Hay 1 cosa pendiente hoy en ${householdName}.`
+        : `Hay ${pendingCount} cosas pendientes hoy en ${householdName}.`;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-terracotta/[0.25] bg-terracotta/[0.10] p-5 pb-7">
-      <div className="flex flex-col gap-2">
-        <p className="font-display text-5xl font-bold text-brown tracking-tight leading-none">{greeting}</p>
+    <div className="flex items-start justify-between gap-4">
+      <div className="min-w-0">
+        {/* Mobile greeting */}
+        <h1 className="text-3xl font-bold tracking-tight text-brown md:hidden">
+          {firstName ? `¡Hola, ${firstName}!` : "¡Hola!"}
+        </h1>
+        <p className="mt-1 text-sm text-muted md:hidden">
+          Aquí tienes un resumen de tu hogar hoy.
+        </p>
 
-        <div className="flex items-center gap-2">
-          {hasMultiple && allMemberships && activeHouseholdId ? (
-            <HouseholdSwitcherMenu
-              memberships={allMemberships}
-              activeHouseholdId={activeHouseholdId}
-            />
-          ) : (
-            <p className="text-sm text-muted">{householdName}</p>
-          )}
-        </div>
-
-        <div className="mt-2 flex items-center gap-2">
-          <div
-            className={cn(
-              "h-2 w-2 shrink-0 rounded-full",
-              pendingCount === 0 ? "bg-success" : "bg-amber",
-            )}
-            aria-hidden
-          />
-          <p
-            className={cn(
-              "text-sm font-medium",
-              pendingCount === 0 ? "text-success" : "text-brown",
-            )}
-          >
-            {statusLine}
-          </p>
-        </div>
+        {/* Desktop greeting */}
+        <h1 className="hidden text-3xl font-bold tracking-tight text-brown md:block">
+          {firstName ? `${daypart}, ${firstName}! ${emoji}` : `${daypart}! ${emoji}`}
+        </h1>
+        <p className="mt-1 hidden text-sm text-muted md:block">
+          {dateLine} {pendingLine}
+        </p>
       </div>
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px"
-        style={{ background: "linear-gradient(90deg, transparent, rgba(232,197,71,0.35), transparent)" }}
-      />
+
+      <AddNewButton className="hidden shrink-0 md:inline-flex" />
     </div>
   );
 }

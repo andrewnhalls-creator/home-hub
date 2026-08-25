@@ -1,12 +1,15 @@
 import { MetricGrid } from "@/components/dashboard/MetricGrid";
-import { Card } from "@/components/ui/Card";
-import { ForkKnife, CalendarDots, WarningCircle } from "@phosphor-icons/react/dist/ssr";
-import { startOfWeek, endOfWeek, format, isPast, parseISO } from "date-fns";
+import { CalendarDots, Receipt } from "@phosphor-icons/react/dist/ssr";
+import { startOfWeek, endOfWeek, format, isPast, isToday, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentCycleDates, getSubscriptionCycleStatus } from "@/lib/cycle";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { GreetingCard } from "@/components/dashboard/GreetingCard";
+import { TodayMealCard } from "@/components/dashboard/TodayMealCard";
+import { AttentionCard } from "@/components/dashboard/AttentionCard";
+import { NextUpCard } from "@/components/dashboard/NextUpCard";
 import { WeekCalendarWidget } from "@/components/dashboard/WeekCalendarWidget";
 import { ListSection } from "@/components/dashboard/ListSection";
 
@@ -23,7 +26,6 @@ export default async function DashboardPage() {
   const cycleEnd = format(cycleEndDate, "yyyy-MM-dd");
 
   const [
-    { data: allMemberships },
     { count: shoppingCount },
     { count: weekMealsCount },
     { data: reminders, count: remindersCount },
@@ -34,11 +36,6 @@ export default async function DashboardPage() {
     { data: calendarEvents },
     { data: todayMeals },
   ] = await Promise.all([
-    supabase
-      .from("household_members")
-      .select("household_id, role, households(name)")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: true }),
     supabase
       .from("shopping_items")
       .select("id", { count: "exact", head: true })
@@ -86,7 +83,7 @@ export default async function DashboardPage() {
       .limit(100),
     supabase
       .from("calendar_events")
-      .select("id, title, event_date")
+      .select("id, title, event_date, event_time")
       .eq("household_id", householdId)
       .is("deleted_at", null)
       .gte("event_date", weekStart)
@@ -129,16 +126,37 @@ export default async function DashboardPage() {
   const proximosCount = pendingFixedPayments.length + pendingSubscriptions.length;
   const hasOverduePayments = (cycleInstances ?? []).some((i) => i.status === "vencido");
 
-  const todayEvents = (calendarEvents ?? []).filter((e) => e.event_date === todayStr).slice(0, 2);
-  const overdueToday = (reminders ?? []).filter((r) => r.due_at && isPast(new Date(r.due_at))).slice(0, 2);
-  const mealItems = (todayMeals ?? []).map((m) => {
+  const overdueToday = (reminders ?? []).filter((r) => r.due_at && isPast(new Date(r.due_at))).slice(0, 3);
+  const mealPairs = (todayMeals ?? []).map((m) => {
     const r = m.recipes as unknown;
     const recipeName = Array.isArray(r) ? (r[0]?.name ?? null) : ((r as { name: string } | null)?.name ?? null);
-    const displayName = m.custom_name ?? recipeName;
+    const name = m.custom_name ?? recipeName;
     const label = m.meal_type === "comida" ? "Comida" : "Cena";
-    return displayName ? `${label}: ${displayName}` : null;
-  }).filter((x): x is string => x !== null);
-  const hasTodayBrief = mealItems.length > 0 || todayEvents.length > 0 || overdueToday.length > 0;
+    return name ? { label, name } : null;
+  }).filter((x): x is { label: string; name: string } => x !== null);
+
+  // Next upcoming event (today or later within the week)
+  const nextEvent = (calendarEvents ?? []).find((e) => e.event_date >= todayStr);
+  const nextEventWhen = nextEvent
+    ? isToday(parseISO(nextEvent.event_date))
+      ? "Hoy"
+      : format(parseISO(nextEvent.event_date), "EEEE d", { locale: es })
+    : null;
+
+  // Next pending fixed payment
+  const nextPayment = pendingFixedPayments[0];
+
+  const attentionItems = [
+    ...overdueToday.map((r) => ({
+      id: r.id,
+      title: r.title,
+      href: "/recordatorios",
+      kind: "reminder" as const,
+    })),
+    ...(hasOverduePayments
+      ? [{ id: "overdue-payments", title: "Tienes pagos vencidos", href: "/finanzas", kind: "payment" as const }]
+      : []),
+  ];
 
   return (
     <div className="flex flex-col gap-5">
@@ -147,39 +165,44 @@ export default async function DashboardPage() {
         firstName={firstName}
         householdName={householdName}
         pendingCount={pendingCount}
-        allMemberships={(allMemberships ?? []) as unknown as { household_id: string; role: "owner" | "member"; households: { name: string } | null }[]}
-        activeHouseholdId={householdId}
       />
 
-      {/* Hoy — only when there's something to show */}
-      {hasTodayBrief && (
-        <Card>
-          <p className="mb-3 text-xs font-medium text-muted">Hoy</p>
-          <ul className="flex flex-col gap-2">
-            {mealItems.map((label) => (
-              <li key={label} className="flex items-center gap-2 text-sm text-brown">
-                <ForkKnife weight="light" className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden />
-                {label}
-              </li>
-            ))}
-            {todayEvents.map((e) => (
-              <li key={e.id} className="flex items-center gap-2 text-sm text-brown">
-                <CalendarDots weight="light" className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden />
-                {e.title}
-              </li>
-            ))}
-            {overdueToday.map((r) => (
-              <li key={r.id} className="flex items-center gap-2 text-sm font-medium text-danger">
-                <WarningCircle weight="fill" className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                {r.title}
-              </li>
-            ))}
-          </ul>
-        </Card>
-      )}
+      {/* Hero: today's menu + next event / next payment */}
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        {mealPairs.length > 0 && <TodayMealCard meals={mealPairs} />}
+        <div className="flex flex-col gap-3">
+          {nextEvent && (
+            <NextUpCard
+              label="Próximo evento"
+              title={nextEvent.title}
+              href="/calendario"
+              icon={CalendarDots}
+              iconColor="text-olive"
+              iconBg="bg-olive/10"
+              primary={nextEvent.event_time ? nextEvent.event_time.slice(0, 5) : (nextEventWhen ?? "")}
+              secondary={nextEvent.event_time ? (nextEventWhen ?? undefined) : undefined}
+            />
+          )}
+          {nextPayment && (
+            <NextUpCard
+              label="Próximo pago"
+              title={nextPayment.name}
+              href="/finanzas"
+              icon={Receipt}
+              iconColor="text-amber"
+              iconBg="bg-amber/10"
+              primary={formatCurrency(nextPayment.amount)}
+              secondary={nextPayment.due_day ? `Día ${nextPayment.due_day}` : undefined}
+            />
+          )}
+        </div>
+      </div>
 
-      {/* Pending finances — above the module cards */}
-      {pendingFixedPayments.length > 0 && (
+      {/* Atención — overdue things that need action */}
+      <AttentionCard items={attentionItems} />
+
+      {/* Pending finances */}
+      {pendingFixedPayments.length > 1 && (
         <ListSection
           title="Próximos pagos"
           href="/finanzas"
