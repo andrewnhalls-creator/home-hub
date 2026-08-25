@@ -7,7 +7,16 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1 (design system), F2 (app shell) and F3 (auth y hogar) are complete.**
+**Stages F1 (design system), F2 (app shell), F3 (auth y hogar) and F4 (Inicio) are complete.**
+
+What F4 changed (commit d93ae68):
+- Dashboard recomposed: greeting hero (mobile "¡Hola, X!", desktop time-of-day + date sentence +
+  "Añadir nuevo" button → QuickAddSheet), TodayMealCard ("Hoy para comer" sage hero → /menu),
+  NextUpCard rows (Próximo evento with event_time, Próximo pago with amount), AttentionCard
+  (danger tint, overdue reminders/payments). All render only with real data — no fake content.
+- GreetingCard is a server component now; HouseholdSwitcherMenu deleted (TopBar sheet covers it).
+- Note: hero cards were verified only with empty data (the live household has no meals/events);
+  re-check visually once real data exists.
 
 What F3 changed (commit 27aff2a):
 - Login/signup/forgot/reset restyled as centred white cards with icon headers; login has
