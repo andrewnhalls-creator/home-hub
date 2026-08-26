@@ -2,6 +2,24 @@
 
 ## Active
 
+### pg_net still in `public` schema (advisor WARN 0014)
+- `ALTER EXTENSION pg_net SET SCHEMA` is unsupported on the installed version (0.20.3),
+  so the fix is drop+recreate (`sql/036_relocate_pg_net.sql`, NOT applied). The
+  permission classifier blocked the DROP in auto mode — apply after user approval.
+  Push cron (`net.http_post`) keeps working; only the transient async queue is lost.
+
+### Leaked-password protection disabled (advisor WARN)
+- User action: enable in Supabase Auth dashboard (Password security → check against
+  HaveIBeenPwned). No code change involved.
+
+### Advisor WARNs kept intentionally (documented exceptions)
+- `authenticated` can execute SECURITY DEFINER fns `create_household`,
+  `redeem_household_invite`, `switch_household` (user-facing RPCs) and
+  `is_household_member` / `is_household_owner` (RLS policy helpers) — by design;
+  `anon` is fully revoked (migration 035).
+- 5 "unused index" INFO lints kept: real query-support indexes; zero scans only
+  because the DB is nearly empty.
+
 ### GitHub repo is public (intentional, Hobby plan)
 - **Decision 2026-06-19**: Staying on Vercel Hobby. Public repo is required for GitHub-triggered auto-deploys on Hobby.
 - **Risk**: Code is publicly readable. Acceptable — no secrets are committed (`.env.local` gitignored; service-role key and VAPID private key are only in Supabase/Vercel dashboards, never in the repo).

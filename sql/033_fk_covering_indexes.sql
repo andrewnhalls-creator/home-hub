@@ -1,0 +1,72 @@
+-- 033: FK covering indexes (backend slice B1.1, part a)
+-- APPLIED 2026-08-26 as remote migration `033a_fk_covering_indexes`.
+-- Covers all 66 unindexed foreign keys flagged by Supabase advisor 0001.
+-- The 5 "unused index" INFO lints were deliberately KEPT: they are
+-- query-support indexes with zero scans only because the database is tiny.
+
+create index if not exists idx_activity_log_actor_id on activity_log (actor_id);
+create index if not exists idx_calendar_events_created_by on calendar_events (created_by);
+create index if not exists idx_calendar_events_deleted_by on calendar_events (deleted_by);
+create index if not exists idx_categories_archived_by on categories (archived_by);
+create index if not exists idx_category_budgets_category_id on category_budgets (category_id);
+create index if not exists idx_category_budgets_created_by on category_budgets (created_by);
+create index if not exists idx_chore_completions_completed_by on chore_completions (completed_by);
+create index if not exists idx_chore_completions_household_id on chore_completions (household_id);
+create index if not exists idx_chores_assigned_to on chores (assigned_to);
+create index if not exists idx_chores_created_by on chores (created_by);
+create index if not exists idx_debts_created_by on debts (created_by);
+create index if not exists idx_debts_deleted_by on debts (deleted_by);
+create index if not exists idx_expenses_category_id on expenses (category_id);
+create index if not exists idx_expenses_created_by on expenses (created_by);
+create index if not exists idx_expenses_deleted_by on expenses (deleted_by);
+create index if not exists idx_expenses_paid_by on expenses (paid_by);
+create index if not exists idx_fixed_payments_category_id on fixed_payments (category_id);
+create index if not exists idx_fixed_payments_created_by on fixed_payments (created_by);
+create index if not exists idx_fixed_payments_deleted_by on fixed_payments (deleted_by);
+create index if not exists idx_household_documents_archived_by on household_documents (archived_by);
+create index if not exists idx_household_documents_created_by on household_documents (created_by);
+create index if not exists idx_household_documents_deleted_by on household_documents (deleted_by);
+create index if not exists idx_household_invites_created_by on household_invites (created_by);
+create index if not exists idx_household_invites_household_id on household_invites (household_id);
+create index if not exists idx_household_invites_used_by on household_invites (used_by);
+create index if not exists idx_households_created_by on households (created_by);
+create index if not exists idx_income_sources_created_by on income_sources (created_by);
+create index if not exists idx_income_sources_deleted_by on income_sources (deleted_by);
+create index if not exists idx_meal_plans_created_by on meal_plans (created_by);
+create index if not exists idx_meal_plans_recipe_id on meal_plans (recipe_id);
+create index if not exists idx_mortgage_payments_created_by on mortgage_payments (created_by);
+create index if not exists idx_mortgage_payments_paid_by on mortgage_payments (paid_by);
+create index if not exists idx_mortgages_archived_by on mortgages (archived_by);
+create index if not exists idx_mortgages_created_by on mortgages (created_by);
+create index if not exists idx_mortgages_deleted_by on mortgages (deleted_by);
+create index if not exists idx_notification_delivery_attempts_push_subscription_id on notification_delivery_attempts (push_subscription_id);
+create index if not exists idx_notification_preferences_user_id on notification_preferences (user_id);
+create index if not exists idx_payment_instances_created_by on payment_instances (created_by);
+create index if not exists idx_payment_instances_paid_by on payment_instances (paid_by);
+create index if not exists idx_profiles_active_household_id on profiles (active_household_id);
+create index if not exists idx_recipe_ingredients_category_id on recipe_ingredients (category_id);
+create index if not exists idx_recipes_created_by on recipes (created_by);
+create index if not exists idx_recipes_household_id on recipes (household_id);
+create index if not exists idx_reminders_assigned_to on reminders (assigned_to);
+create index if not exists idx_reminders_category_id on reminders (category_id);
+create index if not exists idx_reminders_created_by on reminders (created_by);
+create index if not exists idx_reminders_deleted_by on reminders (deleted_by);
+create index if not exists idx_savings_contributions_contributed_by on savings_contributions (contributed_by);
+create index if not exists idx_savings_goals_created_by on savings_goals (created_by);
+create index if not exists idx_savings_goals_deleted_by on savings_goals (deleted_by);
+create index if not exists idx_scheduled_notifications_household_id on scheduled_notifications (household_id);
+create index if not exists idx_scheduled_notifications_user_id on scheduled_notifications (user_id);
+create index if not exists idx_shopping_items_category_id on shopping_items (category_id);
+create index if not exists idx_shopping_items_completed_by on shopping_items (completed_by);
+create index if not exists idx_shopping_items_created_by on shopping_items (created_by);
+create index if not exists idx_shopping_lists_archived_by on shopping_lists (archived_by);
+create index if not exists idx_shopping_lists_created_by on shopping_lists (created_by);
+create index if not exists idx_shopping_lists_deleted_by on shopping_lists (deleted_by);
+create index if not exists idx_shopping_lists_paid_by on shopping_lists (paid_by);
+create index if not exists idx_shopping_trips_created_by on shopping_trips (created_by);
+create index if not exists idx_shopping_trips_household_id on shopping_trips (household_id);
+create index if not exists idx_shopping_trips_paid_by on shopping_trips (paid_by);
+create index if not exists idx_subscriptions_category_id on subscriptions (category_id);
+create index if not exists idx_subscriptions_created_by on subscriptions (created_by);
+create index if not exists idx_subscriptions_deleted_by on subscriptions (deleted_by);
+create index if not exists idx_wishlist_items_created_by on wishlist_items (created_by);

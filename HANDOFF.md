@@ -1,16 +1,27 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-26 (Backend fase 0 — PLAN COMPLETE)
+Updated: 2026-08-26 (Backend slice B1.1 — COMPLETE)
 
 ## Current state
-**Backend fase 0 (plan-only) is done.** `Chatgpt_Redesign/BACKEND_PLAN.md` contains the
-full audit + implementation plan: 16 vertical slices (B1.1 → B7.1) mapped to the backend
-prompt's delivery phases. **Key audit finding:** the app is already a working full-stack
-app (34 RLS-enabled tables, 32 migrations, live push pipeline) — the plan is gap-closure,
-not greenfield. Main gaps: Google Calendar (nothing exists), canonical `ledger_entries`,
-hashed invites, transactional outbox, offline idempotency/conflicts, AI proposal/confirm
-lifecycle, FTS search, registry-based trash, async export, zero test infrastructure.
-Advisors flagged: `pg_net` in public, anon-executable SECURITY DEFINER fns, leaked-password
-protection off, 66 unindexed FKs — all scheduled in B1.1/B7.1.
+**Backend slice B1.1 (hardening + test harness) is done.** Applied to the live DB as
+remote migrations `033a_fk_covering_indexes`, `034_version_updated_by`,
+`035_secdef_grants_pgtap` (repo copies in `sql/033–035`): all 66 FK covering indexes;
+`version` + `updated_by` on the 8 collision-prone tables maintained by the new
+`set_updated_meta` trigger (verified live: version increments, updated_by stamped);
+EXECUTE revoked on SECURITY DEFINER functions (anon fully locked out; trigger/cron
+functions locked to no client role); pgTAP installed. Test harness: vitest 2 (`npm run
+test`, 7 passing tests in `tests/format.test.ts` — vitest 4 doesn't run on Node 21) and
+`supabase/tests/001_rls_basic.sql` (pgTAP, run via MCP execute_sql in a rolled-back
+transaction — executed clean; outsider sees 0 rows, member sees only their household).
+Remaining advisor WARNs are all documented exceptions (see KNOWN_ISSUES): pg_net
+relocation (`sql/036`, NOT applied — needs user approval), leaked-password protection
+(user dashboard toggle), and 5 intentional authenticated-executable RPC/RLS-helper fns.
+Lint 0 errors / typecheck / build / tests all green.
+
+Plan: `Chatgpt_Redesign/BACKEND_PLAN.md` — 16 vertical slices (B1.1 → B7.1); the app was
+already full-stack (34 RLS-enabled tables), so the plan is gap-closure, not greenfield.
+Note for future DB slices: the MCP auto-mode permission classifier blocks some DDL
+(REVOKE/DROP-heavy or mixed migrations) — split migrations into small focused chunks;
+additive chunks generally pass.
 
 The Casa Calma frontend redesign (F1–F12) remains complete and verified
 (plan: `Chatgpt_Redesign/REDESIGN_PLAN.md`, last frontend commit 149ba72).
@@ -32,9 +43,10 @@ The Casa Calma frontend redesign (F1–F12) remains complete and verified
   indigo redesign (historical).
 
 ## NEXT PHASE: Backend slices
-Work `Chatgpt_Redesign/BACKEND_PLAN.md` one slice per session, in order, starting with
-**B1.1 (hardening + FK indexes + version columns + pgTAP/vitest harness)**. Spec:
+Work `Chatgpt_Redesign/BACKEND_PLAN.md` one slice per session, in order; next is
+**B1.2 (invitations v2: hashed codes + concurrency-safe membership caps)**. Spec:
 `Chatgpt_Redesign/HOME_HUB_BACKEND_PROMPT.md`. Supabase project: xzkavpjwvadqldauaabm.
 Each slice: migrations + RLS + server logic + UI + Spanish states + tests + build, then
-handoff/commit/push/stop. User console actions pending: leaked-password protection
-(B1.1), Google Cloud OAuth setup (before B3), papelera purge decision (during B5.2).
+handoff/commit/push/stop. User actions pending: apply `sql/036` (pg_net relocation —
+approve or defer), enable leaked-password protection (Supabase Auth dashboard), Google
+Cloud OAuth setup (before B3), papelera purge decision (during B5.2).
