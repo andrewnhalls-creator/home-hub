@@ -7,7 +7,16 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1–F7 are complete** (F7 = Recordatorios y tareas, commit 0a199c3).
+**Stages F1–F8 are complete** (F8 = Calendario, commit 660fe59).
+
+What F8 changed:
+- Month view is the default and matches the mockup: white month card (title + "Organización
+  familiar" + round nav), green selected-day square, today outline ring, event dots.
+- Day selection shows an inline panel (header + "N eventos" chip + accent-bar item cards)
+  below the grid on mobile / right column on lg+; the old day-detail modal was removed.
+  Add modal retitled "Nuevo evento", prefilled with the selected date.
+- Pending visual check: the lg two-column layout couldn't be screenshotted (Chrome window
+  refused to resize in this session) — verify desktop calendario visually next time.
 
 What F7 changed:
 - ReminderList: grouped layout (Hoy + count chip / Próximos card with compact rows +
