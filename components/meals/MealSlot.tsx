@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { Plus } from "@phosphor-icons/react";
+import { Plus, Coffee, Sun, MoonStars, Cookie, type Icon } from "@phosphor-icons/react";
 import { Modal } from "@/components/ui/Modal";
 import { Select } from "@/components/ui/Select";
 import { Input } from "@/components/ui/Input";
@@ -90,23 +90,52 @@ function MealPlanForm({
   );
 }
 
+const MEAL_VISUALS: Record<MealType, { icon: Icon; color: string; bg: string }> = {
+  desayuno: { icon: Coffee,    color: "text-sage",  bg: "bg-sage/10"  },
+  comida:   { icon: Sun,       color: "text-amber", bg: "bg-amber/10" },
+  cena:     { icon: MoonStars, color: "text-olive", bg: "bg-olive/10" },
+  snack:    { icon: Cookie,    color: "text-rose",  bg: "bg-rose/10"  },
+};
+
 export function MealSlot({ date, mealType, label, meal, recipes }: MealSlotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const mealName = meal?.recipes?.name ?? meal?.custom_name;
+  const visual = MEAL_VISUALS[mealType];
+  const VisualIcon = visual.icon;
 
   return (
     <>
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="flex min-h-[64px] w-full flex-col items-start gap-0.5 rounded-xl border border-border bg-card p-2 text-left"
+        className={
+          mealName
+            ? "flex min-h-[56px] w-full items-center gap-3 rounded-[var(--radius-xl)] border border-border bg-card p-3 text-left shadow-[var(--shadow-card)] transition hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+            : "flex min-h-[56px] w-full items-center gap-3 rounded-[var(--radius-xl)] border border-dashed border-border bg-card/60 p-3 text-left transition hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+        }
       >
-        <span className="text-[12px] font-medium text-muted">{label}</span>
-        {mealName ? (
-          <span className="text-sm text-brown">{mealName}</span>
-        ) : (
-          <span className="flex items-center gap-1 text-sm text-muted">
-            <Plus className="h-3.5 w-3.5" aria-hidden /> Añadir
+        <span
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${visual.bg}`}
+          aria-hidden
+        >
+          <VisualIcon weight="regular" size={18} className={visual.color} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className={`block text-[10px] font-semibold uppercase tracking-wider ${visual.color}`}>
+            {label}
+          </span>
+          {mealName ? (
+            <span className="block truncate text-sm font-medium text-brown">{mealName}</span>
+          ) : (
+            <span className="block truncate text-sm italic text-muted">Planificar {label.toLowerCase()}…</span>
+          )}
+        </span>
+        {!mealName && (
+          <span
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-muted"
+            aria-hidden
+          >
+            <Plus size={14} />
           </span>
         )}
       </button>

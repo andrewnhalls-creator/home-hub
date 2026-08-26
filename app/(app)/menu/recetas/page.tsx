@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { BookOpen } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { RecipesExplorer } from "@/components/meals/RecipesExplorer";
 import { FloatingAddLink } from "@/components/ui/FloatingAddLink";
+import type { Recipe } from "@/lib/types";
 
 export default async function RecipesPage() {
   const { householdId } = await requireHousehold();
@@ -18,40 +18,22 @@ export default async function RecipesPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Link href="/menu" className="text-sm font-medium text-terracotta">
-        ← Volver al menú semanal
+      <Link
+        href="/menu"
+        className="flex min-h-[44px] w-fit items-center gap-1.5 rounded-full pr-3 text-sm font-medium text-muted transition hover:text-brown focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+      >
+        <ArrowLeft weight="bold" className="h-4 w-4" aria-hidden />
+        Menú semanal
       </Link>
 
-      {!recipes || recipes.length === 0 ? (
-        <EmptyState
-          icon={BookOpen}
-          title="Todavía no hay recetas."
-          description="Añade la primera para empezar."
-        />
-      ) : (
-        <ul className="flex flex-col gap-3">
-          {recipes.map((recipe) => (
-            <li key={recipe.id}>
-              <Link href={`/menu/recetas/${recipe.id}`}>
-                <Card className="transition-colors hover:bg-sand">
-                  <CardTitle>{recipe.name}</CardTitle>
-                  {(recipe.prep_time_minutes || recipe.difficulty || recipe.servings) && (
-                    <CardDescription>
-                      {[
-                        recipe.prep_time_minutes ? `${recipe.prep_time_minutes} min` : null,
-                        recipe.difficulty,
-                        recipe.servings ? `${recipe.servings} comensales` : null,
-                      ]
-                        .filter(Boolean)
-                        .join(" · ")}
-                    </CardDescription>
-                  )}
-                </Card>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div>
+        <h1 className="text-2xl font-bold text-brown">Recetas del hogar</h1>
+        <p className="mt-1 text-sm text-muted">
+          Vuestra colección para inspirar la próxima comida.
+        </p>
+      </div>
+
+      <RecipesExplorer recipes={(recipes ?? []) as Recipe[]} />
 
       <FloatingAddLink href="/menu/recetas/nueva" label="Añadir receta" />
     </div>

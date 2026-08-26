@@ -1,6 +1,10 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+
+function subscribeToNothing() {
+  return () => {};
+}
 import { useToast } from "@/components/ui/Toast";
 import { Plus, ShoppingCart, CaretDown, X, ArrowsDownUp, CheckCircle } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/Input";
@@ -28,15 +32,17 @@ export function ShoppingList({ items, categories, members, householdId, shopping
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [storeFilter, setStoreFilter] = useState("");
-  const [sortMode, setSortMode] = useState<"fecha" | "categoria">("categoria");
+  // Hydration-safe read of the stored sort preference: the server snapshot is null
+  // ("categoria" default) and React re-renders with the client value after hydration.
+  const storedSort = useSyncExternalStore(
+    subscribeToNothing,
+    () => localStorage.getItem("shopping-sort"),
+    () => null,
+  );
+  const [sortOverride, setSortOverride] = useState<"fecha" | "categoria" | null>(null);
+  const sortMode: "fecha" | "categoria" =
+    sortOverride ?? (storedSort === "fecha" ? "fecha" : "categoria");
   const [isFinishOpen, setIsFinishOpen] = useState(false);
-
-  // Read the stored sort preference after mount (SSR always renders "categoria",
-  // so reading localStorage in the initializer would cause a hydration mismatch).
-  useEffect(() => {
-    const stored = localStorage.getItem("shopping-sort") as "fecha" | "categoria" | null;
-    if (stored === "fecha") setSortMode("fecha");
-  }, []);
   const [quickName, setQuickName] = useState("");
   const [quickState, quickAction, quickPending] = useActionState(addShoppingItem, {});
 
@@ -234,7 +240,7 @@ export function ShoppingList({ items, categories, members, householdId, shopping
           type="button"
           onClick={() => {
             const next = sortMode === "fecha" ? "categoria" : "fecha";
-            setSortMode(next);
+            setSortOverride(next);
             localStorage.setItem("shopping-sort", next);
           }}
           className="flex items-center gap-1.5 text-xs font-medium text-muted hover:text-brown"

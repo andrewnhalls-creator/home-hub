@@ -38,6 +38,11 @@ export default async function MenuPage({
   const weekLabel = sameMonth
     ? `${format(weekStart, "d", { locale: es })}–${format(weekEnd, "d 'de' MMMM yyyy", { locale: es })}`
     : `${format(weekStart, "d MMM", { locale: es })}–${format(weekEnd, "d MMM yyyy", { locale: es })}`;
+  const compactWeekLabel = sameMonth
+    ? `${format(weekStart, "d", { locale: es })} – ${format(weekEnd, "d 'de' MMMM", { locale: es })}`
+    : `${format(weekStart, "d MMM", { locale: es })} – ${format(weekEnd, "d MMM", { locale: es })}`;
+  const isCurrentWeek =
+    format(startOfWeek(new Date(), { weekStartsOn: 1 }), "yyyy-MM-dd") === weekStartStr;
 
   const supabase = await createClient();
   const [{ data: meals }, { data: recipes }] = await Promise.all([
@@ -63,49 +68,63 @@ export default async function MenuPage({
   return (
     <div className="flex flex-col gap-4">
       <SegmentedToggle />
+
+      {/* Week navigator */}
       <div className="flex items-center justify-between">
         <Link
           href={`/menu?start=${prevWeekStr}`}
           aria-label="Semana anterior"
-          className="flex h-10 w-10 items-center justify-center rounded-full text-muted hover:bg-sand"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-muted transition hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
         >
-          <CaretLeft className="h-5 w-5" aria-hidden />
+          <CaretLeft className="h-4 w-4" aria-hidden />
         </Link>
-        <p className="text-sm font-medium text-brown">
-          {format(weekStart, "dd/MM/yyyy")} - {format(weekEnd, "dd/MM/yyyy")}
-        </p>
+        <div className="text-center">
+          <p className="text-base font-bold text-brown">{compactWeekLabel}</p>
+          {isCurrentWeek && (
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">
+              Esta semana
+            </p>
+          )}
+        </div>
         <Link
           href={`/menu?start=${nextWeekStr}`}
           aria-label="Semana siguiente"
-          className="flex h-10 w-10 items-center justify-center rounded-full text-muted hover:bg-sand"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-muted transition hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
         >
-          <CaretRight className="h-5 w-5" aria-hidden />
+          <CaretRight className="h-4 w-4" aria-hidden />
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        <Link
-          href="/menu/recetas"
-          className="flex items-center justify-center gap-2 rounded-xl border border-terracotta px-4 py-3 text-sm font-medium text-terracotta"
-        >
-          <BookOpen className="h-4 w-4" aria-hidden />
-          Recetas
-        </Link>
-        <GenerateListButton
-          weekStartDate={weekStartStr}
-          weekEndDate={weekEndStr}
-          weekLabel={weekLabel}
-        />
-      </div>
+      <GenerateListButton
+        weekStartDate={weekStartStr}
+        weekEndDate={weekEndStr}
+        weekLabel={weekLabel}
+      />
+      <Link
+        href="/menu/recetas"
+        className="-mt-1 flex min-h-[44px] items-center justify-center gap-2 rounded-full text-sm font-medium text-amber transition hover:bg-amber/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber"
+      >
+        <BookOpen className="h-4 w-4" aria-hidden />
+        Ver recetas del hogar
+      </Link>
 
-      <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2 lg:gap-4">
+      <div className="flex flex-col gap-5 lg:grid lg:grid-cols-2 lg:gap-6">
         {days.map((day) => {
           const dayStr = format(day, "yyyy-MM-dd");
-          const dayLabel = format(day, "EEEE dd/MM", { locale: es });
+          const dayLabel = format(day, "EEEE", { locale: es });
+          const dayNumber = format(day, "d");
           return (
             <div key={dayStr}>
-              <p className="mb-2 text-sm font-semibold capitalize text-brown">{dayLabel}</p>
-              <div className="grid grid-cols-2 gap-2">
+              <p className="mb-2 flex items-center gap-2 text-sm font-semibold capitalize text-brown">
+                <span
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-terracotta/10 text-xs font-bold tabular-nums text-terracotta"
+                  aria-hidden
+                >
+                  {dayNumber}
+                </span>
+                {dayLabel}
+              </p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {MEAL_TYPES.map(({ type, label }) => {
                   const meal = mealsByDay.get(`${dayStr}_${type}`)?.[0];
                   return (
