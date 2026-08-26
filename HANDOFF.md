@@ -1,20 +1,34 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-26 (Backend slice B1.2 — COMPLETE; B1.1 done earlier same day)
+Updated: 2026-08-26 (Backend slice B1.3 — COMPLETE; B1.1/B1.2 done earlier same day)
 
 ## Current state
-**Backend slice B1.2 (invitations v2) is done.** Applied as four remote migrations
-(037a–d, consolidated repo copy `sql/037_invites_v2.sql`): invite codes are now
-16-char/80-bit, generated server-side by `create_household_invite` (owner-only RPC),
-stored **only as SHA-256 digests** (plaintext column dropped), shown exactly once in
-the UI; rotation on regeneration, explicit `revoke_household_invite`, expiry +
-max_uses/use_count limits, activity events. `redeem_household_invite` v2 is atomic and
-concurrency-safe (invite→household→profile row locks) and a constraint trigger
-(`household_members_caps`) enforces ≤5 members/household and ≤4 households/user even
-against direct inserts. UI: InviteSection shows the code once with a "no volverá a
-mostrarse" warning + revoke button; onboarding surfaces specific Spanish errors.
-Tests: `supabase/tests/002_invites.sql` — **15 pgTAP assertions, all passing** (run via
-MCP execute_sql in a rolled-back transaction with fake auth.users). Lint 0 errors /
-typecheck / vitest 7/7 / build all green.
+**Backend slice B1.3 (transactional outbox + activity hardening) is done.**
+Migrations 038a–d (repo copy `sql/038_outbox.sql`): `outbox_jobs` queue
+(dedupe_key unique, claim/lease via `for update skip locked`, capped exponential
+backoff + jitter, attempt-free deferral, cancellation, revive-on-re-enqueue),
+service-role-only (RLS + grants). AFTER INSERT/DELETE triggers on
+`scheduled_notifications` enroll/cancel delivery jobs in the same transaction as
+the domain write — all producers covered with zero app-code changes. New Edge
+Function `supabase/functions/outbox-worker` (deployed, v1) claims jobs and
+delivers: in-app `notification_events` created idempotently (`source_key` unique
+— full index, PostgREST can't infer partial ones), Web Push per active device,
+**quiet hours now DEFER the push instead of dropping it** (per-user
+`deliver_push_event` job scheduled for quiet-hours end). Cron: jobid 1
+(send-push scheduled) replaced by jobid 3 `outbox-worker-cron` (* * * * *,
+verified succeeding); send-push stays deployed only for its device-test mode;
+document-expiry-scan (jobid 2) unchanged. `activity_log`: INSERT now requires
+`actor_id = auth.uid()`, UPDATE/DELETE revoked. E2E verified live: real
+scheduled notification → trigger → claim → 2 in-app events → job done (and the
+retry/backoff path was exercised by a genuine failure before the 038d fix).
+No push attempts occurred because BOTH stored push subscriptions have been
+inactive since June (expired endpoints) — re-enable from Ajustes → Dispositivos.
+Tests: `supabase/tests/003_outbox.sql` (14 pgTAP assertions, all passing),
+vitest 18/18 (new `tests/quiet-hours.test.ts`). Lint 0 errors / typecheck /
+build green.
+
+**B1.2 (earlier)**: invitations v2 — hashed show-once codes, revocation, use limits,
+atomic redemption, concurrency-safe caps trigger (`sql/037_invites_v2.sql`;
+15 pgTAP assertions in `supabase/tests/002_invites.sql`).
 
 **B1.1 (earlier)**: FK indexes ×66, `version`+`updated_by` trigger on 8 tables, secdef
 grant lockdown, pg_net → extensions, pgTAP + vitest harness (`sql/033–036`).

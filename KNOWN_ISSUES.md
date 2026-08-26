@@ -9,9 +9,12 @@
 
 ### Advisor WARNs kept intentionally (documented exceptions)
 - `authenticated` can execute SECURITY DEFINER fns `create_household`,
-  `redeem_household_invite`, `switch_household` (user-facing RPCs) and
+  `redeem_household_invite`, `create_household_invite`, `revoke_household_invite`,
+  `switch_household` (user-facing RPCs with internal owner/membership checks) and
   `is_household_member` / `is_household_owner` (RLS policy helpers) — by design;
-  `anon` is fully revoked (migration 035).
+  `anon` is fully revoked (migrations 035/037).
+- `outbox_jobs` "RLS enabled no policy" INFO: deliberate — the queue is
+  service-role-only; client roles also have table grants revoked (migration 038).
 - 5 "unused index" INFO lints kept: real query-support indexes; zero scans only
   because the DB is nearly empty.
 
