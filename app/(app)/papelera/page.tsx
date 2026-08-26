@@ -3,6 +3,7 @@ import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { TrashSection } from "@/components/ui/TrashSection";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { EmptyTrashButton } from "@/components/ui/EmptyTrashButton";
 import { restoreReminder } from "@/app/(app)/recordatorios/actions";
 import { restoreDocument } from "@/app/(app)/documentos/actions";
 import {
@@ -15,7 +16,7 @@ import { restoreShoppingList } from "@/app/(app)/compra/listas/actions";
 import { restoreCalendarEvent } from "@/app/(app)/calendario/actions";
 
 export default async function PapeleraPage() {
-  const { householdId } = await requireHousehold();
+  const { householdId, role } = await requireHousehold();
   const supabase = await createClient();
 
   const [
@@ -149,14 +150,21 @@ export default async function PapeleraPage() {
           />
         </div>
       ) : (
-        sections.map((s) => (
-          <TrashSection
-            key={s.title}
-            title={s.title}
-            items={s.items}
-            restoreAction={s.restoreAction}
-          />
-        ))
+        <>
+          {sections.map((s) => (
+            <TrashSection
+              key={s.title}
+              title={s.title}
+              items={s.items}
+              restoreAction={s.restoreAction}
+            />
+          ))}
+          {role === "owner" && (
+            <div className="mt-4">
+              <EmptyTrashButton />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

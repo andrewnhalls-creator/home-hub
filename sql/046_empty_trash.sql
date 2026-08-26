@@ -1,0 +1,12 @@
+-- 046: Papelera "Vaciar" (user decision 26/08/2026)
+-- APPLIED 2026-08-26 as remote migration 046_empty_trash.
+-- Manual owner-only permanent purge with confirmation; NO 30-day auto-purge
+-- (explicitly decided against). empty_trash() is SECURITY DEFINER with an
+-- internal owner check: deletes every soft-deleted row of the papelera's
+-- types (expenses first — a deleted list's linked expense purges cleanly;
+-- FK is ON DELETE SET NULL), returns the purged count and writes one
+-- activity record. Ledger rows for purged expenses are removed by the sync
+-- triggers. Verified live (rolled back): member rejected with the Spanish
+-- owner-only error; owner purge removes trashed rows only; live rows and
+-- ledger stay consistent.
+-- See the remote migration for full DDL.

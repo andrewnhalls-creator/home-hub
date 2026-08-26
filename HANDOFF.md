@@ -1,5 +1,5 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-26 (Backend phases B1, B2, B4, B5, B6, B7 — COMPLETE; B3 pending user)
+Updated: 2026-08-26 (BACKEND COMPLETE — B3 dropped by user decision; Vaciar shipped)
 
 ## Current state
 **The backend build is complete except Google Calendar (B3).** All work from
@@ -27,13 +27,10 @@ Gates at completion: lint 0 errors, typecheck, vitest 37/37, build — all green
 pgTAP suites 001–007 all passing against the live DB (rolled-back).
 
 ## OPEN ITEMS (need the user)
-1. **Google Calendar (B3)**: needs a Google Cloud project (Calendar API,
-   OAuth consent, client id/secret, redirect URIs). Ask before starting.
-2. **Papelera purge policy**: "Vaciar" button and/or 30-day auto-purge —
-   deferred decision, papelera is restore-only today.
-3. Re-enable push on both phones (Ajustes → Dispositivos) — subscriptions
+1. Re-enable push on both phones (Ajustes → Dispositivos) — subscriptions
    expired in June; notifications currently reach the in-app centre only.
-4. PWA icons still old branding (mechanical, pending).
+   (User said they will.)
+2. PWA icons still old branding (mechanical, pending).
 
 ## Product decisions (user, 26/08/2026 — do not revisit without asking)
 - Ahorro: KEEP the no-targets model (May rework). Do NOT reintroduce goal targets/% from
@@ -41,8 +38,10 @@ pgTAP suites 001–007 all passing against the live DB (rolled-back).
 - Navigation: no "Casa" hub page — Inicio covers it; bottom nav stays
   Inicio · Compra · + · Finanzas · Calendario.
 - Actividad "Nueva Nota" / notes feature: DROPPED permanently.
-- Papelera purge policy ("Vaciar" + 30-day auto-delete): DEFERRED — decide when the
-  backend trash phase is built.
+- Papelera (decided 26/08/2026): manual owner-only "Vaciar" button with
+  confirmation (migration 046); NO 30-day auto-purge.
+- Google Calendar sync (B3): DROPPED by user decision 26/08/2026 — the couple
+  does not want it. Do not build without a new explicit request.
 
 ## Known follow-ups
 - PWA icons (`public/icons/`) still old dark branding — regenerate (pending, mechanical).
