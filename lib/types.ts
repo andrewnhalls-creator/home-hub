@@ -58,15 +58,13 @@ export interface HouseholdMember {
   created_at: string;
 }
 
+// The invite code itself is never stored or re-readable (only its hash);
+// it is returned exactly once when the invite is created.
 export interface HouseholdInvite {
   id: string;
-  household_id: string;
-  code: string;
-  created_by: string | null;
   expires_at: string;
-  used_by: string | null;
-  used_at: string | null;
-  created_at: string;
+  max_uses: number;
+  use_count: number;
 }
 
 export interface Category {

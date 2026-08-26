@@ -116,10 +116,7 @@ export function SettingsView({
           <CardTitle>Añadir miembro</CardTitle>
           <CardDescription>Comparte este código para que alguien se una a tu hogar.</CardDescription>
           <div className="mt-3">
-            <InviteSection
-              initialCode={initialInvite?.code ?? null}
-              initialExpiresAt={initialInvite?.expires_at ?? null}
-            />
+            <InviteSection initialInvite={initialInvite} />
           </div>
         </Card>
       )}

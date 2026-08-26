@@ -10,7 +10,7 @@ export default async function SettingsPage() {
     { data: household },
     { data: members },
     { data: profile },
-    { data: invite },
+    { data: invites },
     { data: allMemberships },
   ] = await Promise.all([
     supabase.from("households").select("*").eq("id", householdId).single(),
@@ -22,13 +22,12 @@ export default async function SettingsPage() {
     supabase.from("profiles").select("*").eq("id", user.id).single(),
     supabase
       .from("household_invites")
-      .select("*")
+      .select("id, expires_at, max_uses, use_count")
       .eq("household_id", householdId)
-      .is("used_by", null)
+      .is("revoked_at", null)
       .gt("expires_at", new Date().toISOString())
       .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle(),
+      .limit(5),
     supabase
       .from("household_members")
       .select("household_id, role, households(name)")
@@ -43,7 +42,7 @@ export default async function SettingsPage() {
       profile={profile}
       currentUserId={user.id}
       role={role}
-      initialInvite={invite}
+      initialInvite={invites?.find((i) => i.use_count < i.max_uses) ?? null}
       allMemberships={(allMemberships ?? []) as unknown as { household_id: string; role: "owner" | "member"; households: { name: string } | null }[]}
       activeHouseholdId={householdId}
     />

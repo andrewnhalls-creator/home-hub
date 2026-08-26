@@ -44,7 +44,14 @@ export async function joinHousehold(
   });
 
   if (error) {
-    return { error: "Código de invitación no válido o caducado." };
+    // Surface the RPC's own Spanish messages for known cases; anything else
+    // (including truly invalid codes) stays generic and non-enumerating.
+    const known = [
+      "Ya eres miembro de este hogar",
+      "Ya perteneces al máximo de 4 hogares permitidos",
+      "Este hogar ya tiene el máximo de miembros",
+    ].find((message) => error.message.includes(message));
+    return { error: known ? `${known}.` : "Código de invitación no válido o caducado." };
   }
 
   redirect("/dashboard");

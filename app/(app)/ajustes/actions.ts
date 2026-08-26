@@ -1,6 +1,5 @@
 "use server";
 
-import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 import type { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
@@ -26,16 +25,6 @@ function flattenFieldErrors(error: z.ZodError) {
     if (!fieldErrors[key]) fieldErrors[key] = issue.message;
   }
   return fieldErrors;
-}
-
-function generateCode(): string {
-  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const bytes = randomBytes(8);
-  let code = "";
-  for (let i = 0; i < 8; i++) {
-    code += alphabet[bytes[i] % alphabet.length];
-  }
-  return code;
 }
 
 export async function updateHouseholdName(
@@ -94,37 +83,40 @@ export async function updateProfileDisplayName(
   return { success: true };
 }
 
+// The code is generated and hashed server-side (RPC); the plaintext is
+// returned exactly once and never stored.
 export async function generateInviteCode(): Promise<InviteActionState> {
-  const { user, householdId, role } = await requireHousehold();
+  const { role } = await requireHousehold();
   if (role !== "owner") {
     return { error: "Solo la persona propietaria del hogar puede generar invitaciones." };
   }
 
   const supabase = await createClient();
+  const { data, error } = await supabase.rpc("create_household_invite");
 
-  const { count } = await supabase
-    .from("household_members")
-    .select("id", { count: "exact", head: true })
-    .eq("household_id", householdId);
-
-  if ((count ?? 0) >= 5) {
-    return { error: "Este hogar ya tiene el máximo de 5 miembros." };
+  if (error || !data?.[0]) {
+    return { error: "No se ha podido generar el código. Inténtalo de nuevo." };
   }
 
-  const code = generateCode();
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  revalidatePath("/ajustes");
+  return { code: data[0].invite_code, expiresAt: data[0].invite_expires_at };
+}
 
-  const { error } = await supabase.from("household_invites").insert({
-    household_id: householdId,
-    code,
-    created_by: user.id,
-    expires_at: expiresAt,
+export async function revokeInvite(inviteId: string): Promise<InviteActionState> {
+  const { role } = await requireHousehold();
+  if (role !== "owner") {
+    return { error: "Solo la persona propietaria del hogar puede revocar invitaciones." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("revoke_household_invite", {
+    p_invite_id: inviteId,
   });
 
-  if (error) return { error: "No se ha podido generar el código. Inténtalo de nuevo." };
+  if (error) return { error: "No se ha podido revocar la invitación. Inténtalo de nuevo." };
 
   revalidatePath("/ajustes");
-  return { code, expiresAt };
+  return {};
 }
 
 // ---------------------------------------------------------------------------

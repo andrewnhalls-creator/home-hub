@@ -2,9 +2,10 @@
 
 ## Active
 
-### Leaked-password protection disabled (advisor WARN)
-- User action: enable in Supabase Auth dashboard (Password security → check against
-  HaveIBeenPwned). No code change involved.
+### Leaked-password protection disabled (advisor WARN) — ACCEPTED RISK
+- **Decision 2026-08-26 (user)**: the feature is Pro-plan-only on Supabase and the app
+  is used by exactly two known household members, so the WARN is accepted and no
+  upgrade will be made for it. Revisit only if the project ever moves to Pro anyway.
 
 ### Advisor WARNs kept intentionally (documented exceptions)
 - `authenticated` can execute SECURITY DEFINER fns `create_household`,
