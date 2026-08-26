@@ -7,7 +7,11 @@ import { requireHousehold } from "@/lib/auth";
 import { choreSchema } from "@/lib/validations/chores";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
 import { logActivity } from "@/lib/activity";
-import type { ChoreFrequency } from "@/lib/types";
+import {
+  advanceDateOnly,
+  instantFromLocalDateTime,
+  type RecurrenceFrequency,
+} from "@/lib/recurrence";
 
 export interface ChoreFormState {
   error?: string;
@@ -32,31 +36,16 @@ async function scheduleChoreNotification(
     category: "tareas",
     entityType: "chore",
     entityId: choreId,
-    scheduledFor: new Date(`${nextDueDate}T09:00:00`).toISOString(),
+    scheduledFor: instantFromLocalDateTime(nextDueDate, "09:00"),
     title: "Tarea de casa",
     body: title,
   });
 }
 
-function advanceDueDate(currentDate: string, frequency: ChoreFrequency): string {
-  const date = new Date(`${currentDate}T00:00:00`);
-  switch (frequency) {
-    case "diaria":
-      date.setDate(date.getDate() + 1);
-      break;
-    case "semanal":
-      date.setDate(date.getDate() + 7);
-      break;
-    case "quincenal":
-      date.setDate(date.getDate() + 14);
-      break;
-    case "mensual":
-      date.setMonth(date.getMonth() + 1);
-      break;
-    default:
-      break;
-  }
-  return date.toISOString().slice(0, 10);
+// Month-end anchor for mensual rules (see lib/recurrence.ts).
+function anchorDayFor(frequency: string, nextDueDate?: string): number | null {
+  if (!nextDueDate || frequency !== "mensual") return null;
+  return parseInt(nextDueDate.slice(8, 10), 10);
 }
 
 export async function createChore(
@@ -87,6 +76,7 @@ export async function createChore(
       assigned_to: parsed.data.assignedTo || null,
       frequency: parsed.data.frequency,
       next_due_date: parsed.data.nextDueDate || null,
+      anchor_day: anchorDayFor(parsed.data.frequency, parsed.data.nextDueDate),
       created_by: user.id,
     })
     .select("id")
@@ -137,6 +127,7 @@ export async function updateChore(
       assigned_to: parsed.data.assignedTo || null,
       frequency: parsed.data.frequency,
       next_due_date: parsed.data.nextDueDate || null,
+      anchor_day: anchorDayFor(parsed.data.frequency, parsed.data.nextDueDate),
     })
     .eq("id", choreId)
     .eq("household_id", householdId);
@@ -163,20 +154,28 @@ export async function completeChore(choreId: string) {
 
   const { data: chore } = await supabase
     .from("chores")
-    .select("title, frequency, next_due_date, assigned_to")
+    .select("title, frequency, next_due_date, assigned_to, anchor_day")
     .eq("id", choreId)
+    .eq("household_id", householdId)
     .single();
 
   if (!chore) return;
 
   await cancelScheduledNotifications("chore", choreId);
 
-  // Record in completion history regardless of frequency
-  void supabase.from("chore_completions").insert({
-    chore_id: choreId,
-    household_id: householdId,
-    completed_by: user.id,
-  });
+  // Record the completed occurrence. Idempotent: the unique occurrence key
+  // means a concurrent duplicate completion refreshes actor/time instead of
+  // duplicating history.
+  await supabase.from("chore_completions").upsert(
+    {
+      chore_id: choreId,
+      household_id: householdId,
+      occurrence_key: chore.next_due_date ?? "once",
+      completed_at: new Date().toISOString(),
+      completed_by: user.id,
+    },
+    { onConflict: "chore_id,occurrence_key" },
+  );
 
   if (chore.frequency === "puntual" || !chore.next_due_date) {
     await supabase.from("chores").update({ status: "hecho" }).eq("id", choreId).eq("household_id", householdId);
@@ -185,15 +184,25 @@ export async function completeChore(choreId: string) {
     return;
   }
 
-  const nextDate = advanceDueDate(chore.next_due_date, chore.frequency as ChoreFrequency);
+  const nextDate = advanceDateOnly(
+    chore.next_due_date,
+    chore.frequency as RecurrenceFrequency,
+    chore.anchor_day,
+  );
 
-  await supabase
+  // Guarded advance: only from the occurrence we just completed, so a
+  // concurrent duplicate completion creates at most one next occurrence.
+  const { data: advanced } = await supabase
     .from("chores")
     .update({ status: "pendiente", next_due_date: nextDate })
     .eq("id", choreId)
-    .eq("household_id", householdId);
+    .eq("household_id", householdId)
+    .eq("next_due_date", chore.next_due_date)
+    .select("id");
 
-  await scheduleChoreNotification(choreId, householdId, chore.assigned_to, chore.title, nextDate);
+  if (advanced?.length) {
+    await scheduleChoreNotification(choreId, householdId, chore.assigned_to, chore.title, nextDate);
+  }
   void logActivity({ householdId, actorId: user.id, entityType: "chore", entityId: choreId, action: "completed", summary: `Completó la tarea: ${chore.title}` });
 
   revalidatePath("/tareas");

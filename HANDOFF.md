@@ -1,30 +1,33 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-26 (Backend slice B1.3 — COMPLETE; B1.1/B1.2 done earlier same day)
+Updated: 2026-08-26 (Backend slice B2.1 — COMPLETE; B1.1–B1.3 done earlier same day)
 
 ## Current state
-**Backend slice B1.3 (transactional outbox + activity hardening) is done.**
-Migrations 038a–d (repo copy `sql/038_outbox.sql`): `outbox_jobs` queue
-(dedupe_key unique, claim/lease via `for update skip locked`, capped exponential
-backoff + jitter, attempt-free deferral, cancellation, revive-on-re-enqueue),
-service-role-only (RLS + grants). AFTER INSERT/DELETE triggers on
-`scheduled_notifications` enroll/cancel delivery jobs in the same transaction as
-the domain write — all producers covered with zero app-code changes. New Edge
-Function `supabase/functions/outbox-worker` (deployed, v1) claims jobs and
-delivers: in-app `notification_events` created idempotently (`source_key` unique
-— full index, PostgREST can't infer partial ones), Web Push per active device,
-**quiet hours now DEFER the push instead of dropping it** (per-user
-`deliver_push_event` job scheduled for quiet-hours end). Cron: jobid 1
-(send-push scheduled) replaced by jobid 3 `outbox-worker-cron` (* * * * *,
-verified succeeding); send-push stays deployed only for its device-test mode;
-document-expiry-scan (jobid 2) unchanged. `activity_log`: INSERT now requires
-`actor_id = auth.uid()`, UPDATE/DELETE revoked. E2E verified live: real
-scheduled notification → trigger → claim → 2 in-app events → job done (and the
-retry/backoff path was exercised by a genuine failure before the 038d fix).
-No push attempts occurred because BOTH stored push subscriptions have been
-inactive since June (expired endpoints) — re-enable from Ajustes → Dispositivos.
-Tests: `supabase/tests/003_outbox.sql` (14 pgTAP assertions, all passing),
-vitest 18/18 (new `tests/quiet-hours.test.ts`). Lint 0 errors / typecheck /
-build green.
+**Backend slice B2.1 (recurrence engine + occurrence history) is done.**
+`lib/recurrence.ts` is now THE single recurrence engine (documented subset:
+diaria/semanal/quincenal/mensual/anual; month-end anchor rule 31→28/30→31;
+Europe/Madrid wall-clock preserved across DST; occurrence keys = due date/
+instant). Migrations 039/039b (repo copy `sql/039_occurrence_history.sql`):
+`reminder_completions` table + `chore_completions.occurrence_key`, unique
+(template, occurrence_key), `anchor_day` on reminders/chores (backfilled),
+actor-integrity RLS on both history tables. Rewired actions: **recurring
+reminders now actually advance** (they previously died as 'hecho' after one
+completion); chores use the engine (fixes the setMonth overflow bug: 31 ene →
+28 feb, not 3 mar) and completion is concurrency-safe (upsert on occurrence key
++ guarded advance `where due unchanged` → at most one next occurrence);
+`combineDueAt`/chore notifications now share the engine's tz helpers (fixes
+chore notifications scheduled in server-local time). Completion history is
+immutable (template edits never touch it). Tests:
+`supabase/tests/004_occurrences.sql` (8 pgTAP, all passing), vitest 32/32
+(new `tests/recurrence.test.ts`: leap years, month-end, DST spring/fall).
+Lint 0 errors / typecheck / build green.
+
+**B1.3 (earlier)**: transactional outbox (`sql/038_outbox.sql`): `outbox_jobs`
+queue (claim/lease, capped backoff+jitter, deferral, cancellation),
+`outbox-worker` Edge Function deployed + cron jobid 3 every minute (verified);
+scheduled_notifications enroll via triggers transactionally; quiet hours DEFER
+pushes instead of dropping; activity_log actor-integrity + append-only.
+NOTE: both stored push subscriptions expired in June — re-enable from
+Ajustes → Dispositivos to get real phone pushes again.
 
 **B1.2 (earlier)**: invitations v2 — hashed show-once codes, revocation, use limits,
 atomic redemption, concurrency-safe caps trigger (`sql/037_invites_v2.sql`;

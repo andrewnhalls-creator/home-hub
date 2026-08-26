@@ -185,6 +185,7 @@ export interface Reminder {
   assigned_to: string | null;
   category_id: string | null;
   repeat_frequency: RepeatFrequency;
+  anchor_day: number | null;
   status: TaskStatus;
   created_by: string | null;
   created_at: string;
@@ -201,6 +202,7 @@ export interface Chore {
   assigned_to: string | null;
   frequency: ChoreFrequency | null;
   next_due_date: string | null;
+  anchor_day: number | null;
   status: TaskStatus;
   created_by: string | null;
   created_at: string;

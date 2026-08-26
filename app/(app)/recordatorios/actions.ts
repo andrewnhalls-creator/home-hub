@@ -7,6 +7,11 @@ import { requireHousehold } from "@/lib/auth";
 import { reminderSchema } from "@/lib/validations/reminders";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
 import { logActivity } from "@/lib/activity";
+import {
+  advanceInstant,
+  instantFromLocalDateTime,
+  type RecurrenceFrequency,
+} from "@/lib/recurrence";
 
 export interface ReminderFormState {
   error?: string;
@@ -16,21 +21,13 @@ export interface ReminderFormState {
 
 function combineDueAt(dueDate?: string, dueTime?: string): string | null {
   if (!dueDate) return null;
-  const time = dueTime || "09:00";
-  // The server runs UTC, so we must convert Europe/Madrid local time to UTC explicitly.
-  // Strategy: treat the input as UTC to get a reference instant, ask Intl what
-  // Europe/Madrid shows at that instant, compute the offset, then apply it.
-  const utcGuess = new Date(`${dueDate}T${time}:00Z`);
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "Europe/Madrid",
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
-    hour12: false,
-  }).formatToParts(utcGuess);
-  const get = (t: string) => parseInt(parts.find((p) => p.type === t)?.value ?? "0");
-  const madridAsUtcMs = Date.UTC(get("year"), get("month") - 1, get("day"), get("hour"), get("minute"), get("second"));
-  const offsetMs = utcGuess.getTime() - madridAsUtcMs; // negative for UTC+ zones e.g. CEST = -7200000
-  return new Date(utcGuess.getTime() + offsetMs).toISOString();
+  return instantFromLocalDateTime(dueDate, dueTime || "09:00");
+}
+
+// Month-end anchor for mensual/anual rules (see lib/recurrence.ts).
+function anchorDayFor(frequency: string, dueDate?: string): number | null {
+  if (!dueDate || (frequency !== "mensual" && frequency !== "anual")) return null;
+  return parseInt(dueDate.slice(8, 10), 10);
 }
 
 async function scheduleReminderNotification(
@@ -88,6 +85,7 @@ export async function createReminder(
       assigned_to: parsed.data.assignedTo || null,
       category_id: parsed.data.categoryId || null,
       repeat_frequency: parsed.data.repeatFrequency,
+      anchor_day: anchorDayFor(parsed.data.repeatFrequency, parsed.data.dueDate),
       created_by: user.id,
     })
     .select("id")
@@ -143,6 +141,7 @@ export async function updateReminder(
       assigned_to: parsed.data.assignedTo || null,
       category_id: parsed.data.categoryId || null,
       repeat_frequency: parsed.data.repeatFrequency,
+      anchor_day: anchorDayFor(parsed.data.repeatFrequency, parsed.data.dueDate),
     })
     .eq("id", reminderId)
     .eq("household_id", householdId);
@@ -161,18 +160,76 @@ export async function toggleReminderStatus(reminderId: string, isDone: boolean) 
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
-  const { data: reminder } = await supabase.from("reminders").select("title").eq("id", reminderId).single();
-
-  await supabase
+  const { data: reminder } = await supabase
     .from("reminders")
-    .update({ status: isDone ? "hecho" : "pendiente" })
+    .select("title, due_at, assigned_to, repeat_frequency, anchor_day")
     .eq("id", reminderId)
-    .eq("household_id", householdId);
+    .eq("household_id", householdId)
+    .single();
 
-  if (isDone) {
-    await cancelScheduledNotifications("reminder", reminderId);
-    void logActivity({ householdId, actorId: user.id, entityType: "reminder", entityId: reminderId, action: "completed", summary: `Completó el recordatorio: ${reminder?.title ?? reminderId}` });
+  if (!reminder) return;
+
+  if (!isDone) {
+    await supabase
+      .from("reminders")
+      .update({ status: "pendiente" })
+      .eq("id", reminderId)
+      .eq("household_id", householdId);
+    revalidatePath("/recordatorios");
+    return;
   }
+
+  // Record the completed occurrence (idempotent: re-completing the same
+  // occurrence refreshes actor/time instead of duplicating history).
+  await supabase.from("reminder_completions").upsert(
+    {
+      reminder_id: reminderId,
+      household_id: householdId,
+      occurrence_key: reminder.due_at ?? "once",
+      due_at: reminder.due_at,
+      completed_at: new Date().toISOString(),
+      completed_by: user.id,
+    },
+    { onConflict: "reminder_id,occurrence_key" },
+  );
+
+  const isRecurring = reminder.repeat_frequency !== "ninguna" && reminder.due_at;
+
+  if (isRecurring) {
+    const nextDueAt = advanceInstant(
+      reminder.due_at,
+      reminder.repeat_frequency as RecurrenceFrequency,
+      reminder.anchor_day,
+    );
+    // Guarded advance: only from the occurrence we just completed, so a
+    // concurrent duplicate completion can never double-advance the series.
+    const { data: advanced } = await supabase
+      .from("reminders")
+      .update({ status: "pendiente", due_at: nextDueAt })
+      .eq("id", reminderId)
+      .eq("household_id", householdId)
+      .eq("due_at", reminder.due_at)
+      .select("id");
+
+    if (advanced?.length) {
+      await scheduleReminderNotification(
+        reminderId,
+        householdId,
+        reminder.assigned_to,
+        reminder.title,
+        nextDueAt,
+      );
+    }
+  } else {
+    await supabase
+      .from("reminders")
+      .update({ status: "hecho" })
+      .eq("id", reminderId)
+      .eq("household_id", householdId);
+    await cancelScheduledNotifications("reminder", reminderId);
+  }
+
+  void logActivity({ householdId, actorId: user.id, entityType: "reminder", entityId: reminderId, action: "completed", summary: `Completó el recordatorio: ${reminder.title}` });
 
   revalidatePath("/recordatorios");
 }
