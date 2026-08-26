@@ -7,7 +7,14 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1–F6 are complete** (F6 = Menú y recetas, commit abe9db9).
+**Stages F1–F7 are complete** (F7 = Recordatorios y tareas, commit 0a199c3).
+
+What F7 changed:
+- ReminderList: grouped layout (Hoy + count chip / Próximos card with compact rows +
+  "Ver calendario" / collapsible sage Completados) replacing the old filter tabs.
+- ReminderCard & ChoreCard: square sage checkboxes, semibold titles, icon meta lines
+  (clock / calendar / frequency), olive assignee chips, "Atrasado" badge only when overdue.
+- Page headers added to /recordatorios and /tareas.
 
 What F6 changed:
 - Menú semanal: centred week navigator ("24 – 30 de agosto" + ESTA SEMANA), full-width
