@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useCallback, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Circle, CheckCircle, PencilSimple, Trash } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -27,8 +28,27 @@ export function ShoppingItemCard({ item, category, membersById, onEdit, flat }: 
   const [isPending, startTransition] = useTransition();
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [localCompleted, setLocalCompleted] = useState(item.is_completed);
+  const router = useRouter();
   const isOnline = useOnlineStatus();
-  const { enqueue } = useOfflineToggleQueue(isOnline);
+  const onQueueConflicts = useCallback(
+    (count: number) =>
+      showToast(
+        count === 1
+          ? "Un artículo había cambiado mientras estabas sin conexión y no se ha actualizado."
+          : `${count} artículos habían cambiado mientras estabas sin conexión y no se han actualizado.`,
+        "error",
+      ),
+    [showToast],
+  );
+  const { enqueue } = useOfflineToggleQueue(isOnline, onQueueConflicts);
+
+  // Authoritative server state (revalidate/realtime) overrides optimistic
+  // local state so a reconnect replay can never double-toggle visually.
+  const [seenVersion, setSeenVersion] = useState(item.version);
+  if (seenVersion !== item.version) {
+    setSeenVersion(item.version);
+    setLocalCompleted(item.is_completed);
+  }
 
   const meta = [
     item.quantity ? `${item.quantity}${item.unit ? ` ${item.unit}` : ""}` : null,
@@ -56,9 +76,19 @@ export function ShoppingItemCard({ item, category, membersById, onEdit, flat }: 
             const next = !localCompleted;
             setLocalCompleted(next);
             if (!isOnline) {
-              enqueue(item.id, next);
+              enqueue(item.id, next, item.version);
             } else {
-              startTransition(() => toggleShoppingItemComplete(item.id, next));
+              startTransition(async () => {
+                const result = await toggleShoppingItemComplete(item.id, next, {
+                  mutationId: crypto.randomUUID(),
+                  baseVersion: item.version,
+                });
+                if (!result.ok) {
+                  setLocalCompleted(item.is_completed);
+                  showToast(result.message ?? "No se ha podido actualizar.", "error");
+                  router.refresh();
+                }
+              });
             }
           }}
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-terracotta transition active:scale-[0.85] active:bg-terracotta/10 disabled:opacity-50"

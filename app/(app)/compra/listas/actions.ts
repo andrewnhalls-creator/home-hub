@@ -212,15 +212,26 @@ export async function deleteShoppingList(listId: string) {
 
   const { data: list } = await supabase.from("shopping_lists").select("name").eq("id", listId).single();
 
+  const deletedAt = new Date().toISOString();
   await supabase
     .from("shopping_lists")
-    .update({ deleted_at: new Date().toISOString(), deleted_by: user.id })
+    .update({ deleted_at: deletedAt, deleted_by: user.id })
     .eq("id", listId)
     .eq("household_id", householdId);
+
+  // The list's grocery spend must disappear with it (no orphaned movement
+  // left double-countable in Finanzas). Restore brings it back.
+  await supabase
+    .from("expenses")
+    .update({ deleted_at: deletedAt, deleted_by: user.id })
+    .eq("shopping_list_id", listId)
+    .eq("household_id", householdId)
+    .is("deleted_at", null);
 
   void logActivity({ householdId, actorId: user.id, entityType: "shopping_list", entityId: listId, action: "deleted", summary: `Eliminó la lista: ${list?.name ?? listId}` });
 
   revalidatePath("/compra/listas");
+  revalidatePath("/finanzas");
   redirect("/compra/listas");
 }
 
@@ -233,7 +244,16 @@ export async function restoreShoppingList(
   const supabase = await createClient();
   const { error } = await supabase.from("shopping_lists").update({ deleted_at: null, deleted_by: null }).eq("id", listId).eq("household_id", householdId);
   if (error) return { error: "No se ha podido restaurar." };
+
+  // Reactivate the same linked grocery-spend expense the delete soft-removed.
+  await supabase
+    .from("expenses")
+    .update({ deleted_at: null, deleted_by: null })
+    .eq("shopping_list_id", listId)
+    .eq("household_id", householdId);
+
   revalidatePath("/compra/listas");
+  revalidatePath("/finanzas");
   return {};
 }
 

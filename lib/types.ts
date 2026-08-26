@@ -92,6 +92,7 @@ export interface ShoppingItem {
   is_completed: boolean;
   completed_at: string | null;
   completed_by: string | null;
+  version: number;
   created_by: string | null;
   created_at: string;
   updated_at: string;

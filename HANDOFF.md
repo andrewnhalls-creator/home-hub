@@ -1,25 +1,33 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-26 (Backend slice B2.1 — COMPLETE; B1.1–B1.3 done earlier same day)
+Updated: 2026-08-26 (Backend slice B2.2 — COMPLETE; B1.1–B2.1 done earlier same day)
 
 ## Current state
-**Backend slice B2.1 (recurrence engine + occurrence history) is done.**
-`lib/recurrence.ts` is now THE single recurrence engine (documented subset:
-diaria/semanal/quincenal/mensual/anual; month-end anchor rule 31→28/30→31;
-Europe/Madrid wall-clock preserved across DST; occurrence keys = due date/
-instant). Migrations 039/039b (repo copy `sql/039_occurrence_history.sql`):
-`reminder_completions` table + `chore_completions.occurrence_key`, unique
-(template, occurrence_key), `anchor_day` on reminders/chores (backfilled),
-actor-integrity RLS on both history tables. Rewired actions: **recurring
-reminders now actually advance** (they previously died as 'hecho' after one
-completion); chores use the engine (fixes the setMonth overflow bug: 31 ene →
-28 feb, not 3 mar) and completion is concurrency-safe (upsert on occurrence key
-+ guarded advance `where due unchanged` → at most one next occurrence);
-`combineDueAt`/chore notifications now share the engine's tz helpers (fixes
-chore notifications scheduled in server-local time). Completion history is
-immutable (template edits never touch it). Tests:
-`supabase/tests/004_occurrences.sql` (8 pgTAP, all passing), vitest 32/32
-(new `tests/recurrence.test.ts`: leap years, month-end, DST spring/fall).
+**Backend slice B2.2 (idempotent offline shopping + transactional purchase) is
+done.** Migration 040 (repo copy `sql/040_shopping_idempotency.sql`):
+`shopping_mutations` (client UUID mutation ids; replay conflicts → server
+returns authoritative state) and `finish_quick_purchase()` RPC (expense +
+clearing bought standing items in ONE transaction; SECURITY INVOKER; Madrid
+date). `toggleShoppingItemComplete(itemId, isCompleted, {mutationId,
+baseVersion})`: dedupe by mutation id, version-guarded update on the B1.1
+trigger-maintained `version` column — stale-but-same-state = idempotent
+success; divergent edit = Spanish conflict payload ("ha cambiado mientras
+tanto") surfaced as an error toast + refresh. `useOfflineToggleQueue` v2:
+entries carry mutationId + the baseVersion the user actually saw; sequential
+replay; transient failure requeues the remainder; conflicts toast in Spanish.
+ShoppingItemCard syncs optimistic state to the server version (no visual
+double-toggle after reconnect/realtime). Named-list flow: `deleteShoppingList`
+now soft-deletes the linked grocery expense and `restoreShoppingList`
+reactivates the same one (no orphaned/double-countable movement; the
+one-expense-per-list partial unique index already existed). Deviation from
+BACKEND_PLAN noted: no `shopping_trips.expense_id` FK was added — real
+provenance already exists via `expenses.shopping_list_id`, and quick purchases
+get atomicity + activity instead (full ledger provenance arrives in B4.1).
+Tests: `supabase/tests/005_shopping.sql` (7 pgTAP, all passing), vitest 32/32.
 Lint 0 errors / typecheck / build green.
+
+**B2.1 (earlier)**: `lib/recurrence.ts` single engine (month-end anchors, DST
+wall-clock), occurrence history tables, concurrency-safe completions,
+recurring reminders actually advance now (`sql/039_occurrence_history.sql`).
 
 **B1.3 (earlier)**: transactional outbox (`sql/038_outbox.sql`): `outbox_jobs`
 queue (claim/lease, capped backoff+jitter, deferral, cancellation),

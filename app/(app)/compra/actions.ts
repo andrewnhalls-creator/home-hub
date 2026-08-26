@@ -109,17 +109,64 @@ export async function updateShoppingItem(
   return { success: true };
 }
 
-export async function toggleShoppingItemComplete(itemId: string, isCompleted: boolean) {
+export interface ToggleItemResult {
+  ok: boolean;
+  conflict?: boolean;
+  message?: string;
+  current?: { isCompleted: boolean; version: number };
+}
+
+/**
+ * Idempotent, conflict-aware completion toggle (offline-capable).
+ * - `mutationId`: client-generated UUID; a replayed mutation (offline queue
+ *   retry, reconnect replay) is detected and returns current state without
+ *   re-applying.
+ * - `baseVersion`: the trigger-maintained row version the client last saw.
+ *   A stale version that would produce the same state succeeds idempotently;
+ *   a truly divergent edit returns a Spanish conflict payload instead of
+ *   silently overwriting.
+ * Callers without opts keep the previous last-write behaviour.
+ */
+export async function toggleShoppingItemComplete(
+  itemId: string,
+  isCompleted: boolean,
+  opts?: { mutationId?: string; baseVersion?: number },
+): Promise<ToggleItemResult> {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  if (opts?.mutationId) {
+    const { error: mutationError } = await supabase.from("shopping_mutations").insert({
+      id: opts.mutationId,
+      household_id: householdId,
+      item_id: itemId,
+    });
+    if (mutationError?.code === "23505") {
+      // Already applied — return authoritative state, do not re-apply.
+      const { data: current } = await supabase
+        .from("shopping_items")
+        .select("is_completed, version")
+        .eq("id", itemId)
+        .eq("household_id", householdId)
+        .maybeSingle();
+      return current
+        ? { ok: true, current: { isCompleted: current.is_completed, version: current.version } }
+        : { ok: true };
+    }
+  }
+
   const { data: item } = await supabase
     .from("shopping_items")
-    .select("name")
+    .select("name, is_completed, version")
     .eq("id", itemId)
-    .single();
+    .eq("household_id", householdId)
+    .maybeSingle();
 
-  await supabase
+  if (!item) {
+    return { ok: false, message: "Este artículo ya no está en la lista." };
+  }
+
+  let update = supabase
     .from("shopping_items")
     .update({
       is_completed: isCompleted,
@@ -128,8 +175,26 @@ export async function toggleShoppingItemComplete(itemId: string, isCompleted: bo
     })
     .eq("id", itemId)
     .eq("household_id", householdId);
+  if (opts?.baseVersion !== undefined) {
+    update = update.eq("version", opts.baseVersion);
+  }
+  const { data: updated } = await update.select("is_completed, version");
 
-  if (isCompleted && item) {
+  if (!updated?.length) {
+    // Version moved since the client saw it.
+    if (item.is_completed === isCompleted) {
+      // Someone else already produced the same state — idempotent success.
+      return { ok: true, current: { isCompleted: item.is_completed, version: item.version } };
+    }
+    return {
+      ok: false,
+      conflict: true,
+      message: `"${item.name}" ha cambiado mientras tanto. Revisa la lista.`,
+      current: { isCompleted: item.is_completed, version: item.version },
+    };
+  }
+
+  if (isCompleted) {
     await supabase.from("activity_log").insert({
       household_id: householdId,
       actor_id: user.id,
@@ -140,6 +205,7 @@ export async function toggleShoppingItemComplete(itemId: string, isCompleted: bo
   }
 
   revalidatePath("/compra");
+  return { ok: true, current: { isCompleted: updated[0].is_completed, version: updated[0].version } };
 }
 
 export async function deleteShoppingItem(itemId: string) {
@@ -164,42 +230,17 @@ export async function finishQuickPurchase(
   if (!Number.isInteger(cents) || cents <= 0) {
     return { error: "Introduce el total del ticket." };
   }
-  const amount = cents / 100;
-
-  const { user, householdId } = await requireHousehold();
+  await requireHousehold();
   const supabase = await createClient();
 
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("id")
-    .eq("household_id", householdId)
-    .eq("module", "finance")
-    .eq("name", "Supermercado")
-    .limit(1);
-  const categoryId = categories?.[0]?.id ?? null;
-
-  const today = new Date().toISOString().slice(0, 10);
-  const { error: insertError } = await supabase.from("expenses").insert({
-    household_id: householdId,
-    title: "Compra del súper",
-    amount,
-    expense_date: today,
-    category_id: categoryId,
-    paid_by: user.id,
-    created_by: user.id,
+  // Single transaction: expense + clearing the bought items (see migration 040).
+  const { error } = await supabase.rpc("finish_quick_purchase", {
+    p_amount_cents: cents,
   });
 
-  if (insertError) {
+  if (error) {
     return { error: "No se ha podido guardar. Inténtalo de nuevo." };
   }
-
-  // Clear the bought items off the standing list (named lists keep their own flow).
-  await supabase
-    .from("shopping_items")
-    .delete()
-    .eq("household_id", householdId)
-    .eq("is_completed", true)
-    .is("shopping_list_id", null);
 
   revalidatePath("/compra");
   revalidatePath("/finanzas");
