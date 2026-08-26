@@ -2,7 +2,8 @@
 
 import { useActionState, useState } from "react";
 import Link from "next/link";
-import { House, EnvelopeSimple, LockSimple, Eye, EyeSlash, ArrowRight } from "@phosphor-icons/react";
+import Image from "next/image";
+import { EnvelopeSimple, LockSimple, Eye, EyeSlash, ArrowRight } from "@phosphor-icons/react";
 import { signIn, type AuthActionState } from "@/app/auth/actions";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -17,9 +18,14 @@ export default function LoginPage() {
     <main className="flex flex-1 flex-col items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm rounded-[var(--radius-xl)] bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
         <div className="flex flex-col items-center text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-terracotta text-cream" aria-hidden>
-            <House weight="regular" size={26} />
-          </div>
+          <Image
+            src="/branding/home-hub-logo.png"
+            alt="Logotipo de Home Hub"
+            width={64}
+            height={64}
+            className="h-16 w-16"
+            priority
+          />
           <h1 className="mt-4 text-2xl font-bold text-brown">Bienvenido a casa</h1>
           <p className="mt-1.5 text-sm text-muted">
             Introduce tus datos para acceder a tu hogar digital.

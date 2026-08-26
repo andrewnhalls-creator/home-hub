@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { GearSix, SignOut } from "@phosphor-icons/react";
 import { PRIMARY_NAV_ITEMS, MENU_ITEMS } from "@/lib/constants";
@@ -40,7 +41,14 @@ export function Sidebar() {
 
   return (
     <aside className="hidden w-60 shrink-0 border-r border-border bg-card px-3 py-6 md:flex md:flex-col md:overflow-y-auto">
-      <div className="mb-6 px-4">
+      <div className="mb-6 flex items-center gap-2.5 px-4">
+        <Image
+          src="/branding/home-hub-logo.png"
+          alt="Logotipo de Home Hub"
+          width={32}
+          height={32}
+          className="h-8 w-8 shrink-0"
+        />
         <span className="font-display text-xl font-bold text-terracotta tracking-tight" translate="no">
           Home Hub
         </span>

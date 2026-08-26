@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { MagnifyingGlass, CaretDown, List } from "@phosphor-icons/react";
 import { NAV_ITEMS } from "@/lib/constants";
@@ -47,8 +48,18 @@ export function TopBar({ householdName, userName, userRole, households = [], not
               <CaretDown weight="bold" size={12} className="text-muted" aria-hidden />
             </button>
           ) : (
-            <span className="font-display text-base font-bold text-terracotta tracking-tight md:hidden" translate="no">
-              Home Hub
+            <span className="flex items-center gap-2 md:hidden">
+              <Image
+                src="/branding/home-hub-logo.png"
+                alt=""
+                aria-hidden
+                width={24}
+                height={24}
+                className="h-6 w-6 shrink-0"
+              />
+              <span className="font-display text-base font-bold text-terracotta tracking-tight" translate="no">
+                Home Hub
+              </span>
             </span>
           )
         ) : null}
