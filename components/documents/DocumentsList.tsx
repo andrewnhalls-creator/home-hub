@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { isPast, isBefore, addDays } from "date-fns";
-import { Plus, FileText, PencilSimple, Archive, Trash } from "@phosphor-icons/react";
-import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
+import { useMemo, useState, useTransition } from "react";
+import { isPast, differenceInCalendarDays, format, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
+import { Plus, FileText, PencilSimple, Archive, Trash, Warning, ArrowSquareOut } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -13,10 +12,30 @@ import { formatDate } from "@/lib/format";
 import { PrintButton } from "@/components/ui/PrintButton";
 import { DocumentForm } from "@/components/documents/DocumentForm";
 import { createDocument, updateDocument, archiveDocument, deleteDocument } from "@/app/(app)/documentos/actions";
+import { cn } from "@/lib/utils";
 import type { HouseholdDocument } from "@/lib/types";
 
 interface DocumentsListProps {
   documents: HouseholdDocument[];
+}
+
+const TYPE_ACCENTS = ["text-amber", "text-sage", "text-olive", "text-rose"];
+
+function expiryInfo(doc: HouseholdDocument): { label: string; tone: "danger" | "muted" } | null {
+  if (doc.expiry_date) {
+    const expiry = parseISO(doc.expiry_date);
+    const days = differenceInCalendarDays(expiry, new Date());
+    const dateLabel = format(expiry, "d MMM", { locale: es });
+    if (isPast(expiry) && days < 0) return { label: `Caducado (${dateLabel})`, tone: "danger" };
+    if (days === 0) return { label: `Vence hoy (${dateLabel})`, tone: "danger" };
+    if (days <= 30) return { label: `Vence en ${days} ${days === 1 ? "día" : "días"} (${dateLabel})`, tone: "danger" };
+    return { label: `Caduca el ${formatDate(doc.expiry_date)}`, tone: "muted" };
+  }
+  if (doc.renewal_date) {
+    const raw = format(parseISO(doc.renewal_date), "MMM yyyy", { locale: es });
+    return { label: `Renovación: ${raw}`, tone: "muted" };
+  }
+  return null;
 }
 
 export function DocumentsList({ documents }: DocumentsListProps) {
@@ -25,11 +44,60 @@ export function DocumentsList({ documents }: DocumentsListProps) {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingDoc, setEditingDoc] = useState<HouseholdDocument | null>(null);
   const [deletingDoc, setDeletingDoc] = useState<HouseholdDocument | null>(null);
+  const [typeFilter, setTypeFilter] = useState<string>("");
 
-  const soonThreshold = addDays(new Date(), 30);
+  const documentTypes = useMemo(
+    () =>
+      Array.from(
+        new Set(documents.map((d) => d.document_type).filter((t): t is string => !!t)),
+      ).sort((a, b) => a.localeCompare(b, "es")),
+    [documents],
+  );
+  const typeAccent = (type: string | null) => {
+    if (!type) return "text-muted";
+    const index = documentTypes.indexOf(type);
+    return TYPE_ACCENTS[(index >= 0 ? index : 0) % TYPE_ACCENTS.length];
+  };
+
+  const filtered = typeFilter ? documents.filter((d) => d.document_type === typeFilter) : documents;
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4">
+      <div>
+        <h1 className="text-2xl font-bold text-brown">Documentos</h1>
+        <p className="mt-1 text-sm text-muted">Facturas, seguros y garantías del hogar, en orden.</p>
+      </div>
+
+      <Button type="button" onClick={() => setIsAddOpen(true)}>
+        <Plus className="h-4 w-4" aria-hidden />
+        Nuevo documento
+      </Button>
+
+      {documentTypes.length > 0 && (
+        <div className="scrollbar-none flex gap-2 overflow-x-auto" role="tablist" aria-label="Filtrar por tipo">
+          {["", ...documentTypes].map((type) => {
+            const isActive = typeFilter === type;
+            return (
+              <button
+                key={type || "todos"}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setTypeFilter(type)}
+                className={cn(
+                  "min-h-[38px] shrink-0 whitespace-nowrap rounded-full border px-4 text-sm font-medium capitalize transition active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+                  isActive
+                    ? "border-transparent bg-terracotta text-cream"
+                    : "border-border bg-card text-brown hover:bg-sand",
+                )}
+              >
+                {type || "Todos"}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {documents.length === 0 ? (
         <EmptyState
           icon={FileText}
@@ -48,54 +116,80 @@ export function DocumentsList({ documents }: DocumentsListProps) {
             <PrintButton label="Exportar PDF" />
           </div>
           <ul className="flex flex-col gap-3">
-          {documents.map((doc) => {
-            const expiry = doc.expiry_date ? new Date(doc.expiry_date) : null;
-            const isExpired = expiry && isPast(expiry);
-            const isExpiringSoon = expiry && !isExpired && isBefore(expiry, soonThreshold);
+          {filtered.map((doc) => {
+            const info = expiryInfo(doc);
             return (
               <li key={doc.id}>
-                <Card className="flex items-start gap-3">
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-brown">{doc.title}</p>
-                    <p className="text-xs text-muted">
-                      {[doc.document_type, doc.provider, doc.expiry_date ? `Caduca ${formatDate(doc.expiry_date)}` : null]
-                        .filter(Boolean)
-                        .join(" · ")}
-                    </p>
+                <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+                  <div className="flex items-start gap-3">
+                    <div className="min-w-0 flex-1">
+                      {doc.document_type && (
+                        <p className={cn("flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider", typeAccent(doc.document_type))}>
+                          <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
+                          {doc.document_type}
+                        </p>
+                      )}
+                      <p className="mt-0.5 text-sm font-bold text-brown">{doc.title}</p>
+                      {(doc.provider || doc.notes) && (
+                        <p className="mt-0.5 line-clamp-2 text-xs text-muted">
+                          {[doc.provider, doc.notes].filter(Boolean).join(" — ")}
+                        </p>
+                      )}
+                      {info && (
+                        <p
+                          className={cn(
+                            "mt-1.5 flex items-center gap-1 text-xs font-medium",
+                            info.tone === "danger" ? "text-danger" : "text-muted",
+                          )}
+                        >
+                          {info.tone === "danger" && <Warning weight="fill" size={12} aria-hidden />}
+                          {info.label}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex shrink-0 gap-1">
+                      <button
+                        type="button"
+                        aria-label="Editar documento"
+                        title="Editar"
+                        onClick={() => setEditingDoc(doc)}
+                        className="flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                      >
+                        <PencilSimple className="h-4 w-4" aria-hidden />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Archivar documento"
+                        title="Archivar (guarda el documento sin eliminarlo)"
+                        disabled={isPending}
+                        onClick={() => startTransition(async () => { await archiveDocument(doc.id); showToast("Documento archivado"); })}
+                        className="flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                      >
+                        <Archive className="h-4 w-4" aria-hidden />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Eliminar documento"
+                        title="Eliminar"
+                        onClick={() => setDeletingDoc(doc)}
+                        className="flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                      >
+                        <Trash className="h-4 w-4" aria-hidden />
+                      </button>
+                    </div>
                   </div>
-                  {isExpired && <Badge variant="danger">Caducado</Badge>}
-                  {isExpiringSoon && <Badge variant="warning">Caduca pronto</Badge>}
-                  <div className="flex shrink-0 gap-1">
-                    <button
-                      type="button"
-                      aria-label="Editar documento"
-                      title="Editar"
-                      onClick={() => setEditingDoc(doc)}
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                  {doc.storage_url && (
+                    <a
+                      href={doc.storage_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 flex min-h-[40px] w-fit items-center gap-1.5 rounded-full border border-border px-4 text-xs font-semibold text-brown transition hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
                     >
-                      <PencilSimple className="h-4 w-4" aria-hidden />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Archivar documento"
-                      title="Archivar (guarda el documento sin eliminarlo)"
-                      disabled={isPending}
-                      onClick={() => startTransition(async () => { await archiveDocument(doc.id); showToast("Documento archivado"); })}
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
-                    >
-                      <Archive className="h-4 w-4" aria-hidden />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Eliminar documento"
-                      title="Eliminar"
-                      onClick={() => setDeletingDoc(doc)}
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
-                    >
-                      <Trash className="h-4 w-4" aria-hidden />
-                    </button>
-                  </div>
-                </Card>
+                      <ArrowSquareOut size={13} aria-hidden />
+                      Ver documento
+                    </a>
+                  )}
+                </div>
               </li>
             );
           })}
@@ -103,16 +197,7 @@ export function DocumentsList({ documents }: DocumentsListProps) {
         </>
       )}
 
-      <Button
-        type="button"
-        onClick={() => setIsAddOpen(true)}
-        className="mt-4 w-full"
-      >
-        <Plus className="h-4 w-4" aria-hidden />
-        Añadir documento
-      </Button>
-
-      <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir documento">
+      <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Nuevo documento">
         <DocumentForm action={createDocument} onSuccess={() => { setIsAddOpen(false); showToast("Documento añadido"); }} onCancel={() => setIsAddOpen(false)} />
       </Modal>
 

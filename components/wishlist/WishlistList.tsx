@@ -26,11 +26,11 @@ interface WishlistListProps {
   currentUserId: string;
 }
 
-const STATUS_FILTER_OPTIONS = [
-  { value: "idea", label: "Pendiente" },
-  { value: "aprobado", label: "Aprobado" },
-  { value: "comprado", label: "Comprado" },
-  { value: "descartado", label: "Rechazado" },
+const FILTER_CHIPS = [
+  { value: "", label: "Todos" },
+  { value: "alta", label: "Alta prioridad" },
+  { value: "aprobado", label: "Aprobados" },
+  { value: "comprado", label: "Comprados" },
 ];
 
 const STATUS_BADGE: Record<string, "neutral" | "success" | "warning" | "danger"> = {
@@ -55,7 +55,11 @@ export function WishlistList({ items, members, currentUserId }: WishlistListProp
   const [editingItem, setEditingItem] = useState<WishlistItem | null>(null);
   const [deletingItem, setDeletingItem] = useState<WishlistItem | null>(null);
 
-  const filtered = statusFilter ? items.filter((item) => item.status === statusFilter) : items;
+  const filtered = statusFilter
+    ? statusFilter === "alta"
+      ? items.filter((item) => item.priority === "alta" && item.status !== "comprado")
+      : items.filter((item) => item.status === statusFilter)
+    : items;
 
   const otherMembers = members.filter((m) => m.user_id !== currentUserId);
 
@@ -67,16 +71,38 @@ export function WishlistList({ items, members, currentUserId }: WishlistListProp
 
   return (
     <div className="flex flex-col gap-4 px-4 pb-24 pt-4">
-      <h1 className="text-xl font-semibold text-brown">Lista de deseos</h1>
+      <div>
+        <h1 className="text-2xl font-bold text-brown">Lista de deseos</h1>
+        <p className="mt-1 text-sm text-muted">Lo que os gustaría traer a casa, votado entre todos.</p>
+      </div>
 
-      <Select
-        label="Estado"
-        name="statusFilter"
-        placeholder="Todos"
-        value={statusFilter}
-        onChange={(event) => setStatusFilter(event.target.value)}
-        options={STATUS_FILTER_OPTIONS}
-      />
+      <div className="scrollbar-none flex gap-2 overflow-x-auto" role="tablist" aria-label="Filtrar deseos">
+        {FILTER_CHIPS.map((chip) => {
+          const isActive = statusFilter === chip.value;
+          return (
+            <button
+              key={chip.value || "todos"}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => setStatusFilter(chip.value)}
+              className={cn(
+                "min-h-[38px] shrink-0 whitespace-nowrap rounded-full border px-4 text-sm font-medium transition active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta",
+                isActive
+                  ? "border-transparent bg-terracotta text-cream"
+                  : "border-border bg-card text-brown hover:bg-sand",
+              )}
+            >
+              {chip.label}
+            </button>
+          );
+        })}
+      </div>
+
+      <Button type="button" onClick={() => setIsAddOpen(true)} className="w-fit">
+        <Plus className="h-4 w-4" aria-hidden />
+        Añadir artículo
+      </Button>
 
       {filtered.length === 0 ? (
         items.length === 0 ? (
@@ -105,26 +131,47 @@ export function WishlistList({ items, members, currentUserId }: WishlistListProp
                   {/* Header row */}
                   <div className="flex items-start gap-3">
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-brown">{item.name}</p>
-                      <p className="text-xs text-muted">
-                        {[
-                          item.estimated_cost != null ? formatCurrency(item.estimated_cost) : null,
-                          item.priority !== "normal" ? item.priority : null,
-                        ]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </p>
-                      {item.url && (
-                        <a
-                          href={item.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-1 inline-flex items-center gap-1 text-xs text-terracotta"
-                        >
-                          <ArrowSquareOut className="h-3 w-3" aria-hidden />
-                          Ver enlace
-                        </a>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="text-sm font-bold text-brown">{item.name}</p>
+                        {item.priority !== "normal" && (
+                          <span
+                            className={cn(
+                              "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
+                              item.priority === "alta" ? "bg-rose/10 text-rose" : "bg-sand text-muted",
+                            )}
+                          >
+                            {item.priority}
+                          </span>
+                        )}
+                      </div>
+                      {item.estimated_cost != null && (
+                        <p className="mt-0.5 text-lg font-bold tabular-nums text-brown">
+                          ~{formatCurrency(item.estimated_cost)}
+                        </p>
                       )}
+                      {item.notes && <p className="mt-0.5 line-clamp-2 text-xs text-muted">{item.notes}</p>}
+                      <div className="mt-1.5 flex items-center gap-4">
+                        <span className="flex items-center gap-1 text-xs text-muted" aria-label="Votos a favor">
+                          <Heart
+                            weight={Object.values(item.votes ?? {}).some((v) => v === "quiero") ? "fill" : "regular"}
+                            size={14}
+                            className="text-rose"
+                            aria-hidden
+                          />
+                          {Object.values(item.votes ?? {}).filter((v) => v === "quiero").length}
+                        </span>
+                        {item.url && (
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-terracotta hover:underline"
+                          >
+                            Ver link
+                            <ArrowSquareOut className="h-3 w-3" aria-hidden />
+                          </a>
+                        )}
+                      </div>
                     </div>
                     <Badge variant={STATUS_BADGE[item.status]}>{STATUS_LABEL[item.status] ?? item.status}</Badge>
                     <div className="flex shrink-0 gap-1">
@@ -207,12 +254,7 @@ export function WishlistList({ items, members, currentUserId }: WishlistListProp
         </ul>
       )}
 
-      <Button type="button" onClick={() => setIsAddOpen(true)} className="mt-4 w-full">
-        <Plus className="h-4 w-4" aria-hidden />
-        Añadir deseo
-      </Button>
-
-      <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir deseo">
+      <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir artículo">
         <WishlistItemForm action={createWishlistItem} onSuccess={() => { setIsAddOpen(false); showToast("Deseo añadido"); }} onCancel={() => setIsAddOpen(false)} />
       </Modal>
 
