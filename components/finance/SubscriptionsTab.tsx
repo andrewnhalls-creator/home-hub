@@ -245,6 +245,22 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
         />
       ) : (
         <div className="flex flex-col gap-5">
+          {/* Summary — estimated monthly cost + annual projection */}
+          <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+            <p className="text-xs font-medium text-muted">Coste mensual estimado</p>
+            <p className="mt-0.5 text-2xl font-bold tabular-nums text-brown">
+              {formatCurrency(monthlyTotal + annualTotal / 12)}
+              <span className="text-sm font-medium text-muted"> /mes</span>
+            </p>
+            <div className="mt-2 border-t border-border/60 pt-2">
+              <p className="text-xs font-medium text-muted">Proyección anual</p>
+              <p className="mt-0.5 text-base font-bold tabular-nums text-amber">
+                {formatCurrency(monthlyTotal * 12 + annualTotal)}
+                <span className="text-xs font-medium text-muted"> /año</span>
+              </p>
+            </div>
+          </div>
+
           {monthly.length > 0 && (
             <div className="flex flex-col gap-2">
               <div className="flex items-baseline justify-between gap-2">

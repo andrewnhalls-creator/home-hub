@@ -1,7 +1,9 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { PencilSimple } from "@phosphor-icons/react";
+import { ArrowDown, ArrowUp, ArrowsClockwise } from "@phosphor-icons/react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
 
@@ -302,42 +304,82 @@ export function ResumenTab({
   const disponible = accountBalance != null ? accountBalance - totalPending : null;
   const isPositive = disponible != null && disponible >= 0;
 
+  const salidasEsteMes = totalFixedThisMonth + monthlySubscriptionsTotal + expensesThisMonthTotal;
+  const restanteEsteMes = totalMonthlyIncome - salidasEsteMes;
+  const monthLabel = (() => {
+    const raw = format(new Date(), "MMMM", { locale: es });
+    return raw.charAt(0).toUpperCase() + raw.slice(1);
+  })();
+
   return (
     <div className="flex flex-col gap-3">
-      {/* Hero: account balance + disponible */}
-      <div className="grid grid-cols-2 gap-2">
-        <div className="relative rounded-[var(--radius-xl)] border border-rose/20 bg-card p-4 shadow-[var(--shadow-card)]">
-          <p className="text-xs font-medium text-rose/60">Saldo en cuenta</p>
-          {accountBalance != null ? (
-            <p className="mt-1 text-xl font-bold tabular-nums text-brown">
-              {formatCurrency(accountBalance)}
+      {/* Este mes — entradas / salidas / disponible */}
+      <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-semibold text-brown">Este mes</p>
+          <p className="text-xs text-muted">{monthLabel}</p>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <div>
+            <p className="flex items-center gap-1 text-xs text-muted">
+              <ArrowUp weight="bold" size={12} className="text-sage" aria-hidden />
+              Entradas
             </p>
-          ) : (
-            <p className="mt-1 text-sm text-muted">No configurado</p>
-          )}
-          <p className="mt-1 text-xs text-muted/60">Saldo actual</p>
+            <p className="mt-0.5 text-xl font-bold tabular-nums text-brown">
+              {totalMonthlyIncome > 0 ? formatCurrency(totalMonthlyIncome) : "—"}
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="flex items-center justify-end gap-1 text-xs text-muted">
+              <ArrowDown weight="bold" size={12} className="text-amber" aria-hidden />
+              Salidas
+            </p>
+            <p className="mt-0.5 text-xl font-bold tabular-nums text-brown">
+              {formatCurrency(salidasEsteMes)}
+            </p>
+          </div>
+        </div>
+        {totalMonthlyIncome > 0 && (
+          <div
+            className={cn(
+              "mt-3 rounded-[var(--radius-md)] px-4 py-2.5 text-center",
+              restanteEsteMes >= 0 ? "bg-terracotta" : "bg-danger",
+            )}
+          >
+            <p className="text-xs font-medium text-cream/80">Disponible</p>
+            <p className="text-2xl font-bold tabular-nums text-cream">
+              {formatCurrency(restanteEsteMes)}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Saldo total en cuenta */}
+      <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-medium text-muted">Saldo total</p>
+            {accountBalance != null ? (
+              <p className="mt-0.5 text-xl font-bold tabular-nums text-brown">
+                {formatCurrency(accountBalance)}
+              </p>
+            ) : (
+              <p className="mt-0.5 text-sm text-muted">No configurado</p>
+            )}
+            {disponible !== null && (
+              <p className={cn("mt-0.5 text-xs tabular-nums", isPositive ? "text-sage" : "text-danger")}>
+                {formatCurrency(disponible)} tras pagar lo pendiente
+              </p>
+            )}
+          </div>
           <button
             type="button"
-            aria-label="Actualizar saldo"
             onClick={() => setIsBalanceOpen(true)}
-            className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:text-brown active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+            className="flex min-h-[40px] shrink-0 items-center gap-1.5 rounded-full bg-terracotta/10 px-3.5 text-sm font-semibold text-terracotta transition hover:bg-terracotta/20 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
           >
-            <PencilSimple className="h-3.5 w-3.5" aria-hidden />
+            <ArrowsClockwise size={14} aria-hidden />
+            Actualizar
           </button>
-        </div>
-
-        <div className="rounded-[var(--radius-xl)] border border-rose/20 bg-card p-4 shadow-[var(--shadow-card)]">
-          <p className="text-xs font-medium text-rose/60">Disponible</p>
-          {disponible !== null ? (
-            <>
-              <p className={cn("mt-1 text-xl font-bold tabular-nums", isPositive ? "text-sage" : "text-danger")}>
-                {formatCurrency(disponible)}
-              </p>
-              <p className="mt-1 text-xs text-muted/60">Saldo − pendientes</p>
-            </>
-          ) : (
-            <p className="mt-1 text-sm text-muted">Introduce tu saldo</p>
-          )}
         </div>
       </div>
 
