@@ -50,8 +50,15 @@ export function SettingsView({
   allMemberships,
   activeHouseholdId,
 }: SettingsViewProps) {
+  const MEMBER_ACCENTS = ["bg-amber", "bg-sage", "bg-olive", "bg-rose", "bg-terracotta"];
+
   return (
     <div className="flex flex-col gap-4">
+      <div>
+        <h1 className="text-2xl font-bold text-brown">Ajustes</h1>
+        <p className="mt-1 text-sm text-muted">Tu hogar, tu perfil y tus preferencias.</p>
+      </div>
+
       {allMemberships.length > 1 && (
         <Card>
           <CardTitle>Mis hogares</CardTitle>
@@ -80,20 +87,27 @@ export function SettingsView({
       <Card>
         <CardTitle>Miembros</CardTitle>
         <CardDescription>Personas con acceso a este hogar.</CardDescription>
-        <ul className="mt-3 flex flex-col gap-2">
-          {members.map((member) => (
-            <li key={member.id} className="flex items-center justify-between gap-3">
-              <span className="text-base text-brown">
-                {member.display_name || "Sin nombre"}
-                {member.user_id === currentUserId && (
-                  <span className="text-muted"> (tú)</span>
-                )}
-              </span>
-              <Badge variant={member.role === "owner" ? "accent" : "neutral"}>
-                {member.role === "owner" ? "Propietario" : "Miembro"}
-              </Badge>
-            </li>
-          ))}
+        <ul className="mt-3 flex flex-col gap-2.5">
+          {members.map((member, index) => {
+            const name = member.display_name || "Sin nombre";
+            return (
+              <li key={member.id} className="flex items-center gap-3">
+                <span
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-cream ${MEMBER_ACCENTS[index % MEMBER_ACCENTS.length]}`}
+                  aria-hidden
+                >
+                  {name.charAt(0).toUpperCase()}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-sm font-medium text-brown">
+                  {name}
+                  {member.user_id === currentUserId && <span className="text-muted"> (tú)</span>}
+                </span>
+                <Badge variant={member.role === "owner" ? "accent" : "neutral"}>
+                  {member.role === "owner" ? "Admin" : "Miembro"}
+                </Badge>
+              </li>
+            );
+          })}
         </ul>
       </Card>
 
