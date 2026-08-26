@@ -15,11 +15,17 @@ F6 Menú/recetas · F7 Recordatorios/tareas · F8 Calendario (month card + inlin
 F9 Finanzas (Este mes hero, Nuevo Gasto, movimientos, subs summary, presupuestos, deudas) ·
 F10 Documentos/deseos · F11 Buscar (fixed results crash)/papelera/actividad · F12 Ajustes.
 
-## Known follow-ups / intentional divergences
-- PlanAhorroTab keeps the no-targets model (May rework) — mockup shows targets; needs a
-  product decision.
-- Papelera has no "Vaciar"/30-day purge; Actividad has no "Nueva Nota" — both need backend.
-- PWA icons (`public/icons/`) still old dark branding — regenerate.
+## Product decisions (user, 26/08/2026 — do not revisit without asking)
+- Ahorro: KEEP the no-targets model (May rework). Do NOT reintroduce goal targets/% from
+  the `ahorro_y_objetivos` mockup.
+- Navigation: no "Casa" hub page — Inicio covers it; bottom nav stays
+  Inicio · Compra · + · Finanzas · Calendario.
+- Actividad "Nueva Nota" / notes feature: DROPPED permanently.
+- Papelera purge policy ("Vaciar" + 30-day auto-delete): DEFERRED — decide when the
+  backend trash phase is built.
+
+## Known follow-ups
+- PWA icons (`public/icons/`) still old dark branding — regenerate (pending, mechanical).
 - Screens verified with empty data (recetas cards/detail, documentos, deseos, F4 hero cards)
   should be re-checked once real data exists.
 - DESIGN_SYSTEM.md deprecated; DESIGN.md is current. UI_REDESIGN_PLAN.md is from the old
