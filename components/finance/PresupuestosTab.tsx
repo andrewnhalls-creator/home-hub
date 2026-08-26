@@ -129,6 +129,24 @@ export function PresupuestosTab({
   const totalSpent = budgetsWithSpend.reduce((sum, b) => sum + b.spent, 0);
   const totalPct = totalBudgeted > 0 ? (totalSpent / totalBudgeted) * 100 : 0;
 
+  // How far through the cycle we are, to compare spend pace vs time elapsed.
+  const cycleStartMs = new Date(`${cycleStart}T00:00:00`).getTime();
+  const cycleEndMs = new Date(`${cycleEnd}T23:59:59`).getTime();
+  const [nowMs] = useState(() => Date.now());
+  const cycleDays = Math.max(1, Math.round((cycleEndMs - cycleStartMs) / 86_400_000));
+  const dayOfCycle = Math.min(
+    cycleDays,
+    Math.max(1, Math.ceil((nowMs - cycleStartMs) / 86_400_000)),
+  );
+  const monthElapsedPct = Math.min(100, Math.round((dayOfCycle / cycleDays) * 100));
+
+  function statusChip(pct: number): { label: string; className: string } | null {
+    if (pct > 100) return { label: "Excedido", className: "bg-danger-soft text-danger" };
+    if (pct >= monthElapsedPct + 10)
+      return { label: "Precaución", className: "bg-warning-soft text-warning-text" };
+    return null;
+  }
+
   return (
     <div className="flex flex-col gap-4">
       {categoryBudgets.length === 0 ? (
@@ -146,31 +164,39 @@ export function PresupuestosTab({
       ) : (
         <>
           {/* Summary */}
-          <Card variant="subtle">
-            <div className="flex items-center justify-between gap-4">
-              <span className="text-sm text-muted">Total presupuestado</span>
-              <span className="text-sm font-bold text-brown tabular-nums">
-                {formatCurrency(totalBudgeted)}/mes
+          <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+            <p className="text-xs font-medium text-muted">Total presupuestado</p>
+            <p className="mt-0.5 text-2xl font-bold tabular-nums text-brown">
+              {formatCurrency(totalBudgeted)}
+              <span className="text-sm font-medium text-muted"> /mes</span>
+            </p>
+            <div className="mt-2.5 flex items-center justify-between gap-4 text-xs">
+              <span className="text-muted">Gastado ({Math.round(totalPct)}%)</span>
+              <span className={cn("font-semibold tabular-nums", totalPct > 100 ? "text-danger" : "text-brown")}>
+                {formatCurrency(totalSpent)}
               </span>
             </div>
-            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-border">
+            <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-sand">
               <div
                 className={cn("h-full rounded-full transition-transform", progressColor(totalPct))}
                 style={{ width: `${Math.min(totalPct, 100)}%` }}
               />
             </div>
-            <div className="mt-1.5 flex items-center justify-between gap-4">
-              <span className="text-xs text-muted">Gastado este ciclo</span>
-              <span className={cn("text-xs font-semibold tabular-nums", totalPct > 100 ? "text-danger" : "text-brown")}>
-                {formatCurrency(totalSpent)}
-              </span>
-            </div>
-          </Card>
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-muted">
+              <span
+                className="inline-block h-1.5 w-1.5 rounded-full bg-terracotta"
+                aria-hidden
+              />
+              Día {dayOfCycle} de {cycleDays} ({monthElapsedPct}% del ciclo)
+            </p>
+          </div>
 
           {/* Per-category rows */}
+          <p className="text-sm font-semibold text-brown">Categorías</p>
           <div className="flex flex-col gap-3">
             {budgetsWithSpend.map((b) => {
               const cat = categoryMap.get(b.category_id);
+              const chip = statusChip(b.pct);
               return (
                 <Card key={b.id} className="flex flex-col gap-2">
                   <div className="flex items-center gap-2">
@@ -181,9 +207,19 @@ export function PresupuestosTab({
                         aria-hidden
                       />
                     )}
-                    <span className="min-w-0 flex-1 text-sm font-medium text-brown">
+                    <span className="min-w-0 flex-1 text-sm font-semibold text-brown">
                       {cat?.name ?? "Categoría"}
                     </span>
+                    {chip && (
+                      <span
+                        className={cn(
+                          "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
+                          chip.className,
+                        )}
+                      >
+                        {chip.label}
+                      </span>
+                    )}
                     <span className="shrink-0 text-xs text-muted tabular-nums">
                       {formatCurrency(b.spent)} / {formatCurrency(b.monthly_amount)}
                     </span>
@@ -210,17 +246,24 @@ export function PresupuestosTab({
                       <Trash className="h-4 w-4" aria-hidden />
                     </button>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-border">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-sand">
                     <div
                       className={cn("h-full rounded-full transition-all", progressColor(b.pct))}
                       style={{ width: `${Math.min(b.pct, 100)}%` }}
                     />
                   </div>
-                  {b.pct > 100 && (
-                    <p className="text-xs text-danger">
+                  <p className="text-xs text-muted">
+                    Gastado: {Math.round(b.pct)}% · Mes: {monthElapsedPct}%
+                  </p>
+                  {b.pct > 100 ? (
+                    <p className="text-xs font-medium text-danger">
                       Excedido en {formatCurrency(b.spent - b.monthly_amount)}
                     </p>
-                  )}
+                  ) : b.pct >= monthElapsedPct + 10 ? (
+                    <p className="text-xs text-warning-text">
+                      El gasto va por delante del ritmo del mes.
+                    </p>
+                  ) : null}
                 </Card>
               );
             })}

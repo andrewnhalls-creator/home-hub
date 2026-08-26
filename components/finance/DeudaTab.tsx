@@ -151,19 +151,20 @@ export function DeudaTab({ debts }: DeudaTabProps) {
         />
       ) : (
         <>
-          {/* Summary */}
-          <Card variant="subtle">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-xs text-muted">Deuda total</p>
-                <p className="text-base font-bold text-danger tabular-nums">{formatCurrency(totalBalance)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted">Cuota mensual total</p>
-                <p className="text-base font-bold text-brown tabular-nums">{formatCurrency(totalMonthly)}</p>
-              </div>
-            </div>
-          </Card>
+          {/* Summary banner */}
+          <div className="rounded-[var(--radius-xl)] bg-terracotta p-4 shadow-[var(--shadow-card)]">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-cream/80">
+              Deuda total pendiente
+            </p>
+            <p className="mt-1 text-3xl font-bold tabular-nums text-cream">
+              {formatCurrency(totalBalance)}
+            </p>
+            {totalMonthly > 0 && (
+              <p className="mt-1 text-xs text-cream/80 tabular-nums">
+                Cuotas mensuales: {formatCurrency(totalMonthly)}
+              </p>
+            )}
+          </div>
 
           <ul className="flex flex-col gap-2">
             {debts.map((debt) => (
