@@ -7,7 +7,19 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1–F8 are complete** (F8 = Calendario, commit 660fe59).
+**Stages F1–F8 complete; F9 half done** (F9a = Finanzas resumen/gasto/movimientos/subs, commit fda0fb6).
+
+What F9a changed (all verified live with real data):
+- ResumenTab: "Este mes" hero (Entradas/Salidas + green Disponible banner) and "Saldo total"
+  card with Actualizar pill; the rest of the tab (KPIs, splits, budget, hipoteca) unchanged.
+- ExpenseForm = mockup's Nuevo Gasto: big € hero input, icon Descripción, Fecha+Categoría row,
+  "¿Quién pagó?" member chips (hidden input paidBy), Cuenta/Etiqueta; stacked Guardar/Cancelar.
+- ExpensesTab: day-grouped movimientos (Hoy/Ayer/EEEE d MMM headers, receipt tiles, −importe).
+- SubscriptionsTab: summary card (coste mensual estimado incl. anuales/12 + proyección anual).
+
+**F9b pending**: presupuestos_mensuales mockup (PresupuestosTab: total card + per-category
+PRECAUCIÓN chips), ahorro_y_objetivos (PlanAhorroTab goal cards w/ % completado + fecha chips),
+gesti_n_de_hipoteca, otras_deudas, movimientos "Pagos fijos" toggle styling, resumen escritorio.
 
 What F8 changed:
 - Month view is the default and matches the mockup: white month card (title + "Organización
