@@ -2,12 +2,6 @@
 
 ## Active
 
-### pg_net still in `public` schema (advisor WARN 0014)
-- `ALTER EXTENSION pg_net SET SCHEMA` is unsupported on the installed version (0.20.3),
-  so the fix is drop+recreate (`sql/036_relocate_pg_net.sql`, NOT applied). The
-  permission classifier blocked the DROP in auto mode — apply after user approval.
-  Push cron (`net.http_post`) keeps working; only the transient async queue is lost.
-
 ### Leaked-password protection disabled (advisor WARN)
 - User action: enable in Supabase Auth dashboard (Password security → check against
   HaveIBeenPwned). No code change involved.
@@ -26,6 +20,10 @@
 - **Revisit**: If sensitive logic is ever added, upgrade to Vercel Pro (~$20/month) to enable private-repo deploys.
 
 ## Resolved
+
+### pg_net moved out of `public` schema ✅
+- **Resolved 2026-08-26** (migration `036_relocate_pg_net`, user-approved): drop+recreate
+  into `extensions`. Verified `net.http_post` exists and the push cron kept succeeding.
 
 ### "Más" button crash fixed ✅
 - **Resolved 2026-06-18** (`3791097`): `ClockClockwise` icon was missing from `PHOSPHOR_MENU_ICONS` in `MoreMenuSheet.tsx`, causing the sheet to crash on open. Added the `/actividad` entry and its accent.

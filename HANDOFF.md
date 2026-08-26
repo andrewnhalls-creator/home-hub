@@ -12,9 +12,10 @@ functions locked to no client role); pgTAP installed. Test harness: vitest 2 (`n
 test`, 7 passing tests in `tests/format.test.ts` — vitest 4 doesn't run on Node 21) and
 `supabase/tests/001_rls_basic.sql` (pgTAP, run via MCP execute_sql in a rolled-back
 transaction — executed clean; outsider sees 0 rows, member sees only their household).
-Remaining advisor WARNs are all documented exceptions (see KNOWN_ISSUES): pg_net
-relocation (`sql/036`, NOT applied — needs user approval), leaked-password protection
-(user dashboard toggle), and 5 intentional authenticated-executable RPC/RLS-helper fns.
+Migration `036_relocate_pg_net` was then user-approved and applied (pg_net →
+`extensions`; push cron verified working after). Remaining advisor WARNs are all
+documented exceptions (see KNOWN_ISSUES): leaked-password protection (user dashboard
+toggle, pending) and 5 intentional authenticated-executable RPC/RLS-helper fns.
 Lint 0 errors / typecheck / build / tests all green.
 
 Plan: `Chatgpt_Redesign/BACKEND_PLAN.md` — 16 vertical slices (B1.1 → B7.1); the app was
@@ -47,6 +48,6 @@ Work `Chatgpt_Redesign/BACKEND_PLAN.md` one slice per session, in order; next is
 **B1.2 (invitations v2: hashed codes + concurrency-safe membership caps)**. Spec:
 `Chatgpt_Redesign/HOME_HUB_BACKEND_PROMPT.md`. Supabase project: xzkavpjwvadqldauaabm.
 Each slice: migrations + RLS + server logic + UI + Spanish states + tests + build, then
-handoff/commit/push/stop. User actions pending: apply `sql/036` (pg_net relocation —
-approve or defer), enable leaked-password protection (Supabase Auth dashboard), Google
-Cloud OAuth setup (before B3), papelera purge decision (during B5.2).
+handoff/commit/push/stop. User actions pending: enable leaked-password protection
+(Supabase Auth dashboard; may be Pro-plan-gated), Google Cloud OAuth setup (before B3),
+papelera purge decision (during B5.2).

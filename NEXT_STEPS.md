@@ -3,9 +3,8 @@
 **Backend B1.1 (hardening + harness): COMPLETO.** ✔ (migraciones 033–035 aplicadas)
 
 Acciones del usuario pendientes:
-- Aprobar/aplicar `sql/036_relocate_pg_net.sql` (drop+recreate de pg_net fuera de
-  `public`; el clasificador de permisos bloqueó el DROP — decisión del usuario).
-- Activar leaked-password protection en el dashboard de Supabase Auth.
+- Activar leaked-password protection en el dashboard de Supabase Auth (si el toggle
+  está bloqueado por plan, avisar y se documenta como riesgo aceptado).
 
 Siguientes slices:
 1. **B1.2 — Invitaciones v2**: `code_hash` (HMAC + pepper), revocación/límites de uso,
