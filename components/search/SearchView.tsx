@@ -3,13 +3,33 @@
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { MagnifyingGlass, X } from "@phosphor-icons/react";
+import {
+  MagnifyingGlass, X, ShoppingCart, Bell, ListChecks, Wallet, FileText,
+  Heart, ForkKnife, ArrowCounterClockwise, PiggyBank,
+} from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
 import { EmptyState } from "@/components/ui/EmptyState";
 
+export type SearchSectionIcon =
+  | "compra" | "recordatorios" | "tareas" | "pagos" | "suscripciones"
+  | "documentos" | "deseos" | "recetas" | "ahorro";
+
+/** Icon names (serialisable) — the server page can't pass component functions to this client view. */
+const SECTION_ICONS: Record<SearchSectionIcon, Icon> = {
+  compra: ShoppingCart,
+  recordatorios: Bell,
+  tareas: ListChecks,
+  pagos: Wallet,
+  suscripciones: ArrowCounterClockwise,
+  documentos: FileText,
+  deseos: Heart,
+  recetas: ForkKnife,
+  ahorro: PiggyBank,
+};
+
 export interface SearchSection {
   label: string;
-  icon: Icon;
+  icon: SearchSectionIcon;
   results: Array<{ id: string; title: string; href: string }>;
 }
 
@@ -75,12 +95,12 @@ export function SearchView({ query, sections }: SearchViewProps) {
       {hasResults && (
         <div className="flex flex-col gap-5">
           {sections.map((section) => {
-            const Icon = section.icon;
+            const Icon = SECTION_ICONS[section.icon] ?? MagnifyingGlass;
             return (
               <div key={section.label}>
                 <div className="mb-2 flex items-center gap-2">
-                  <Icon className="h-3.5 w-3.5 text-muted" aria-hidden />
-                  <p className="text-xs font-medium text-muted">{section.label}</p>
+                  <Icon className="h-4 w-4 text-terracotta" weight="regular" aria-hidden />
+                  <p className="text-sm font-bold text-brown">{section.label}</p>
                 </div>
                 <ul className="flex flex-col gap-1">
                   {section.results.map((result) => (

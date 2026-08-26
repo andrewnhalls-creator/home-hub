@@ -119,9 +119,12 @@ export default async function PapeleraPage() {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm text-muted">
-        Elementos eliminados recientemente. Puedes restaurarlos en cualquier momento.
-      </p>
+      <div>
+        <h1 className="text-2xl font-bold text-brown">Papelera</h1>
+        <p className="mt-1 text-sm text-muted">
+          Elementos eliminados recientemente. Puedes restaurarlos en cualquier momento.
+        </p>
+      </div>
 
       {isEmpty ? (
         <div className="mt-6">

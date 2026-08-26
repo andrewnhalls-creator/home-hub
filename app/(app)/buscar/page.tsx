@@ -2,18 +2,6 @@ import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { SearchView } from "@/components/search/SearchView";
 import type { SearchSection } from "@/components/search/SearchView";
-import {
-  ShoppingCart,
-  Bell,
-  ListChecks,
-  Wallet,
-  FileText,
-  Heart,
-  ForkKnife,
-  ArrowCounterClockwise,
-  PiggyBank,
-} from "@phosphor-icons/react/dist/ssr";
-
 export const dynamic = "force-dynamic";
 
 interface BuscarPageProps {
@@ -54,53 +42,54 @@ export default async function BuscarPage({ searchParams }: BuscarPageProps) {
     supabase.from("savings_goals").select("id, name").eq("household_id", householdId).ilike("name", pattern).is("deleted_at", null).limit(5),
   ]);
 
-  const sections: SearchSection[] = [
+  const allSections: SearchSection[] = [
     {
       label: "Compra",
-      icon: ShoppingCart,
+      icon: "compra",
       results: (shopping ?? []).map((r) => ({ id: r.id, title: r.name, href: "/compra" })),
     },
     {
       label: "Recordatorios",
-      icon: Bell,
+      icon: "recordatorios",
       results: (reminders ?? []).map((r) => ({ id: r.id, title: r.title, href: "/recordatorios" })),
     },
     {
       label: "Tareas",
-      icon: ListChecks,
+      icon: "tareas",
       results: (chores ?? []).map((r) => ({ id: r.id, title: r.title, href: "/tareas" })),
     },
     {
       label: "Pagos fijos",
-      icon: Wallet,
+      icon: "pagos",
       results: (payments ?? []).map((r) => ({ id: r.id, title: r.name, href: "/finanzas" })),
     },
     {
       label: "Suscripciones",
-      icon: ArrowCounterClockwise,
+      icon: "suscripciones",
       results: (subs ?? []).map((r) => ({ id: r.id, title: r.name, href: "/finanzas" })),
     },
     {
       label: "Documentos",
-      icon: FileText,
+      icon: "documentos",
       results: (docs ?? []).map((r) => ({ id: r.id, title: r.title, href: "/documentos" })),
     },
     {
       label: "Deseos",
-      icon: Heart,
+      icon: "deseos",
       results: (wishes ?? []).map((r) => ({ id: r.id, title: r.name, href: "/deseos" })),
     },
     {
       label: "Recetas",
-      icon: ForkKnife,
+      icon: "recetas",
       results: (recipes ?? []).map((r) => ({ id: r.id, title: r.name, href: `/menu/recetas/${r.id}` })),
     },
     {
       label: "Ahorro",
-      icon: PiggyBank,
+      icon: "ahorro",
       results: (savings ?? []).map((r) => ({ id: r.id, title: r.name, href: "/finanzas" })),
     },
-  ].filter((s) => s.results.length > 0);
+  ];
+  const sections = allSections.filter((s) => s.results.length > 0);
 
   return <SearchView query={query} sections={sections} />;
 }

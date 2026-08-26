@@ -103,7 +103,12 @@ export function ActivityFeed({ entries, memberMap }: ActivityFeedProps) {
 
   return (
     <div className="flex flex-col gap-5 px-4 pb-24 pt-4">
-      <h1 className="text-xl font-semibold text-brown">Actividad</h1>
+      <div>
+        <h1 className="text-2xl font-bold text-brown">Actividad</h1>
+        <p className="mt-1 text-sm text-muted">
+          El registro de la casa: quién ha hecho qué y cuándo.
+        </p>
+      </div>
 
       {/* Filter chips */}
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">

@@ -27,15 +27,14 @@ function TrashRow({
   const [state, formAction, pending] = useActionState(restoreAction, {});
 
   return (
-    <li className="flex items-center gap-3 py-2">
+    <li className="flex items-center gap-3 py-2.5">
       <div className="flex-1 min-w-0">
-        <p className="truncate text-sm font-medium text-brown">{item.label}</p>
+        <p className="truncate text-sm font-medium text-muted line-through">{item.label}</p>
         {item.sublabel && (
           <p className="truncate text-xs text-muted">{item.sublabel}</p>
         )}
         <p className="text-xs text-muted">
-          Eliminado{" "}
-          {format(new Date(item.deletedAt), "d MMM yyyy", { locale: es })}
+          Eliminado el {format(new Date(item.deletedAt), "d MMM, HH:mm", { locale: es })}
         </p>
         {state.error && (
           <p className="mt-0.5 text-xs text-danger">{state.error}</p>
@@ -47,10 +46,10 @@ function TrashRow({
           type="submit"
           disabled={pending}
           aria-label={`Restaurar ${item.label}`}
-          className="flex items-center gap-1 text-xs text-terracotta hover:opacity-80 font-medium px-2 py-1 rounded-lg hover:bg-terracotta/10 transition-colors disabled:opacity-50"
+          title="Restaurar"
+          className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] bg-terracotta text-cream transition hover:bg-coral active:scale-[0.92] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
         >
-          <ArrowCounterClockwise size={12} />
-          Restaurar
+          <ArrowCounterClockwise size={18} aria-hidden />
         </button>
       </form>
     </li>
@@ -70,17 +69,17 @@ export function TrashSection({
   restoreAction,
   emptyMessage = "No hay elementos eliminados",
 }: TrashSectionProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
-    <div className="mt-3 overflow-hidden rounded-xl border border-border">
+    <div className="mt-3 overflow-hidden rounded-[var(--radius-xl)] border border-border bg-card shadow-[var(--shadow-card)]">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-sand"
+        className="flex min-h-[48px] w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-sand"
         aria-expanded={open}
       >
-        <span className="text-xs font-medium text-muted">
+        <span className="text-sm font-semibold text-brown">
           {title}
         </span>
         <span className="text-muted">
