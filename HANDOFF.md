@@ -1,29 +1,28 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-26 (Backend slice B2.2 — COMPLETE; B1.1–B2.1 done earlier same day)
+Updated: 2026-08-26 (Backend slice B2.3 — COMPLETE; B1.1–B2.2 done earlier same day)
 
 ## Current state
-**Backend slice B2.2 (idempotent offline shopping + transactional purchase) is
-done.** Migration 040 (repo copy `sql/040_shopping_idempotency.sql`):
-`shopping_mutations` (client UUID mutation ids; replay conflicts → server
-returns authoritative state) and `finish_quick_purchase()` RPC (expense +
-clearing bought standing items in ONE transaction; SECURITY INVOKER; Madrid
-date). `toggleShoppingItemComplete(itemId, isCompleted, {mutationId,
-baseVersion})`: dedupe by mutation id, version-guarded update on the B1.1
-trigger-maintained `version` column — stale-but-same-state = idempotent
-success; divergent edit = Spanish conflict payload ("ha cambiado mientras
-tanto") surfaced as an error toast + refresh. `useOfflineToggleQueue` v2:
-entries carry mutationId + the baseVersion the user actually saw; sequential
-replay; transient failure requeues the remainder; conflicts toast in Spanish.
-ShoppingItemCard syncs optimistic state to the server version (no visual
-double-toggle after reconnect/realtime). Named-list flow: `deleteShoppingList`
-now soft-deletes the linked grocery expense and `restoreShoppingList`
-reactivates the same one (no orphaned/double-countable movement; the
-one-expense-per-list partial unique index already existed). Deviation from
-BACKEND_PLAN noted: no `shopping_trips.expense_id` FK was added — real
-provenance already exists via `expenses.shopping_list_id`, and quick purchases
-get atomicity + activity instead (full ledger provenance arrives in B4.1).
-Tests: `supabase/tests/005_shopping.sql` (7 pgTAP, all passing), vitest 32/32.
-Lint 0 errors / typecheck / build green.
+**Backend slice B2.3 (menu generation + native calendar) is done.** Migration
+041 (repo copy `sql/041_menu_idempotency_calendar_exceptions.sql`): one
+generated shopping list per menu week (unique partial index; the action reuses
+the existing list on retry/race — no duplicated ingredients; item values are
+copied so recipe edits never rewrite reviewed lists), new
+`calendar_event_exceptions` table + end>=start check. `lib/calendar.ts`
+expansion now runs on the shared engine (fixes date-fns anchor loss: monthly on
+day 31 no longer sticks at 28) and skips exception dates. Calendar UI: recurring
+events offer "Eliminar solo este día" (exception) vs "Eliminar toda la serie".
+Recurring events NOW HAVE reminders (previously none): armed at
+create/update/skip for the next occurrence, and outbox-worker v2 re-arms the
+following occurrence after each delivery (self-perpetuating chain; the worker
+bundles a copy of lib/recurrence.ts guarded by a vitest identity test).
+Timezone fix: event reminders were scheduled in server-local time — now Madrid.
+Tests: `supabase/tests/006_calendar_menu.sql` (6 pgTAP, all passing), vitest
+37/37 (new `tests/calendar.test.ts`). Lint 0 errors / typecheck / build green.
+outbox-worker v2 deployed and smoke-tested.
+
+**B2.2 (earlier)**: idempotent offline shopping (mutation ids + version-guarded
+conflicts, Spanish conflict UI), transactional `finish_quick_purchase()`,
+list-delete soft-deletes/restores its linked expense (`sql/040`).
 
 **B2.1 (earlier)**: `lib/recurrence.ts` single engine (month-end anchors, DST
 wall-clock), occurrence history tables, concurrency-safe completions,

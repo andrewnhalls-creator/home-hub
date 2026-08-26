@@ -20,6 +20,13 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import webpush from "https://esm.sh/web-push@3.6.7";
 import { isInQuietHours, secondsUntilQuietEnd } from "./quiet-hours.ts";
+import {
+  advanceDateOnly,
+  instantFromLocalDateTime,
+  nextOccurrenceOnOrAfter,
+  wallClockInTimeZone,
+  type RecurrenceFrequency,
+} from "./recurrence.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -239,7 +246,73 @@ async function handleDeliverNotification(
     .update({ status: "enviado", processed_at: new Date().toISOString() })
     .eq("id", scheduledId);
 
+  // Recurring calendar events re-arm their next occurrence's reminder after
+  // each delivery, forming a self-perpetuating per-occurrence chain.
+  if (scheduled.entity_type === "calendar_event" && scheduled.entity_id) {
+    await rearmCalendarReminder(db, scheduled.entity_id as string);
+  }
+
   return "done";
+}
+
+async function rearmCalendarReminder(db: Db, eventId: string): Promise<void> {
+  const { data: event } = await db
+    .from("calendar_events")
+    .select("household_id, title, event_date, event_time, repeat_frequency, remind_before_minutes, deleted_at")
+    .eq("id", eventId)
+    .maybeSingle();
+  if (
+    !event ||
+    event.deleted_at ||
+    event.repeat_frequency === "ninguna" ||
+    event.remind_before_minutes === null ||
+    event.remind_before_minutes === undefined
+  ) {
+    return;
+  }
+
+  const { data: exceptions } = await db
+    .from("calendar_event_exceptions")
+    .select("occurrence_date")
+    .eq("event_id", eventId);
+  const skipped = new Set(
+    ((exceptions ?? []) as { occurrence_date: string }[]).map((e) => e.occurrence_date),
+  );
+
+  // Search from tomorrow (Madrid) so the just-delivered occurrence is skipped.
+  const w = wallClockInTimeZone(new Date(), TIMEZONE);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const madridToday = `${w.year}-${pad(w.month)}-${pad(w.day)}`;
+  const from = advanceDateOnly(madridToday, "diaria");
+
+  const next = nextOccurrenceOnOrAfter(
+    event.event_date as string,
+    event.repeat_frequency as RecurrenceFrequency,
+    from,
+    skipped,
+  );
+  if (!next) return;
+
+  const time = (event.event_time as string | null)?.slice(0, 5) || "09:00";
+  const instant = instantFromLocalDateTime(next, time, TIMEZONE);
+  const scheduledFor = new Date(
+    new Date(instant).getTime() - Number(event.remind_before_minutes) * 60 * 1000,
+  ).toISOString();
+
+  await db.from("scheduled_notifications").upsert(
+    {
+      household_id: event.household_id,
+      user_id: null,
+      category: "calendario",
+      entity_type: "calendar_event",
+      entity_id: eventId,
+      scheduled_for: scheduledFor,
+      title: "Evento en el calendario",
+      body: event.title,
+      idempotency_key: `calendar_event:${eventId}:${scheduledFor}`,
+    },
+    { onConflict: "idempotency_key", ignoreDuplicates: true },
+  );
 }
 
 async function handleDeliverPushEvent(db: Db, job: OutboxJob): Promise<string> {

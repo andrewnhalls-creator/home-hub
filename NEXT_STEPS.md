@@ -1,22 +1,20 @@
 # Next Steps
 
-**Backend B2.2 (compra offline idempotente + compra transaccional): COMPLETO.** ✔
-(migración 040, 7 tests pgTAP + 32 vitest)
+**Backend B2.3 (menú + calendario nativo): COMPLETO.** ✔ Fase B2 entera terminada.
 
-Comprobaciones/acciones del usuario pendientes:
+Acciones del usuario pendientes:
 - **Reactivar push en vuestros móviles** (Ajustes → Dispositivos).
-- Prueba en el móvil: modo avión → marcar artículos → volver online → se
-  sincronizan sin duplicar; si el otro miembro cambió algo mientras, sale un
-  aviso en español y la lista se refresca.
+- **Antes de la fase B3 (Google Calendar)**: crear el proyecto de Google Cloud
+  (se pedirán los pasos exactos cuando toque).
 
-Siguiente slice:
-1. **B2.3 — Menú/recetas + calendario nativo**: generación de lista de la
-   compra desde el menú idempotente (clave por semana; reintentos sin
-   duplicados; editar receta no reescribe artículos ya revisados), calendario
-   sobre `lib/recurrence.ts` (recurrencia + excepciones, tz IANA, all-day vs
-   instante, soft delete + papelera), realtime tras escritura durable.
-
-Después (Fase B3): Google Calendar — requiere que el usuario cree el proyecto
-de Google Cloud (documentaremos los pasos exactos en ese slice).
-
-Pendiente menor del frontend: iconos PWA con branding antiguo.
+Siguientes slices (Fase B4 — finanzas canónicas, en curso):
+1. **B4.1 — Ledger canónico + snapshots**: tabla `ledger_entries`, backfill de
+   movimientos existentes, FKs únicos desde las tablas fuente, informes sobre
+   el ledger.
+2. **B4.2 — Ocurrencias unificadas + presupuestos** (rollover idempotente,
+   dedupe de umbrales).
+3. **B4.3 — Ahorro (sin objetivos) / hipoteca / deudas** (invariantes
+   principal-interés, proyección 30 días).
+Después: B5 (búsqueda FTS, papelera unificada + decisión de purga, export
+asíncrono), B6 (asistente IA con confirmación), B7 (hardening final), B3
+(Google Calendar — requiere consola de Google).

@@ -1,19 +1,28 @@
-import { addDays, addMonths, addYears, format, isAfter, isBefore } from "date-fns";
+import { addDays, format, isAfter, isBefore } from "date-fns";
 import type { CalendarEvent } from "@/lib/types";
+import { advanceDateOnly, type RecurrenceFrequency } from "@/lib/recurrence";
 
 export interface CalendarOccurrence {
   date: string;
   event: CalendarEvent;
 }
 
+/** Set of "yyyy-MM-dd" dates excluded per event (from calendar_event_exceptions). */
+export type EventExceptionMap = Map<string, Set<string>>;
+
 /**
  * Recurring calendar_events are not materialised into rows — expand on
- * read for the visible date range instead. See DATA_MODEL.md.
+ * read for the visible date range instead, using the shared recurrence
+ * engine (lib/recurrence.ts) so month-end rules match every other module:
+ * a monthly event on day 31 falls on the last valid day of shorter months
+ * and returns to 31 (date-fns addMonths lost the anchor). Occurrence dates
+ * listed in `exceptions` ("eliminar solo este día") are skipped.
  */
 export function expandCalendarEvent(
   event: CalendarEvent,
   rangeStart: Date,
   rangeEnd: Date,
+  exceptions?: Set<string>,
 ): CalendarOccurrence[] {
   const occurrences: CalendarOccurrence[] = [];
 
@@ -33,35 +42,25 @@ export function expandCalendarEvent(
     return occurrences;
   }
 
-  let cursor = new Date(`${event.event_date}T00:00:00`);
+  const frequency = event.repeat_frequency as RecurrenceFrequency;
+  const anchorDay = parseInt(event.event_date.slice(8, 10), 10);
+  const startStr = format(rangeStart, "yyyy-MM-dd");
+  const endStr = format(rangeEnd, "yyyy-MM-dd");
 
-  const step = (date: Date) => {
-    switch (event.repeat_frequency) {
-      case "diaria":
-        return addDays(date, 1);
-      case "semanal":
-        return addDays(date, 7);
-      case "mensual":
-        return addMonths(date, 1);
-      case "anual":
-        return addYears(date, 1);
-      default:
-        return date;
-    }
-  };
-
-  // Fast-forward to the first occurrence at or after rangeStart.
+  let cursor = event.event_date;
   let guard = 0;
-  while (isBefore(cursor, rangeStart) && guard < 1000) {
-    cursor = step(cursor);
-    guard += 1;
+  while (cursor < startStr && guard < 1000) {
+    cursor = advanceDateOnly(cursor, frequency, anchorDay);
+    guard++;
   }
 
   guard = 0;
-  while (!isAfter(cursor, rangeEnd) && guard < 366) {
-    occurrences.push({ date: format(cursor, "yyyy-MM-dd"), event });
-    cursor = step(cursor);
-    guard += 1;
+  while (cursor <= endStr && guard < 366) {
+    if (!exceptions?.has(cursor)) {
+      occurrences.push({ date: cursor, event });
+    }
+    cursor = advanceDateOnly(cursor, frequency, anchorDay);
+    guard++;
   }
 
   return occurrences;
@@ -71,8 +70,11 @@ export function expandCalendarEvents(
   events: CalendarEvent[],
   rangeStart: Date,
   rangeEnd: Date,
+  exceptionsByEvent?: EventExceptionMap,
 ): CalendarOccurrence[] {
-  return events.flatMap((event) => expandCalendarEvent(event, rangeStart, rangeEnd));
+  return events.flatMap((event) =>
+    expandCalendarEvent(event, rangeStart, rangeEnd, exceptionsByEvent?.get(event.id)),
+  );
 }
 
 export type CalendarItemType =
@@ -105,6 +107,7 @@ interface BuildCalendarItemsInput {
   meals: { id: string; planned_date: string; custom_name: string | null; recipes: { name: string }[] | null }[];
   rangeStart: Date;
   rangeEnd: Date;
+  exceptionsByEvent?: EventExceptionMap;
 }
 
 export function buildCalendarItems({
@@ -117,10 +120,11 @@ export function buildCalendarItems({
   meals,
   rangeStart,
   rangeEnd,
+  exceptionsByEvent,
 }: BuildCalendarItemsInput): CalendarItem[] {
   const items: CalendarItem[] = [];
 
-  for (const occurrence of expandCalendarEvents(events, rangeStart, rangeEnd)) {
+  for (const occurrence of expandCalendarEvents(events, rangeStart, rangeEnd, exceptionsByEvent)) {
     items.push({
       id: `evento-${occurrence.event.id}-${occurrence.date}`,
       date: occurrence.date,

@@ -7,6 +7,11 @@ import { requireHousehold } from "@/lib/auth";
 import { calendarEventSchema } from "@/lib/validations/calendar";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
 import { logActivity } from "@/lib/activity";
+import {
+  instantFromLocalDateTime,
+  nextOccurrenceOnOrAfter,
+  type RecurrenceFrequency,
+} from "@/lib/recurrence";
 
 export interface CalendarEventFormState {
   error?: string;
@@ -14,6 +19,12 @@ export interface CalendarEventFormState {
   success?: boolean;
 }
 
+/**
+ * Arms the reminder for the next relevant occurrence (Madrid wall clock).
+ * One-off events remind at their date; recurring events remind at the next
+ * occurrence on/after today that is not skipped by an exception. The worker
+ * re-arms the following occurrence after each delivery (see outbox-worker).
+ */
 async function scheduleEventReminder(
   eventId: string,
   householdId: string,
@@ -21,14 +32,39 @@ async function scheduleEventReminder(
   eventDate: string,
   eventTime: string | undefined,
   remindBeforeMinutes: number | "" | undefined,
+  repeatFrequency: string,
 ) {
   if (remindBeforeMinutes === undefined || remindBeforeMinutes === "") {
     await cancelScheduledNotifications("calendar_event", eventId);
     return;
   }
 
-  const eventDateTime = new Date(`${eventDate}T${eventTime || "09:00"}:00`);
-  const scheduledFor = new Date(eventDateTime.getTime() - remindBeforeMinutes * 60 * 1000).toISOString();
+  let occurrenceDate = eventDate;
+  if (repeatFrequency !== "ninguna") {
+    const supabase = await createClient();
+    const { data: exceptions } = await supabase
+      .from("calendar_event_exceptions")
+      .select("occurrence_date")
+      .eq("event_id", eventId);
+    const skipped = new Set((exceptions ?? []).map((e) => e.occurrence_date as string));
+    const today = new Date().toISOString().slice(0, 10);
+    const next = nextOccurrenceOnOrAfter(
+      eventDate,
+      repeatFrequency as RecurrenceFrequency,
+      today,
+      skipped,
+    );
+    if (!next) {
+      await cancelScheduledNotifications("calendar_event", eventId);
+      return;
+    }
+    occurrenceDate = next;
+  }
+
+  const eventInstant = instantFromLocalDateTime(occurrenceDate, eventTime || "09:00");
+  const scheduledFor = new Date(
+    new Date(eventInstant).getTime() - Number(remindBeforeMinutes) * 60 * 1000,
+  ).toISOString();
 
   await upsertScheduledNotification({
     householdId,
@@ -92,16 +128,15 @@ export async function createCalendarEvent(
     return { error: "No se ha podido guardar. Inténtalo de nuevo." };
   }
 
-  if (parsed.data.repeatFrequency === "ninguna") {
-    await scheduleEventReminder(
-      data.id,
-      householdId,
-      parsed.data.title,
-      parsed.data.eventDate,
-      parsed.data.eventTime,
-      parsed.data.remindBeforeMinutes,
-    );
-  }
+  await scheduleEventReminder(
+    data.id,
+    householdId,
+    parsed.data.title,
+    parsed.data.eventDate,
+    parsed.data.eventTime,
+    parsed.data.remindBeforeMinutes,
+    parsed.data.repeatFrequency,
+  );
   void logActivity({ householdId, actorId: user.id, entityType: "calendar_event", entityId: data.id, action: "created", summary: `Añadió el evento: ${parsed.data.title}` });
 
   revalidatePath("/calendario");
@@ -157,21 +192,61 @@ export async function updateCalendarEvent(
     return { error: "No se ha podido guardar. Inténtalo de nuevo." };
   }
 
-  if (parsed.data.repeatFrequency === "ninguna") {
-    await scheduleEventReminder(
-      eventId,
-      householdId,
-      parsed.data.title,
-      parsed.data.eventDate,
-      parsed.data.eventTime,
-      parsed.data.remindBeforeMinutes,
-    );
-  } else {
-    await cancelScheduledNotifications("calendar_event", eventId);
-  }
+  await scheduleEventReminder(
+    eventId,
+    householdId,
+    parsed.data.title,
+    parsed.data.eventDate,
+    parsed.data.eventTime,
+    parsed.data.remindBeforeMinutes,
+    parsed.data.repeatFrequency,
+  );
 
   revalidatePath("/calendario");
   return { success: true };
+}
+
+/**
+ * "Eliminar solo este día": records an exception for one occurrence of a
+ * recurring event without touching the series, and re-arms the reminder in
+ * case the skipped occurrence was the one scheduled next.
+ */
+export async function skipCalendarEventOccurrence(eventId: string, occurrenceDate: string) {
+  const { user, householdId } = await requireHousehold();
+  const supabase = await createClient();
+
+  const { data: event } = await supabase
+    .from("calendar_events")
+    .select("title, event_date, event_time, repeat_frequency, remind_before_minutes")
+    .eq("id", eventId)
+    .eq("household_id", householdId)
+    .single();
+
+  if (!event || event.repeat_frequency === "ninguna") return;
+
+  await supabase.from("calendar_event_exceptions").upsert(
+    {
+      event_id: eventId,
+      household_id: householdId,
+      occurrence_date: occurrenceDate,
+      created_by: user.id,
+    },
+    { onConflict: "event_id,occurrence_date", ignoreDuplicates: true },
+  );
+
+  await scheduleEventReminder(
+    eventId,
+    householdId,
+    event.title,
+    event.event_date,
+    event.event_time?.slice(0, 5) ?? undefined,
+    event.remind_before_minutes ?? undefined,
+    event.repeat_frequency,
+  );
+
+  void logActivity({ householdId, actorId: user.id, entityType: "calendar_event", entityId: eventId, action: "occurrence_skipped", summary: `Quitó un día del evento: ${event.title}` });
+
+  revalidatePath("/calendario");
 }
 
 export async function deleteCalendarEvent(eventId: string) {

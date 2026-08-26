@@ -25,7 +25,12 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { WeekStrip } from "@/components/ui/WeekStrip";
 import { useToast } from "@/components/ui/Toast";
 import { CalendarEventForm } from "@/components/calendar/CalendarEventForm";
-import { createCalendarEvent, updateCalendarEvent, deleteCalendarEvent } from "@/app/(app)/calendario/actions";
+import {
+  createCalendarEvent,
+  updateCalendarEvent,
+  deleteCalendarEvent,
+  skipCalendarEventOccurrence,
+} from "@/app/(app)/calendario/actions";
 import { cn } from "@/lib/utils";
 import type { CalendarItem, CalendarItemType } from "@/lib/calendar";
 
@@ -522,6 +527,25 @@ export function CalendarView({ items }: CalendarViewProps) {
               }}
               onCancel={() => setEditingItem(null)}
             />
+            {editingItem.event.repeat_frequency !== "ninguna" && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  if (editingItem?.event) {
+                    const id = editingItem.event.id;
+                    const date = editingItem.date;
+                    startTransition(async () => {
+                      await skipCalendarEventOccurrence(id, date);
+                      setEditingItem(null);
+                      showToast("Se ha quitado solo este día");
+                    });
+                  }
+                }}
+              >
+                Eliminar solo este día
+              </Button>
+            )}
             <Button
               type="button"
               variant="danger"
@@ -531,12 +555,18 @@ export function CalendarView({ items }: CalendarViewProps) {
                   startTransition(async () => {
                     await deleteCalendarEvent(id);
                     setEditingItem(null);
-                    showToast("Evento eliminado");
+                    showToast(
+                      editingItem.event?.repeat_frequency !== "ninguna"
+                        ? "Serie eliminada"
+                        : "Evento eliminado",
+                    );
                   });
                 }
               }}
             >
-              Eliminar evento
+              {editingItem.event.repeat_frequency !== "ninguna"
+                ? "Eliminar toda la serie"
+                : "Eliminar evento"}
             </Button>
           </div>
         )}

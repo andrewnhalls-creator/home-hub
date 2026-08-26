@@ -16,6 +16,7 @@ export default async function CalendarPage() {
     { data: subscriptions },
     { data: documents },
     { data: meals },
+    { data: exceptions },
   ] = await Promise.all([
     supabase.from("calendar_events").select("*").eq("household_id", householdId).is("deleted_at", null),
     supabase
@@ -52,7 +53,18 @@ export default async function CalendarPage() {
       .from("meal_plans")
       .select("id, planned_date, custom_name, recipes(name)")
       .eq("household_id", householdId),
+    supabase
+      .from("calendar_event_exceptions")
+      .select("event_id, occurrence_date")
+      .eq("household_id", householdId),
   ]);
+
+  const exceptionsByEvent = new Map<string, Set<string>>();
+  for (const ex of exceptions ?? []) {
+    const set = exceptionsByEvent.get(ex.event_id) ?? new Set<string>();
+    set.add(ex.occurrence_date);
+    exceptionsByEvent.set(ex.event_id, set);
+  }
 
   const today = new Date();
   const items = buildCalendarItems({
@@ -65,6 +77,7 @@ export default async function CalendarPage() {
     meals: meals ?? [],
     rangeStart: addDays(today, -365),
     rangeEnd: addDays(today, 365),
+    exceptionsByEvent,
   });
 
   return <CalendarView items={items} />;

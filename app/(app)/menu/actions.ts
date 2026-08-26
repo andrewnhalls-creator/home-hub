@@ -76,6 +76,21 @@ export async function generateShoppingListFromMealPlan(formData: FormData) {
   const { user, householdId } = await requireHousehold();
   const supabase = await createClient();
 
+  // Idempotent: one generated list per menu week (unique index on
+  // household+source_menu_week_start). A retry reuses the existing list and
+  // never duplicates its ingredients; recipe edits never rewrite a list that
+  // was already generated and reviewed (items copied by value below).
+  const { data: existingList } = await supabase
+    .from("shopping_lists")
+    .select("id")
+    .eq("household_id", householdId)
+    .eq("source_menu_week_start", weekStartDate)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (existingList) {
+    redirect(`/compra/listas/${existingList.id}`);
+  }
+
   // Collect unique recipe IDs planned for this week
   const { data: mealPlans } = await supabase
     .from("meal_plans")
@@ -131,6 +146,17 @@ export async function generateShoppingListFromMealPlan(formData: FormData) {
     .select("id")
     .single();
 
+  if (listError?.code === "23505") {
+    // Concurrent generation raced us — reuse the winner's list.
+    const { data: raced } = await supabase
+      .from("shopping_lists")
+      .select("id")
+      .eq("household_id", householdId)
+      .eq("source_menu_week_start", weekStartDate)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (raced) redirect(`/compra/listas/${raced.id}`);
+  }
   if (listError || !list) redirect("/menu");
 
   // Insert deduplicated items linked to the new list
