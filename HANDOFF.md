@@ -7,7 +7,20 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1 (design system), F2 (app shell), F3 (auth y hogar), F4 (Inicio) and F5 (Compra) are complete.**
+**Stages F1–F6 are complete** (F6 = Menú y recetas, commit abe9db9).
+
+What F6 changed:
+- Menú semanal: centred week navigator ("24 – 30 de agosto" + ESTA SEMANA), full-width
+  Generar lista button, "Ver recetas del hogar" link, day headers with number chips, and
+  MealSlot rows with per-meal icon tiles (Coffee/Sun/MoonStars/Cookie) — dashed
+  "Planificar…" style when empty.
+- Recetas: `RecipesExplorer` (client search + accent-tile cards with time/difficulty/servings
+  meta); detail page is view-first (hero, Ingredientes card, "Añadir ingredientes a la compra"
+  primary, numbered Preparación steps parsed from notes) with edit form + delete inside a
+  <details> collapsible. Recipe cards/detail verified only with empty data (no recipes yet).
+- ShoppingList sort preference now uses useSyncExternalStore (lint-clean, hydration-safe).
+- Browser-testing note: the Chrome tab renderer wedged twice on first-compile navigations;
+  closing the tab and opening a fresh one fixed it (not an app bug — server responded fine).
 
 What F5 changed:
 - Shopping list default view is now grouped category cards (mockup style) with accent-coloured
