@@ -1,127 +1,32 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-25 (Casa Calma redesign — Stage F1 done)
+Updated: 2026-08-26 (Casa Calma redesign — FRONTEND COMPLETE, F1–F12)
 
 ## Current state
-A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/`:
-- `Frontend Designs/` — 36 screens (code.html + screen.png each), design system in `casa_calma/DESIGN.md`
-- `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
-- `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
+**The Casa Calma frontend redesign is complete** (stages F1–F12, last commit 203437f).
+Source designs: `Chatgpt_Redesign/Frontend Designs/` (36 Stitch screens);
+plan: `Chatgpt_Redesign/REDESIGN_PLAN.md`. All 12 stages committed, pushed, and verified
+against the live app (mobile + desktop where possible). Build/lint/typecheck green.
 
-**Stages F1–F11 complete** (F11 = buscar/papelera/actividad, commit 3c49762).
+Stage summary: F1 tokens/fonts (light Casa Calma, Plus Jakarta Sans) · F2 shell (bottom nav +
+FAB + QuickAddSheet, AppDrawer, TopBar, Sidebar) · F3 auth y hogar (login card, 2-step
+onboarding, HouseholdSwitchSheet) · F4 Inicio (greeting hero, TodayMealCard, NextUpCards,
+AttentionCard) · F5 Compra (grouped categories, Finalizar compra + finishQuickPurchase E2E) ·
+F6 Menú/recetas · F7 Recordatorios/tareas · F8 Calendario (month card + inline day panel) ·
+F9 Finanzas (Este mes hero, Nuevo Gasto, movimientos, subs summary, presupuestos, deudas) ·
+F10 Documentos/deseos · F11 Buscar (fixed results crash)/papelera/actividad · F12 Ajustes.
 
-F11: Papelera header + open card sections + struck rows + green restore buttons; Buscar bold
-section headers **and a real bug fix** (search crashed whenever results existed — icon
-components were passed server→client; now icon names). Actividad header/subtitle.
-Mockup elements intentionally skipped: papelera "Vaciar"/30-day purge (no purge backend yet —
-comes with HOME_HUB_BACKEND_PROMPT trash phase) and actividad "Nueva Nota" (feature doesn't
-exist; no placebo buttons).
+## Known follow-ups / intentional divergences
+- PlanAhorroTab keeps the no-targets model (May rework) — mockup shows targets; needs a
+  product decision.
+- Papelera has no "Vaciar"/30-day purge; Actividad has no "Nueva Nota" — both need backend.
+- PWA icons (`public/icons/`) still old dark branding — regenerate.
+- Screens verified with empty data (recetas cards/detail, documentos, deseos, F4 hero cards)
+  should be re-checked once real data exists.
+- DESIGN_SYSTEM.md deprecated; DESIGN.md is current. UI_REDESIGN_PLAN.md is from the old
+  indigo redesign (historical).
 
-F10: Documentos — header, top Nuevo documento button, dynamic type-filter chips, cards with
-coloured type labels + expiry countdown lines + "Ver documento" outline link. Deseos — header,
-filter chips, top Añadir artículo, cards with priority chip / prominent coste / heart votes /
-VER LINK. Both verified with empty states only (no live docs/wishes yet) — recheck with data.
-
-F9b: Presupuestos summary card (total + gastado % + "Día N de M, % del ciclo") and category
-cards with Precaución/Excedido chips + pace captions; Deudas green total-pendiente banner.
-Intentional divergences from mockups (need a product decision before changing):
-- PlanAhorroTab keeps the no-targets model (May rework) — mockup `ahorro_y_objetivos` shows
-  goal targets/% completado.
-- MortgageTab layout kept (already covers capital/cuota/interés/calendario content).
-
-What F9a changed (all verified live with real data):
-- ResumenTab: "Este mes" hero (Entradas/Salidas + green Disponible banner) and "Saldo total"
-  card with Actualizar pill; the rest of the tab (KPIs, splits, budget, hipoteca) unchanged.
-- ExpenseForm = mockup's Nuevo Gasto: big € hero input, icon Descripción, Fecha+Categoría row,
-  "¿Quién pagó?" member chips (hidden input paidBy), Cuenta/Etiqueta; stacked Guardar/Cancelar.
-- ExpensesTab: day-grouped movimientos (Hoy/Ayer/EEEE d MMM headers, receipt tiles, −importe).
-- SubscriptionsTab: summary card (coste mensual estimado incl. anuales/12 + proyección anual).
-
-**F9b pending**: presupuestos_mensuales mockup (PresupuestosTab: total card + per-category
-PRECAUCIÓN chips), ahorro_y_objetivos (PlanAhorroTab goal cards w/ % completado + fecha chips),
-gesti_n_de_hipoteca, otras_deudas, movimientos "Pagos fijos" toggle styling, resumen escritorio.
-
-What F8 changed:
-- Month view is the default and matches the mockup: white month card (title + "Organización
-  familiar" + round nav), green selected-day square, today outline ring, event dots.
-- Day selection shows an inline panel (header + "N eventos" chip + accent-bar item cards)
-  below the grid on mobile / right column on lg+; the old day-detail modal was removed.
-  Add modal retitled "Nuevo evento", prefilled with the selected date.
-- Pending visual check: the lg two-column layout couldn't be screenshotted (Chrome window
-  refused to resize in this session) — verify desktop calendario visually next time.
-
-What F7 changed:
-- ReminderList: grouped layout (Hoy + count chip / Próximos card with compact rows +
-  "Ver calendario" / collapsible sage Completados) replacing the old filter tabs.
-- ReminderCard & ChoreCard: square sage checkboxes, semibold titles, icon meta lines
-  (clock / calendar / frequency), olive assignee chips, "Atrasado" badge only when overdue.
-- Page headers added to /recordatorios and /tareas.
-
-What F6 changed:
-- Menú semanal: centred week navigator ("24 – 30 de agosto" + ESTA SEMANA), full-width
-  Generar lista button, "Ver recetas del hogar" link, day headers with number chips, and
-  MealSlot rows with per-meal icon tiles (Coffee/Sun/MoonStars/Cookie) — dashed
-  "Planificar…" style when empty.
-- Recetas: `RecipesExplorer` (client search + accent-tile cards with time/difficulty/servings
-  meta); detail page is view-first (hero, Ingredientes card, "Añadir ingredientes a la compra"
-  primary, numbered Preparación steps parsed from notes) with edit form + delete inside a
-  <details> collapsible. Recipe cards/detail verified only with empty data (no recipes yet).
-- ShoppingList sort preference now uses useSyncExternalStore (lint-clean, hydration-safe).
-- Browser-testing note: the Chrome tab renderer wedged twice on first-compile navigations;
-  closing the tab and opening a fresh one fixed it (not an app bug — server responded fine).
-
-What F5 changed:
-- Shopping list default view is now grouped category cards (mockup style) with accent-coloured
-  headers and flat rows (`ShoppingItemCard flat` prop); "Por fecha" flat view still available
-  (localStorage preference now read post-mount to avoid hydration mismatch).
-- New "Finalizar compra" flow on the standing list: floating pill (visible when there are
-  completed items) opens `FinishShoppingSheet` — summary card with progress, keypad for the
-  ticket total, "Confirmar y guardar" → `finishQuickPurchase` action: inserts a Supermercado
-  expense and clears completed standing-list items. E2E-tested against live Supabase
-  (test expense deleted afterwards). Named lists keep their own markShoppingListPurchased flow.
-
-What F4 changed (commit d93ae68):
-- Dashboard recomposed: greeting hero (mobile "¡Hola, X!", desktop time-of-day + date sentence +
-  "Añadir nuevo" button → QuickAddSheet), TodayMealCard ("Hoy para comer" sage hero → /menu),
-  NextUpCard rows (Próximo evento with event_time, Próximo pago with amount), AttentionCard
-  (danger tint, overdue reminders/payments). All render only with real data — no fake content.
-- GreetingCard is a server component now; HouseholdSwitcherMenu deleted (TopBar sheet covers it).
-- Note: hero cards were verified only with empty data (the live household has no meals/events);
-  re-check visually once real data exists.
-
-What F3 changed (commit 27aff2a):
-- Login/signup/forgot/reset restyled as centred white cards with icon headers; login has
-  field icons, show-password toggle and the mockup's copy ("Bienvenido a casa").
-- Onboarding is now two-step: selectable create/join cards ("¿Cómo quieres empezar?") → form.
-- New `HouseholdSwitchSheet` ("Seleccionar hogar") opens from the TopBar household pill,
-  lists memberships with member counts (fetched in `app/(app)/layout.tsx`) and calls
-  `switchHousehold`; "Añadir otra casa" links to /ajustes.
-- `Input` gained `icon`, `endSlot`, `labelEnd` props. Build passes, lint 0 errors, typecheck clean. F2 verified visually at 480px and desktop against the live app.
-
-What F2 changed (commit bb4a165):
-- Bottom nav: Inicio · Compra · center green quick-add FAB · Finanzas · Calendario; the FAB opens
-  `QuickAddSheet` (links to compra/finanzas/tareas/calendario).
-- `MoreMenuSheet` deleted → new left `AppDrawer` (profile header, household pill → /ajustes,
-  module list with green active pill, Cerrar sesión) opened from the TopBar avatar.
-- TopBar: household-name pill (mobile, Inicio) linking to /ajustes; avatar button opens the drawer.
-- Sidebar (desktop): grouped nav (main 4 + MÓDULOS + bottom Ajustes/Cerrar sesión), green pill actives.
-- `lib/constants.ts` nav icons converted lucide → Phosphor; PRIMARY_NAV_ITEMS reordered.
-- Fixed pre-existing OfflineBanner hydration mismatch (`useOnlineStatus` → `useSyncExternalStore`).
-
-What F1 changed:
-- `app/globals.css`: all tokens retargeted from dark "Índigo Profundo" to light **Casa Calma**
-  (cream `#f4fafd` bg, forest-green primary `#154212` on legacy var `--color-terracotta`,
-  terracotta secondary `#974723` on `--color-amber`, soft shadows, 16px card radius).
-  `.glass` is now a plain soft white card (no blur). Legacy token *names* kept everywhere.
-- `app/layout.tsx` + `app/manifest.ts`: Plus Jakarta Sans (`--font-jakarta`), light themeColor `#f4fafd`.
-- Swept all `bg-white/[0.0x]` glass tints, edge-glint overlays, inline `rgba(13,11,31,…)` nav/modal
-  backgrounds, `[color-scheme:dark]` → light equivalents (`bg-card`, `bg-sand`, `border-border`).
-- Button secondary restyled to terracotta outline per Casa Calma spec; ghost hover → sand.
-- `DESIGN.md` rewritten for Casa Calma; CLAUDE.md design section updated.
-
-Stitch MCP server is configured (`claude mcp add stitch`, key in `~/.claude.json`); screens were
-also mirrored to `Chatgpt_Redesign/stitch/` via the API. `Frontend Designs/` is the working copy.
-
-## Known follow-ups
-- Screens have only had the token flip — layout alignment to the Stitch mockups happens per stage (F2+).
-- Icon buttons/accents using sage/olive/amber/rose tints were retargeted globally; verify per screen.
-- PWA icons (`public/icons/`) still show the old dark branding — regenerate in a later stage.
+## NEXT PHASE: Backend
+Follow `Chatgpt_Redesign/HOME_HUB_BACKEND_PROMPT.md` (~45KB spec). Before starting:
+read the FULL prompt, inspect repo/schema, produce an implementation plan + schema/module
+map (the prompt's "Implementation contract"), then work vertical slices in its delivery-phase
+order. Supabase project: xzkavpjwvadqldauaabm. Stitch MCP configured in ~/.claude.json.
