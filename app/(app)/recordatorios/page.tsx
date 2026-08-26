@@ -23,6 +23,12 @@ export default async function RemindersPage() {
   ]);
 
   return (
-    <ReminderList reminders={reminders ?? []} categories={categories ?? []} members={members ?? []} />
+    <div className="flex flex-col gap-4">
+      <div>
+        <h1 className="text-2xl font-bold text-brown">Recordatorios</h1>
+        <p className="mt-1 text-sm text-muted">Gestiona las cosas de tu hogar con calma.</p>
+      </div>
+      <ReminderList reminders={reminders ?? []} categories={categories ?? []} members={members ?? []} />
+    </div>
   );
 }

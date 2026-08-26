@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { isPast } from "date-fns";
-import { Circle, CheckCircle, PencilSimple, Clock } from "@phosphor-icons/react";
+import { Check, PencilSimple, Clock } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -33,26 +33,50 @@ export function ReminderCard({ reminder, assignedName, onEdit }: ReminderCardPro
           aria-label={isDone ? "Marcar como pendiente" : "Marcar como hecho"}
           disabled={isPending}
           onClick={() => startTransition(() => toggleReminderStatus(reminder.id, !isDone))}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-terracotta transition active:scale-[0.85] active:bg-terracotta/10 disabled:opacity-50"
+          className="flex h-11 w-11 shrink-0 items-center justify-center disabled:opacity-50"
         >
-          {isDone ? <CheckCircle className="h-6 w-6" aria-hidden /> : <Circle className="h-6 w-6" aria-hidden />}
+          <span
+            className={cn(
+              "flex h-6 w-6 items-center justify-center rounded-md border-2 transition active:scale-[0.85]",
+              isDone ? "border-sage bg-sage text-cream" : "border-border bg-card",
+              isOverdue && !isDone && "border-danger/50",
+            )}
+            aria-hidden
+          >
+            {isDone && <Check weight="bold" size={14} />}
+          </span>
         </button>
 
-        <div className="min-w-0 flex-1">
-          <p className={cn("text-sm font-medium text-brown", isDone && "text-muted line-through")}>
+        <div className="min-w-0 flex-1 pt-0.5">
+          <p className={cn("text-sm font-semibold text-brown", isDone && "font-medium text-muted line-through")}>
             {reminder.title}
           </p>
-          <p className="text-xs text-muted">
-            {[reminder.due_at ? formatDateTime(reminder.due_at) : null, assignedName]
-              .filter(Boolean)
-              .join(" · ")}
-          </p>
-          {reminder.description && <p className="mt-1 text-xs text-muted">{reminder.description}</p>}
+          {(reminder.due_at || reminder.description) && (
+            <p className="mt-0.5 flex items-center gap-1 text-xs text-muted">
+              {reminder.due_at && (
+                <>
+                  <Clock size={12} aria-hidden />
+                  {formatDateTime(reminder.due_at)}
+                </>
+              )}
+              {reminder.due_at && reminder.description && <span aria-hidden>·</span>}
+              {reminder.description}
+            </p>
+          )}
+          {assignedName && (
+            <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-olive/10 py-0.5 pl-1 pr-2.5 text-xs font-medium text-olive">
+              <span
+                className="flex h-4 w-4 items-center justify-center rounded-full bg-olive text-[9px] font-bold text-cream"
+                aria-hidden
+              >
+                {assignedName.charAt(0).toUpperCase()}
+              </span>
+              {assignedName}
+            </span>
+          )}
         </div>
 
-        {!isDone && (
-          <Badge variant={isOverdue ? "danger" : "neutral"}>{isOverdue ? "Vencido" : "Pendiente"}</Badge>
-        )}
+        {isOverdue && <Badge variant="danger">Atrasado</Badge>}
 
         <div className="flex shrink-0 gap-1">
           {!isDone && (

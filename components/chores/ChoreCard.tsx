@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { isPast } from "date-fns";
-import { Circle, CheckCircle, PencilSimple, Trash, Clock } from "@phosphor-icons/react";
+import { Check, ArrowsClockwise, PencilSimple, Trash, Clock, CalendarBlank } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -37,30 +37,64 @@ export function ChoreCard({ chore, assignedName, onEdit }: ChoreCardProps) {
           aria-label="Marcar como hecho"
           disabled={isPending || isDone}
           onClick={() => startTransition(() => completeChore(chore.id))}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-terracotta transition active:scale-[0.85] active:bg-terracotta/10 disabled:opacity-50"
+          className="flex h-11 w-11 shrink-0 items-center justify-center disabled:opacity-70"
         >
-          {isDone ? <CheckCircle className="h-6 w-6" aria-hidden /> : <Circle className="h-6 w-6" aria-hidden />}
+          <span
+            className={cn(
+              "flex h-6 w-6 items-center justify-center rounded-md border-2 transition active:scale-[0.85]",
+              isDone ? "border-sage bg-sage text-cream" : "border-border bg-card",
+              isOverdue && !isDone && "border-danger/50",
+            )}
+            aria-hidden
+          >
+            {isDone && <Check weight="bold" size={14} />}
+          </span>
         </button>
 
-        <div className="min-w-0 flex-1">
-          <p className={cn("text-sm font-medium text-brown", isDone && "text-muted line-through")}>
+        <div className="min-w-0 flex-1 pt-0.5">
+          <p className={cn("text-sm font-semibold text-brown", isDone && "font-medium text-muted line-through")}>
             {chore.title}
           </p>
-          <p className="text-xs text-muted">
-            {[chore.next_due_date ? formatDate(chore.next_due_date) : null, assignedName]
-              .filter(Boolean)
-              .join(" · ")}
-          </p>
+          {(chore.next_due_date || chore.frequency) && (
+            <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-muted">
+              {chore.next_due_date && (
+                <span className="flex items-center gap-1">
+                  <CalendarBlank size={12} aria-hidden />
+                  {formatDate(chore.next_due_date)}
+                </span>
+              )}
+              {chore.next_due_date && chore.frequency && <span aria-hidden>·</span>}
+              {chore.frequency && (
+                <span className="flex items-center gap-1 capitalize">
+                  <ArrowsClockwise size={12} aria-hidden />
+                  {chore.frequency}
+                </span>
+              )}
+            </p>
+          )}
           {chore.description && <p className="mt-1 text-xs text-muted">{chore.description}</p>}
-          <Link
-            href={`/tareas/${chore.id}`}
-            className="mt-1 inline-block text-xs text-terracotta hover:underline"
-          >
-            Ver historial
-          </Link>
+          <div className="mt-1.5 flex flex-wrap items-center gap-2">
+            {assignedName && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-olive/10 py-0.5 pl-1 pr-2.5 text-xs font-medium text-olive">
+                <span
+                  className="flex h-4 w-4 items-center justify-center rounded-full bg-olive text-[9px] font-bold text-cream"
+                  aria-hidden
+                >
+                  {assignedName.charAt(0).toUpperCase()}
+                </span>
+                {assignedName}
+              </span>
+            )}
+            <Link
+              href={`/tareas/${chore.id}`}
+              className="inline-block text-xs text-terracotta hover:underline"
+            >
+              Ver historial
+            </Link>
+          </div>
         </div>
 
-        {!isDone && <Badge variant={isOverdue ? "danger" : "neutral"}>{isOverdue ? "Vencido" : "Pendiente"}</Badge>}
+        {isOverdue && <Badge variant="danger">Atrasado</Badge>}
 
         <div className="flex shrink-0 gap-1">
           {!isDone && (

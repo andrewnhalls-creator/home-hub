@@ -15,5 +15,13 @@ export default async function ChoresPage() {
     supabase.from("household_members").select("user_id, display_name").eq("household_id", householdId),
   ]);
 
-  return <ChoreList chores={chores ?? []} members={members ?? []} />;
+  return (
+    <div className="flex flex-col gap-4">
+      <div>
+        <h1 className="text-2xl font-bold text-brown">Tareas</h1>
+        <p className="mt-1 text-sm text-muted">Las tareas de casa, repartidas y al día.</p>
+      </div>
+      <ChoreList chores={chores ?? []} members={members ?? []} />
+    </div>
+  );
 }
