@@ -81,9 +81,9 @@ const TYPE_LABEL: Record<CalendarItemType, string> = {
 export function CalendarView({ items }: CalendarViewProps) {
   const { showToast } = useToast();
   const [, startTransition] = useTransition();
-  const [viewMode, setViewMode] = useState<ViewMode>("semanal");
+  const [viewMode, setViewMode] = useState<ViewMode>("mensual");
   const [cursor, setCursor] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>(() => format(new Date(), "yyyy-MM-dd"));
   const [selectedWeekDay, setSelectedWeekDay] = useState<string>(() =>
     format(new Date(), "yyyy-MM-dd"),
   );
@@ -173,7 +173,12 @@ export function CalendarView({ items }: CalendarViewProps) {
       .slice(0, 30);
   }, [items]);
 
-  const selectedDayItems = selectedDate ? itemsByDate.get(selectedDate) ?? [] : [];
+  const selectedDayItems = itemsByDate.get(selectedDate) ?? [];
+  const selectedDayLabel = (() => {
+    const d = parse(selectedDate, "yyyy-MM-dd", new Date());
+    const raw = format(d, "EEEE, d MMM", { locale: es });
+    return raw.charAt(0).toUpperCase() + raw.slice(1);
+  })();
 
   return (
     <div className="flex flex-col gap-4">
@@ -263,65 +268,159 @@ export function CalendarView({ items }: CalendarViewProps) {
 
       {/* ── Month view ────────────────────────────────────────────────── */}
       {viewMode === "mensual" && (
-        <>
-          <div className="flex items-center justify-between">
-            <button
-              type="button"
-              aria-label="Mes anterior"
-              onClick={() => setCursor((d) => subMonths(d, 1))}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
-            >
-              <CaretLeft className="h-5 w-5" aria-hidden />
-            </button>
-            <p className="text-sm font-medium text-brown">{monthNavLabel}</p>
-            <button
-              type="button"
-              aria-label="Mes siguiente"
-              onClick={() => setCursor((d) => addMonths(d, 1))}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
-            >
-              <CaretRight className="h-5 w-5" aria-hidden />
-            </button>
+        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[1fr_340px] lg:items-start lg:gap-5">
+          {/* Month card */}
+          <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="text-xl font-bold text-brown">{monthNavLabel}</p>
+                <p className="text-xs text-muted">Organización familiar</p>
+              </div>
+              <div className="flex gap-1.5">
+                <button
+                  type="button"
+                  aria-label="Mes anterior"
+                  onClick={() => setCursor((d) => subMonths(d, 1))}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                >
+                  <CaretLeft className="h-4 w-4" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Mes siguiente"
+                  onClick={() => setCursor((d) => addMonths(d, 1))}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted transition hover:bg-sand active:scale-[0.9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                >
+                  <CaretRight className="h-4 w-4" aria-hidden />
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-7 gap-1">
+              {["L", "M", "X", "J", "V", "S", "D"].map((label, i) => (
+                <div key={`${label}-${i}`} className="py-1 text-center text-xs font-semibold text-muted">
+                  {label}
+                </div>
+              ))}
+              {monthDays.map((day) => {
+                const dateStr = format(day, "yyyy-MM-dd");
+                const dayItems = itemsByDate.get(dateStr) ?? [];
+                const isSelected = dateStr === selectedDate;
+                return (
+                  <button
+                    key={dateStr}
+                    type="button"
+                    onClick={() => setSelectedDate(dateStr)}
+                    aria-pressed={isSelected}
+                    className={cn(
+                      "flex aspect-square flex-col items-center justify-start gap-1 rounded-xl p-1 pt-1.5 text-xs transition-colors",
+                      isSelected
+                        ? "bg-terracotta shadow-[var(--shadow-xs)]"
+                        : "hover:bg-sand",
+                      !isSameMonth(day, cursor) && !isSelected && "opacity-40",
+                      isToday(day) && !isSelected && "ring-2 ring-terracotta/50",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "font-semibold tabular-nums",
+                        isSelected ? "text-cream" : isToday(day) ? "text-terracotta" : "text-brown",
+                      )}
+                    >
+                      {format(day, "d")}
+                    </span>
+                    <div className="flex flex-wrap justify-center gap-0.5">
+                      {dayItems.slice(0, 3).map((item) => (
+                        <span
+                          key={item.id}
+                          className={cn(
+                            "h-1.5 w-1.5 rounded-full",
+                            isSelected ? "bg-cream/80" : !item.color && TYPE_DOT_CLASS[item.type],
+                          )}
+                          style={!isSelected && item.color ? { background: item.color } : undefined}
+                          aria-hidden
+                        />
+                      ))}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="grid grid-cols-7 gap-1">
-            {["L", "M", "X", "J", "V", "S", "D"].map((label) => (
-              <div key={label} className="text-center text-xs font-medium text-muted py-1">
-                {label}
-              </div>
-            ))}
-            {monthDays.map((day) => {
-              const dateStr = format(day, "yyyy-MM-dd");
-              const dayItems = itemsByDate.get(dateStr) ?? [];
-              return (
-                <button
-                  key={dateStr}
-                  type="button"
-                  onClick={() => setSelectedDate(dateStr)}
-                  className={cn(
-                    "flex aspect-square flex-col items-center justify-start gap-1 rounded-lg p-1 text-xs transition-colors hover:bg-sand",
-                    !isSameMonth(day, cursor) && "opacity-40",
-                    isToday(day) && "ring-2 ring-terracotta ring-offset-1 ring-offset-cream",
-                  )}
-                >
-                  <span className={cn("font-medium", isToday(day) ? "text-terracotta" : "text-brown")}>
-                    {format(day, "d")}
-                  </span>
-                  <div className="flex flex-wrap justify-center gap-0.5">
-                    {dayItems.slice(0, 3).map((item) => (
+          {/* Selected-day panel (below on mobile, right column on desktop) */}
+          <section aria-label={selectedDayLabel} className="flex flex-col gap-3">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-base font-bold text-brown">{selectedDayLabel}</h2>
+              <span className="rounded-full bg-sand px-2.5 py-1 text-xs font-medium text-muted">
+                {selectedDayItems.length === 1 ? "1 evento" : `${selectedDayItems.length} eventos`}
+              </span>
+            </div>
+
+            {selectedDayItems.length === 0 ? (
+              <p className="rounded-[var(--radius-xl)] border border-dashed border-border px-4 py-6 text-center text-sm text-muted">
+                Sin eventos este día.
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-2.5">
+                {selectedDayItems.map((item) => {
+                  const accentColor =
+                    item.color ??
+                    ({
+                      evento: "var(--color-terracotta)",
+                      recordatorio: "var(--color-amber)",
+                      tarea: "var(--color-olive)",
+                      pago: "var(--color-rose)",
+                      suscripcion: "var(--color-rose)",
+                      documento: "var(--color-muted)",
+                      comida: "var(--color-sage)",
+                    }[item.type]);
+                  const timeLabel =
+                    item.type === "evento" && item.event?.event_time
+                      ? item.event.event_time.slice(0, 5)
+                      : null;
+                  return (
+                    <li
+                      key={item.id}
+                      className="flex gap-3 rounded-[var(--radius-xl)] border border-border bg-card p-3.5 shadow-[var(--shadow-card)]"
+                    >
                       <span
-                        key={item.id}
-                        className={cn("h-1.5 w-1.5 rounded-full", !item.color && TYPE_DOT_CLASS[item.type])}
-                        style={item.color ? { background: item.color } : undefined}
+                        className="w-1 shrink-0 self-stretch rounded-full"
+                        style={{ background: accentColor }}
                         aria-hidden
                       />
-                    ))}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </>
+                      <div className="flex min-w-0 flex-1 items-start gap-2">
+                        <div className="min-w-0 flex-1">
+                          {(timeLabel || itemDateRangeLabel(item)) && (
+                            <p className="text-xs font-semibold" style={{ color: accentColor }}>
+                              {timeLabel ?? itemDateRangeLabel(item)}
+                            </p>
+                          )}
+                          <p className="mt-0.5 truncate text-sm font-semibold text-brown">
+                            {item.title}
+                            {item.isPrivate && (
+                              <Lock className="ml-1 inline h-3 w-3 text-muted" aria-label="Privado" />
+                            )}
+                          </p>
+                          <p className="text-xs text-muted">{TYPE_LABEL[item.type]}</p>
+                        </div>
+                        {item.type === "evento" && item.event && (
+                          <button
+                            type="button"
+                            onClick={() => setEditingItem(item)}
+                            className="shrink-0 min-h-[44px] px-2 text-xs font-medium text-terracotta hover:underline active:opacity-70"
+                          >
+                            Editar
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+        </div>
       )}
 
       {/* ── Agenda view ───────────────────────────────────────────────── */}
@@ -397,52 +496,11 @@ export function CalendarView({ items }: CalendarViewProps) {
         Añadir evento
       </Button>
 
-      {/* ── Month day detail modal ────────────────────────────────────── */}
-      <Modal
-        isOpen={!!selectedDate}
-        onClose={() => setSelectedDate(null)}
-        title={
-          selectedDate
-            ? format(new Date(`${selectedDate}T00:00:00`), "EEEE d 'de' MMMM", { locale: es })
-                .replace(/^\w/, (c) => c.toUpperCase())
-            : ""
-        }
-      >
-        {selectedDayItems.length === 0 ? (
-          <p className="text-sm text-muted">Sin eventos este día.</p>
-        ) : (
-          <ul className="flex flex-col gap-2">
-            {selectedDayItems.map((item) => (
-              <li
-                key={item.id}
-                className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-brown"
-              >
-                <ItemDot item={item} />
-                <span className="min-w-0 flex-1 truncate">{item.title}</span>
-                {item.isPrivate && <Lock className="h-3 w-3 shrink-0 text-muted" aria-label="Privado" />}
-                {item.type === "evento" && item.event && (
-                  <button
-                    type="button"
-                    className="shrink-0 text-xs font-medium text-terracotta"
-                    onClick={() => {
-                      setSelectedDate(null);
-                      setEditingItem(item);
-                    }}
-                  >
-                    Editar
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Modal>
-
       {/* ── Add event modal ───────────────────────────────────────────── */}
-      <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Añadir evento">
+      <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Nuevo evento">
         <CalendarEventForm
           action={createCalendarEvent}
-          defaultDate={selectedDate ?? format(new Date(), "yyyy-MM-dd")}
+          defaultDate={selectedDate}
           onSuccess={() => {
             setIsAddOpen(false);
             showToast("Evento añadido");
