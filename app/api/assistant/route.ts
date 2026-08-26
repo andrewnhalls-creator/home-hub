@@ -1,12 +1,14 @@
+import { createHash } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { requireHousehold } from "@/lib/auth";
 import { routeToProvider } from "@/lib/ai/provider-router";
-import { executeAssistantAction } from "@/lib/ai/execute-assistant-action";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 // POST /api/assistant
-// Parses a natural-language household command into a structured action.
-// Pass autoExecute: true in the body to immediately run safe, non-destructive actions.
+// Parses a natural-language household command into a structured action and
+// stores it as a short-lived pending proposal. Nothing is ever executed here;
+// /api/assistant/execute confirms the STORED proposal by id.
 export async function POST(req: NextRequest) {
   let auth;
   try {
@@ -17,13 +19,19 @@ export async function POST(req: NextRequest) {
 
   const { householdId, user } = auth;
 
+  if (!checkRateLimit(`assistant:${user.id}`, 20, 60_000)) {
+    return NextResponse.json(
+      { ok: false, error: "Demasiadas peticiones seguidas. Espera un momento." },
+      { status: 429 },
+    );
+  }
+
   const body = await req.json().catch(() => null);
   if (!body || typeof body.message !== "string" || !body.message.trim()) {
     return NextResponse.json({ ok: false, error: "Mensaje requerido" }, { status: 400 });
   }
 
   const message: string = body.message.trim();
-  const autoExecute: boolean = body.autoExecute === true;
 
   const routed = await routeToProvider(message);
 
@@ -39,16 +47,32 @@ export async function POST(req: NextRequest) {
 
   const { provider, result } = routed;
 
-  let executed = false;
-  if (autoExecute && !result.requiresConfirmation && result.action !== "clarify") {
+  // Every write goes through the stored-proposal + explicit-confirmation
+  // lifecycle — there is no silent-execution path (migration 045).
+  let pendingActionId: string | null = null;
+  if (result.action !== "clarify") {
     const supabase = await createClient();
-    const execResult = await executeAssistantAction(result, {
-      supabase,
-      householdId,
-      userId: user.id,
-    });
-    executed = execResult.executed;
+    const actionHash = createHash("sha256")
+      .update(JSON.stringify({ action: result.action, payload: result.payload }))
+      .digest("hex");
+    const { data: pending, error: pendingError } = await supabase
+      .from("pending_ai_actions")
+      .insert({
+        household_id: householdId,
+        user_id: user.id,
+        action: result,
+        action_hash: actionHash,
+      })
+      .select("id")
+      .single();
+    if (pendingError || !pending) {
+      return NextResponse.json(
+        { ok: false, error: "No se ha podido preparar la acción. Inténtalo de nuevo." },
+        { status: 500 },
+      );
+    }
+    pendingActionId = pending.id;
   }
 
-  return NextResponse.json({ ok: true, provider, result, executed });
+  return NextResponse.json({ ok: true, provider, result, pendingActionId });
 }

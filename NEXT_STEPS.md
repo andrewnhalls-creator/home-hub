@@ -1,20 +1,15 @@
 # Next Steps
 
-**Backend B2.3 (menú + calendario nativo): COMPLETO.** ✔ Fase B2 entera terminada.
+**Backend COMPLETO salvo Google Calendar (B3).** ✔ Fases B1, B2, B4, B5, B6 y
+B7 terminadas, con tests y build en verde. Runbook en `OPERATIONS.md`.
 
-Acciones del usuario pendientes:
-- **Reactivar push en vuestros móviles** (Ajustes → Dispositivos).
-- **Antes de la fase B3 (Google Calendar)**: crear el proyecto de Google Cloud
-  (se pedirán los pasos exactos cuando toque).
+Decisiones/acciones del usuario:
+1. **¿Google Calendar (B3)?** Requiere crear un proyecto en Google Cloud
+   (API de Calendar + pantalla de consentimiento OAuth + client id/secret).
+   Si lo queréis, pedidlo y se darán los pasos exactos.
+2. **Política de la papelera**: ¿botón "Vaciar" (borrado definitivo manual,
+   solo propietaria) y/o auto-purga a los 30 días? Hoy es solo restaurar.
+3. **Reactivar push en los móviles** (Ajustes → Dispositivos).
+4. Iconos PWA con branding antiguo (pendiente menor).
 
-Siguientes slices (Fase B4 — finanzas canónicas, en curso):
-1. **B4.1 — Ledger canónico + snapshots**: tabla `ledger_entries`, backfill de
-   movimientos existentes, FKs únicos desde las tablas fuente, informes sobre
-   el ledger.
-2. **B4.2 — Ocurrencias unificadas + presupuestos** (rollover idempotente,
-   dedupe de umbrales).
-3. **B4.3 — Ahorro (sin objetivos) / hipoteca / deudas** (invariantes
-   principal-interés, proyección 30 días).
-Después: B5 (búsqueda FTS, papelera unificada + decisión de purga, export
-asíncrono), B6 (asistente IA con confirmación), B7 (hardening final), B3
-(Google Calendar — requiere consola de Google).
+Mantenimiento: ver `OPERATIONS.md` (salud del outbox, crons, backups).

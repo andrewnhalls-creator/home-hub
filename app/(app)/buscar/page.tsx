@@ -1,15 +1,30 @@
 import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { SearchView } from "@/components/search/SearchView";
-import type { SearchSection } from "@/components/search/SearchView";
+import type { SearchSection, SearchSectionIcon } from "@/components/search/SearchView";
 export const dynamic = "force-dynamic";
 
 interface BuscarPageProps {
   searchParams: Promise<{ q?: string }>;
 }
 
+// Order + presentation per module; the search itself is one indexed,
+// accent-insensitive RPC (search_household, migration 044).
+const MODULES: { key: string; label: string; icon: SearchSectionIcon; href: (id: string) => string }[] = [
+  { key: "compra", label: "Compra", icon: "compra", href: () => "/compra" },
+  { key: "recordatorios", label: "Recordatorios", icon: "recordatorios", href: () => "/recordatorios" },
+  { key: "tareas", label: "Tareas", icon: "tareas", href: () => "/tareas" },
+  { key: "pagos", label: "Pagos fijos", icon: "pagos", href: () => "/finanzas" },
+  { key: "suscripciones", label: "Suscripciones", icon: "suscripciones", href: () => "/finanzas" },
+  { key: "documentos", label: "Documentos", icon: "documentos", href: () => "/documentos" },
+  { key: "deseos", label: "Deseos", icon: "deseos", href: () => "/deseos" },
+  { key: "recetas", label: "Recetas", icon: "recetas", href: (id) => `/menu/recetas/${id}` },
+  { key: "ahorro", label: "Ahorro", icon: "ahorro", href: () => "/finanzas" },
+  { key: "calendario", label: "Calendario", icon: "recordatorios", href: () => "/calendario" },
+];
+
 export default async function BuscarPage({ searchParams }: BuscarPageProps) {
-  const { householdId } = await requireHousehold();
+  await requireHousehold();
   const { q } = await searchParams;
   const query = q?.trim() ?? "";
 
@@ -18,78 +33,26 @@ export default async function BuscarPage({ searchParams }: BuscarPageProps) {
   }
 
   const supabase = await createClient();
-  const pattern = `%${query}%`;
+  const { data: rows } = await supabase.rpc("search_household", { p_query: query });
 
-  const [
-    { data: shopping },
-    { data: reminders },
-    { data: chores },
-    { data: payments },
-    { data: subs },
-    { data: docs },
-    { data: wishes },
-    { data: recipes },
-    { data: savings },
-  ] = await Promise.all([
-    supabase.from("shopping_items").select("id, name").eq("household_id", householdId).ilike("name", pattern).limit(5),
-    supabase.from("reminders").select("id, title").eq("household_id", householdId).ilike("title", pattern).is("deleted_at", null).limit(5),
-    supabase.from("chores").select("id, title").eq("household_id", householdId).ilike("title", pattern).limit(5),
-    supabase.from("fixed_payments").select("id, name").eq("household_id", householdId).ilike("name", pattern).is("deleted_at", null).limit(5),
-    supabase.from("subscriptions").select("id, name").eq("household_id", householdId).ilike("name", pattern).is("deleted_at", null).limit(5),
-    supabase.from("household_documents").select("id, title").eq("household_id", householdId).ilike("title", pattern).is("deleted_at", null).limit(5),
-    supabase.from("wishlist_items").select("id, name").eq("household_id", householdId).ilike("name", pattern).limit(5),
-    supabase.from("recipes").select("id, name").eq("household_id", householdId).ilike("name", pattern).limit(5),
-    supabase.from("savings_goals").select("id, name").eq("household_id", householdId).ilike("name", pattern).is("deleted_at", null).limit(5),
-  ]);
+  const byModule = new Map<string, { id: string; title: string }[]>();
+  for (const row of (rows ?? []) as { module: string; id: string; title: string }[]) {
+    const list = byModule.get(row.module) ?? [];
+    list.push({ id: row.id, title: row.title });
+    byModule.set(row.module, list);
+  }
 
-  const allSections: SearchSection[] = [
-    {
-      label: "Compra",
-      icon: "compra",
-      results: (shopping ?? []).map((r) => ({ id: r.id, title: r.name, href: "/compra" })),
-    },
-    {
-      label: "Recordatorios",
-      icon: "recordatorios",
-      results: (reminders ?? []).map((r) => ({ id: r.id, title: r.title, href: "/recordatorios" })),
-    },
-    {
-      label: "Tareas",
-      icon: "tareas",
-      results: (chores ?? []).map((r) => ({ id: r.id, title: r.title, href: "/tareas" })),
-    },
-    {
-      label: "Pagos fijos",
-      icon: "pagos",
-      results: (payments ?? []).map((r) => ({ id: r.id, title: r.name, href: "/finanzas" })),
-    },
-    {
-      label: "Suscripciones",
-      icon: "suscripciones",
-      results: (subs ?? []).map((r) => ({ id: r.id, title: r.name, href: "/finanzas" })),
-    },
-    {
-      label: "Documentos",
-      icon: "documentos",
-      results: (docs ?? []).map((r) => ({ id: r.id, title: r.title, href: "/documentos" })),
-    },
-    {
-      label: "Deseos",
-      icon: "deseos",
-      results: (wishes ?? []).map((r) => ({ id: r.id, title: r.name, href: "/deseos" })),
-    },
-    {
-      label: "Recetas",
-      icon: "recetas",
-      results: (recipes ?? []).map((r) => ({ id: r.id, title: r.name, href: `/menu/recetas/${r.id}` })),
-    },
-    {
-      label: "Ahorro",
-      icon: "ahorro",
-      results: (savings ?? []).map((r) => ({ id: r.id, title: r.name, href: "/finanzas" })),
-    },
-  ];
-  const sections = allSections.filter((s) => s.results.length > 0);
+  const sections: SearchSection[] = MODULES.flatMap((m) => {
+    const results = byModule.get(m.key);
+    if (!results?.length) return [];
+    return [
+      {
+        label: m.label,
+        icon: m.icon,
+        results: results.map((r) => ({ id: r.id, title: r.title, href: m.href(r.id) })),
+      },
+    ];
+  });
 
   return <SearchView query={query} sections={sections} />;
 }

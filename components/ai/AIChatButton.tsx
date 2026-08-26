@@ -192,6 +192,7 @@ function CommandMode() {
   const [input, setInput] = useState("");
   const [phase, setPhase] = useState<CmdPhase>("idle");
   const [parsedResult, setParsedResult] = useState<AssistantResult | null>(null);
+  const [pendingActionId, setPendingActionId] = useState<string | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -208,6 +209,7 @@ function CommandMode() {
   const reset = () => {
     setPhase("idle");
     setParsedResult(null);
+    setPendingActionId(null);
     setInput("");
     setError("");
   };
@@ -224,11 +226,17 @@ function CommandMode() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text }),
       });
-      const data = (await res.json()) as { ok: boolean; result?: AssistantResult; error?: string };
+      const data = (await res.json()) as {
+        ok: boolean;
+        result?: AssistantResult;
+        pendingActionId?: string | null;
+        error?: string;
+      };
       if (!data.ok || !data.result) throw new Error(data.error ?? "Error al procesar");
 
       const result = data.result;
       setParsedResult(result);
+      setPendingActionId(data.pendingActionId ?? null);
       setPhase(result.action === "clarify" ? "clarify" : "confirm");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al contactar el asistente");
@@ -237,15 +245,17 @@ function CommandMode() {
   };
 
   const execute = async () => {
-    if (!parsedResult || phase === "executing") return;
+    if (!parsedResult || !pendingActionId || phase === "executing") return;
     setPhase("executing");
     setError("");
 
     try {
+      // Confirms the proposal STORED server-side — the payload never travels
+      // back from the client.
       const res = await fetch("/api/assistant/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ result: parsedResult }),
+        body: JSON.stringify({ pendingActionId }),
       });
       const data = (await res.json()) as { ok: boolean; executed?: boolean; error?: string };
       if (!data.ok) throw new Error(data.error ?? "Error al ejecutar");

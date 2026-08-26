@@ -1,0 +1,9 @@
+-- 045: AI assistant proposal/confirmation lifecycle (backend slice B6)
+-- APPLIED 2026-08-26 as remote migration 045_pending_ai_actions.
+-- pending_ai_actions: parse stores the proposal server-side (action jsonb +
+-- sha256 hash + schema_version, 15-minute expiry); /api/assistant/execute
+-- confirms by ID only — the client never submits the payload. Atomic
+-- pending→executed claim makes confirmation idempotent; failures are recorded
+-- ('failed' + error). The old autoExecute silent-write path was removed.
+-- RLS: each user manages only their own proposals within their household.
+-- See the remote migration for full DDL.

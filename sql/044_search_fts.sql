@@ -1,0 +1,8 @@
+-- 044: Accent-insensitive household search (backend slice B5.1)
+-- APPLIED 2026-08-26 as remote migrations 044_search_fts + 044b_search_fix_ambiguity.
+-- unaccent + pg_trgm (extensions schema), immutable f_unaccent wrapper, GIN
+-- trigram indexes on the 10 searched columns, and search_household(p_query)
+-- (SECURITY INVOKER — caller's RLS applies; scoped to the active household;
+-- min 2 chars; 5 results per module). /buscar now makes ONE rpc call instead
+-- of nine ILIKE queries and matches "menu" ≈ "menú". Verified live against
+-- real data (netflix/hipoteca/luz). See the remote migrations for full DDL.

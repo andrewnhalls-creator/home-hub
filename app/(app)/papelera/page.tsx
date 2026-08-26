@@ -12,6 +12,7 @@ import {
   restoreSubscription,
 } from "@/app/(app)/finanzas/actions";
 import { restoreShoppingList } from "@/app/(app)/compra/listas/actions";
+import { restoreCalendarEvent } from "@/app/(app)/calendario/actions";
 
 export default async function PapeleraPage() {
   const { householdId } = await requireHousehold();
@@ -25,6 +26,7 @@ export default async function PapeleraPage() {
     { data: savings },
     { data: subs },
     { data: lists },
+    { data: events },
   ] = await Promise.all([
     supabase
       .from("reminders")
@@ -75,6 +77,13 @@ export default async function PapeleraPage() {
       .not("deleted_at", "is", null)
       .order("deleted_at", { ascending: false })
       .limit(50),
+    supabase
+      .from("calendar_events")
+      .select("id, title, deleted_at")
+      .eq("household_id", householdId)
+      .not("deleted_at", "is", null)
+      .order("deleted_at", { ascending: false })
+      .limit(50),
   ]);
 
   const sections = [
@@ -112,6 +121,11 @@ export default async function PapeleraPage() {
       title: "Listas de la compra",
       items: (lists ?? []).map((r) => ({ id: r.id, label: r.name, deletedAt: r.deleted_at! })),
       restoreAction: restoreShoppingList,
+    },
+    {
+      title: "Eventos del calendario",
+      items: (events ?? []).map((r) => ({ id: r.id, label: r.title, deletedAt: r.deleted_at! })),
+      restoreAction: restoreCalendarEvent,
     },
   ].filter((s) => s.items.length > 0);
 
