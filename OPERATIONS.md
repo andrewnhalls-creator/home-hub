@@ -68,9 +68,8 @@ Right-sized for a private 2-person household app; revisit if the product grows:
 - Rate limiting is per-instance in-memory (stops loops/casual abuse, not
   distributed attacks).
 - No Playwright E2E suite; manual test plan in TEST_PLAN.md + pgTAP/vitest.
-- Google Calendar (phase B3) not built: requires the user's Google Cloud
-  project first (OAuth consent, Calendar API, client ids). All other phases
-  (B1, B2, B4, B5, B6, B7) are complete.
+- Google Calendar (phase B3) DROPPED by user decision (26/08/2026) — the
+  household does not want it. Every other phase is complete.
 - CSP allows 'unsafe-inline' scripts/styles (Next.js bootstrap + Tailwind
   inline styles; no nonce pipeline).
 
