@@ -7,7 +7,14 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1–F8 complete; F9 half done** (F9a = Finanzas resumen/gasto/movimientos/subs, commit fda0fb6).
+**Stages F1–F9 complete** (F9a fda0fb6, F9b 947f44e). Desktop finanzas verified visually.
+
+F9b: Presupuestos summary card (total + gastado % + "Día N de M, % del ciclo") and category
+cards with Precaución/Excedido chips + pace captions; Deudas green total-pendiente banner.
+Intentional divergences from mockups (need a product decision before changing):
+- PlanAhorroTab keeps the no-targets model (May rework) — mockup `ahorro_y_objetivos` shows
+  goal targets/% completado.
+- MortgageTab layout kept (already covers capital/cuota/interés/calendario content).
 
 What F9a changed (all verified live with real data):
 - ResumenTab: "Este mes" hero (Entradas/Salidas + green Disponible banner) and "Saldo total"
