@@ -7,7 +7,14 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1–F10 complete** (F10 = Documentos y deseos, commit 2b4d4be).
+**Stages F1–F11 complete** (F11 = buscar/papelera/actividad, commit 3c49762).
+
+F11: Papelera header + open card sections + struck rows + green restore buttons; Buscar bold
+section headers **and a real bug fix** (search crashed whenever results existed — icon
+components were passed server→client; now icon names). Actividad header/subtitle.
+Mockup elements intentionally skipped: papelera "Vaciar"/30-day purge (no purge backend yet —
+comes with HOME_HUB_BACKEND_PROMPT trash phase) and actividad "Nueva Nota" (feature doesn't
+exist; no placebo buttons).
 
 F10: Documentos — header, top Nuevo documento button, dynamic type-filter chips, cards with
 coloured type labels + expiry countdown lines + "Ver documento" outline link. Deseos — header,

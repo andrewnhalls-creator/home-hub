@@ -1,9 +1,9 @@
 # Next Steps
 
 Redesign plan: `Chatgpt_Redesign/REDESIGN_PLAN.md` (stages F1–F12, then backend).
-F1–F10 hechos.
+F1–F11 hechos.
 
-1. **F11 — Buscar, papelera, actividad**: `buscar_en_el_hogar`, `papelera_de_reciclaje`,
-   `actividad_reciente`.
-2. **F12 — Ajustes**: `ajustes_y_configuraci_n`, `notificaciones_y_ajustes`.
-Después: fases backend según `HOME_HUB_BACKEND_PROMPT.md` (leer el prompt completo al empezar).
+1. **F12 — Ajustes** (última etapa frontend): `ajustes_y_configuraci_n`,
+   `notificaciones_y_ajustes`.
+2. Después: fases backend según `Chatgpt_Redesign/HOME_HUB_BACKEND_PROMPT.md`
+   (leer el prompt completo al empezar; trabajar por slices verticales).
