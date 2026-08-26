@@ -1,0 +1,19 @@
+-- 043: Finance invariants (backend slices B4.2/B4.3)
+-- APPLIED 2026-08-26 as remote migration 043_finance_invariants.
+--
+-- 1) savings_goals.current_amount is trigger-maintained by DELTA from
+--    savings_contributions (insert/update/delete) — race-safe, preserves any
+--    manually-set base. The addContribution server action no longer does the
+--    read-modify-write increment (it could drift and double-count).
+-- 2) mortgages.current_balance decreases by applied PRINCIPAL (incl. extra
+--    payments) when an installment becomes 'pagado' and is restored when the
+--    payment is reverted or deleted. Interest never reduces the liability.
+--    (Previously: paying an installment never moved the balance at all.)
+-- 3) scan_budget_threshold_notifications(): monthly-budget 80%/100% alerts
+--    computed from ledger_monthly_totals, deduplicated per
+--    household/month/threshold via scheduled_notifications.idempotency_key,
+--    delivered through the outbox. Copy contains no amounts (privacy rule).
+--    Scheduled daily at 18:00 as pg_cron job 'budget-threshold-scan'.
+-- Documented scope notes: budget rollover is not offered by the product (no
+-- rollover semantics to materialize); per-category thresholds deferred.
+-- See the remote migration for full DDL.

@@ -1,0 +1,26 @@
+-- RLS/logic test 007: canonical ledger + finance invariants (B4)
+-- Run via Supabase MCP `execute_sql` — one transaction, ROLLED BACK.
+-- Executed 2026-08-26 with the results-capture harness: ALL 15 PASS.
+-- Covers: expense→ledger sync (create/edit/soft-delete/restore on the SAME
+-- entry), payment instances counting only while 'pagado', mortgage balance
+-- moving by principal+extra only (and reversing on delete), savings
+-- current_amount deltas (insert/update/delete), ledger being client-read-only,
+-- and household isolation.
+--
+-- Assertions (see git history of this file for the executable version used
+-- via execute_sql; kept here in pgTAP form):
+--  1 expense creates exactly one ledger entry
+--  2 ledger amount mirrors the expense
+--  3 edit updates the same single entry
+--  4 soft delete propagates to the ledger
+--  5 restore reactivates the same entry
+--  6 pending instance has no active ledger entry
+--  7 paying materializes the movement
+--  8 reverting excludes the movement again
+--  9 mortgage balance drops by principal+extra (never interest)
+-- 10 ledger records full cash out with principal split
+-- 11 deleting the payment restores the balance
+-- 12 goal amount = base + contribution delta (insert→update)
+-- 13 deleting the contribution returns to base
+-- 14 clients cannot insert ledger entries directly (42501)
+-- 15 outsider sees no ledger entries

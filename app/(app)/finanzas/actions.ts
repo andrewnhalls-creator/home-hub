@@ -491,13 +491,15 @@ export async function addContribution(
 
   const { data: goal } = await supabase
     .from("savings_goals")
-    .select("current_amount")
+    .select("id")
     .eq("id", goalId)
     .eq("household_id", householdId)
     .single();
 
   if (!goal) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
 
+  // The goal's current_amount is maintained by a database trigger (delta per
+  // contribution, race-safe) — never incremented here (migration 043).
   const { error: contribError } = await supabase.from("savings_contributions").insert({
     goal_id: goalId,
     amount: parsed.data.amount,
@@ -508,12 +510,6 @@ export async function addContribution(
   });
 
   if (contribError) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
-
-  await supabase
-    .from("savings_goals")
-    .update({ current_amount: Number(goal.current_amount) + parsed.data.amount })
-    .eq("id", goalId)
-    .eq("household_id", householdId);
 
   revalidatePath("/finanzas");
   return { success: true };

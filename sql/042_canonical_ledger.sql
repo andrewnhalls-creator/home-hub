@@ -1,0 +1,34 @@
+-- 042: Canonical ledger + balance snapshots (backend slice B4.1)
+-- APPLIED 2026-08-26 as remote migrations 042a_ledger_and_snapshots and
+-- 042b_ledger_sync_triggers_backfill.
+--
+-- One `ledger_entries` row per ACTUAL recorded movement, maintained
+-- EXCLUSIVELY by security-definer triggers on the source tables (clients have
+-- a select policy only). unique (source_table, source_id) is the
+-- no-double-counting invariant; editing a source updates the same entry;
+-- soft delete/restore propagates to the same entry.
+--
+-- Sources of real movements in this app:
+--   expenses                      → entry_type 'expense'
+--   payment_instances (pagado)    → 'fixed_payment' (reverting excludes it)
+--   mortgage_payments (pagado)    → 'mortgage_payment' (amount = cuota+extra;
+--                                    principal_amount = principal+extra,
+--                                    excluded from spending analytics)
+--   savings_contributions         → 'savings_contribution' (cash allocation,
+--                                    not spending)
+-- Documented adaptations (2-person household):
+--   - income and subscriptions are PROJECTED (no real movement rows exist in
+--     the product), so they have no ledger entries;
+--   - debts keep a manually-edited balance (no payment records exist);
+--   - existing UI reports read the source tables, which the triggers keep
+--     numerically identical to the ledger by construction; the
+--     ledger_monthly_totals view is the aggregation surface going forward.
+-- Backfill verified: counts and sums match sources exactly.
+-- See the remote migrations for full DDL (this file is the reviewed record):
+--   * ledger_entries (+RLS select-only, indexes)
+--   * balance_snapshots (dated; fed by a trigger on households.current_balance)
+--   * ledger_monthly_totals view (security_invoker)
+--   * sync_expense_ledger / sync_payment_instance_ledger /
+--     sync_mortgage_payment_ledger / sync_savings_contribution_ledger /
+--     snapshot_household_balance triggers
+--   * idempotent backfill (on conflict do nothing)
