@@ -7,7 +7,12 @@ A complete redesign is underway based on the Stitch export in `Chatgpt_Redesign/
 - `HOME_HUB_BACKEND_PROMPT.md` — the backend build spec to follow **after** the frontend stages
 - `REDESIGN_PLAN.md` — the staged plan (F1–F12 frontend, then backend phases)
 
-**Stages F1–F9 complete** (F9a fda0fb6, F9b 947f44e). Desktop finanzas verified visually.
+**Stages F1–F10 complete** (F10 = Documentos y deseos, commit 2b4d4be).
+
+F10: Documentos — header, top Nuevo documento button, dynamic type-filter chips, cards with
+coloured type labels + expiry countdown lines + "Ver documento" outline link. Deseos — header,
+filter chips, top Añadir artículo, cards with priority chip / prominent coste / heart votes /
+VER LINK. Both verified with empty states only (no live docs/wishes yet) — recheck with data.
 
 F9b: Presupuestos summary card (total + gastado % + "Día N de M, % del ciclo") and category
 cards with Precaución/Excedido chips + pace captions; Deudas green total-pendiente banner.
