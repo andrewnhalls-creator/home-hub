@@ -1,10 +1,14 @@
 # Next Steps
 
-**Frontend redesign F1–F12: COMPLETO.** ✔
+**Backend fase 0 (plan): COMPLETO.** ✔ Plan en `Chatgpt_Redesign/BACKEND_PLAN.md`.
 
-1. **Backend fase 0 — plan**: leer entero `Chatgpt_Redesign/HOME_HUB_BACKEND_PROMPT.md`,
-   inspeccionar esquema actual (Supabase MCP `list_tables`), y producir el plan de
-   implementación + mapa de esquema/módulos que exige su "Implementation contract".
-2. **Backend fases 1+**: seguir las delivery phases del prompt en orden, un slice vertical
-   por sesión (migraciones + RLS + lógica de servidor + UI + estados + tests + build).
-3. Pendientes menores del frontend en HANDOFF.md (iconos PWA, decisión objetivos de ahorro).
+1. **B1.1 — Hardening + harness**: mover `pg_net` de `public`, revocar EXECUTE anon en
+   funciones SECURITY DEFINER, índices FK (66), columnas `version`/`updated_by`,
+   instalar pgTAP + vitest con primeros tests RLS. Usuario: activar leaked-password
+   protection en el dashboard de Supabase Auth.
+2. **B1.2 — Invitaciones v2**: códigos hasheados, revocación/límites, redención atómica
+   con topes (5 miembros / 4 hogares) concurrency-safe + tests pgTAP.
+3. **B1.3 — Outbox transaccional**: tabla `outbox_jobs`, worker Edge Function con
+   claim/lease y backoff, migrar escaneos de notificaciones al patrón outbox.
+
+Pendientes menores del frontend (HANDOFF.md): iconos PWA con branding antiguo.

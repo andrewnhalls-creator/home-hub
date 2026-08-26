@@ -1,19 +1,19 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-26 (Casa Calma redesign — FRONTEND COMPLETE, F1–F12)
+Updated: 2026-08-26 (Backend fase 0 — PLAN COMPLETE)
 
 ## Current state
-**The Casa Calma frontend redesign is complete** (stages F1–F12, last commit 203437f).
-Source designs: `Chatgpt_Redesign/Frontend Designs/` (36 Stitch screens);
-plan: `Chatgpt_Redesign/REDESIGN_PLAN.md`. All 12 stages committed, pushed, and verified
-against the live app (mobile + desktop where possible). Build/lint/typecheck green.
+**Backend fase 0 (plan-only) is done.** `Chatgpt_Redesign/BACKEND_PLAN.md` contains the
+full audit + implementation plan: 16 vertical slices (B1.1 → B7.1) mapped to the backend
+prompt's delivery phases. **Key audit finding:** the app is already a working full-stack
+app (34 RLS-enabled tables, 32 migrations, live push pipeline) — the plan is gap-closure,
+not greenfield. Main gaps: Google Calendar (nothing exists), canonical `ledger_entries`,
+hashed invites, transactional outbox, offline idempotency/conflicts, AI proposal/confirm
+lifecycle, FTS search, registry-based trash, async export, zero test infrastructure.
+Advisors flagged: `pg_net` in public, anon-executable SECURITY DEFINER fns, leaked-password
+protection off, 66 unindexed FKs — all scheduled in B1.1/B7.1.
 
-Stage summary: F1 tokens/fonts (light Casa Calma, Plus Jakarta Sans) · F2 shell (bottom nav +
-FAB + QuickAddSheet, AppDrawer, TopBar, Sidebar) · F3 auth y hogar (login card, 2-step
-onboarding, HouseholdSwitchSheet) · F4 Inicio (greeting hero, TodayMealCard, NextUpCards,
-AttentionCard) · F5 Compra (grouped categories, Finalizar compra + finishQuickPurchase E2E) ·
-F6 Menú/recetas · F7 Recordatorios/tareas · F8 Calendario (month card + inline day panel) ·
-F9 Finanzas (Este mes hero, Nuevo Gasto, movimientos, subs summary, presupuestos, deudas) ·
-F10 Documentos/deseos · F11 Buscar (fixed results crash)/papelera/actividad · F12 Ajustes.
+The Casa Calma frontend redesign (F1–F12) remains complete and verified
+(plan: `Chatgpt_Redesign/REDESIGN_PLAN.md`, last frontend commit 149ba72).
 
 ## Product decisions (user, 26/08/2026 — do not revisit without asking)
 - Ahorro: KEEP the no-targets model (May rework). Do NOT reintroduce goal targets/% from
@@ -31,8 +31,10 @@ F10 Documentos/deseos · F11 Buscar (fixed results crash)/papelera/actividad · 
 - DESIGN_SYSTEM.md deprecated; DESIGN.md is current. UI_REDESIGN_PLAN.md is from the old
   indigo redesign (historical).
 
-## NEXT PHASE: Backend
-Follow `Chatgpt_Redesign/HOME_HUB_BACKEND_PROMPT.md` (~45KB spec). Before starting:
-read the FULL prompt, inspect repo/schema, produce an implementation plan + schema/module
-map (the prompt's "Implementation contract"), then work vertical slices in its delivery-phase
-order. Supabase project: xzkavpjwvadqldauaabm. Stitch MCP configured in ~/.claude.json.
+## NEXT PHASE: Backend slices
+Work `Chatgpt_Redesign/BACKEND_PLAN.md` one slice per session, in order, starting with
+**B1.1 (hardening + FK indexes + version columns + pgTAP/vitest harness)**. Spec:
+`Chatgpt_Redesign/HOME_HUB_BACKEND_PROMPT.md`. Supabase project: xzkavpjwvadqldauaabm.
+Each slice: migrations + RLS + server logic + UI + Spanish states + tests + build, then
+handoff/commit/push/stop. User console actions pending: leaked-password protection
+(B1.1), Google Cloud OAuth setup (before B3), papelera purge decision (during B5.2).
