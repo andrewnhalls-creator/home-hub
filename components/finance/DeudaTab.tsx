@@ -6,12 +6,14 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
 import { formatCurrency } from "@/lib/format";
 import { createDebt, updateDebt, deleteDebt, type FinanceFormState } from "@/app/(app)/finanzas/actions";
 import type { Debt } from "@/lib/types";
+import { ACCOUNT_OPTIONS } from "@/lib/constants";
 
 interface DeudaTabProps {
   debts: Debt[];
@@ -48,16 +50,15 @@ function DebtForm({
       />
       <div className="grid grid-cols-2 gap-3">
         <Input
-          label="Saldo pendiente (€)"
+          label="Saldo pendiente (€, opcional)"
           name="balance"
           type="number"
           inputMode="decimal"
           step="0.01"
           min="0"
-          required
           defaultValue={debt?.balance ?? undefined}
           error={state.fieldErrors?.balance}
-          placeholder="0,00"
+          placeholder="Sin datos"
         />
         <Input
           label="Cuota mensual (€)"
@@ -93,6 +94,13 @@ function DebtForm({
           placeholder="Ej. 3,50"
         />
       </div>
+      <Select
+        label="Cuenta"
+        name="bankAccount"
+        placeholder="Sin cuenta"
+        defaultValue={debt?.bank_account ?? ""}
+        options={ACCOUNT_OPTIONS}
+      />
       <div className="grid grid-cols-2 gap-3">
         <Input
           label="Entidad / prestamista"
@@ -132,7 +140,7 @@ export function DeudaTab({ debts }: DeudaTabProps) {
   const [editingDebt, setEditingDebt] = useState<Debt | null>(null);
   const [deletingDebt, setDeletingDebt] = useState<Debt | null>(null);
 
-  const totalBalance = debts.reduce((sum, d) => sum + Number(d.balance), 0);
+  const totalBalance = debts.reduce((sum, d) => sum + Number(d.balance ?? 0), 0);
   const totalMonthly = debts.reduce((sum, d) => sum + Number(d.monthly_payment ?? 0), 0);
 
   return (
@@ -173,7 +181,7 @@ export function DeudaTab({ debts }: DeudaTabProps) {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-brown">{debt.name}</p>
                     <p className="text-xs text-muted">
-                      {formatCurrency(debt.balance)} pendiente
+                      {debt.balance != null ? `${formatCurrency(debt.balance)} pendiente` : "Saldo por confirmar"}
                       {debt.monthly_payment ? ` · ${formatCurrency(debt.monthly_payment)}/mes` : ""}
                       {debt.interest_rate ? ` · ${debt.interest_rate}% TIN` : ""}
                       {debt.lender ? ` · ${debt.lender}` : ""}

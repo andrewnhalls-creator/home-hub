@@ -47,6 +47,8 @@ export async function createFixedPayment(
     dueDay: formData.get("dueDay") || undefined,
     paymentMethod: formData.get("paymentMethod") || undefined,
     bankAccount: formData.get("bankAccount") || undefined,
+    frequency: formData.get("frequency") || undefined,
+    recurrenceMonths: formData.getAll("recurrenceMonths"),
     isActive: formData.get("isActive") === "on",
     notes: formData.get("notes") || undefined,
   });
@@ -62,6 +64,8 @@ export async function createFixedPayment(
     amount: parsed.data.amount,
     category_id: parsed.data.categoryId || null,
     due_day: parsed.data.dueDay === "" ? null : parsed.data.dueDay,
+    frequency: parsed.data.frequency === "" ? null : (parsed.data.frequency ?? null),
+    recurrence_months: parsed.data.recurrenceMonths?.length ? parsed.data.recurrenceMonths : null,
     payment_method: parsed.data.paymentMethod || null,
     bank_account: parsed.data.bankAccount || null,
     is_active: parsed.data.isActive,
@@ -90,6 +94,8 @@ export async function updateFixedPayment(
     dueDay: formData.get("dueDay") || undefined,
     paymentMethod: formData.get("paymentMethod") || undefined,
     bankAccount: formData.get("bankAccount") || undefined,
+    frequency: formData.get("frequency") || undefined,
+    recurrenceMonths: formData.getAll("recurrenceMonths"),
     isActive: formData.get("isActive") === "on",
     notes: formData.get("notes") || undefined,
   });
@@ -106,6 +112,8 @@ export async function updateFixedPayment(
       amount: parsed.data.amount,
       category_id: parsed.data.categoryId || null,
       due_day: parsed.data.dueDay === "" ? null : parsed.data.dueDay,
+      frequency: parsed.data.frequency === "" ? null : (parsed.data.frequency ?? null),
+      recurrence_months: parsed.data.recurrenceMonths?.length ? parsed.data.recurrenceMonths : null,
       payment_method: parsed.data.paymentMethod || null,
       bank_account: parsed.data.bankAccount || null,
       is_active: parsed.data.isActive,
@@ -166,14 +174,23 @@ export async function ensureCurrentMonthPaymentInstances(householdId: string) {
   const cycleStart = format(cycleStartDate, "yyyy-MM-dd");
   const cycleEnd = format(cycleEndDate, "yyyy-MM-dd");
 
-  const { data: activePayments } = await supabase
+  const { data: allActivePayments } = await supabase
     .from("fixed_payments")
-    .select("id, name, amount, currency, due_day")
+    .select("id, name, amount, currency, due_day, frequency, recurrence_months")
     .eq("household_id", householdId)
     .eq("is_active", true)
     .is("deleted_at", null);
 
-  if (!activePayments || activePayments.length === 0) return;
+  // Non-monthly payments only materialize an occurrence in the cycle whose
+  // (end-)month appears in their recurrence months; frequency null = monthly
+  // until confirmed. The 25→25 cycle is named after its end month.
+  const cycleMonth = cycleEndDate.getMonth() + 1;
+  const activePayments = (allActivePayments ?? []).filter((p) => {
+    if (!p.frequency || p.frequency === "mensual") return true;
+    return ((p.recurrence_months as number[] | null) ?? []).includes(cycleMonth);
+  });
+
+  if (activePayments.length === 0) return;
 
   // Deduplicate against existing instances within the cycle date range
   const { data: existingInstances } = await supabase
@@ -731,10 +748,12 @@ export async function createDebt(
 ): Promise<FinanceFormState> {
   const parsed = debtSchema.safeParse({
     name: formData.get("name"),
-    balance: formData.get("balance"),
+    balance: formData.get("balance") || undefined,
     monthlyPayment: formData.get("monthlyPayment") || undefined,
     paymentDay: formData.get("paymentDay") || undefined,
     interestRate: formData.get("interestRate") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
+    categoryId: formData.get("categoryId") || undefined,
     lender: formData.get("lender") || undefined,
     startDate: formData.get("startDate") || undefined,
     notes: formData.get("notes") || undefined,
@@ -748,7 +767,9 @@ export async function createDebt(
   const { error } = await supabase.from("debts").insert({
     household_id: householdId,
     name: parsed.data.name,
-    balance: parsed.data.balance,
+    balance: parsed.data.balance === "" ? null : (parsed.data.balance ?? null),
+    bank_account: parsed.data.bankAccount || null,
+    category_id: parsed.data.categoryId || null,
     monthly_payment: parsed.data.monthlyPayment === "" ? null : (parsed.data.monthlyPayment ?? null),
     payment_day: parsed.data.paymentDay === "" ? null : (parsed.data.paymentDay ?? null),
     interest_rate: parsed.data.interestRate === "" ? null : (parsed.data.interestRate ?? null),
@@ -771,10 +792,12 @@ export async function updateDebt(
 ): Promise<FinanceFormState> {
   const parsed = debtSchema.safeParse({
     name: formData.get("name"),
-    balance: formData.get("balance"),
+    balance: formData.get("balance") || undefined,
     monthlyPayment: formData.get("monthlyPayment") || undefined,
     paymentDay: formData.get("paymentDay") || undefined,
     interestRate: formData.get("interestRate") || undefined,
+    bankAccount: formData.get("bankAccount") || undefined,
+    categoryId: formData.get("categoryId") || undefined,
     lender: formData.get("lender") || undefined,
     startDate: formData.get("startDate") || undefined,
     notes: formData.get("notes") || undefined,
@@ -789,7 +812,9 @@ export async function updateDebt(
     .from("debts")
     .update({
       name: parsed.data.name,
-      balance: parsed.data.balance,
+      balance: parsed.data.balance === "" ? null : (parsed.data.balance ?? null),
+      bank_account: parsed.data.bankAccount || null,
+      category_id: parsed.data.categoryId || null,
       monthly_payment: parsed.data.monthlyPayment === "" ? null : (parsed.data.monthlyPayment ?? null),
       payment_day: parsed.data.paymentDay === "" ? null : (parsed.data.paymentDay ?? null),
       interest_rate: parsed.data.interestRate === "" ? null : (parsed.data.interestRate ?? null),

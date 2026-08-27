@@ -8,6 +8,8 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { Button } from "@/components/ui/Button";
 import type { FinanceFormState } from "@/app/(app)/finanzas/actions";
 import type { Category, FixedPayment } from "@/lib/types";
+import { ACCOUNT_OPTIONS } from "@/lib/constants";
+import { MonthPicker } from "@/components/finance/MonthPicker";
 
 interface FixedPaymentFormProps {
   action: (prevState: FinanceFormState, formData: FormData) => Promise<FinanceFormState>;
@@ -41,6 +43,25 @@ export function FixedPaymentForm({ action, categories, payment, onSuccess, onCan
         />
         <Input label="Día de cobro" name="dueDay" type="number" min={1} max={31} defaultValue={payment?.due_day ?? undefined} />
       </div>
+      <div className="grid grid-cols-2 gap-3">
+        <Select
+          label="Periodicidad"
+          name="frequency"
+          placeholder="Por confirmar"
+          defaultValue={payment?.frequency ?? "mensual"}
+          options={[
+            { value: "mensual", label: "Mensual" },
+            { value: "trimestral", label: "Trimestral" },
+            { value: "semestral", label: "Semestral" },
+            { value: "anual", label: "Anual" },
+          ]}
+        />
+      </div>
+      <MonthPicker
+        name="recurrenceMonths"
+        label="Meses de cobro (solo periodicidad no mensual)"
+        defaultValue={payment?.recurrence_months}
+      />
       <Select
         label="Categoría"
         name="categoryId"
@@ -51,15 +72,11 @@ export function FixedPaymentForm({ action, categories, payment, onSuccess, onCan
       <div className="grid grid-cols-2 gap-3">
         <Input label="Método de pago" name="paymentMethod" defaultValue={payment?.payment_method ?? undefined} />
         <Select
-          label="Cuenta bancaria"
+          label="Cuenta"
           name="bankAccount"
           placeholder="Sin cuenta"
           defaultValue={payment?.bank_account ?? ""}
-          options={[
-            { value: "ING", label: "ING" },
-            { value: "BBVA", label: "BBVA" },
-            { value: "Revolut", label: "Revolut" },
-          ]}
+          options={ACCOUNT_OPTIONS}
         />
       </div>
       <Checkbox label="Activo" name="isActive" defaultChecked={payment?.is_active ?? true} />

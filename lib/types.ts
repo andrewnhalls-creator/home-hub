@@ -219,7 +219,9 @@ export interface FixedPayment {
   category_id: string | null;
   due_day: number | null;
   payment_method: string | null;
-  bank_account: BankAccount | null;
+  bank_account: string | null;
+  frequency: FixedPaymentFrequency | null;
+  recurrence_months: number[] | null;
   is_active: boolean;
   notes: string | null;
   created_by: string | null;
@@ -228,6 +230,8 @@ export interface FixedPayment {
   deleted_at: string | null;
   deleted_by: string | null;
 }
+
+export type FixedPaymentFrequency = "mensual" | "trimestral" | "semestral" | "anual";
 
 export interface PaymentInstance {
   id: string;
@@ -392,7 +396,9 @@ export interface IncomeSource {
   frequency: IncomeFrequency;
   earner_name: string | null;
   payment_day: number | null;
-  bank_account: BankAccount | null;
+  recurrence_months: number[] | null;
+  category_id: string | null;
+  bank_account: string | null;
   is_active: boolean;
   notes: string | null;
   created_by: string | null;
@@ -422,9 +428,10 @@ export interface Mortgage {
   household_id: string;
   name: string;
   lender: string | null;
-  original_principal: number;
-  current_balance: number;
+  original_principal: number | null;
+  current_balance: number | null;
   monthly_payment: number;
+  bank_account: string | null;
   interest_rate: number | null;
   rate_type: MortgageRateType;
   euribor_spread: number | null;
@@ -466,10 +473,12 @@ export interface Debt {
   id: string;
   household_id: string;
   name: string;
-  balance: number;
+  balance: number | null;
   monthly_payment: number | null;
   payment_day: number | null;
   interest_rate: number | null;
+  bank_account: string | null;
+  category_id: string | null;
   lender: string | null;
   start_date: string | null;
   notes: string | null;

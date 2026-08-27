@@ -100,7 +100,16 @@ export default async function FinancePage() {
   // Derive effective status for each active fixed payment using cycle-aware logic.
   // DB "pagado"/"omitido" is authoritative; for everything else, infer from due_day.
   const instanceByCyclePaymentId = new Map(thisCycleInstances.map((i) => [i.fixed_payment_id, i]));
-  const activeFixedPayments = (fixedPayments ?? []).filter((p) => p.is_active);
+  // A payment counts in this cycle when it is monthly (or its frequency is
+  // pending confirmation) or when a non-monthly rule lists the cycle's month.
+  // The 25→25 cycle is named after its END month.
+  const cycleMonth = getCurrentCycleDates().end.getMonth() + 1;
+  function countsThisCycle(p: { frequency: string | null; recurrence_months: number[] | null }): boolean {
+    if (!p.frequency || p.frequency === "mensual") return true;
+    return (p.recurrence_months ?? []).includes(cycleMonth);
+  }
+  const allActiveFixedPayments = (fixedPayments ?? []).filter((p) => p.is_active);
+  const activeFixedPayments = allActiveFixedPayments.filter(countsThisCycle);
 
   function derivedFixedStatus(payment: { due_day: number | null; id: string }): "pagado" | "pendiente" | "omitido" {
     const inst = instanceByCyclePaymentId.get(payment.id);

@@ -158,7 +158,7 @@ function MortgageCard({
   onClick?: () => void;
 }) {
   const amortisedPct =
-    mortgage.original_principal > 0
+    mortgage.original_principal != null && mortgage.original_principal > 0 && mortgage.current_balance != null
       ? Math.max(0, Math.min(100, ((mortgage.original_principal - mortgage.current_balance) / mortgage.original_principal) * 100))
       : 0;
   const nextDate = nextPendingPaymentDate(mortgage, payments);
@@ -197,7 +197,7 @@ function MortgageCard({
             <div>
               <p className="text-[12px] text-muted">Saldo pendiente</p>
               <p className="text-base font-bold text-brown tabular-nums">
-                {formatCurrency(mortgage.current_balance)}
+                {mortgage.current_balance != null ? formatCurrency(mortgage.current_balance) : "Por confirmar"}
               </p>
             </div>
             <div>

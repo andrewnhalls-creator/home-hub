@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
+import { MONTH_LABELS } from "@/lib/constants";
 import { formatCurrency } from "@/lib/format";
 import { getSubscriptionCycleStatus } from "@/lib/cycle";
 import { FixedPaymentForm } from "@/components/finance/FixedPaymentForm";
@@ -20,6 +21,13 @@ import {
   skipPaymentInstance,
 } from "@/app/(app)/finanzas/actions";
 import type { Category, FixedPayment, PaymentInstance } from "@/lib/types";
+
+const FREQUENCY_LABELS: Record<string, string> = {
+  mensual: "Mensual",
+  trimestral: "Trimestral",
+  semestral: "Semestral",
+  anual: "Anual",
+};
 
 interface FixedPaymentsTabProps {
   payments: FixedPayment[];
@@ -61,7 +69,15 @@ function PaymentRow({ payment, instance, onEdit, onDelete, onMarkPaid, onUnmarkP
             <p className="text-sm font-medium text-brown">{payment.name}</p>
             <p className="text-xs text-muted">
               {formatCurrency(payment.amount)}
-              {payment.due_day ? ` · Día ${payment.due_day}` : ""}
+              {payment.frequency && payment.frequency !== "mensual"
+                ? ` · ${FREQUENCY_LABELS[payment.frequency]}`
+                : payment.frequency == null
+                ? " · Periodicidad por confirmar"
+                : ""}
+              {payment.recurrence_months?.length
+                ? ` (${payment.recurrence_months.map((m) => MONTH_LABELS[m]).join(", ")})`
+                : ""}
+              {payment.due_day ? ` · Día ${payment.due_day}` : " · Fecha pendiente"}
               {payment.bank_account ? ` · ${payment.bank_account}` : ""}
               {!payment.is_active ? " · Inactivo" : ""}
             </p>

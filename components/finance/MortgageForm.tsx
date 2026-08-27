@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
+import { ACCOUNT_OPTIONS } from "@/lib/constants";
 import type { MortgageFormState } from "@/app/(app)/finanzas/mortgageActions";
 import type { Mortgage } from "@/lib/types";
 
@@ -60,7 +61,6 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
           inputMode="decimal"
           step="0.01"
           min="0"
-          required
           defaultValue={mortgage?.original_principal ?? undefined}
           error={state.fieldErrors?.originalPrincipal}
           placeholder="0,00"
@@ -72,8 +72,7 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
           inputMode="decimal"
           step="0.01"
           min="0"
-          required
-          defaultValue={mortgage?.current_balance ?? undefined}
+                    defaultValue={mortgage?.current_balance ?? undefined}
           error={state.fieldErrors?.currentBalance}
           placeholder="0,00"
         />
@@ -164,6 +163,13 @@ export function MortgageForm({ action, mortgage, onSuccess, onCancel }: Mortgage
         placeholder="Ej. 5"
       />
 
+      <Select
+        label="Cuenta"
+        name="bankAccount"
+        placeholder="Sin cuenta"
+        defaultValue={mortgage?.bank_account ?? ""}
+        options={ACCOUNT_OPTIONS}
+      />
       <Textarea
         label="Notas"
         name="notes"

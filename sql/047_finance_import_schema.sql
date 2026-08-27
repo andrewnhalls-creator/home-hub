@@ -1,0 +1,15 @@
+-- 047: Finance data-import support (APPLIED 2026-08-27 as 047_finance_import_schema)
+-- No personal values here (the data import itself runs as a reviewed,
+-- idempotent server-side operation — never a migration or seed file).
+-- - Account labels become free-form organisational labels; the household's
+--   list (4 labels) lives in lib/constants.ts ACCOUNT_OPTIONS; legacy checks
+--   dropped; debts + mortgages gain bank_account.
+-- - debts.balance, mortgages.original_principal/current_balance now nullable
+--   ("Saldo por confirmar" in UI — never invent financial data).
+-- - fixed_payments: frequency (mensual/trimestral/semestral/anual, null =
+--   periodicidad por confirmar; existing rows backfilled 'mensual') +
+--   recurrence_months smallint[]; non-monthly payments only count/materialize
+--   instances in cycles whose end month is listed.
+-- - income_sources: +semestral frequency, recurrence_months, category_id.
+-- - debts: +category_id.
+-- See the remote migration for full DDL.

@@ -9,6 +9,7 @@ import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
+import { ACCOUNT_OPTIONS } from "@/lib/constants";
 import { formatCurrency } from "@/lib/format";
 import { addContribution, type FinanceFormState } from "@/app/(app)/finanzas/actions";
 import { useToast } from "@/components/ui/Toast";
@@ -41,11 +42,7 @@ const PLAN_CONFIG = [
   },
 ] as const;
 
-const BANK_ACCOUNT_OPTIONS = [
-  { value: "ING", label: "ING" },
-  { value: "BBVA", label: "BBVA" },
-  { value: "Revolut", label: "Revolut" },
-];
+const BANK_ACCOUNT_OPTIONS = ACCOUNT_OPTIONS;
 
 // Months from the current month through December (inclusive)
 function getMonthsLeftInYear(): number {

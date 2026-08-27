@@ -11,6 +11,8 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
 import { formatCurrency } from "@/lib/format";
+import { ACCOUNT_OPTIONS, MONTH_LABELS } from "@/lib/constants";
+import { MonthPicker } from "@/components/finance/MonthPicker";
 import {
   createIncomeSource,
   updateIncomeSource,
@@ -27,6 +29,7 @@ const FREQUENCY_OPTIONS = [
   { value: "mensual", label: "Mensual" },
   { value: "quincenal", label: "Quincenal (cada 2 semanas)" },
   { value: "trimestral", label: "Trimestral" },
+  { value: "semestral", label: "Semestral" },
   { value: "anual", label: "Anual" },
 ];
 
@@ -34,11 +37,13 @@ const FREQUENCY_LABEL: Record<string, string> = {
   mensual: "mensual",
   quincenal: "quincenal",
   trimestral: "trimestral",
+  semestral: "semestral",
   anual: "anual",
 };
 
 function toMonthly(amount: number, frequency: string): number {
   if (frequency === "anual") return amount / 12;
+  if (frequency === "semestral") return amount / 6;
   if (frequency === "trimestral") return amount / 3;
   if (frequency === "quincenal") return amount * 2;
   return amount;
@@ -111,17 +116,18 @@ function IncomeForm({
           placeholder="Ej. 25"
         />
         <Select
-          label="Cuenta bancaria"
+          label="Cuenta"
           name="bankAccount"
           placeholder="Sin cuenta"
           defaultValue={source?.bank_account ?? ""}
-          options={[
-            { value: "ING", label: "ING" },
-            { value: "BBVA", label: "BBVA" },
-            { value: "Revolut", label: "Revolut" },
-          ]}
+          options={ACCOUNT_OPTIONS}
         />
       </div>
+      <MonthPicker
+        name="recurrenceMonths"
+        label="Meses de cobro (solo frecuencia no mensual)"
+        defaultValue={source?.recurrence_months}
+      />
       <Checkbox label="Activo" name="isActive" defaultChecked={source ? source.is_active : true} />
       {state.error && <p className="text-sm text-danger">{state.error}</p>}
       <div className="mt-2 flex gap-3">
@@ -205,9 +211,16 @@ export function IngresoTab({ sources }: IngresoTabProps) {
                                 (≈ {formatCurrency(toMonthly(Number(source.amount), source.frequency))}/mes)
                               </span>
                             )}
-                            {source.payment_day && source.frequency !== "quincenal" && (
-                              <span className="ml-1 text-muted/70">· día {source.payment_day}</span>
+                            {source.frequency !== "quincenal" && (
+                              <span className="ml-1 text-muted/70">
+                                {source.payment_day ? `· día ${source.payment_day}` : "· Fecha pendiente"}
+                              </span>
                             )}
+                            {source.recurrence_months?.length ? (
+                              <span className="ml-1 text-muted/70">
+                                · {source.recurrence_months.map((m) => MONTH_LABELS[m]).join(", ")}
+                              </span>
+                            ) : null}
                             {source.bank_account && (
                               <span className="ml-1 text-muted/70">· {source.bank_account}</span>
                             )}

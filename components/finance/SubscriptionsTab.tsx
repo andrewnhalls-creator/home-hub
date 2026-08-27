@@ -12,6 +12,7 @@ import { Select } from "@/components/ui/Select";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
+import { ACCOUNT_OPTIONS } from "@/lib/constants";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { getSubscriptionCycleStatus } from "@/lib/cycle";
 import { createSubscription, deleteSubscription, updateSubscription, type FinanceFormState } from "@/app/(app)/finanzas/actions";
@@ -55,11 +56,7 @@ function AddSubscriptionForm({
           label="Cuenta bancaria"
           name="bankAccount"
           placeholder="Sin cuenta"
-          options={[
-            { value: "ING", label: "ING" },
-            { value: "BBVA", label: "BBVA" },
-            { value: "Revolut", label: "Revolut" },
-          ]}
+          options={ACCOUNT_OPTIONS}
         />
       </div>
       <Select label="Ciclo de facturación" name="billingCycle" defaultValue="mensual" options={BILLING_OPTIONS} />
@@ -112,11 +109,7 @@ function EditSubscriptionForm({
           name="bankAccount"
           placeholder="Sin cuenta"
           defaultValue={subscription.bank_account ?? ""}
-          options={[
-            { value: "ING", label: "ING" },
-            { value: "BBVA", label: "BBVA" },
-            { value: "Revolut", label: "Revolut" },
-          ]}
+          options={ACCOUNT_OPTIONS}
         />
       </div>
       <Select label="Ciclo de facturación" name="billingCycle" defaultValue={subscription.billing_cycle} options={BILLING_OPTIONS} />
@@ -196,6 +189,9 @@ export function SubscriptionsTab({ subscriptions, categories }: SubscriptionsTab
             <p className="text-sm font-medium text-brown">{subscription.name}</p>
             <p className="text-xs text-muted">
               {formatCurrency(subscription.amount)}
+              {subscription.billing_cycle === "mensual" && subscription.billing_day == null
+                ? " · Fecha pendiente"
+                : ""}
               {renewalLabel
                 ? ` · ${renewalLabel}`
                 : subscription.renewal_date && !hasFutureStart && subscription.billing_cycle !== "mensual"

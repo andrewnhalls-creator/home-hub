@@ -34,9 +34,9 @@ interface MortgageTabProps {
 }
 
 function progressPct(mortgage: Mortgage): number {
-  const total = Number(mortgage.original_principal);
-  if (total <= 0) return 0;
-  const paid = total - Number(mortgage.current_balance);
+  const total = Number(mortgage.original_principal ?? 0);
+  if (!Number.isFinite(total) || total <= 0) return 0;
+  const paid = total - Number(mortgage.current_balance ?? 0);
   return Math.min(100, Math.max(0, (paid / total) * 100));
 }
 
@@ -142,8 +142,8 @@ function MortgageCard({ mortgage, payments, onEdit, onDelete, onAddPayment }: Mo
         </div>
         <ProgressBar value={pct} max={100} />
         <div className="flex justify-between text-xs text-muted">
-          <span>{formatCurrency(Number(mortgage.original_principal) - Number(mortgage.current_balance))} pagados</span>
-          <span>{formatCurrency(Number(mortgage.current_balance))} pendientes</span>
+          <span>{mortgage.original_principal != null && mortgage.current_balance != null ? `${formatCurrency(Number(mortgage.original_principal) - Number(mortgage.current_balance))} pagados` : "Progreso por confirmar"}</span>
+          <span>{mortgage.current_balance != null ? `${formatCurrency(Number(mortgage.current_balance))} pendientes` : "Saldo por confirmar"}</span>
         </div>
       </div>
 

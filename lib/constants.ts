@@ -57,3 +57,26 @@ export const MENU_ITEMS: NavItem[] = [
   { href: "/ajustes/dispositivos",   label: "Dispositivos",    icon: DeviceMobile },
   { href: "/papelera",               label: "Papelera",        icon: Trash },
 ];
+
+/**
+ * Manual account labels (organisational only — never connected to a real
+ * bank). Legacy values ("ING", "BBVA", "Revolut") remain valid on old rows.
+ */
+export const ACCOUNT_OPTIONS = [
+  { value: "BBVA Andrew", label: "BBVA Andrew" },
+  { value: "ING — Cuenta conjunta", label: "ING — Cuenta conjunta" },
+  { value: "Revolut", label: "Revolut" },
+  { value: "BBVA José", label: "BBVA José" },
+];
+
+/** Month options for recurrence-month pickers (1–12, es-ES). */
+export const MONTH_OPTIONS = [
+  { value: 1, label: "Ene" }, { value: 2, label: "Feb" }, { value: 3, label: "Mar" },
+  { value: 4, label: "Abr" }, { value: 5, label: "May" }, { value: 6, label: "Jun" },
+  { value: 7, label: "Jul" }, { value: 8, label: "Ago" }, { value: 9, label: "Sep" },
+  { value: 10, label: "Oct" }, { value: 11, label: "Nov" }, { value: 12, label: "Dic" },
+];
+
+export const MONTH_LABELS: Record<number, string> = Object.fromEntries(
+  MONTH_OPTIONS.map((m) => [m.value, m.label]),
+);

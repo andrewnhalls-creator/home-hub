@@ -1,5 +1,6 @@
 "use client";
 
+import { ACCOUNT_OPTIONS } from "@/lib/constants";
 import { useActionState, useEffect, useState } from "react";
 import { PencilSimple } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/Input";
@@ -10,11 +11,7 @@ import { cn } from "@/lib/utils";
 import type { FinanceFormState } from "@/app/(app)/finanzas/actions";
 import type { Category, Expense } from "@/lib/types";
 
-const BANK_ACCOUNT_OPTIONS = [
-  { value: "ING", label: "ING" },
-  { value: "BBVA", label: "BBVA" },
-  { value: "Revolut", label: "Revolut" },
-];
+const BANK_ACCOUNT_OPTIONS = ACCOUNT_OPTIONS;
 
 const CHIP_ACCENTS = [
   "bg-amber text-cream",
