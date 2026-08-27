@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useToast } from "@/components/ui/Toast";
 import { formatCurrency } from "@/lib/format";
+import { getCurrentCycleDates } from "@/lib/cycle";
 import { BudgetCard } from "@/components/finance/BudgetCard";
 import { updateHouseholdBalance } from "@/app/(app)/finanzas/actions";
 import type { Mortgage, MortgagePayment } from "@/lib/types";
@@ -27,11 +28,12 @@ interface ResumenTabProps {
   expensesThisMonthTotal: number;
   monthlySubscriptionsTotal: number;
   annualSubscriptionsTotal: number;
+  annualSubsDueThisCycleTotal: number;
   paidSubsThisMonthTotal: number;
   pendingSubsThisMonthTotal: number;
   savingsProgressPct: number | null;
   monthlyBudget: number | null;
-  totalMonthlyIncome: number;
+  incomeThisCycleTotal: number;
   accountBalance: number | null;
   mortgages?: Mortgage[];
   mortgagePayments?: MortgagePayment[];
@@ -284,11 +286,12 @@ export function ResumenTab({
   expensesThisMonthTotal,
   monthlySubscriptionsTotal,
   annualSubscriptionsTotal,
+  annualSubsDueThisCycleTotal,
   paidSubsThisMonthTotal,
   pendingSubsThisMonthTotal,
   savingsProgressPct,
   monthlyBudget,
-  totalMonthlyIncome,
+  incomeThisCycleTotal,
   accountBalance,
   mortgages = [],
   mortgagePayments = [],
@@ -307,10 +310,13 @@ export function ResumenTab({
   const disponible = accountBalance != null ? accountBalance - totalPending : null;
   const isPositive = disponible != null && disponible >= 0;
 
-  const salidasEsteMes = totalFixedThisMonth + monthlySubscriptionsTotal + expensesThisMonthTotal;
-  const restanteEsteMes = totalMonthlyIncome - salidasEsteMes;
+  // Annual subs count only in the cycle their renewal falls in; monthly subs every cycle.
+  const salidasEsteMes =
+    totalFixedThisMonth + monthlySubscriptionsTotal + annualSubsDueThisCycleTotal + expensesThisMonthTotal;
+  const restanteEsteMes = incomeThisCycleTotal - salidasEsteMes;
+  // The 25→25 cycle is named after its END month (pay on the 26th funds the following month).
   const monthLabel = (() => {
-    const raw = format(new Date(), "MMMM", { locale: es });
+    const raw = format(getCurrentCycleDates().end, "MMMM", { locale: es });
     return raw.charAt(0).toUpperCase() + raw.slice(1);
   })();
 
@@ -330,7 +336,7 @@ export function ResumenTab({
               Entradas
             </p>
             <p className="mt-0.5 text-xl font-bold tabular-nums text-brown">
-              {totalMonthlyIncome > 0 ? formatCurrency(totalMonthlyIncome) : "—"}
+              {incomeThisCycleTotal > 0 ? formatCurrency(incomeThisCycleTotal) : "—"}
             </p>
           </div>
           <div className="text-right">
@@ -343,7 +349,7 @@ export function ResumenTab({
             </p>
           </div>
         </div>
-        {totalMonthlyIncome > 0 && (
+        {incomeThisCycleTotal > 0 && (
           <div
             className={cn(
               "mt-3 rounded-[var(--radius-md)] px-4 py-2.5 text-center",
@@ -391,7 +397,7 @@ export function ResumenTab({
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <TappableKpi
           label="Ingresos"
-          value={totalMonthlyIncome > 0 ? formatCurrency(totalMonthlyIncome) : "—"}
+          value={incomeThisCycleTotal > 0 ? formatCurrency(incomeThisCycleTotal) : "—"}
           variant="positive"
           onClick={onGoToIngresos}
         />
@@ -403,7 +409,7 @@ export function ResumenTab({
         <TappableKpi
           label="Suscripciones"
           value={formatCurrency(monthlySubscriptionsTotal)}
-          sub={annualSubscriptionsTotal > 0 ? `+ ${formatCurrency(annualSubscriptionsTotal / 12)}/mes anuales` : undefined}
+          sub={annualSubsDueThisCycleTotal > 0 ? `+ ${formatCurrency(annualSubsDueThisCycleTotal)} anuales este mes` : undefined}
           onClick={onGoToSuscripciones}
         />
         <TappableKpi
@@ -474,7 +480,9 @@ export function ResumenTab({
                 {formatCurrency(annualSubscriptionsTotal)}/año
               </p>
               <p className="text-xs text-muted tabular-nums">
-                ≈ {formatCurrency(annualSubscriptionsTotal / 12)}/mes
+                {annualSubsDueThisCycleTotal > 0
+                  ? `${formatCurrency(annualSubsDueThisCycleTotal)} este mes`
+                  : "Nada que pagar este mes"}
               </p>
             </div>
           </div>

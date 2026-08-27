@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
 import { formatCurrency } from "@/lib/format";
+import { expectedIncomeInCycle, getCurrentCycleDates } from "@/lib/cycle";
 import { ACCOUNT_OPTIONS, MONTH_LABELS } from "@/lib/constants";
 import { MonthPicker } from "@/components/finance/MonthPicker";
 import {
@@ -59,6 +60,14 @@ function toMonthly(amount: number, frequency: string): number {
   if (frequency === "trimestral") return amount / 3;
   if (frequency === "quincenal") return amount * 2;
   return amount;
+}
+
+function toAnnual(amount: number, frequency: string): number {
+  if (frequency === "anual") return amount;
+  if (frequency === "semestral") return amount * 2;
+  if (frequency === "trimestral") return amount * 4;
+  if (frequency === "quincenal") return amount * 26;
+  return amount * 12;
 }
 
 function IncomeForm({
@@ -226,8 +235,10 @@ export function IngresoTab({ sources, receipts }: IngresoTabProps) {
   const [receiving, setReceiving] = useState<IncomeSource | null>(null);
 
   const activeSources = sources.filter((s) => s.is_active);
-  const totalMonthly = activeSources.reduce((sum, s) => sum + toMonthly(Number(s.amount), s.frequency), 0);
-  const totalAnnual = totalMonthly * 12;
+  // What actually arrives this cycle — full amounts, no anual/12 averaging.
+  const cycleMonth = getCurrentCycleDates().end.getMonth() + 1;
+  const totalThisCycle = expectedIncomeInCycle(activeSources, cycleMonth);
+  const totalAnnual = activeSources.reduce((sum, s) => sum + toAnnual(Number(s.amount), s.frequency), 0);
 
   const byEarner = activeSources.reduce<Record<string, IncomeSource[]>>((acc, s) => {
     const key = s.earner_name ?? "Sin asignar";
@@ -255,8 +266,8 @@ export function IngresoTab({ sources, receipts }: IngresoTabProps) {
           {/* Total summary */}
           <Card variant="subtle">
             <div className="flex items-center justify-between gap-4">
-              <span className="text-sm text-muted">Total mensual neto</span>
-              <span className="text-base font-bold text-sage tabular-nums">{formatCurrency(totalMonthly)}</span>
+              <span className="text-sm text-muted">Entra este mes</span>
+              <span className="text-base font-bold text-sage tabular-nums">{formatCurrency(totalThisCycle)}</span>
             </div>
             <div className="mt-1.5 h-px bg-border" />
             <div className="mt-1.5 flex items-center justify-between gap-4">

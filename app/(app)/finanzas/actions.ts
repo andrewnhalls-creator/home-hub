@@ -15,7 +15,7 @@ import {
 } from "@/lib/validations/finance";
 import { upsertScheduledNotification, cancelScheduledNotifications } from "@/lib/notifications";
 import { logActivity } from "@/lib/activity";
-import { getCurrentCycleDates, getCycleDueDate } from "@/lib/cycle";
+import { getCurrentCycleDates, getCycleDueDate, occursInCycle } from "@/lib/cycle";
 
 export interface FinanceFormState {
   error?: string;
@@ -181,14 +181,13 @@ export async function ensureCurrentMonthPaymentInstances(householdId: string) {
     .eq("is_active", true)
     .is("deleted_at", null);
 
-  // Non-monthly payments only materialize an occurrence in the cycle whose
-  // (end-)month appears in their recurrence months; frequency null = monthly
-  // until confirmed. The 25→25 cycle is named after its end month.
+  // Non-monthly payments only materialize an occurrence in the cycle their
+  // payment actually falls in (due day >= 25 shifts into the following month's
+  // cycle); frequency null = monthly until confirmed.
   const cycleMonth = cycleEndDate.getMonth() + 1;
-  const activePayments = (allActivePayments ?? []).filter((p) => {
-    if (!p.frequency || p.frequency === "mensual") return true;
-    return ((p.recurrence_months as number[] | null) ?? []).includes(cycleMonth);
-  });
+  const activePayments = (allActivePayments ?? []).filter((p) =>
+    occursInCycle(p.frequency, p.recurrence_months as number[] | null, p.due_day, cycleMonth),
+  );
 
   if (activePayments.length === 0) return;
 

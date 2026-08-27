@@ -386,7 +386,7 @@ export interface ActivityLogEntry {
   created_at: string;
 }
 
-export type IncomeFrequency = "mensual" | "trimestral" | "anual" | "quincenal";
+export type IncomeFrequency = "mensual" | "trimestral" | "semestral" | "anual" | "quincenal";
 
 export interface IncomeSource {
   id: string;

@@ -1,8 +1,26 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-27 (Finance data import + per-account balances shipped)
+Updated: 2026-08-27 (Cycle-aware income/gastos + getCycleDueDate fix)
 
 ## Current state
-**27/08: household finance data imported + connected account balances.**
+**27/08 (later): finance sums are now fully cycle-aware.**
+- New helpers in `lib/cycle.ts` (tested, `tests/cycle.test.ts`): `occursInCycle`
+  and `expectedIncomeInCycle`. Rule: the 25→25 cycle is named after its END
+  month, and anything charged/received on day >= 25 of month M belongs to cycle
+  M+1 (pay arrives the 26th and funds the FOLLOWING month).
+- Resumen "Entradas" no longer averages (no anual/12): it sums only income that
+  actually arrives this cycle; quincenal counts ×2. Annual subscriptions count
+  in Salidas only in the cycle their renewal falls (renewal_date/start_date).
+  "Este mes" header now shows the cycle's end month. Ingresos tab leads with
+  "Entra este mes" + honest annual estimate.
+- Fixed `getCycleDueDate`: it produced dates OUTSIDE the cycle when today was
+  in the 25th→end-of-month window, which (a) mis-stated pagado/pendiente and
+  (b) broke instance dedup — 138 duplicate out-of-cycle `payment_instances`
+  created 25–27 Aug were deleted from the live DB.
+- Data: the two nóminas + both pagas extra set to `payment_day = 26` (user:
+  "we get paid on the 26th"). `IncomeFrequency` type now includes `semestral`.
+- Gates: lint 0 errors, typecheck, vitest 53/53 (16 new cycle tests), build.
+
+**Earlier 27/08: household finance data imported + connected account balances.**
 - Initial financial data imported (idempotent server-side operation via MCP —
   values never in repo files): 10 subscriptions, 15 active fixed payments
   (frequency + recurrence months, "Fecha pendiente" where unknown), 2 car-loan

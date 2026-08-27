@@ -3,7 +3,13 @@ import { requireHousehold } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { ensureCurrentMonthPaymentInstances } from "@/app/(app)/finanzas/actions";
 import { FinanceTabs } from "@/components/finance/FinanceTabs";
-import { getCurrentCycleDates, getCycleLabel, getSubscriptionCycleStatus } from "@/lib/cycle";
+import {
+  expectedIncomeInCycle,
+  getCurrentCycleDates,
+  getCycleLabel,
+  getSubscriptionCycleStatus,
+  occursInCycle,
+} from "@/lib/cycle";
 
 export default async function FinancePage() {
   const { householdId } = await requireHousehold();
@@ -114,15 +120,13 @@ export default async function FinancePage() {
   // DB "pagado"/"omitido" is authoritative; for everything else, infer from due_day.
   const instanceByCyclePaymentId = new Map(thisCycleInstances.map((i) => [i.fixed_payment_id, i]));
   // A payment counts in this cycle when it is monthly (or its frequency is
-  // pending confirmation) or when a non-monthly rule lists the cycle's month.
-  // The 25→25 cycle is named after its END month.
-  const cycleMonth = getCurrentCycleDates().end.getMonth() + 1;
-  function countsThisCycle(p: { frequency: string | null; recurrence_months: number[] | null }): boolean {
-    if (!p.frequency || p.frequency === "mensual") return true;
-    return (p.recurrence_months ?? []).includes(cycleMonth);
-  }
+  // pending confirmation) or when a non-monthly occurrence falls inside the
+  // cycle (due day >= 25 shifts it into the following month's cycle).
+  const cycleMonth = cycleEndDate.getMonth() + 1;
   const allActiveFixedPayments = (fixedPayments ?? []).filter((p) => p.is_active);
-  const activeFixedPayments = allActiveFixedPayments.filter(countsThisCycle);
+  const activeFixedPayments = allActiveFixedPayments.filter((p) =>
+    occursInCycle(p.frequency, p.recurrence_months, p.due_day, cycleMonth),
+  );
 
   function derivedFixedStatus(payment: { due_day: number | null; id: string }): "pagado" | "pendiente" | "omitido" {
     const inst = instanceByCyclePaymentId.get(payment.id);
@@ -163,8 +167,18 @@ export default async function FinancePage() {
   const monthlySubscriptionsTotal = activeSubs
     .filter((s) => s.billing_cycle === "mensual")
     .reduce((sum, s) => sum + Number(s.amount), 0);
-  const annualSubscriptionsTotal = activeSubs
-    .filter((s) => s.billing_cycle === "anual")
+  const annualSubs = activeSubs.filter((s) => s.billing_cycle === "anual");
+  const annualSubscriptionsTotal = annualSubs.reduce((sum, s) => sum + Number(s.amount), 0);
+  // Annual subscriptions charge once a year: count them as an outflow only in
+  // the cycle their renewal falls in (renewal_date, else start_date anniversary).
+  const annualSubsDueThisCycleTotal = annualSubs
+    .filter((s) => {
+      const ref = s.renewal_date ?? s.start_date;
+      if (!ref) return false;
+      const refDate = new Date(`${ref}T00:00:00`);
+      const day = s.billing_day ?? refDate.getDate();
+      return occursInCycle("anual", [refDate.getMonth() + 1], day, cycleMonth);
+    })
     .reduce((sum, s) => sum + Number(s.amount), 0);
 
   // Monthly sub paid/pending split (cycle-derived)
@@ -190,14 +204,12 @@ export default async function FinancePage() {
         100
       : null;
 
-  const totalMonthlyIncome = (incomeSources ?? [])
-    .filter((s) => s.is_active)
-    .reduce((sum, s) => {
-      const amt = Number(s.amount);
-      if (s.frequency === "anual") return sum + amt / 12;
-      if (s.frequency === "trimestral") return sum + amt / 3;
-      return sum + amt;
-    }, 0);
+  // Income expected to actually arrive this cycle — full amounts, no averaging.
+  // Non-monthly sources count only in the cycle their payment falls in.
+  const incomeThisCycleTotal = expectedIncomeInCycle(
+    (incomeSources ?? []).filter((s) => s.is_active),
+    cycleMonth,
+  );
 
   const accountBalance = householdRow?.current_balance ?? null;
 
@@ -212,11 +224,12 @@ export default async function FinancePage() {
         expensesThisMonthTotal,
         monthlySubscriptionsTotal,
         annualSubscriptionsTotal,
+        annualSubsDueThisCycleTotal,
         paidSubsThisMonthTotal,
         pendingSubsThisMonthTotal,
         savingsProgressPct,
         monthlyBudget: householdRow?.monthly_budget ?? null,
-        totalMonthlyIncome,
+        incomeThisCycleTotal,
         accountBalance,
       }}
       fixedPayments={fixedPayments ?? []}

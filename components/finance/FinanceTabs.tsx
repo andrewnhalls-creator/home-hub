@@ -62,11 +62,12 @@ interface FinanceTabsProps {
     expensesThisMonthTotal: number;
     monthlySubscriptionsTotal: number;
     annualSubscriptionsTotal: number;
+    annualSubsDueThisCycleTotal: number;
     paidSubsThisMonthTotal: number;
     pendingSubsThisMonthTotal: number;
     savingsProgressPct: number | null;
     monthlyBudget: number | null;
-    totalMonthlyIncome: number;
+    incomeThisCycleTotal: number;
     accountBalance: number | null;
   };
   fixedPayments: FixedPayment[];
