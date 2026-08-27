@@ -15,6 +15,7 @@ import { formatCurrency } from "@/lib/format";
 import { BudgetCard } from "@/components/finance/BudgetCard";
 import { updateHouseholdBalance } from "@/app/(app)/finanzas/actions";
 import type { Mortgage, MortgagePayment } from "@/lib/types";
+import { AccountsCard, type AccountBalance } from "@/components/finance/AccountsCard";
 
 interface ResumenTabProps {
   upcomingCount: number;
@@ -22,6 +23,7 @@ interface ResumenTabProps {
   paidThisMonthTotal: number;
   pendingThisMonthTotal: number;
   totalFixedThisMonth: number;
+  accounts: AccountBalance[];
   expensesThisMonthTotal: number;
   monthlySubscriptionsTotal: number;
   annualSubscriptionsTotal: number;
@@ -278,6 +280,7 @@ export function ResumenTab({
   paidThisMonthTotal,
   pendingThisMonthTotal,
   totalFixedThisMonth,
+  accounts,
   expensesThisMonthTotal,
   monthlySubscriptionsTotal,
   annualSubscriptionsTotal,
@@ -313,6 +316,7 @@ export function ResumenTab({
 
   return (
     <div className="flex flex-col gap-3">
+      <AccountsCard accounts={accounts} />
       {/* Este mes — entradas / salidas / disponible */}
       <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-card)]">
         <div className="flex items-center justify-between">

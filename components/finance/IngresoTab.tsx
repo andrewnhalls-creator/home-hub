@@ -17,12 +17,24 @@ import {
   createIncomeSource,
   updateIncomeSource,
   deleteIncomeSource,
+  markIncomeReceived,
+  unmarkIncomeReceived,
   type IncomeFormState,
 } from "@/app/(app)/finanzas/incomeActions";
 import type { IncomeSource } from "@/lib/types";
 
+export interface IncomeReceipt {
+  id: string;
+  income_source_id: string;
+  occurrence_key: string;
+  received_on: string;
+  amount: number;
+  bank_account: string | null;
+}
+
 interface IngresoTabProps {
   sources: IncomeSource[];
+  receipts: IncomeReceipt[];
 }
 
 const FREQUENCY_OPTIONS = [
@@ -142,12 +154,76 @@ function IncomeForm({
   );
 }
 
-export function IngresoTab({ sources }: IngresoTabProps) {
+function ReceiptForm({
+  source,
+  onSuccess,
+  onCancel,
+}: {
+  source: IncomeSource;
+  onSuccess: () => void;
+  onCancel: () => void;
+}) {
+  const [state, formAction, isPending] = useActionState(markIncomeReceived, {});
+  const today = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
+
+  useEffect(() => {
+    if (state.success) onSuccess();
+  }, [state.success, onSuccess]);
+
+  return (
+    <form action={formAction} noValidate className="flex flex-col gap-4">
+      <input type="hidden" name="sourceId" value={source.id} />
+      <div className="grid grid-cols-2 gap-3">
+        <Input
+          label="Importe recibido (€)"
+          name="amount"
+          type="number"
+          inputMode="decimal"
+          step="0.01"
+          min="0"
+          required
+          defaultValue={source.amount}
+          placeholder="0,00"
+        />
+        <Input label="Fecha" name="receivedOn" type="date" defaultValue={today} />
+      </div>
+      <Select
+        label="Cuenta"
+        name="bankAccount"
+        placeholder="Sin cuenta"
+        defaultValue={source.bank_account ?? ""}
+        options={ACCOUNT_OPTIONS}
+      />
+      <p className="text-xs text-muted">
+        El importe se sumará al saldo de la cuenta. Puedes cambiarlo si este mes
+        ha sido distinto — la plantilla no se toca.
+      </p>
+      {state.error && <p className="text-sm text-danger">{state.error}</p>}
+      <div className="mt-1 flex gap-3">
+        <Button type="button" variant="secondary" className="flex-1" onClick={onCancel}>
+          Cancelar
+        </Button>
+        <Button type="submit" className="flex-1" isLoading={isPending}>
+          Marcar recibido
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+export function IngresoTab({ sources, receipts }: IngresoTabProps) {
+  const currentMonthKey = new Date()
+    .toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" })
+    .slice(0, 7);
+  const receiptBySource = new Map(
+    receipts.filter((r) => r.occurrence_key === currentMonthKey).map((r) => [r.income_source_id, r]),
+  );
   const { showToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editing, setEditing] = useState<IncomeSource | null>(null);
   const [deleting, setDeleting] = useState<IncomeSource | null>(null);
+  const [receiving, setReceiving] = useState<IncomeSource | null>(null);
 
   const activeSources = sources.filter((s) => s.is_active);
   const totalMonthly = activeSources.reduce((sum, s) => sum + toMonthly(Number(s.amount), s.frequency), 0);
@@ -226,7 +302,34 @@ export function IngresoTab({ sources }: IngresoTabProps) {
                             )}
                           </p>
                         </div>
-                        <div className="flex shrink-0 gap-1">
+                        <div className="flex shrink-0 items-center gap-1">
+                          {receiptBySource.has(source.id) ? (
+                            <button
+                              type="button"
+                              aria-label={`Quitar recibido de ${source.name}`}
+                              title="Recibido este mes — toca para deshacer"
+                              onClick={() => {
+                                const receipt = receiptBySource.get(source.id);
+                                if (receipt) {
+                                  startTransition(async () => {
+                                    await unmarkIncomeReceived(receipt.id);
+                                    showToast("Se ha quitado el recibido");
+                                  });
+                                }
+                              }}
+                              className="rounded-full bg-sage/15 px-2.5 py-1 text-xs font-medium text-sage transition active:scale-[0.95]"
+                            >
+                              Recibido ✓
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setReceiving(source)}
+                              className="rounded-full border border-sage/50 px-2.5 py-1 text-xs font-medium text-sage transition hover:bg-sage/10 active:scale-[0.95]"
+                            >
+                              Recibido
+                            </button>
+                          )}
                           <button
                             type="button"
                             aria-label="Editar ingreso"
@@ -304,6 +407,23 @@ export function IngresoTab({ sources }: IngresoTabProps) {
             source={editing}
             onSuccess={() => { setEditing(null); showToast("Ingreso actualizado"); }}
             onCancel={() => setEditing(null)}
+          />
+        )}
+      </Modal>
+
+      <Modal
+        isOpen={!!receiving}
+        onClose={() => setReceiving(null)}
+        title={receiving ? `¿Has recibido ${receiving.name}?` : "Recibido"}
+      >
+        {receiving && (
+          <ReceiptForm
+            source={receiving}
+            onSuccess={() => {
+              setReceiving(null);
+              showToast("Ingreso registrado");
+            }}
+            onCancel={() => setReceiving(null)}
           />
         )}
       </Modal>

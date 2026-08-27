@@ -30,6 +30,8 @@ import { MortgageTab } from "@/components/finance/MortgageTab";
 import { PresupuestosTab } from "@/components/finance/PresupuestosTab";
 import { PlanAhorroTab } from "@/components/finance/PlanAhorroTab";
 import { DeudaTab } from "@/components/finance/DeudaTab";
+import type { AccountBalance } from "@/components/finance/AccountsCard";
+import type { IncomeReceipt } from "@/components/finance/IngresoTab";
 import { ExportButton } from "@/components/finance/ExportButton";
 import type {
   Category,
@@ -79,6 +81,8 @@ interface FinanceTabsProps {
   incomeSources: IncomeSource[];
   categoryBudgets: CategoryBudget[];
   debts: Debt[];
+  accounts: AccountBalance[];
+  incomeReceipts: IncomeReceipt[];
   cycleLabel?: string;
   cycleStart?: string;
   cycleEnd?: string;
@@ -240,6 +244,8 @@ export function FinanceTabs({
   incomeSources,
   categoryBudgets,
   debts,
+  accounts,
+  incomeReceipts,
   cycleLabel,
   cycleStart,
   cycleEnd,
@@ -291,6 +297,7 @@ export function FinanceTabs({
         return (
           <ResumenTab
             {...resumen}
+            accounts={accounts}
             mortgages={mortgages}
             mortgagePayments={mortgagePayments}
             onGoToMortgage={() => goTo("hipoteca")}
@@ -301,7 +308,7 @@ export function FinanceTabs({
           />
         );
       case "ingresos":
-        return <IngresoTab sources={incomeSources} />;
+        return <IngresoTab sources={incomeSources} receipts={incomeReceipts} />;
       case "gastos-fijos":
         return <FixedPaymentsTab payments={fixedPayments} instances={paymentInstances} categories={financeCategories} />;
       case "suscripciones":

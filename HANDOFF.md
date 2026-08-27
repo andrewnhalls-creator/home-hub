@@ -1,7 +1,26 @@
 # Home Hub — Handoff Document
-Updated: 2026-08-26 (BACKEND COMPLETE — B3 dropped by user decision; Vaciar shipped)
+Updated: 2026-08-27 (Finance data import + per-account balances shipped)
 
 ## Current state
+**27/08: household finance data imported + connected account balances.**
+- Initial financial data imported (idempotent server-side operation via MCP —
+  values never in repo files): 10 subscriptions, 15 active fixed payments
+  (frequency + recurrence months, "Fecha pendiente" where unknown), 2 car-loan
+  debts (balances honestly "por confirmar"), mortgage completed from the real
+  ING amortization schedule (265.000 €, 2,90 % fijo, 14/07/2026–01/08/2056,
+  cuota 1.103,01), 10 income sources with expected amounts. Zero paid
+  occurrences / zero ledger entries created. IBI + Seguro de hogar moved from
+  subscriptions to fixed payments; old "Coche" fixed payment replaced by the
+  Arteon debt (originals deactivated with notes).
+- NEW connected accounts system (sql/047, sql/048): 4 account labels
+  (BBVA Andrew, ING — Cuenta conjunta, Revolut, BBVA José) everywhere; Cuentas
+  card on Resumen with editable "saldo a fecha" anchor; income "Recibido"
+  button (actual amount per month, creates the ledger income movement);
+  gastos/pagos/hipoteca/ahorro subtract per account through the ledger.
+  Verified live: 1000 − 42,37 + 305,50 → edit → all resums correctly.
+- Fixed-payment monthly totals and occurrence generation are now
+  frequency-aware (annual/semestral count only in their listed months).
+
 **The backend build is complete except Google Calendar (B3).** All work from
 `Chatgpt_Redesign/BACKEND_PLAN.md` is done and pushed; per-phase details live
 in git history and the `sql/033–045` migration records. `OPERATIONS.md` is the

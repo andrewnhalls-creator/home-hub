@@ -1,0 +1,15 @@
+-- 048: Per-account balances + income receipts (APPLIED 2026-08-27 as
+-- 048_accounts_and_income_receipts + 048b_account_anchor_precision).
+-- - household_accounts: the 4 organisational labels with an editable
+--   "saldo a fecha" anchor (opening_balance/opening_date/opening_at).
+-- - income_receipts: marking income as received (one per source+month,
+--   actual amount editable, account label) IS the money-in movement —
+--   synced to the ledger as entry_type 'income' by trigger.
+-- - ledger_entries.bank_account (backfilled; all sync triggers pass the
+--   account through from their source rows).
+-- - account_balances view (security_invoker): anchor + ingresos recibidos
+--   − gastos/pagos fijos pagados/hipoteca/aportaciones cargados a la cuenta,
+--   counting same-day movements only if LOGGED after the anchor was set.
+-- Verified live (rolled back): 1000 → gasto 42,37 → 957,63 → ingreso
+-- 305,50 → 1263,13 → editar recibo a 300 → 1257,63; single ledger row per
+-- receipt. See the remote migrations for full DDL.
